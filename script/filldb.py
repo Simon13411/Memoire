@@ -9,7 +9,8 @@ def insertOrder() :
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
-    if result != [] :
+    print(result)
+    if result != [(None,)] :
         Count = result[0][0]+1
 
     for i in range(0, len(toinsert)):
