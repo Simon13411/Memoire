@@ -2,7 +2,7 @@ import sqlite3
 import pandas as pd
 import numpy as np
 
-def insertOrder() :
+def insertPopulation(data, cursor, conn) :
     toinsert = data["Order"].values.tolist()
     duplicationquery =  """SELECT MAX(id_order)
                             FROM Ordre"""
@@ -15,7 +15,7 @@ def insertOrder() :
 
     for i in range(0, len(toinsert)):
         duplicationquery =  """SELECT *
-                                FROM Ordre
+                                FROM Ordre 
                                 WHERE name = "{}" """.format(toinsert[i]) 
         cursor.execute(duplicationquery)
         if cursor.fetchall() == [] :
@@ -23,21 +23,7 @@ def insertOrder() :
                             (id_order, name) 
                             VALUES 
                             ({},"{}")""".format(Count, toinsert[i])
-            print(insertquery)
+            #print(insertquery)
             cursor.execute(insertquery)
             Count+=1
     conn.commit()
-
-
-file = pd.ExcelFile("FilteredData.xlsx")
-
-data = pd.read_excel(file)
-
-#Connexion
-database = "Entomologie.db"
-conn = sqlite3.connect(database)
-cursor = conn.cursor()
-print("Successfully Connected to the db")
-
-insertOrder()
-cursor.close()
