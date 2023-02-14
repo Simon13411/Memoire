@@ -1,0 +1,193 @@
+﻿CREATE TABLE "Order" (
+"id_order" INT NOT NULL,
+"name" VARCHAR(50) NOT NULL,
+PRIMARY KEY ("id_order"),
+UNIQUE ("id_order"),
+UNIQUE ("name")
+);
+
+CREATE TABLE "Family" (
+"id_family" INT NOT NULL,
+"name" VARCHAR(50) NOT NULL,
+PRIMARY KEY ("id_family"),
+UNIQUE ("id_family"),
+UNIQUE ("name")
+);
+
+CREATE TABLE "subFamily" (
+"id_subfamily" INT NOT NULL,
+"name" VARCHAR(50) NOT NULL,
+PRIMARY KEY ("id_subfamily"),
+UNIQUE ("id_subfamily"),
+UNIQUE ("name")
+);
+
+CREATE TABLE "Scientific" (
+"id_sc" INT NOT NULL,
+"name" VARCHAR(50) NOT NULL,
+PRIMARY KEY ("id_sc"),
+UNIQUE ("id_sc")
+);
+
+CREATE TABLE "Genus" (
+"id_genus" INT NOT NULL,
+"name" VARCHAR(50) NOT NULL,
+"id_sc" INT,
+"date" DATE, 
+PRIMARY KEY ("id_genus"),
+UNIQUE ("id_genus"),
+UNIQUE ("name"),
+FOREIGN KEY("id_sc") REFERENCES "Scientific"("id_sc")
+);
+
+
+CREATE TABLE "subGenus" (
+"id_subgenus" INT NOT NULL,
+"name" VARCHAR(50) NOT NULL,
+"id_sc" INT,
+"date" DATE, 
+PRIMARY KEY ("id_subgenus"),
+UNIQUE ("id_subgenus"),
+UNIQUE ("name"),
+FOREIGN KEY("id_sc") REFERENCES "Scientific"("id_sc")
+);
+
+
+
+CREATE TABLE "Species" (
+"id_species" INT NOT NULL,
+"name" VARCHAR(50) NOT NULL,
+"id_sc" INT,
+"date" DATE, 
+PRIMARY KEY ("id_species"),
+UNIQUE ("id_species"),
+UNIQUE ("name"),
+FOREIGN KEY("id_sc") REFERENCES "Scientific"("id_sc")
+);
+
+
+CREATE TABLE "subSpecies" (
+"id_subspecies" INT NOT NULL,
+"name" VARCHAR(50) NOT NULL,
+"id_sc" INT,
+"date" DATE, 
+PRIMARY KEY ("id_subspecies"),
+UNIQUE ("id_subspecies"),
+UNIQUE ("name"),
+FOREIGN KEY("id_sc") REFERENCES "Scientific"("id_sc")
+);
+
+CREATE TABLE "Population" (
+"id_population" INT NOT NULL,
+"order_id" INT NOT NULL,
+"family_id" INT,
+"subFamily_id" INT,
+"genus_id" INT,
+"subGenus_id" INT,
+"species_id" INT, 
+"subSpecies_id" INT,
+PRIMARY KEY ("id_population"),
+UNIQUE ("id_population"),
+FOREIGN KEY("order_id") REFERENCES "Order"("id_order"),
+FOREIGN KEY("family_id") REFERENCES "Family"("id_family"),
+FOREIGN KEY("subFamily_id") REFERENCES "subFamily"("id_subfamily"),
+FOREIGN KEY("genus_id") REFERENCES "Genus"("id_genus"),
+FOREIGN KEY("subGenus_id") REFERENCES "subGenus"("id_subgenus"),
+FOREIGN KEY("species_id") REFERENCES "Species"("id_species"),
+FOREIGN KEY("subSpecies_id") REFERENCES "subSpecies"("id_subspecies")
+);
+
+CREATE TABLE "Collection" (
+"id_collection" INT NOT NULL,
+"name" VARCHAR(50) NOT NULL,
+UNIQUE("id_collection"),
+PRIMARY KEY ("id_collection")
+);
+
+CREATE TABLE "SpeciesRange" (
+"id_speciesrange" INT NOT NULL,
+"range_begin" VARCHAR(5) NOT NULL,
+"range_end" VARCHAR(5) NOT NULL,
+UNIQUE("id_speciesrange"),
+PRIMARY KEY ("id_speciesrange")
+);
+
+CREATE TABLE "GenusRange" (
+"id_genusrange" INT NOT NULL,
+"range_begin" VARCHAR(5) NOT NULL,
+"range_end" VARCHAR(5) NOT NULL,
+UNIQUE("id_genusrange"),
+PRIMARY KEY ("id_genusrange")
+);
+
+CREATE TABLE "Box" (
+"id_box" INT NOT NULL,
+"population_id" INT NOT NULL,
+"location" VARCHAR(50),
+"speciesrange_id" INT,
+"genusrange_id" INT,
+"museum" VARCHAR(50),
+"paratypes" INT, 
+"types" INT, 
+UNIQUE("id_box"),
+PRIMARY KEY ("id_box"),
+FOREIGN KEY ("population_id") REFERENCES "Population"("id_population"),
+FOREIGN KEY ("speciesrange_id") REFERENCES "SpeciesRange"("id_speciesrange"),
+FOREIGN KEY ("genusrange_id") REFERENCES "GenusRange"("id_genusrange")
+);
+
+CREATE TABLE "CollectionBox" (
+"collection_id" INT NOT NULL,
+"box_id" INT NOT NULL,
+PRIMARY KEY("collection_id", "box_id"),
+CONSTRAINT "UC_CollectionBox" UNIQUE ("collection_id", "box_id")
+);
+
+CREATE TABLE "Individu" (
+"id_individu" INT NOT NULL,
+"box_id" INT NOT NULL,
+"population_id" INT NOT NULL,
+"continent" VARCHAR(50),
+"country" VARCHAR(50), 
+"ecozone" VARCHAR(50),
+UNIQUE ("id_individu"),
+PRIMARY KEY ("id_individu"),
+FOREIGN KEY ("box_id") REFERENCES "Box"("id_box"),
+FOREIGN KEY ("population_id") REFERENCES "Population"("id_population")
+);
+
+CREATE TABLE "Loaner" (
+"id_loaner" INT NOT NULL,
+"name" VARCHAR(50) NOT NULL,
+"mail" VARCHAR(100),
+"phone" VARCHAR(25),
+UNIQUE ("id_loaner"),
+UNIQUE ("mail"),
+UNIQUE ("phone"),
+PRIMARY KEY ("id_loaner")
+);
+
+
+CREATE TABLE "loanBox" (
+"loaner_id" INT NOT NULL,
+"box_id" INT NOT NULL,
+"begin_date" DATE NOT NULL,
+"end_date" DATE NOT NULL,
+UNIQUE("loaner_id"),
+PRIMARY KEY("loaner_id","box_id", "begin_date", "end_date"),
+FOREIGN KEY ("loaner_id") REFERENCES "Loaner"("id_loaner"),
+FOREIGN KEY ("box_id") REFERENCES "Box"("id_box"),
+CONSTRAINT "UC_loanBox" UNIQUE ("loaner_id","box_id", "begin_date", "end_date")
+);
+
+CREATE TABLE "loanIndividu" (
+"loaner_id" INT NOT NULL,
+"individu_id" INT NOT NULL,
+"begin_date" DATE NOT NULL,
+"end_date" DATE NOT NULL,
+UNIQUE("loaner_id"),
+PRIMARY KEY("loaner_id","individu_id", "begin_date", "end_date"),
+FOREIGN KEY ("loaner_id") REFERENCES "Loaner"("id_loaner"),
+FOREIGN KEY ("individu_id") REFERENCES "Individu"("id_individu"),
+CONSTRAINT "UC_loanIndividu" UNIQUE ("loaner_id","individu_id", "begin_date", "end_date")
+);
