@@ -1,14 +1,22 @@
 ﻿CREATE TABLE "Order" (
 "id_order" INT NOT NULL,
-"name" VARCHAR(50) NOT NULL,
+"name" VARCHAR(100) NOT NULL,
 PRIMARY KEY ("id_order"),
 UNIQUE ("id_order"),
 UNIQUE ("name")
 );
 
+﻿CREATE TABLE "subOrder" (
+"id_suborder" INT NOT NULL,
+"name" VARCHAR(500) NOT NULL,
+PRIMARY KEY ("id_suborder"),
+UNIQUE ("id_suborder"),
+UNIQUE ("name")
+);
+
 CREATE TABLE "Family" (
 "id_family" INT NOT NULL,
-"name" VARCHAR(50) NOT NULL,
+"name" VARCHAR(500) NOT NULL,
 PRIMARY KEY ("id_family"),
 UNIQUE ("id_family"),
 UNIQUE ("name")
@@ -16,7 +24,7 @@ UNIQUE ("name")
 
 CREATE TABLE "subFamily" (
 "id_subfamily" INT NOT NULL,
-"name" VARCHAR(50) NOT NULL,
+"name" VARCHAR(500) NOT NULL,
 PRIMARY KEY ("id_subfamily"),
 UNIQUE ("id_subfamily"),
 UNIQUE ("name")
@@ -24,14 +32,14 @@ UNIQUE ("name")
 
 CREATE TABLE "Scientific" (
 "id_sc" INT NOT NULL,
-"name" VARCHAR(50) NOT NULL,
+"name" VARCHAR(500) NOT NULL,
 PRIMARY KEY ("id_sc"),
 UNIQUE ("id_sc")
 );
 
 CREATE TABLE "Genus" (
 "id_genus" INT NOT NULL,
-"name" VARCHAR(50) NOT NULL,
+"name" VARCHAR(500) NOT NULL,
 "id_sc" INT,
 "date" DATE, 
 PRIMARY KEY ("id_genus"),
@@ -43,7 +51,7 @@ FOREIGN KEY("id_sc") REFERENCES "Scientific"("id_sc")
 
 CREATE TABLE "subGenus" (
 "id_subgenus" INT NOT NULL,
-"name" VARCHAR(50) NOT NULL,
+"name" VARCHAR(500) NOT NULL,
 "id_sc" INT,
 "date" DATE, 
 PRIMARY KEY ("id_subgenus"),
@@ -56,7 +64,7 @@ FOREIGN KEY("id_sc") REFERENCES "Scientific"("id_sc")
 
 CREATE TABLE "Species" (
 "id_species" INT NOT NULL,
-"name" VARCHAR(50) NOT NULL,
+"name" VARCHAR(500) NOT NULL,
 "id_sc" INT,
 "date" DATE, 
 PRIMARY KEY ("id_species"),
@@ -68,7 +76,7 @@ FOREIGN KEY("id_sc") REFERENCES "Scientific"("id_sc")
 
 CREATE TABLE "subSpecies" (
 "id_subspecies" INT NOT NULL,
-"name" VARCHAR(50) NOT NULL,
+"name" VARCHAR(500) NOT NULL,
 "id_sc" INT,
 "date" DATE, 
 PRIMARY KEY ("id_subspecies"),
@@ -80,6 +88,7 @@ FOREIGN KEY("id_sc") REFERENCES "Scientific"("id_sc")
 CREATE TABLE "Population" (
 "id_population" INT NOT NULL,
 "order_id" INT NOT NULL,
+"suborder_id" INT,
 "family_id" INT,
 "subFamily_id" INT,
 "genus_id" INT,
@@ -89,6 +98,7 @@ CREATE TABLE "Population" (
 PRIMARY KEY ("id_population"),
 UNIQUE ("id_population"),
 FOREIGN KEY("order_id") REFERENCES "Order"("id_order"),
+FOREIGN KEY("suborder_id") REFERENCES "Order"("id_suborder"),
 FOREIGN KEY("family_id") REFERENCES "Family"("id_family"),
 FOREIGN KEY("subFamily_id") REFERENCES "subFamily"("id_subfamily"),
 FOREIGN KEY("genus_id") REFERENCES "Genus"("id_genus"),
@@ -99,7 +109,7 @@ FOREIGN KEY("subSpecies_id") REFERENCES "subSpecies"("id_subspecies")
 
 CREATE TABLE "Collection" (
 "id_collection" INT NOT NULL,
-"name" VARCHAR(50) NOT NULL,
+"name" VARCHAR(100) NOT NULL,
 UNIQUE("id_collection"),
 PRIMARY KEY ("id_collection")
 );
@@ -114,8 +124,8 @@ PRIMARY KEY ("id_speciesrange")
 
 CREATE TABLE "GenusRange" (
 "id_genusrange" INT NOT NULL,
-"range_begin" VARCHAR(5) NOT NULL,
-"range_end" VARCHAR(5) NOT NULL,
+"range_begin" VARCHAR(10) NOT NULL,
+"range_end" VARCHAR(10) NOT NULL,
 UNIQUE("id_genusrange"),
 PRIMARY KEY ("id_genusrange")
 );

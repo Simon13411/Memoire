@@ -18,6 +18,7 @@ build-dbops:
 	docker build -t dbops $(DBOPS)/
 
 
+run: run-front run-db run-gate run-dbops
 
 run-front:
 	docker run -p 1050:80 --name frontc front

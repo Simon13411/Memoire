@@ -14,23 +14,44 @@ class Selection extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      order: '',
-      suborder: '',
-      genus: '',
-      subgenus: '',
-      family: '',
-      subfamily: '',
-      species: '',
-      subspecies: '',
-      results: []
+      order: 'NULL',
+      suborder: 'NULL',
+      genus: 'NULL',
+      subgenus: 'NULL',
+      family: 'NULL',
+      subfamily: 'NULL',
+      species: 'NULL',
+      subspecies: 'NULL',
+      results: [],
+      orderlist: [],
+      suborderlist: [],
+      genuslist: [],
+      subgenuslist: [],
+      familylist: [],
+      subfamilylist: [],
+      specieslist: [],
+      subspecieslist: [],
     }
   }
 
+  isselectionempty() {
+    return (this.state.order === 'NULL' && this.state.suborder === 'NULL' && this.state.genus === 'NULL' && this.state.subgenus === 'NULL' 
+      && this.state.family === 'NULL' && this.state.subfamily === 'NULL' && this.state.species === 'NULL' && this.state.subspecies === 'NULL')
+  }
+
   fetchResults = () => {
-    axios.get(`${url}/get_all`)
-    .then((res) => {
-        this.setState({results: res.data.rows})
-    })
+    if (!this.isselectionempty()) {
+      axios.get(`${url}/get_result/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}`)
+      .then((res) => {
+          this.setState({results: res.data.rows})
+      })
+    }
+    else {
+      axios.get(`${url}/get_all`)
+      .then((res) => {
+          this.setState({results: res.data.rows})
+      })
+    }
   }
 
   OrderChange = (event) => {
@@ -61,9 +82,14 @@ class Selection extends React.Component {
   }
   
   componentDidMount() {
-    axios.get(`${url}/get_all`)
+    /*axios.get(`${url}/get_all`)
     .then((res) => {
         this.setState({results: res.data.rows})
+    })*/
+
+    axios.get(`${url}/get_selection`)
+    .then((res) => {
+        this.setState({orderlist: res.data.rows})
     })
   }
 
@@ -71,7 +97,7 @@ class Selection extends React.Component {
     return(
       <>
         <Box sx={{m:1, border: 1, borderColor: 'green', width:130}}>
-          <button buttonStyle='btn--outline' onClick={this.fetchResults}>SEARCH</button>
+          <button buttonStyle='btn--outline' onClick={this.fetchResults}>SEARCH BOXES</button>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
             <InputLabel id="demo-simple-select-label">Order</InputLabel>
             <Select
@@ -81,11 +107,12 @@ class Selection extends React.Component {
               label="Order"
               onChange={this.OrderChange}
             >
-              <MenuItem value=''>
+              <MenuItem value='NULL'>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={'10'}>Ten</MenuItem>
-              <MenuItem value={20}>Four</MenuItem>
+              {this.state.orderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+              <MenuItem value={"Hymenoptera"}>Hymenoptera</MenuItem>
+              <MenuItem value={"Lepidoptera"}>Lepidoptera</MenuItem>
               <MenuItem value={30}>Quad</MenuItem>
             </Select>
           </FormControl>
@@ -98,6 +125,9 @@ class Selection extends React.Component {
               label="subOrder"
               onChange={this.subOrderChange}
             >
+              <MenuItem value='NULL'>
+                <em>None</em>
+              </MenuItem>
               <MenuItem value={10}>Ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
@@ -112,6 +142,9 @@ class Selection extends React.Component {
               label="Genus"
               onChange={this.GenusChange}
             >
+              <MenuItem value='NULL'>
+                <em>None</em>
+              </MenuItem>
               <MenuItem value={10}>Ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
@@ -126,6 +159,9 @@ class Selection extends React.Component {
               label="subGenus"
               onChange={this.subGenusChange}
             >
+              <MenuItem value='NULL'>
+                <em>None</em>
+              </MenuItem>
               <MenuItem value={10}>Ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
@@ -140,6 +176,9 @@ class Selection extends React.Component {
               label="family"
               onChange={this.FamilyChange}
             >
+              <MenuItem value='NULL'>
+                <em>None</em>
+              </MenuItem>
               <MenuItem value={10}>Ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
@@ -154,6 +193,9 @@ class Selection extends React.Component {
               label="subfamily"
               onChange={this.subFamilyChange}
             >
+              <MenuItem value='NULL'>
+                <em>None</em>
+              </MenuItem>
               <MenuItem value={10}>Ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
@@ -168,7 +210,7 @@ class Selection extends React.Component {
               label="Species"
               onChange={this.SpeciesChange}
             >
-              <MenuItem value="">
+              <MenuItem value='NULL'>
                 <em>None</em>
               </MenuItem>
               <MenuItem value={10}>Ten</MenuItem>
@@ -185,7 +227,7 @@ class Selection extends React.Component {
               label="Species"
               onChange={this.subSpeciesChange}
             >
-              <MenuItem value="">
+              <MenuItem value='NULL'>
                 <em>None</em>
               </MenuItem>
               <MenuItem value={10}>Ten</MenuItem>
@@ -195,7 +237,7 @@ class Selection extends React.Component {
           </FormControl>
         </Box>
         <ul class="datalist">
-          {this.state.results.map((data) => <li><Result order={data.Att1} suborder={data.Att2}></Result></li>)}
+          {this.state.results.map((data) => <li><Result order={data.Order} suborder={data.subOrder} family={data.Family} subfamily={data.SubFamily}></Result></li>)}
         </ul>
       </>
     );

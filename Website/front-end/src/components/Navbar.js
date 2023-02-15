@@ -24,7 +24,17 @@ function Navbar() {
           <ul className={click ? 'nav-menu active' : 'nav-menu'}>
             <li className='nav-item'>
               <Link to='/' className='nav-links'>
-                Home
+                Boxes
+              </Link>
+            </li>
+            <li className='nav-item'>
+              <Link to='/IndividualSearch' className='nav-links'>
+                Individuals
+              </Link>
+            </li>
+            <li className='nav-item'>
+              <Link to='/AddData' className='nav-links'>
+                Add Data
               </Link>
             </li>
             <li>

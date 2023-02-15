@@ -11,8 +11,16 @@ app.get('/get_all', (req, res) => {
     res.redirect(307, `http://${IP}:4001/get_all`)
 })
 
-app.get('/get_query', (req, res) => {
-    res.redirect(307, `http://${IP}:4001/get_query`)
+app.get('/get_query/:order/:suborder/:family/:subfamily', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_result/${req.params.order}/${req.params.suborder}/${req.params.family}/${req.params.subfamily}`)
+})
+
+app.get('/get_selection', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_selection`)
+})
+
+app.put('/csvtosql', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/csvtosql`)
 })
 
 module.exports = app

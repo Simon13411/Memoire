@@ -5,6 +5,7 @@ WORKDIR /usr/src/scapp-front-end
 COPY package.json .
 
 RUN npm install
+RUN npm install @fontsource/source-sans-pro
 
 ENV DB_HOST dbtest
 ENV DB_USER admin
