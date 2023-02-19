@@ -23,4 +23,14 @@ app.put('/csvtosql', (req, res) => {
     res.redirect(307, `http://${IP}:4001/csvtosql`)
 })
 
+
+//FileDownloader
+app.get('/boxestemplate', (req, res) => {
+    res.redirect(307, `http://${IP}:4002/boxestemplate`)
+})
+
+app.get('/individualstemplate', (req, res) => {
+    res.redirect(307, `http://${IP}:4002/individualstemplate`)
+})
+
 module.exports = app
