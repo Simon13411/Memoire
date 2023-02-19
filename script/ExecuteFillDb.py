@@ -7,12 +7,14 @@ import subgenus
 import species
 import Collection
 import speciesrange
+import genusrange
 import tribu
 import suborder
 
 
 import pandas as pd
 import psycopg2
+import sqlite3
 
 
 file = pd.ExcelFile("FilteredData.xlsx")
@@ -38,9 +40,10 @@ Genus.insertGenus(data, cursor, conn)
 subgenus.insertSubGenus(data, cursor, conn)
 species.insertSpecies(data, cursor, conn)
 Collection.insertCollection(data, cursor, conn)
-#speciesrange.insertOrder(data, cursor, conn)
-#tribu.insertTribu(data, cursor, conn)
+speciesrange.insertOrder(data, cursor, conn)
+tribu.insertTribu(data, cursor, conn)
 suborder.insertSubOrder(data, cursor, conn)
+genusrange.insertOrder(data, cursor, conn)
 
 
 

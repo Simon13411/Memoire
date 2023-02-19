@@ -14,6 +14,15 @@ UNIQUE ("id_suborder"),
 UNIQUE ("name")
 );
 
+CREATE TABLE "Tribu" (
+"id_stribu" INT NOT NULL,
+"name" VARCHAR(50) NOT NULL,
+PRIMARY KEY ("id_tribu"),
+UNIQUE ("id_tribu"),
+UNIQUE ("name")
+);
+
+
 CREATE TABLE "Family" (
 "id_family" INT NOT NULL,
 "name" VARCHAR(500) NOT NULL,
@@ -89,6 +98,7 @@ CREATE TABLE "Population" (
 "id_population" INT NOT NULL,
 "order_id" INT NOT NULL,
 "suborder_id" INT,
+"tribu_id" INT NOT NULL,
 "family_id" INT,
 "subFamily_id" INT,
 "genus_id" INT,
@@ -104,7 +114,9 @@ FOREIGN KEY("subFamily_id") REFERENCES "subFamily"("id_subfamily"),
 FOREIGN KEY("genus_id") REFERENCES "Genus"("id_genus"),
 FOREIGN KEY("subGenus_id") REFERENCES "subGenus"("id_subgenus"),
 FOREIGN KEY("species_id") REFERENCES "Species"("id_species"),
-FOREIGN KEY("subSpecies_id") REFERENCES "subSpecies"("id_subspecies")
+FOREIGN KEY("subSpecies_id") REFERENCES "subSpecies"("id_subspecies"),
+FOREIGN KEY("tribu_id") REFERENCES Tribu("id_tribu")
+
 );
 
 CREATE TABLE "Collection" (
