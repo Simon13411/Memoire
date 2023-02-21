@@ -1,4 +1,4 @@
-FROM node:11.0.0-alpine
+FROM node:18.14.1-alpine3.16
 
 WORKDIR /usr/dbops
 
@@ -6,7 +6,7 @@ RUN apk update && apk add
 
 COPY package.json .
 
-RUN npm install
+RUN npm install -g npm@latest
 RUN npm install multer
 
 RUN apk add --no-cache python3

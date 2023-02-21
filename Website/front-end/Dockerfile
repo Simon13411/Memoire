@@ -1,10 +1,10 @@
-FROM node:alpine
+FROM node:18.14.1-alpine3.16
 
 WORKDIR /usr/src/scapp-front-end
 
 COPY package.json .
 
-RUN npm install
+RUN npm install -g npm@latest
 RUN npm install @fontsource/source-sans-pro
 
 ENV DB_HOST dbtest

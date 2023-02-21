@@ -1,5 +1,4 @@
 const { Client } = require('pg');
-const { search } = require('./app');
 const { spawn } = require('child_process');
 const client = new Client({
     user: 'postgres',
