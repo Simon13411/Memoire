@@ -3,7 +3,15 @@ import pandas as pd
 import numpy as np
 
 def insertPopulation(data, cursor, conn) :
-    toinsert = data["Order"].values.tolist()
+    toinsertOrder = data["Order"].values.tolist()
+    toinsertSubOrder = data["SubOrder"].values.tolist()
+    toinsertTribu = data["Tribu"].values.tolist()
+    toinsertFamily = data["Family"].values.tolist()
+    toinsertSubFamily = data["SubFamily"].values.tolist()
+    toinsertGenus = data["Genus"].values.tolist()
+    toinsertSubGenus = data["SubGenus"].values.tolist()
+    toinsertSpecies = data["species"].values.tolist()
+    toinsertSubSpecies = data[""].values.tolist()
     duplicationquery =  """SELECT MAX(id_order)
                             FROM Ordre"""
     cursor.execute(duplicationquery)

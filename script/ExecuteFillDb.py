@@ -10,6 +10,7 @@ import speciesrange
 import genusrange
 import tribu
 import suborder
+import subspecies
 
 
 import pandas as pd
@@ -44,6 +45,7 @@ speciesrange.insertOrder(data, cursor, conn)
 tribu.insertTribu(data, cursor, conn)
 suborder.insertSubOrder(data, cursor, conn)
 genusrange.insertOrder(data, cursor, conn)
+subspecies.insertSubSpecies(data, cursor, conn)
 
 
 

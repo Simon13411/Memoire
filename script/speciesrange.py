@@ -15,7 +15,6 @@ def insertOrder(data, cursor, conn) :
         Count = result[0][0]+1
 
     for i in range(0, len(toinsert)):
-        print(type(toinsert[i]) , toinsert[i])
         if isinstance(toinsert[i], str):
             
             speciesrangeList = toinsert[i].split("_")
@@ -24,8 +23,6 @@ def insertOrder(data, cursor, conn) :
                end = speciesrangeList[1]
             else:
                end = ""
-            print("start", start)
-            print("end ", end)
             duplicationquery =  """SELECT *
                                     FROM SpeciesRange 
                                     WHERE range_begin = "{}" and range_end= "{}" """.format(start, end) 
