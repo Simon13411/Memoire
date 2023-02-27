@@ -3,7 +3,13 @@ import pandas as pd
 import numpy as np
 import math
 
-def insertPopulation(data, cursor, conn) :
+def insertBox(data, cursor, conn) :
+    toinsertID = data["Num_ID"].values.tolist()
+    toinsertLocation = data["Box_Localization"].values.tolist()
+    toinsertMuseum = data["Museum"].values.tolist()
+    toinsertParaType = data["Paratypes"].values.tolist()
+    toinsertType = data["Types"].values.tolist()
+    
     toinsertOrder = data["Order"].values.tolist()
     toinsertSubOrder = data["Suborder"].values.tolist()
     toinsertTribu = data["Tribu"].values.tolist()
@@ -14,8 +20,12 @@ def insertPopulation(data, cursor, conn) :
     toinsertSpecies = data["species"].values.tolist()
     toinsertSubSpecies = data["Subspecies"].values.tolist()
     
-    duplicationquery =  """SELECT MAX(id_population)
-                            FROM Population"""
+    
+    toinsertGenusRange = data["Genus_range"].values.tolist()
+    toinsertSpeciesRange = data["Species_range"].values.tolist()
+    
+    duplicationquery =  """SELECT MAX(id_box)
+                            FROM Box"""
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
@@ -23,7 +33,7 @@ def insertPopulation(data, cursor, conn) :
     if result != [(None,)] :
         Count = result[0][0]+1
 
-    for i in range(0, len(toinsertOrder)):
+    for i in range(0, len(toinsertID)):
         #On recupere l'ordre
         order = """SELECT id_order
                         FROM Ordre
@@ -133,19 +143,90 @@ def insertPopulation(data, cursor, conn) :
         speciesValue = speciesList[0][0] if isinstance(toinsertSpecies[i],str) else 0
       
         subSpeciesValue = subSpeciesList[0][0] if isinstance(toinsertSubSpecies[i],str) else 0
-  
+        
+        
+        
         duplicationquery =  """SELECT *
-                                FROM Population 
-                                WHERE order_id = "{}" and suborder_id = "{}" and tribu_id = "{}" and family_id = "{}" and subFamily_id = "{}" and genus_id = "{}" and subGenus_id = "{}" and species_id = "{}" and subSpecies_id = "{}" """.format(orderValue, subOrderValue, tribuValue, familyValue, subFamilyValue, genusValue, subGenusValue, speciesValue, subSpeciesValue) 
+                                FROM Box 
+                                WHERE id_box = "{}" """.format(toinsertID[i]) 
         cursor.execute(duplicationquery)
         if cursor.fetchall() == [] :
-
-                            
+            #On recupere l'id de la population de la boite
+            id_population =  """SELECT id_population
+                                FROM Population 
+                                WHERE order_id = "{}" and suborder_id = "{}" and tribu_id = "{}" and family_id = "{}" and subFamily_id = "{}" and genus_id = "{}" and subGenus_id = "{}" and species_id = "{}" and subSpecies_id = "{}" """.format(orderValue, subOrderValue, tribuValue, familyValue, subFamilyValue, genusValue, subGenusValue, speciesValue, subSpeciesValue) 
+            cursor.execute(id_population)
+            id_populationList = cursor.fetchall()
+            if (len(id_populationList)>1): #juste check mais normalement devrait pas aller la
+                print("Pas normal")
+                print(id_populationList)
+            if(len(id_populationList)==0):
+                print("HEYYYYYY PAS BIEN")
+                print(id_populationList)
             
-            insertquery = """INSERT INTO Population
-                            (id_population, order_id, suborder_id , tribu_id , family_id ,subFamily_id, genus_id, subGenus_id , species_id, subSpecies_id) 
-                            VALUES 
-                            ({},{},{},{},{},{},{},{},{},{})""".format(Count, orderValue, subOrderValue, tribuValue, familyValue, subFamilyValue, genusValue, subGenusValue, speciesValue, subSpeciesValue)
+            #On recupere l'id du genus range
+            genusFlag = False
+            if isinstance(toinsertGenusRange[i], str):
+            
+                genusrangeList = toinsertGenusRange[i].split("_")
+                start = genusrangeList[0]
+                if(len(genusrangeList)==2):
+                    end = genusrangeList[1]
+                else:
+                    end = ""   
+                #S il y a un genus descriptor, on va recupere l'id du sc
+                id_genusRange =  """SELECT id_genusrange
+                                FROM GenusRange 
+                                WHERE range_begin = "{}" and range_end = "{}"  """.format(start, end) 
+                cursor.execute(id_genusRange)
+                id_genusRangeList = cursor.fetchall()
+                if (len(id_genusRangeList)>1): #juste check mais normalement devrait pas aller la
+                    print("Pas normal")
+                    print(id_genusRangeList)
+                genusFlag = True
+            #On recupere l'id du species range   
+            speciesFlag = False
+            if isinstance(toinsertSpeciesRange[i], str):
+            
+                speciesrangeList = toinsertSpeciesRange[i].split("_")
+                speciesstart = speciesrangeList[0]
+                if(len(speciesrangeList)==2):
+                    speciesend = speciesrangeList[1]
+                else:
+                    speciesend = ""   
+                #S il y a un genus descriptor, on va recupere l'id du sc
+                id_speciesRange =  """SELECT id_speciesrange
+                                FROM SpeciesRange 
+                                WHERE range_begin = "{}" and range_end = "{}"  """.format(speciesstart, speciesend) 
+                cursor.execute(id_speciesRange)
+                id_speciesRangeList = cursor.fetchall()
+                if (len(id_speciesRangeList)>1): #juste check mais normalement devrait pas aller la
+                    print("Pas normal")
+                    print(id_speciesRangeList)
+                speciesFlag = True
+                
+            location = toinsertLocation[i] if isinstance(toinsertLocation[i],str) else ""
+            museum = toinsertMuseum[i] if isinstance(toinsertMuseum[i], str) else ""
+            
+            paratype = math.nan if isinstance(toinsertParaType[i], str) else toinsertParaType[i]
+            paratype = paratype if not math.isnan(paratype) else 0
+            paratype = 0 if isinstance(paratype, str) else paratype
+            types = toinsertType[i] if not math.isnan(toinsertType[i]) else 0
+            genusrangeID = id_genusRangeList[0][0] if genusFlag else 0
+            speciesrangeID = id_speciesRangeList[0][0] if speciesFlag else 0
+            print("type: ", types)
+            print("paratype: ", paratype)
+            print("id population: ", id_populationList[0][0])
+            print("location: ", location)
+            print("museum: ", museum)
+            print("genus range: ", genusrangeID)
+            print("species range: ", speciesrangeID)
+            
+            insertquery = """INSERT INTO Box
+                                (id_box, population_id, location, speciesrange_id, genusrange_id, museum, paratypes, types) 
+                                VALUES 
+                                ({},{},"{}",{},{},"{}",{},{})""".format(toinsertID[i], id_populationList[0][0], location, speciesrangeID, genusrangeID, museum, paratype, types)
+            print(insertquery)
             cursor.execute(insertquery)
             Count+=1
     conn.commit()

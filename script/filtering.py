@@ -59,6 +59,10 @@ for i, row in df.iterrows() :
         baddf.loc[len(baddf)] = row
         count += 1
         continue
+    if not isinstance(row.Order, str):
+        baddf.loc[len(baddf)] = row
+        count += 1
+        continue
     if isinstance(row.Genus_Descriptor, str) and not (row.Genus_Descriptor != row.Genus_Descriptor):
         splittedrow = row.Genus_Descriptor.split()
         if len(splittedrow) == 1 and any(char.isdigit() for char in splittedrow[0]):
