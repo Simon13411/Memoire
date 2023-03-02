@@ -24,3 +24,49 @@ SELECT individu (et toutes ses infos) en fonction d'un ordre, sous-ordre, genus,
 SELECT loaner d'une box
 
 SELECT loaner d'un individu
+
+UPDATE loaner d'une box
+
+UPDATE order  d'une box
+
+UPDATE suborder d'une box
+
+UPDATE genus d'une box
+
+UPDATE subgenus d'une box
+
+UPDATE family d'une box
+
+UPDATE subfamily d'une box
+
+UPDATE species d'une box
+
+UPDATE subspecies d'une box
+
+UPDATE tribus d'une box
+
+UPDATE subtribus d'une box
+
+UPDATE loaner d'un individu
+
+UPDATE order d'un individu
+
+UPDATE suborder d'un individu
+
+UPDATE genus d'un individu
+
+UPDATE subgenus d'un individu
+
+UPDATE family d'un individu
+
+UPDATE subfamily d'un individu
+
+UPDATE species d'un individu
+
+UPDATE subspecies d'un individu
+
+UPDATE tribus d'un individu
+
+UPDATE subtribus d'un individu
+
+
