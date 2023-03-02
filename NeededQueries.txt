@@ -1,0 +1,26 @@
+SELECT suborder en fonction d'un ordre 'order'
+
+SELECT genus en fonction d'un sous-order 'suborder'
+
+SELECT subgenus en fonction d'un genus 'genus'
+
+SELECT family en fonction d'un subgenus 'subgenus'
+
+SELECT subfamily en fonction d'un famille 'family'
+
+SELECT species en fonction d'un subfamille 'subfamily'
+
+SELECT subspecies en fonction d'un species 'species'
+
+SELECT tribus en fonction d'un subspecies 'subspecies'
+
+SELECT subtribus en fonction d'un tribus 'tribus'
+
+
+SELECT box (et toutes ses infos) en fonction d'un ordre, sous-ordre, genus, subgenus, ...
+
+SELECT individu (et toutes ses infos) en fonction d'un ordre, sous-ordre, genus, subgenus, ... numéro de boite
+
+SELECT loaner d'une box
+
+SELECT loaner d'un individu
