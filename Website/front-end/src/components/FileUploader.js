@@ -24,20 +24,6 @@ class FileUploader extends Component {
     }
   };
 
-  handleFileDrop = (event) => {
-    event.preventDefault();
-    const file = event.dataTransfer.files[0];
-    if (file && file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-      this.setState({
-        selectedFile: file
-      });
-    } else {
-      this.setState({
-        fileError: 'Le fichier doit être de type .xlsx',
-      });
-    }
-  };
-
   CsvToSQL = (event) => {
     const formData = new FormData();
     formData.append('file', this.state.selectedFile);
@@ -61,14 +47,14 @@ class FileUploader extends Component {
 
   render() {
     return (
-      <div onDrop={this.handleFileDrop} onDragOver={(e) => e.preventDefault()}>
+      <div>
         <label>
           {this.state.fileName}
           <input type="file" onChange={this.handleFileChange} accept=".xlsx" />
         </label>
         {this.state.fileError && <p style={{ color: 'red' }}>{this.state.fileError}</p>}
         {
-          this.showbutton ? (
+          this.showbutton() ? (
             <button buttonStyle='btn--outline' onClick={this.CsvToSQL}>Add Data</button>
           ) : (
             <></>

@@ -6,7 +6,7 @@ import './AddData.css';
 
 function AddData() {
   return (
-    <>
+    <div>
         <Navbar />
         <div className="container">
         <div className="left-panel">
@@ -28,7 +28,7 @@ function AddData() {
           </div>
         </div>
         </div>
-    </>
+    </div>
   );
 }
 
