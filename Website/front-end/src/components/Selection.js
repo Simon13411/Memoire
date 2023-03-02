@@ -22,6 +22,8 @@ class Selection extends React.Component {
       subfamily: 'NULL',
       species: 'NULL',
       subspecies: 'NULL',
+      tribus: 'NULL',
+      subtribus: 'NULL',
       results: [],
       orderlist: [],
       suborderlist: [],
@@ -31,6 +33,8 @@ class Selection extends React.Component {
       subfamilylist: [],
       specieslist: [],
       subspecieslist: [],
+      tribuslist: [],
+      subtribuslist: []
     }
   }
 
