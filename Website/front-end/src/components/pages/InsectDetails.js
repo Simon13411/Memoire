@@ -1,4 +1,6 @@
 import * as React from 'react';
+import Navbar from '../Navbar';
+import './Details.css';
 
 class InsectDetails extends React.Component {
     constructor (props) {
@@ -11,7 +13,7 @@ class InsectDetails extends React.Component {
         family: 'NULL',
         subfamily: 'NULL',
         species: 'NULL',
-        subspecies: 'NULL',
+        subspecies: 'Test',
         tribus: 'NULL',
         subtribus: 'NULL',
         loaner: 'NULL',
