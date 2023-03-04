@@ -5,6 +5,7 @@ import InsectDetails from './components/pages/InsectDetails';
 import BoxesHome from './components/pages/BoxesHome';
 import InsectHome from './components/pages/InsectHome';
 import AddData from './components/pages/AddData';
+import AboutUs from './components/pages/AboutUs';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignUp from './components/pages/SignUp';
 import "@fontsource/source-sans-pro"
@@ -16,11 +17,12 @@ class App extends React.Component {
         <Router>
           <Routes>
             <Route path='/' element={<BoxesHome/>} />
-            <Route path='/IndividualSearch' element={<InsectHome/>} />
-            <Route path='/Individual' element={<InsectDetails/>} />
-            <Route path='/Box' element={<BoxDetails/>} />
-            <Route path='/AddData' element={<AddData/>} />
+            <Route path='/indiv-search' element={<InsectHome/>} />
+            <Route path='/individual' element={<InsectDetails/>} />
+            <Route path='/box' element={<BoxDetails/>} />
+            <Route path='/add-data' element={<AddData/>} />
             <Route path='/sign-up' element={<SignUp/>} />
+            <Route path='/about-us' element={<AboutUs/>} />
           </Routes>
         </Router>
       </>
