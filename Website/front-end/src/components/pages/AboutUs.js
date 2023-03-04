@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Navbar from '../Navbar';
-import './Details.css';
 
 class AboutUs extends React.Component {
     constructor (props) {
@@ -11,9 +10,9 @@ class AboutUs extends React.Component {
         return (
             <>
             <Navbar />
-                <div className="contact-container">
+                <div>
                 <h2>Contact Us</h2>
-                    <div className="contact-info">
+                    <div>
                         <p><strong>Company Name:</strong> My Group</p>
                         <p><strong>Phone Number:</strong> 123-456-7890</p>
                         <p><strong>Email:</strong> contact@mygroup.com</p>
