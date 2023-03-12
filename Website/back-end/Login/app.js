@@ -1,12 +1,17 @@
 const express = require('express');
-const app = express();
+
 const loginops = require('./login_ops')
 
-app.get('/login/:username/:pw', (req, res) => {
-  const un = req.params.username
-  const pw = req.params.pw
+const app = express();
+const bodyParser = require('body-parser');
 
-  return loginops.login(un, pw)
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+
+  return loginops.login(username, password)
   .then((result) => {
       res.status(200).json(result)
   })

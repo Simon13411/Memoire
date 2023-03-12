@@ -34,12 +34,12 @@ app.get('/individualstemplate', (req, res) => {
 })
 
 //LogIn and SignIn
-app.get('/login/:username/:pw', (req, res) => {
-    res.redirect(307, `http://${IP}:4003/login/${req.params.username}/${req.params.pw}`)
+app.post('/login', (req, res) => {
+    res.redirect(307, `http://${IP}:4003/login`)
 })
 
-app.get('/signin/:username/:pw', (req, res) => {
-    res.redirect(307, `http://${IP}:4003/signin/${req.params.username}/${req.params.pw}`)
+app.post('/signin', (req, res) => {
+    res.redirect(307, `http://${IP}:4003/signin`)
 })
 
 module.exports = app

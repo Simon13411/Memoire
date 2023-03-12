@@ -25,7 +25,10 @@ class Authentication extends React.Component {
     }
 
     loginUser = (event) => {
-        axios.get(`${url}/login/${this.state.username}/${this.state.password}`)
+        axios.post(`${url}/login`, {
+            username: this.state.username,
+            password: this.state.password
+          })
         .then((res) => {
             console.log(res.data.rows)
             if (res.data.rows[0].count === "1") {
