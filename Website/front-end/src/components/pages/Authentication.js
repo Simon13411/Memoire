@@ -2,12 +2,16 @@ import * as React from 'react';
 import Navbar from '../Navbar';
 import {useNavigate} from 'react-router-dom';
 
+import axios from 'axios'
+const url = 'http://localhost:4000'
+
 class Authentication extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             username: '',
             password: '',
+            loginstate: ''
         }
     }
 
@@ -21,9 +25,16 @@ class Authentication extends React.Component {
     }
 
     loginUser = (event) => {
-        if (this.state.username === 'test1' && this.state.password === 'test2') {
-            this.props.navigate('/admin-pannel')
-        }
+        axios.get(`${url}/login/${this.state.username}/${this.state.password}`)
+        .then((res) => {
+            console.log(res.data.rows)
+            if (res.data.rows[0].count === "1") {
+                this.props.navigate('/admin-pannel')
+            }
+            else {
+                this.setState({loginstate: 'Wrong username or password'})
+            }
+        })
     }
 
     onSubmit (event) {
@@ -72,6 +83,9 @@ class Authentication extends React.Component {
                         type='submit'>
                             Log in
                     </button>
+                </div>
+                <div>
+                    {this.state.loginstate}
                 </div>
             </form>
         </div>

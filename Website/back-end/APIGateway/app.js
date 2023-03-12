@@ -33,4 +33,13 @@ app.get('/individualstemplate', (req, res) => {
     res.redirect(307, `http://${IP}:4002/individualstemplate`)
 })
 
+//LogIn and SignIn
+app.get('/login/:username/:pw', (req, res) => {
+    res.redirect(307, `http://${IP}:4003/login/${req.params.username}/${req.params.pw}`)
+})
+
+app.get('/signin/:username/:pw', (req, res) => {
+    res.redirect(307, `http://${IP}:4003/signin/${req.params.username}/${req.params.pw}`)
+})
+
 module.exports = app

@@ -3,8 +3,9 @@ APIGATEWAY =  back-end/APIGateway
 DATABASE = back-end/Database
 DBOPS = back-end/DBOps
 DLDER = back-end/FileDownloader
+LOGIN = back-end/Login
 
-build: build-front build-gate build-dbops build-db build-dlder
+build: build-front build-gate build-dbops build-db build-dlder build-login
 
 build-front:
 	docker build -t front $(FRONTEND)/
@@ -21,8 +22,11 @@ build-dbops:
 build-dlder:
 	docker build -t dlder $(DLDER)/
 
+build-login:
+	docker build -t login $(LOGIN)/
 
-run: run-front run-db run-gate run-dbops run-dlder
+
+run: run-front run-db run-gate run-dbops run-dlder run-login
 
 run-front:
 	docker run -p 1050:80 --name frontc front
@@ -39,8 +43,11 @@ run-dbops:
 run-dlder:
 	docker run -p 4002:80 --name dlderc dlder
 
+run-login:
+	docker run -p 4003:80 --name loginc --link postgresc login
 
-stop: stop-front stop-db stop-gate stop-dbops stop-dlder
+
+stop: stop-front stop-db stop-gate stop-dbops stop-dlder stop-login
 
 stop-front:
 	docker stop frontc
@@ -57,8 +64,11 @@ stop-dbops:
 stop-dlder:
 	docker stop dlderc
 
+stop-login:
+	docker stop loginc
 
-clean: clean-front clean-db clean-gate clean-dbops clean-dlder
+
+clean: clean-front clean-db clean-gate clean-dbops clean-dlder clean-login
 
 clean-front:
 	docker rm frontc
@@ -74,3 +84,6 @@ clean-dbops:
 	
 clean-dlder:
 	docker rm dlderc
+
+clean-login:
+	docker rm loginc
