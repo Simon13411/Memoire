@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 import Cookies from 'js-cookie';
 import './App.css';
 
+import axios from 'axios'
+const url = 'http://localhost:4000'
+
 import BoxDetails from './components/pages/BoxDetails';
 import InsectDetails from './components/pages/InsectDetails';
 import BoxesHome from './components/pages/BoxesHome';
@@ -13,16 +16,35 @@ import Authentication, {AuthWNav} from './components/pages/Authentication';
 import AdminPannel from './components/pages/AdminPannel';
 
 class App extends React.Component {
-  getAccessToken = () => {
-    Cookies.get('gc_access_token')
-  }
 
-  getRefreshToken = () => {
-    Cookies.get('gc_refresh_token')
+  state = {
+    username: '',
+    isAuthenticated: false,
+    isLoading: true,
+  };
+
+  componentDidMount() {
+    const authToken = Cookies.get('auth_token');
+  
+    if (authToken) {
+      // Vérification du jeton d'authentification
+      axios.post(`${url}/validate-token`, { token: authToken })
+        .then((res) => {
+          if (res.data.success) {
+            const username = res.data.username;
+            this.setState({ isAuthenticated: true, username: username});
+          }
+        })
+        .catch((err) => console.log(err))
+        .finally(() => this.setState({ isLoading: false }));
+    }
+    else {
+      this.setState({ isLoading: false });
+    }
   }
 
   isAuthenticated = () => {
-    !!this.getAccessToken()
+    return this.state.isAuthenticated
   }
 
   render() {

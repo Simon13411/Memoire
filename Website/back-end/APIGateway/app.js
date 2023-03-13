@@ -42,4 +42,8 @@ app.post('/signin', (req, res) => {
     res.redirect(307, `http://${IP}:4003/signin`)
 })
 
+app.post(`/validate-token`, (req, res) => {
+    res.redirect(307, `http://${IP}:4003/validate-token`)
+})
+
 module.exports = app

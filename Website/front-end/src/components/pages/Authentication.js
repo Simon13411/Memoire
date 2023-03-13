@@ -2,6 +2,8 @@ import * as React from 'react';
 import Navbar from '../Navbar';
 import {useNavigate} from 'react-router-dom';
 
+import Cookies from 'js-cookie';
+
 import axios from 'axios'
 const url = 'http://localhost:4000'
 
@@ -24,21 +26,27 @@ class Authentication extends React.Component {
         })
     }
 
-    loginUser = (event) => {
+    loginUser = () => {
         axios.post(`${url}/login`, {
             username: this.state.username,
             password: this.state.password
-          })
+        })
         .then((res) => {
-            console.log(res.data.rows)
-            if (res.data.rows[0].count === "1") {
-                this.props.navigate('/admin-pannel')
+            if (res.data.success) {
+                // Stockage du jeton d'authentification dans un cookie
+                Cookies.set('auth_token', res.data.token);
+                this.props.navigate('/admin-pannel');
             }
             else {
-                this.setState({loginstate: 'Wrong username or password'})
+                this.setState({loginstate: 'Wrong username or password'});
             }
         })
+        .catch((err) => {
+          console.log(err);
+          this.setState({loginstate: 'An error occurred while logging in'});
+        });
     }
+      
 
     onSubmit (event) {
         event.preventDefault()

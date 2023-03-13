@@ -13,6 +13,7 @@ COPY gulpfile.js .
 COPY daemon.js .
 COPY app.js .
 COPY login_ops.js .
+COPY token_ops.js .
 
 ENV IP localhost
 
