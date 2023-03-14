@@ -26,17 +26,29 @@ function verifytoken(token) {
         console.log(SelectQuery)
         client.query(SelectQuery, [token], (error, results) => {
             if (error) {
-            reject(error);
+                reject(error);
             } else {
-            if (results.rows.length === 1) {
-                resolve(results.rows[0].username);
-            } else {
-                reject(new Error('Invalid token not in DB'));
-            }
+                if (results.rows.length === 1) {
+                    resolve(results.rows[0].username);
+                } else {
+                    const DeleteQuery = `DELETE FROM "Tokens" WHERE "expirationTime" < NOW()`;
+                    client.query(DeleteQuery, (error, results) => {
+                        console.log(results)
+                        if (error) {
+                            reject(error);
+                        } else {
+                            if (results.rows.length > 0) {
+                                reject(new Error('Invalid token not in DB + expired tokens deleted'));
+                            } else {
+                                reject(new Error('Invalid token not in DB'));
+                            }
+                        }
+                    })
+                }
             }
         });
-        });
-  }
+    });
+}
 
 module.exports = {
     verifytoken

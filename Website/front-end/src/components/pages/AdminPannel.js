@@ -13,9 +13,9 @@ class AdminPannel extends React.Component {
         {this.props.isAuthenticated() ? 
             (
                 <Navbar />
-            ) : 
+            ) : (
                 <Navigate to='/sign-in' />
-            
+            )
         }
         </>
     )}
