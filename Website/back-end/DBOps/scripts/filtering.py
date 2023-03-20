@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-file = pd.ExcelFile("Collections.xlsx")
+file = pd.ExcelFile("Collection_Box.xlsx")
 
 olddf = pd.read_excel(file)
 
@@ -56,6 +56,10 @@ for i, row in df.iterrows() :
         count += 1
         continue
     if not isinstance(row.Genus_Descriptor, str) and not (row.Genus_Descriptor != row.Genus_Descriptor):
+        baddf.loc[len(baddf)] = row
+        count += 1
+        continue
+    if not isinstance(row.Order, str):
         baddf.loc[len(baddf)] = row
         count += 1
         continue

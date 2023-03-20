@@ -14,23 +14,22 @@ import subspecies
 import population
 import box
 import collectionBox
+import individu
 
 import pandas as pd
 import psycopg2
-import sys
+import sqlite3
 
 
-conn = psycopg2.connect(
-    host="postgresc",
-    database="entomologie",
-    user="postgres",
-    password="password"
-)
+file = pd.ExcelFile("IndividuFiltered.xlsx")
+
+data = pd.read_excel(file)
+
+#Connexion
+database = "Entomologie.db"
+conn = sqlite3.connect(database)
 cursor = conn.cursor()
-print("Successfully connected to DB")
-
-filename = sys.argv[1]
-data = pd.read_excel(filename, engine="openpyxl")
+print("Successfully Connected to the db")
 
 
 ### Ici on  va inserer tout mais on pourrait en fonctio d'arguments lancer, ajouter seulement certain trucs ###
@@ -47,12 +46,16 @@ Genus.insertGenus(data, cursor, conn)
 subgenus.insertSubGenus(data, cursor, conn)
 species.insertSpecies(data, cursor, conn)
 subspecies.insertSubSpecies(data, cursor, conn)
-Collection.insertCollection(data, cursor, conn)
+population.insertPopulation(data, cursor, conn)
+
+box.insertBox(data, cursor, conn)
+individu.insertIndividu(data, cursor, conn)
+"""Collection.insertCollection(data, cursor, conn)
 speciesrange.insertOrder(data, cursor, conn)
 genusrange.insertOrder(data, cursor, conn)
 population.insertPopulation(data, cursor, conn)
 box.insertBox(data, cursor, conn)
-collectionBox.insertCollectionBox(data, cursor, conn)
+collectionBox.insertCollectionBox(data, cursor, conn)"""
 
 
 

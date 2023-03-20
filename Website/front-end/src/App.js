@@ -20,7 +20,6 @@ class App extends React.Component {
   state = {
     username: '',
     isAuthenticated: false,
-    isLoading: true,
   };
 
   componentDidMount() {
@@ -36,10 +35,6 @@ class App extends React.Component {
           }
         })
         .catch((err) => console.log(err))
-        .finally(() => this.setState({ isLoading: false }));
-    }
-    else {
-      this.setState({ isLoading: false });
     }
   }
 
