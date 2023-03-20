@@ -17,8 +17,7 @@ def insertCollectionBox(data, cursor, conn) :
 
     for i in range(0, len(toinsertID)):
         collname = toinsertCollection[i]
-        print("type: ", type(collname), " value: ", collname)
-        #S il y a un genus descriptor, on va recupere l'id du sc
+        #On suppose qu'il est obligé d'avoir un name pour la collection
         collectionName = """SELECT id_collection
                         FROM Collection
                         WHERE name="{}" """.format(toinsertCollection[i])

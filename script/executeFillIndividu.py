@@ -14,13 +14,14 @@ import subspecies
 import population
 import box
 import collectionBox
+import individu
 
 import pandas as pd
 import psycopg2
 import sqlite3
 
 
-file = pd.ExcelFile("FilteredData.xlsx")
+file = pd.ExcelFile("IndividuFiltered.xlsx")
 
 data = pd.read_excel(file)
 
@@ -45,12 +46,16 @@ Genus.insertGenus(data, cursor, conn)
 subgenus.insertSubGenus(data, cursor, conn)
 species.insertSpecies(data, cursor, conn)
 subspecies.insertSubSpecies(data, cursor, conn)
-Collection.insertCollection(data, cursor, conn)
+population.insertPopulation(data, cursor, conn)
+
+box.insertBox(data, cursor, conn)
+individu.insertIndividu(data, cursor, conn)
+"""Collection.insertCollection(data, cursor, conn)
 speciesrange.insertOrder(data, cursor, conn)
 genusrange.insertOrder(data, cursor, conn)
 population.insertPopulation(data, cursor, conn)
 box.insertBox(data, cursor, conn)
-collectionBox.insertCollectionBox(data, cursor, conn)
+collectionBox.insertCollectionBox(data, cursor, conn)"""
 
 
 

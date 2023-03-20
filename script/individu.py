@@ -1,7 +1,6 @@
 import sqlite3
 import pandas as pd
 import numpy as np
-import math
 
 
 def order(insert, cursor):
@@ -11,6 +10,7 @@ def order(insert, cursor):
     
     returnOrder = []
     for index in ordernameList:
+        
         order = """SELECT id_order
                         FROM "Order"
                         WHERE name="{}" """.format(index)
@@ -176,17 +176,29 @@ def subspecies(insert, cursor):
             print(subSpeciesList)
     return returnSubSpecies
     
+def population(order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies, cursor):
+    #On recupere l'id de la population de la boite
+    id_population =  """SELECT id_population
+                                FROM Population 
+                                WHERE order_id = "{}" and suborder_id = "{}" and tribu_id = "{}" and family_id = "{}" and subFamily_id = "{}" and genus_id = "{}" and subGenus_id = "{}" and species_id = "{}" and subSpecies_id = "{}" """.format(order, suborder, tribu, family, subfamily, genus, subgenus, species, subspecies) 
+    cursor.execute(id_population)
+    id_populationList = cursor.fetchall()
+    print("id popppo: ", id_populationList, id_populationList[0][0])
+    if (len(id_populationList)>1): #juste check mais normalement devrait pas aller la
+        print("Pas normal")
+        print(id_populationList)
+    if(len(id_populationList)==0):
+        print("HEYYYYYY PAS BIEN")
+        print(id_populationList)
+    return id_populationList[0][0]
+
+def insertIndividu(data, cursor, conn) :
+    toinsert = data["Specimen code"].values.tolist()
+    toinsertCountry = data["Country"].values.tolist()
+    toinsertContinent = data["Continent"].values.tolist()
+    toinsertEcozone = data["Ecozone"].values.tolist()
+    toinsertID = data["Num_ID"].values.tolist()
     
-
-
-
-
-
-
-
-
-
-def insertPopulation(data, cursor, conn) :
     toinsertOrder = data["Order"].values.tolist()
     toinsertSubOrder = data["Suborder"].values.tolist()
     toinsertTribu = data["Tribu"].values.tolist()
@@ -197,8 +209,8 @@ def insertPopulation(data, cursor, conn) :
     toinsertSpecies = data["species"].values.tolist()
     toinsertSubSpecies = data["Subspecies"].values.tolist()
     
-    duplicationquery =  """SELECT MAX(id_population)
-                            FROM Population"""
+    duplicationquery =  """SELECT MAX(id_individu)
+                            FROM "Individu" """
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
@@ -206,58 +218,51 @@ def insertPopulation(data, cursor, conn) :
     if result != [(None,)] :
         Count = result[0][0]+1
 
-    for i in range(0, len(toinsertOrder)):
-        #On recupere l'ordre
-        orderList = order(toinsertOrder[i], cursor)
-                
-        #On recupere le sous ordre
-        suborderList = suborder(toinsertSubOrder[i], cursor)
-                
-        #On recupere la tribu
-        tribuList = tribu(toinsertTribu[i], cursor)
-                 
-        #On recupere la famille
-        familyList = family(toinsertFamily[i], cursor)
-                
-        #On recupere la sous famille
-        subFamilyList = subfamily(toinsertSubFamily[i], cursor)
-                
-        #On recupere le genus
-        genusList = genus(toinsertGenus[i], cursor)
-                
-        #On recupere le sous genus
-        subGenusList = subgenus(toinsertSubGenus[i], cursor)
-                
-        #On recupere la species
-        speciesList  = species(toinsertSpecies[i], cursor)
-                
-        #On recupere la sous species
-        subSpeciesList  =subspecies(toinsertSubSpecies, cursor)
-            
-        for orderValue in orderList:
-            for subOrderValue in suborderList:
-                for familyValue in familyList:
-                    for subFamilyValue in subFamilyList:
-                        for tribuValue in tribuList:
-                            for genusValue in genusList:
-                                for subGenusValue in subGenusList:
-                                    for speciesValue in speciesList:
-                                        for subSpeciesValue in subSpeciesList:
-                                            
-  
-                                            duplicationquery =  """SELECT *
-                                                                FROM Population 
-                                                                WHERE order_id = "{}" and suborder_id = "{}" and tribu_id = "{}" and family_id = "{}" and subFamily_id = "{}" and genus_id = "{}" and subGenus_id = "{}" and species_id = "{}" and subSpecies_id = "{}" """.format(orderValue, subOrderValue, tribuValue, familyValue, subFamilyValue, genusValue, subGenusValue, speciesValue, subSpeciesValue) 
-                                            cursor.execute(duplicationquery)
-                                            if cursor.fetchall() == [] :
+    for i in range(0, len(toinsert)):
 
-                            
             
-                                                insertquery = """INSERT INTO Population
-                                                            (id_population, order_id, suborder_id , tribu_id , family_id ,subFamily_id, genus_id, subGenus_id , species_id, subSpecies_id) 
-                                                            VALUES 
-                                                            ({},{},{},{},{},{},{},{},{},{})""".format(Count, orderValue, subOrderValue, tribuValue, familyValue, subFamilyValue, genusValue, subGenusValue, speciesValue, subSpeciesValue)
-                                                print(insertquery)
-                                                cursor.execute(insertquery)
-                                                Count+=1
+        duplicationquery =  """SELECT *
+                                FROM "Individu" 
+                                WHERE name = "{}" """.format(toinsert[i]) 
+        cursor.execute(duplicationquery)
+        if cursor.fetchall() == [] :
+            
+            
+            #On recupere l'ordre
+            orderList = order(toinsertOrder[i], cursor)
+                
+            #On recupere le sous ordre
+            suborderList = suborder(toinsertSubOrder[i], cursor)
+                
+            #On recupere la tribu
+            tribuList = tribu(toinsertTribu[i], cursor)
+                 
+            #On recupere la famille
+            familyList = family(toinsertFamily[i], cursor)
+                
+            #On recupere la sous famille
+            subFamilyList = subfamily(toinsertSubFamily[i], cursor)
+                
+            #On recupere le genus
+            genusList = genus(toinsertGenus[i], cursor)
+                
+            #On recupere le sous genus
+            subGenusList = subgenus(toinsertSubGenus[i], cursor)
+                
+            #On recupere la species
+            speciesList  = species(toinsertSpecies[i], cursor)
+                
+            #On recupere la sous species
+            subSpeciesList  =subspecies(toinsertSubSpecies, cursor)
+        
+
+            popu = population(orderList[0],  suborderList[0], familyList[0], subFamilyList[0], tribuList[0], genusList[0],subGenusList[0],speciesList[0],subSpeciesList[0],cursor)
+            
+            insertquery = """INSERT INTO "Individu"
+                            (id_individu, box_id, population_id, continent, country, ecozone, name) 
+                            VALUES 
+                            ({},{}, {},"{}", "{}", "{}","{}")""".format(Count, toinsertID[i], popu, toinsertContinent[i], toinsertCountry[i], toinsertEcozone[i], toinsert[i])
+            print(insertquery)
+            cursor.execute(insertquery)
+            Count+=1
     conn.commit()

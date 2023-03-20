@@ -15,7 +15,7 @@ UNIQUE ("name")
 );
 
 CREATE TABLE "Tribu" (
-"id_stribu" INT NOT NULL,
+"id_tribu" INT NOT NULL,
 "name" VARCHAR(50) NOT NULL,
 PRIMARY KEY ("id_tribu"),
 UNIQUE ("id_tribu"),
@@ -165,8 +165,16 @@ PRIMARY KEY("collection_id", "box_id"),
 CONSTRAINT "UC_CollectionBox" UNIQUE ("collection_id", "box_id")
 );
 
+CREATE TABLE "PopuBox" (
+"population_id" INT NOT NULL,
+"box_id" INT NOT NULL,
+PRIMARY KEY("population_id", "box_id"),
+CONSTRAINT "UC_PopuBox" UNIQUE ("population_id", "box_id")
+);
+
 CREATE TABLE "Individu" (
 "id_individu" INT NOT NULL,
+"name" VARCHAR(500),
 "box_id" INT NOT NULL,
 "population_id" INT NOT NULL,
 "continent" VARCHAR(50),

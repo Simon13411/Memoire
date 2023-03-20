@@ -1,72 +1,92 @@
-SELECT suborder en fonction d'un ordre 'order'
+	SELECT suborder en fonction d'un ordre 'order'
 
-SELECT genus en fonction d'un sous-order 'suborder'
+	SELECT genus en fonction d'un sous-order 'suborder'
 
-SELECT subgenus en fonction d'un genus 'genus'
+	SELECT subgenus en fonction d'un genus 'genus'
 
-SELECT family en fonction d'un subgenus 'subgenus'
+	SELECT family en fonction d'un subgenus 'subgenus'
 
-SELECT subfamily en fonction d'un famille 'family'
+	SELECT subfamily en fonction d'un famille 'family'
 
-SELECT species en fonction d'un subfamille 'subfamily'
+SELECT DISTINCT S.name AS "subFamily"
+FROM "subFamily" S, "Population" P
+WHERE S.id_subfamily==P.subFamily_id and P.family_id==4
 
-SELECT subspecies en fonction d'un species 'species'
+	SELECT species en fonction d'un subfamille 'subfamily'
 
-SELECT tribus en fonction d'un subspecies 'subspecies'
+	SELECT subspecies en fonction d'un species 'species'
 
-SELECT subtribus en fonction d'un tribus 'tribus'
+	SELECT tribus en fonction d'un subspecies 'subspecies'
+
+	SELECT subtribus en fonction d'un tribus 'tribus'
 
 
-SELECT box (et toutes ses infos) en fonction d'un ordre, sous-ordre, genus, subgenus, ...
+	SELECT box (et toutes ses infos) en fonction d'un ordre, sous-ordre, genus, subgenus, ...
 
-SELECT individu (et toutes ses infos) en fonction d'un ordre, sous-ordre, genus, subgenus, ... numéro de boite
+SELECT B.id_box, B.location, B.speciesrange_id, B.genusrange_id, B.museum, B.paratypes, B.types, Spec.species_range_begin, Spec.species_range_end, Gen.genus_range_begin, Gen.genus_range_end
+FROM "Box" B, (
+    SELECT P.box_id
+    FROM "PopuBox" P, Population P2
+    WHERE P.population_id==P2.id_population AND P2.order_id=1 AND P2.suborder_id=1 AND P2.family_id=1 AND P2.subFamily_id=1 AND P2.tribu_id=1 AND P2.genus_id=6 AND P2.subGenus_id=1 AND P2.species_id=2 AND P2.subSpecies_id=1) AS R,
+    (SELECT id_speciesrange, range_begin AS species_range_begin, range_end AS species_range_end
+    FROM "SpeciesRange" SR) AS Spec,
+    (SELECT id_genusrange, range_begin AS genus_range_begin, range_end AS genus_range_end
+    FROM "GenusRange" SR) AS Gen
+WHERE B.id_box == R.box_id AND Spec.id_speciesrange==B.speciesrange_id AND Gen.id_genusrange==B.genusrange_id
 
-SELECT loaner d'une box
+	SELECT individu (et toutes ses infos) en fonction d'un ordre, sous-ordre, genus, subgenus, ... numéro de boite
+SELECT I.id_individu, I.box_id, I.continent, I.country, I.ecozone
+FROM "Individu" I, (
+    SELECT P.box_id
+    FROM "PopuBox" P, Population P2
+    WHERE P.population_id==P2.id_population AND P2.order_id=1 AND P2.suborder_id=1 AND P2.family_id=1 AND P2.subFamily_id=5 AND P2.tribu_id=1 AND P2.genus_id=1 AND P2.subGenus_id=1 AND P2.species_id=587 AND P2.subSpecies_id=1) AS R
+WHERE I.box_id == R.box_id
+	SELECT loaner d'une box
 
-SELECT loaner d'un individu
+	SELECT loaner d'un individu
 
-UPDATE loaner d'une box
+	UPDATE loaner d'une box
 
-UPDATE order  d'une box
+	UPDATE order  d'une box
 
-UPDATE suborder d'une box
+	UPDATE suborder d'une box
 
-UPDATE genus d'une box
+	UPDATE genus d'une box
 
-UPDATE subgenus d'une box
+	UPDATE subgenus d'une box
 
-UPDATE family d'une box
+	UPDATE family d'une box
 
-UPDATE subfamily d'une box
+	UPDATE subfamily d'une box
 
-UPDATE species d'une box
+	UPDATE species d'une box
 
-UPDATE subspecies d'une box
+	UPDATE subspecies d'une box
 
-UPDATE tribus d'une box
+	UPDATE tribus d'une box
 
-UPDATE subtribus d'une box
+	UPDATE subtribus d'une box
 
-UPDATE loaner d'un individu
+	UPDATE loaner d'un individu
 
-UPDATE order d'un individu
+	UPDATE order d'un individu
 
-UPDATE suborder d'un individu
+	UPDATE suborder d'un individu
 
-UPDATE genus d'un individu
+	UPDATE genus d'un individu
 
-UPDATE subgenus d'un individu
+	UPDATE subgenus d'un individu
 
-UPDATE family d'un individu
+	UPDATE family d'un individu
 
-UPDATE subfamily d'un individu
+	UPDATE subfamily d'un individu
 
-UPDATE species d'un individu
+	UPDATE species d'un individu
 
-UPDATE subspecies d'un individu
+	UPDATE subspecies d'un individu
 
-UPDATE tribus d'un individu
+	UPDATE tribus d'un individu
 
-UPDATE subtribus d'un individu
+	UPDATE subtribus d'un individu
 
 

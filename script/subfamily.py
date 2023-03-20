@@ -15,16 +15,24 @@ def insertSubFamily(data, cursor, conn) :
         Count = result[0][0]+1
 
     for i in range(0, len(toinsert)):
-        duplicationquery =  """SELECT *
+        
+        
+        if isinstance(toinsert[i], str) : subfamilyList  = toinsert[i].split("_")
+        else : subfamilyList = [""]
+        
+        
+        for index in subfamilyList:
+            
+            duplicationquery =  """SELECT *
                                 FROM subFamily 
-                                WHERE name = "{}" """.format(toinsert[i]) 
-        cursor.execute(duplicationquery)
-        if cursor.fetchall() == [] :
-            insertquery = """INSERT INTO subFamily
+                                WHERE name = "{}" """.format(index) 
+            cursor.execute(duplicationquery)
+            if cursor.fetchall() == [] :
+                insertquery = """INSERT INTO subFamily
                             (id_subfamily, name) 
                             VALUES 
-                            ({},"{}")""".format(Count, toinsert[i])
-            #print(insertquery)
-            cursor.execute(insertquery)
-            Count+=1
+                            ({},"{}")""".format(Count, index)
+                print(insertquery)
+                cursor.execute(insertquery)
+                Count+=1
     conn.commit()

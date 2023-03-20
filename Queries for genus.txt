@@ -1,0 +1,63 @@
+
+--Order
+
+SELECT DISTINCT S.name AS "order"
+FROM "Order" S, "Population" P, "Genus" F
+WHERE S.id_order==P.order_id and P.genus_id==F.id_genus AND F.name="Ceropalinae"
+
+
+--subOrder
+
+SELECT DISTINCT S.name AS "subOrder"
+FROM "subOrder" S, "Population" P, "Genus" F
+WHERE S.id_suborder==P.suborder_id and P.genus_id==F.id_genus AND F.name="Ceropalinae"
+
+
+--family
+
+SELECT DISTINCT S.name AS "family"
+FROM "Family" S, "Population" P, "Genus" F
+WHERE S.id_family==P.Family_id and P.genus_id==F.id_genus AND F.name="Ceropalinae"
+
+--subfamily
+
+SELECT DISTINCT S.name AS "subFamily"
+FROM "subFamily" S, "Population" P, "Genus" F
+WHERE S.id_subfamily==P.subFamily_id and P.genus_id==F.id_genus AND F.name="Ceropalinae"
+
+
+--Tribu
+
+SELECT DISTINCT S.name AS "Tribu"
+FROM "Tribu" S, "Population" P, "Genus" F
+WHERE S.id_tribu==P.tribu_id and P.genus_id==F.id_genus AND F.name="Ceropalinae"
+
+--genus
+
+SELECT DISTINCT S.name AS "genus"
+FROM "Genus" S, "Population" P, "Genus" F
+WHERE S.id_genus==P.genus_id and P.genus_id==F.id_genus AND F.name="Ceropalinae"
+
+
+--subGenus
+
+SELECT DISTINCT S.name AS "subGenus"
+FROM "subGenus" S, "Population" P, "Genus" F
+WHERE S.id_subgenus==P.subgenus_id and P.genus_id==F.id_genus AND F.name="Ceropalinae"
+
+
+--species
+
+SELECT DISTINCT S.name AS "species"
+FROM "Species" S, "Population" P, "Genus" F
+WHERE S.id_species==P.species_id and P.genus_id==F.id_genus AND F.name="Ceropalinae"
+
+
+--subSpecies
+
+SELECT DISTINCT S.name AS "subspecies"
+FROM "subSpecies" S, "Population" P, "Genus" F
+WHERE S.id_subspecies==P.subspecies_id and P.genus_id==F.id_genus AND F.name="Ceropalinae"
+
+
+*/
