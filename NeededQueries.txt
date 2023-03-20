@@ -8,9 +8,26 @@
 
 	SELECT subfamily en fonction d'un famille 'family'
 
-SELECT DISTINCT S.name AS "subFamily"
-FROM "subFamily" S, "Population" P
-WHERE S.id_subfamily==P.subFamily_id and P.family_id==4
+SELECT DISTINCT G."name"as 'Genus', Sf."name" as 'sousfamille'
+FROM "Population" P
+JOIN "Order" O On P."order_id"=O."id_order"
+JOIN "subOrder" So ON P."suborder_id"==So."id_suborder"
+JOIN "Family" f ON P."family_id"==F."id_family"
+JOIN "subFamily" Sf ON P."subFamily_id"==Sf."id_subfamily"
+JOIN "Tribu" T ON P."tribu_id"==T."id_tribu"
+JOIN "Genus" G ON P."genus_id"==G."id_genus"
+JOIN "subGenus" Sg ON P."subGenus_id"==Sg."id_subgenus"
+JOIN "Species" S ON P."species_id"==S."id_species"
+JOIN "subSpecies" Ss ON P."subSpecies_id"==Ss."id_subspecies"
+WHERE (O.name=='Hymenoptera' OR 'Hymenoptera'=="")
+    AND (So.name=='' OR ''=="")
+    AND (F.name == 'Pompilidae' OR 'Pompilidae'=="")
+    AND (Sf.name =='' OR ''=="")
+    AND (T.name == '' OR ''=="")
+    AND (G.name == '' OR ''=="")
+    AND (Sg.name == '' OR ''=="")
+    AND (S.name == '' OR ''=="")
+    AND (Ss.name == '' OR ''=="")
 
 	SELECT species en fonction d'un subfamille 'subfamily'
 
@@ -23,29 +40,54 @@ WHERE S.id_subfamily==P.subFamily_id and P.family_id==4
 
 	SELECT box (et toutes ses infos) en fonction d'un ordre, sous-ordre, genus, subgenus, ...
 
-SELECT B.id_box, B.location, B.speciesrange_id, B.genusrange_id, B.museum, B.paratypes, B.types, Spec.species_range_begin, Spec.species_range_end, Gen.genus_range_begin, Gen.genus_range_end
-FROM "Box" B, (
-    SELECT P.box_id
+SELECT B."id_box", B."location", B."speciesrange_id", B."genusrange_id", B."museum", B."paratypes", B."types", Spec."species_range_begin", Spec."species_range_end", Gen."genus_range_begin", Gen."genus_range_end", R."ordre",
+    R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", Col."name"
+FROM "Box" B, "Collection" Col, "CollectionBox" ColBox,
+    (SELECT P."box_id" as 'bid', O."name" as 'ordre', So."name" as 'subOrder', F."name" as 'Family', Sf."name" as 'subFamily', T."name" as 'Tribu', G."name" as 'Genus', Sg."name"as 'subGenus', S."name" as 'Species', Ss."name" as 'subSpecies'
     FROM "PopuBox" P, Population P2
-    WHERE P.population_id==P2.id_population AND P2.order_id=1 AND P2.suborder_id=1 AND P2.family_id=1 AND P2.subFamily_id=1 AND P2.tribu_id=1 AND P2.genus_id=6 AND P2.subGenus_id=1 AND P2.species_id=2 AND P2.subSpecies_id=1) AS R,
-    (SELECT id_speciesrange, range_begin AS species_range_begin, range_end AS species_range_end
+    JOIN "Order" O On P2."order_id"=O."id_order"
+    JOIN "subOrder" So ON P2."suborder_id"==So."id_suborder"
+    JOIN "Family" F ON P2."family_id"==F."id_family"
+    JOIN "subFamily" Sf ON P2."subFamily_id"==Sf."id_subfamily"
+    JOIN "Tribu" T ON P2."tribu_id"==T."id_tribu"
+    JOIN "Genus" G ON P2."genus_id"==G."id_genus"
+    JOIN "subGenus" Sg ON P2."subGenus_id"==Sg."id_subgenus"
+    JOIN "Species" S ON P2."species_id"==S."id_species"
+    JOIN "subSpecies" Ss ON P2."subSpecies_id"==Ss."id_subspecies"
+    WHERE P."population_id"==P2."id_population"
+        AND (O."name"=='Hymenoptera' OR 'Hymenoptera'=="")
+        AND (So."name"=='' OR ""=="")
+        AND (F."name" == 'Cephidae' OR 'Cephidae'="")
+        AND (Sf."name" ='Cephinae' OR "Cephinae"=="")
+        AND (T."name" == '' OR ''=="")
+        AND (G."name" == '' OR ''=="")
+        AND (Sg."name" == '' OR ''=="")
+        AND (S."name" == '' OR ''=="")
+        AND (Ss."name" == '' OR ''=="")) AS R,
+    
+    (SELECT "id_speciesrange", "range_begin" AS species_range_begin, "range_end" AS species_range_end
     FROM "SpeciesRange" SR) AS Spec,
-    (SELECT id_genusrange, range_begin AS genus_range_begin, range_end AS genus_range_end
+    
+    (SELECT "id_genusrange", "range_begin" AS genus_range_begin, "range_end" AS genus_range_end
     FROM "GenusRange" SR) AS Gen
-WHERE B.id_box == R.box_id AND Spec.id_speciesrange==B.speciesrange_id AND Gen.id_genusrange==B.genusrange_id
+    
+    
+WHERE B."id_box" == R."bid" AND Spec."id_speciesrange"==B."speciesrange_id" AND Gen."id_genusrange"==B."genusrange_id" AND ColBox."box_id"==B."id_box" AND ColBox."collection_id"==Col."id_collection"
 
 	SELECT individu (et toutes ses infos) en fonction d'un ordre, sous-ordre, genus, subgenus, ... numéro de boite
+
 SELECT I.id_individu, I.box_id, I.continent, I.country, I.ecozone
 FROM "Individu" I, (
     SELECT P.box_id
     FROM "PopuBox" P, Population P2
     WHERE P.population_id==P2.id_population AND P2.order_id=1 AND P2.suborder_id=1 AND P2.family_id=1 AND P2.subFamily_id=5 AND P2.tribu_id=1 AND P2.genus_id=1 AND P2.subGenus_id=1 AND P2.species_id=587 AND P2.subSpecies_id=1) AS R
 WHERE I.box_id == R.box_id
-	SELECT loaner d'une box
 
-	SELECT loaner d'un individu
+	SELECT loaner d'une box (para rapport id)
 
-	UPDATE loaner d'une box
+	SELECT loaner d'un individu(para rapport id)
+
+	UPDATE loaner d'une box(para rapport id)
 
 	UPDATE order  d'une box
 
@@ -64,8 +106,6 @@ WHERE I.box_id == R.box_id
 	UPDATE subspecies d'une box
 
 	UPDATE tribus d'une box
-
-	UPDATE subtribus d'une box
 
 	UPDATE loaner d'un individu
 
@@ -86,7 +126,5 @@ WHERE I.box_id == R.box_id
 	UPDATE subspecies d'un individu
 
 	UPDATE tribus d'un individu
-
-	UPDATE subtribus d'un individu
 
 
