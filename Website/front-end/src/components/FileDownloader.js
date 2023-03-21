@@ -1,7 +1,7 @@
 import React from 'react';
 
 import axios from 'axios'
-const url = 'http://localhost:4000'
+const url = 'http://192.168.1.15:4000'
 
 function FileDownloader({file}) {
 

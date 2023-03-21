@@ -12,9 +12,9 @@ def order(insert, cursor):
     returnOrder = []
     for index in ordernameList:
         
-        order = """SELECT id_order
+        order = """SELECT "id_order"
                         FROM "Order"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(order)
         orderList = cursor.fetchall()
         returnOrder.append(orderList[0][0])
@@ -32,9 +32,9 @@ def suborder(insert, cursor):
     returnSubOrder = []
     for index in subordernameList:
         
-        suborder = """SELECT id_suborder
+        suborder = """SELECT "id_suborder"
                         FROM "subOrder"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(suborder)
         suborderList = cursor.fetchall()
         returnSubOrder.append(suborderList[0][0])
@@ -52,9 +52,9 @@ def tribu(insert, cursor):
     returnTribu = []
     for index in tribunameList:
         
-        tribu = """SELECT id_tribu
+        tribu = """SELECT "id_tribu"
                         FROM "Tribu"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(tribu)
         tribuList = cursor.fetchall()
         returnTribu.append(tribuList[0][0])
@@ -71,9 +71,9 @@ def family(insert, cursor):
     returnFamily = []
     for index in familynameList:
         
-        family = """SELECT id_family
+        family = """SELECT "id_family"
                         FROM "Family"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(family)
         familyList = cursor.fetchall()
         returnFamily.append(familyList[0][0])
@@ -90,9 +90,9 @@ def subfamily(insert, cursor):
     returnSubFamily = []
     for index in subfamilynameList:
         
-        subFamily = """SELECT id_subfamily
+        subFamily = """SELECT "id_subfamily"
                         FROM "subFamily"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(subFamily)
         subFamilyList = cursor.fetchall()
         returnSubFamily.append(subFamilyList[0][0])
@@ -109,9 +109,9 @@ def genus(insert, cursor):
     returnGenus = []
     for index in genusnameList:
         
-        genus = """SELECT id_genus
+        genus = """SELECT "id_genus"
                         FROM "Genus"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(genus)
         genusList = cursor.fetchall()
         returnGenus.append(genusList[0][0])
@@ -128,9 +128,9 @@ def subgenus(insert, cursor):
     returnSubGenus = []
     for index in subgenusnameList:
         
-        subGenus = """SELECT id_subgenus
+        subGenus = """SELECT "id_subgenus"
                         FROM "subGenus"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(subGenus)
         subGenusList = cursor.fetchall()
         returnSubGenus.append(subGenusList[0][0])
@@ -147,9 +147,9 @@ def species(insert, cursor):
     returnSpecies = []
     for index in speciesnameList:
         
-        species = """SELECT id_species
+        species = """SELECT "id_species"
                         FROM "Species"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(species)
         speciesList = cursor.fetchall()
         returnSpecies.append(speciesList[0][0])
@@ -166,9 +166,9 @@ def subspecies(insert, cursor):
     returnSubSpecies = []
     for index in subspeciesnameList:
         
-        subSpecies = """SELECT id_subspecies
+        subSpecies = """SELECT "id_subspecies"
                         FROM "subSpecies"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(subSpecies)
         subSpeciesList = cursor.fetchall()
         returnSubSpecies.append(subSpeciesList[0][0])
@@ -179,9 +179,9 @@ def subspecies(insert, cursor):
     
 def population(order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies, cursor):
     #On recupere l'id de la population de la boite
-    id_population =  """SELECT id_population
-                                FROM Population 
-                                WHERE order_id = "{}" and suborder_id = "{}" and tribu_id = "{}" and family_id = "{}" and subFamily_id = "{}" and genus_id = "{}" and subGenus_id = "{}" and species_id = "{}" and subSpecies_id = "{}" """.format(order, suborder, tribu, family, subfamily, genus, subgenus, species, subspecies) 
+    id_population =  """SELECT "id_population"
+                                FROM "Population" 
+                                WHERE "order_id" = '{}' and "suborder_id" = '{}' and "tribu_id" = '{}' and "family_id" = '{}' and "subFamily_id" = '{}' and "genus_id" = '{}' and "subGenus_id" = '{}' and "species_id" = '{}' and "subSpecies_id" = '{}' """.format(order, suborder, tribu, family, subfamily, genus, subgenus, species, subspecies) 
     cursor.execute(id_population)
     id_populationList = cursor.fetchall()
     if (len(id_populationList)>1): #juste check mais normalement devrait pas aller la
@@ -215,7 +215,7 @@ def insertBox(data, cursor, conn) :
     
     
     duplicationquery =  """SELECT MAX(id_box)
-                            FROM Box"""
+                            FROM "Box" """
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
@@ -228,21 +228,21 @@ def insertBox(data, cursor, conn) :
         if(toinsertID[i]==0):
             
             zeroExist = """SELECT *
-                                FROM Box 
-                                WHERE id_box = "{}" """.format(toinsertID[i])
+                                FROM "Box" 
+                                WHERE "id_box" = '{}' """.format(toinsertID[i])
             cursor.execute(zeroExist)
             if cursor.fetchall()==[]:
                 #il y a pas encore de zero, on ajoute un id box 0, un id species range 0, un id genus range 0
                 
-                speciesRange = """ INSERT INTO SpeciesRange
-                                    (id_speciesrange, range_begin, range_end)
+                speciesRange = """ INSERT INTO "SpeciesRange"
+                                    ("id_speciesrange", "range_begin", "range_end")
                                     VALUES
-                                    ({}, "{}","{}")""".format(0,"","")
+                                    ({}, '{}','{}') """.format(0,"","")
                 cursor.execute(speciesRange)
-                genusRange = """ INSERT INTO GenusRange
-                                    (id_genusrange, range_begin, range_end)
+                genusRange = """ INSERT INTO "GenusRange"
+                                    ("id_genusrange", "range_begin", "range_end")
                                     VALUES
-                                    ({}, "{}","{}")""".format(0,"","")
+                                    ({}, '{}','{}') """.format(0,"","")
                 cursor.execute(genusRange)
                 #On recupere l'ordre
                 orderList = order(toinsertOrder[i], cursor)
@@ -287,20 +287,20 @@ def insertBox(data, cursor, conn) :
                                                     populationList.append(population(orderValue,  subOrderValue, familyValue, subFamilyValue, tribuValue, genusValue,subGenusValue,speciesValue,subSpeciesValue,cursor))
                 for pop in populationList:
                     duplicate = """SELECT *
-                             FROM PopuBox
-                             WHERE box_id = {} and population_id = {} """.format(toinsertID[i], pop)
+                             FROM "PopuBox"
+                             WHERE "box_id" = {} and "population_id" = {} """.format(toinsertID[i], pop)
                     cursor.execute(duplicate)
                     if(cursor.fetchall()==[]):
-                        insertPopuBox = """INSERT INTO PopuBox
-                                     (population_id, box_id)
+                        insertPopuBox = """INSERT INTO "PopuBox"
+                                     ("population_id", "box_id")
                                      VALUES
                                      ({},{}) """.format(pop, toinsertID[i])
                         cursor.execute(insertPopuBox)   
                 
-                insertquery = """INSERT INTO Box
-                                (id_box, location, speciesrange_id, genusrange_id, museum, paratypes, types) 
+                insertquery = """INSERT INTO "Box"
+                                ("id_box", "location", "speciesrange_id", "genusrange_id", "museum", "paratypes", "types") 
                                 VALUES 
-                                ({},"{}",{},{},"{}",{},{})""".format(0,"", 0, 0, "", 0, 0)
+                                ({},'{}',{},{},'{}',{},{})""".format(0,"", 0, 0, "", 0, 0)
                 print(insertquery)
                 cursor.execute(insertquery)
             else:            
@@ -347,19 +347,19 @@ def insertBox(data, cursor, conn) :
                                                     populationList.append(population(orderValue,  subOrderValue, familyValue, subFamilyValue, tribuValue, genusValue,subGenusValue,speciesValue,subSpeciesValue,cursor))
                 for pop in populationList:
                     duplicate = """SELECT *
-                             FROM PopuBox
-                             WHERE box_id = {} and population_id = {} """.format(toinsertID[i], pop)
+                             FROM "PopuBox"
+                             WHERE "box_id" = {} and "population_id" = {} """.format(toinsertID[i], pop)
                     cursor.execute(duplicate)
                     if(cursor.fetchall()==[]):
-                        insertPopuBox = """INSERT INTO PopuBox
-                                     (population_id, box_id)
+                        insertPopuBox = """INSERT INTO "PopuBox"
+                                     ("population_id", "box_id")
                                      VALUES
                                      ({},{}) """.format(pop, toinsertID[i])
                         cursor.execute(insertPopuBox)  
                
         duplicationquery =  """SELECT *
-                                FROM Box 
-                                WHERE id_box = "{}" """.format(toinsertID[i]) 
+                                FROM "Box" 
+                                WHERE "id_box" = {} """.format(toinsertID[i]) 
         cursor.execute(duplicationquery)
         if cursor.fetchall() == [] :
             #On recupere l'ordre
@@ -406,12 +406,12 @@ def insertBox(data, cursor, conn) :
              
             for pop in populationList:
                 duplicate = """SELECT *
-                             FROM PopuBox
-                             WHERE box_id = {} and population_id = {} """.format(toinsertID[i], pop)
+                             FROM "PopuBox"
+                             WHERE "box_id" = {} and "population_id" = {} """.format(toinsertID[i], pop)
                 cursor.execute(duplicate)
                 if(cursor.fetchall()==[]):
-                    insertPopuBox = """INSERT INTO PopuBox
-                                     (population_id, box_id)
+                    insertPopuBox = """INSERT INTO "PopuBox"
+                                     ("population_id", "box_id")
                                      VALUES
                                      ({},{}) """.format(pop, toinsertID[i])
                     cursor.execute(insertPopuBox)
@@ -428,9 +428,9 @@ def insertBox(data, cursor, conn) :
                 else:
                     end = ""   
                 #S il y a un genus descriptor, on va recupere l'id du sc
-                id_genusRange =  """SELECT id_genusrange
-                                FROM GenusRange 
-                                WHERE range_begin = "{}" and range_end = "{}"  """.format(start, end) 
+                id_genusRange =  """SELECT "id_genusrange"
+                                FROM "GenusRange" 
+                                WHERE "range_begin" = '{}' and "range_end" = '{}'  """.format(start, end) 
                 cursor.execute(id_genusRange)
                 id_genusRangeList = cursor.fetchall()
                 if (len(id_genusRangeList)>1): #juste check mais normalement devrait pas aller la
@@ -448,9 +448,9 @@ def insertBox(data, cursor, conn) :
                 else:
                     speciesend = ""   
                 #S il y a un genus descriptor, on va recupere l'id du sc
-                id_speciesRange =  """SELECT id_speciesrange
-                                FROM SpeciesRange 
-                                WHERE range_begin = "{}" and range_end = "{}"  """.format(speciesstart, speciesend) 
+                id_speciesRange =  """SELECT "id_speciesrange"
+                                FROM "SpeciesRange" 
+                                WHERE "range_begin" = '{}' and "range_end" = '{}' """.format(speciesstart, speciesend) 
                 cursor.execute(id_speciesRange)
                 id_speciesRangeList = cursor.fetchall()
                 if (len(id_speciesRangeList)>1): #juste check mais normalement devrait pas aller la
@@ -465,8 +465,8 @@ def insertBox(data, cursor, conn) :
             paratype = paratype if not math.isnan(paratype) else 0
             paratype = 0 if isinstance(paratype, str) else paratype
             types = toinsertType[i] if not math.isnan(toinsertType[i]) else 0
-            genusrangeID = id_genusRangeList[0][0] if genusFlag else 0
-            speciesrangeID = id_speciesRangeList[0][0] if speciesFlag else 0
+            genusrangeID = id_genusRangeList[0][0] if genusFlag else "NULL"
+            speciesrangeID = id_speciesRangeList[0][0] if speciesFlag else "NULL"
             print("type: ", types)
             print("paratype: ", paratype)
             print("id population: ", populationList)
@@ -477,10 +477,10 @@ def insertBox(data, cursor, conn) :
             
             
                 
-            insertquery = """INSERT INTO Box
-                                (id_box, location, speciesrange_id, genusrange_id, museum, paratypes, types) 
+            insertquery = """INSERT INTO "Box"
+                                ("id_box", "location", "speciesrange_id", "genusrange_id", "museum", "paratypes", "types") 
                                 VALUES 
-                                ({},"{}",{},{},"{}",{},{})""".format(toinsertID[i], location, speciesrangeID, genusrangeID, museum, paratype, types)
+                                ({},'{}',{},{},'{}',{},{})""".format(toinsertID[i], location, speciesrangeID, genusrangeID, museum, paratype, types)
             print(insertquery)
             cursor.execute(insertquery)
             Count+=1

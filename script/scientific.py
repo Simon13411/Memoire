@@ -7,8 +7,8 @@ def insertScientific(data, cursor, conn) :
     toinsert += data["Subgenus_Descriptor"].values.tolist()
     toinsert += data["Species_Descriptor"].values.tolist()
     toinsert += data["Species_Descriptor"].values.tolist()
-    duplicationquery =  """SELECT MAX(id_sc)
-                            FROM Scientific"""
+    duplicationquery =  """SELECT MAX("id_sc")
+                            FROM "Scientific" """
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
@@ -18,14 +18,14 @@ def insertScientific(data, cursor, conn) :
 
     for i in range(0, len(toinsert)):
         duplicationquery =  """SELECT *
-                                FROM Scientific 
-                                WHERE name = "{}" """.format(toinsert[i]) 
+                                FROM "Scientific" 
+                                WHERE "name" = '{}' """.format(toinsert[i]) 
         cursor.execute(duplicationquery)
         if cursor.fetchall() == [] :
-            insertquery = """INSERT INTO Scientific
-                            (id_sc, name) 
+            insertquery = """INSERT INTO "Scientific"
+                            ("id_sc", "name") 
                             VALUES 
-                            ({},"{}")""".format(Count, toinsert[i])
+                            ({},'{}') """.format(Count, toinsert[i])
             #print(insertquery)
             cursor.execute(insertquery)
             Count+=1

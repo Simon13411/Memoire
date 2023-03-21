@@ -5,8 +5,8 @@ import numpy as np
 
 def insertSubFamily(data, cursor, conn) :
     toinsert = data["Subfamily"].values.tolist()
-    duplicationquery =  """SELECT MAX(id_subfamily)
-                            FROM subFamily"""
+    duplicationquery =  """SELECT MAX("id_subfamily")
+                            FROM "subFamily" """
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
@@ -24,14 +24,14 @@ def insertSubFamily(data, cursor, conn) :
         for index in subfamilyList:
             
             duplicationquery =  """SELECT *
-                                FROM subFamily 
-                                WHERE name = "{}" """.format(index) 
+                                FROM "subFamily" 
+                                WHERE "name" = '{}' """.format(index) 
             cursor.execute(duplicationquery)
             if cursor.fetchall() == [] :
-                insertquery = """INSERT INTO subFamily
-                            (id_subfamily, name) 
+                insertquery = """INSERT INTO "subFamily"
+                            ("id_subfamily", "name") 
                             VALUES 
-                            ({},"{}")""".format(Count, index)
+                            ({},'{}')""".format(Count, index)
                 print(insertquery)
                 cursor.execute(insertquery)
                 Count+=1

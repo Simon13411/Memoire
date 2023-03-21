@@ -11,9 +11,9 @@ def order(insert, cursor):
     
     returnOrder = []
     for index in ordernameList:
-        order = """SELECT id_order
+        order = """SELECT "id_order"
                         FROM "Order"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(order)
         orderList = cursor.fetchall()
         returnOrder.append(orderList[0][0])
@@ -31,9 +31,9 @@ def suborder(insert, cursor):
     returnSubOrder = []
     for index in subordernameList:
         
-        suborder = """SELECT id_suborder
+        suborder = """SELECT "id_suborder"
                         FROM "subOrder"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(suborder)
         suborderList = cursor.fetchall()
         returnSubOrder.append(suborderList[0][0])
@@ -51,9 +51,9 @@ def tribu(insert, cursor):
     returnTribu = []
     for index in tribunameList:
         
-        tribu = """SELECT id_tribu
+        tribu = """SELECT "id_tribu"
                         FROM "Tribu"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(tribu)
         tribuList = cursor.fetchall()
         returnTribu.append(tribuList[0][0])
@@ -70,9 +70,9 @@ def family(insert, cursor):
     returnFamily = []
     for index in familynameList:
         
-        family = """SELECT id_family
+        family = """SELECT "id_family"
                         FROM "Family"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(family)
         familyList = cursor.fetchall()
         returnFamily.append(familyList[0][0])
@@ -89,9 +89,9 @@ def subfamily(insert, cursor):
     returnSubFamily = []
     for index in subfamilynameList:
         
-        subFamily = """SELECT id_subfamily
+        subFamily = """SELECT "id_subfamily"
                         FROM "subFamily"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(subFamily)
         subFamilyList = cursor.fetchall()
         returnSubFamily.append(subFamilyList[0][0])
@@ -108,9 +108,9 @@ def genus(insert, cursor):
     returnGenus = []
     for index in genusnameList:
         
-        genus = """SELECT id_genus
+        genus = """SELECT "id_genus"
                         FROM "Genus"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(genus)
         genusList = cursor.fetchall()
         returnGenus.append(genusList[0][0])
@@ -127,9 +127,9 @@ def subgenus(insert, cursor):
     returnSubGenus = []
     for index in subgenusnameList:
         
-        subGenus = """SELECT id_subgenus
+        subGenus = """SELECT "id_subgenus"
                         FROM "subGenus"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(subGenus)
         subGenusList = cursor.fetchall()
         returnSubGenus.append(subGenusList[0][0])
@@ -146,9 +146,9 @@ def species(insert, cursor):
     returnSpecies = []
     for index in speciesnameList:
         
-        species = """SELECT id_species
+        species = """SELECT "id_species"
                         FROM "Species"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(species)
         speciesList = cursor.fetchall()
         returnSpecies.append(speciesList[0][0])
@@ -165,9 +165,9 @@ def subspecies(insert, cursor):
     returnSubSpecies = []
     for index in subspeciesnameList:
         
-        subSpecies = """SELECT id_subspecies
+        subSpecies = """SELECT "id_subspecies"
                         FROM "subSpecies"
-                        WHERE name="{}" """.format(index)
+                        WHERE "name"='{}' """.format(index)
         cursor.execute(subSpecies)
         subSpeciesList = cursor.fetchall()
         returnSubSpecies.append(subSpeciesList[0][0])
@@ -197,8 +197,8 @@ def insertPopulation(data, cursor, conn) :
     toinsertSpecies = data["species"].values.tolist()
     toinsertSubSpecies = data["Subspecies"].values.tolist()
     
-    duplicationquery =  """SELECT MAX(id_population)
-                            FROM Population"""
+    duplicationquery =  """SELECT MAX("id_population")
+                            FROM "Population" """
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
@@ -246,15 +246,15 @@ def insertPopulation(data, cursor, conn) :
                                             
   
                                             duplicationquery =  """SELECT *
-                                                                FROM Population 
-                                                                WHERE order_id = "{}" and suborder_id = "{}" and tribu_id = "{}" and family_id = "{}" and subFamily_id = "{}" and genus_id = "{}" and subGenus_id = "{}" and species_id = "{}" and subSpecies_id = "{}" """.format(orderValue, subOrderValue, tribuValue, familyValue, subFamilyValue, genusValue, subGenusValue, speciesValue, subSpeciesValue) 
+                                                                FROM "Population" 
+                                                                WHERE "order_id" = '{}' and "suborder_id" = '{}' and "tribu_id" = '{}' and "family_id" = '{}' and "subFamily_id" = '{}' and "genus_id" = '{}' and "subGenus_id" = '{}' and "species_id" = '{}' and "subSpecies_id" = '{}' """.format(orderValue, subOrderValue, tribuValue, familyValue, subFamilyValue, genusValue, subGenusValue, speciesValue, subSpeciesValue) 
                                             cursor.execute(duplicationquery)
                                             if cursor.fetchall() == [] :
 
                             
             
-                                                insertquery = """INSERT INTO Population
-                                                            (id_population, order_id, suborder_id , tribu_id , family_id ,subFamily_id, genus_id, subGenus_id , species_id, subSpecies_id) 
+                                                insertquery = """INSERT INTO "Population"
+                                                            ("id_population", "order_id", "suborder_id" , "tribu_id" , "family_id" ,"subFamily_id", "genus_id", "subGenus_id" , "species_id", "subSpecies_id") 
                                                             VALUES 
                                                             ({},{},{},{},{},{},{},{},{},{})""".format(Count, orderValue, subOrderValue, tribuValue, familyValue, subFamilyValue, genusValue, subGenusValue, speciesValue, subSpeciesValue)
                                                 print(insertquery)

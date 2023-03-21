@@ -62,8 +62,291 @@ function get_result(order, suborder, family, subfamily) {
     })
 }
 
-function get_selection() {
-    var searchquery = `SELECT * FROM "Order"`
+function get_selectiono(So, F, Sf, T, G, Sg, S, Ss) {
+    var searchquery = `SELECT DISTINCT O."name" as "name"
+                        FROM "Population" P
+                        JOIN "Order" O On P."order_id"=O."id_order"
+                        JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
+                        JOIN "Family" f ON P."family_id"=F."id_family"
+                        JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
+                        JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
+                        JOIN "Genus" G ON P."genus_id"=G."id_genus"
+                        JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
+                        JOIN "Species" S ON P."species_id"=S."id_species"
+                        JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
+                        WHERE (So."name" = '${So}' OR '${So}'='NULL')
+                        AND (F."name" = '${F}' OR '${F}'='NULL')
+                        AND (Sf."name" = '${Sf}' OR '${Sf}'='NULL')
+                        AND (T."name" = '${T}' OR '${T}'='NULL')
+                        AND (G."name" = '${G}' OR '${G}'='NULL')
+                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
+                        AND (S."name" = '${S}' OR '${S}'='NULL')
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+    
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+function get_selectionso(O, F, Sf, T, G, Sg, S, Ss) {
+    var searchquery = `SELECT DISTINCT So."name" as "name"
+                        FROM "Population" P
+                        JOIN "Order" O On P."order_id"=O."id_order"
+                        JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
+                        JOIN "Family" f ON P."family_id"=F."id_family"
+                        JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
+                        JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
+                        JOIN "Genus" G ON P."genus_id"=G."id_genus"
+                        JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
+                        JOIN "Species" S ON P."species_id"=S."id_species"
+                        JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
+                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
+                        AND (F."name" = '${F}' OR '${F}'='NULL')
+                        AND (Sf."name" = '${Sf}' OR '${Sf}'='NULL')
+                        AND (T."name" = '${T}' OR '${T}'='NULL')
+                        AND (G."name" = '${G}' OR '${G}'='NULL')
+                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
+                        AND (S."name" = '${S}' OR '${S}'='NULL')
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+    
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+function get_selectiong(O, So, F, Sf, T, Sg, S, Ss) {
+    var searchquery = `SELECT DISTINCT G."name" as "name"
+                        FROM "Population" P
+                        JOIN "Order" O On P."order_id"=O."id_order"
+                        JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
+                        JOIN "Family" f ON P."family_id"=F."id_family"
+                        JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
+                        JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
+                        JOIN "Genus" G ON P."genus_id"=G."id_genus"
+                        JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
+                        JOIN "Species" S ON P."species_id"=S."id_species"
+                        JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
+                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
+                        AND (So."name" = '${So}' OR '${So}'='NULL')
+                        AND (F."name" = '${F}' OR '${F}'='NULL')
+                        AND (Sf."name" = '${Sf}' OR '${Sf}'='NULL')
+                        AND (T."name" = '${T}' OR '${T}'='NULL')
+                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
+                        AND (S."name" = '${S}' OR '${S}'='NULL')
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+
+    
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+function get_selectionsg(O, So, F, Sf, T, G, S, Ss) {
+    var searchquery = `SELECT DISTINCT Sg."name" as "name"
+                        FROM "Population" P
+                        JOIN "Order" O On P."order_id"=O."id_order"
+                        JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
+                        JOIN "Family" f ON P."family_id"=F."id_family"
+                        JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
+                        JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
+                        JOIN "Genus" G ON P."genus_id"=G."id_genus"
+                        JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
+                        JOIN "Species" S ON P."species_id"=S."id_species"
+                        JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
+                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
+                        AND (So."name" = '${So}' OR '${So}'='NULL')
+                        AND (F."name" = '${F}' OR '${F}'='NULL')
+                        AND (Sf."name" = '${Sf}' OR '${Sf}'='NULL')
+                        AND (T."name" = '${T}' OR '${T}'='NULL')
+                        AND (G."name" = '${G}' OR '${G}'='NULL')
+                        AND (S."name" = '${S}' OR '${S}'='NULL')
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+    
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+function get_selectionf(O, So, Sf, T, G, Sg, S, Ss) {
+    var searchquery = `SELECT DISTINCT F."name" as "name"
+                        FROM "Population" P
+                        JOIN "Order" O On P."order_id"=O."id_order"
+                        JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
+                        JOIN "Family" f ON P."family_id"=F."id_family"
+                        JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
+                        JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
+                        JOIN "Genus" G ON P."genus_id"=G."id_genus"
+                        JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
+                        JOIN "Species" S ON P."species_id"=S."id_species"
+                        JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
+                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
+                        AND (So."name" = '${So}' OR '${So}'='NULL')
+                        AND (Sf."name" = '${Sf}' OR '${Sf}'='NULL')
+                        AND (T."name" = '${T}' OR '${T}'='NULL')
+                        AND (G."name" = '${G}' OR '${G}'='NULL')
+                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
+                        AND (S."name" = '${S}' OR '${S}'='NULL')
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+    
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+function get_selectionsf(O, So, F, T, G, Sg, S, Ss) {
+    var searchquery = `SELECT DISTINCT Sf."name" as "name"
+                        FROM "Population" P
+                        JOIN "Order" O On P."order_id"=O."id_order"
+                        JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
+                        JOIN "Family" f ON P."family_id"=F."id_family"
+                        JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
+                        JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
+                        JOIN "Genus" G ON P."genus_id"=G."id_genus"
+                        JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
+                        JOIN "Species" S ON P."species_id"=S."id_species"
+                        JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
+                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
+                        AND (So."name" = '${So}' OR '${So}'='NULL')
+                        AND (F."name" = '${F}' OR '${F}'='NULL')
+                        AND (T."name" = '${T}' OR '${T}'='NULL')
+                        AND (G."name" = '${G}' OR '${G}'='NULL')
+                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
+                        AND (S."name" = '${S}' OR '${S}'='NULL')
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+    
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+function get_selections(O, So, F, Sf, T, G, Sg, Ss) {
+    var searchquery = `SELECT DISTINCT S."name" as "name"
+                        FROM "Population" P
+                        JOIN "Order" O On P."order_id"=O."id_order"
+                        JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
+                        JOIN "Family" f ON P."family_id"=F."id_family"
+                        JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
+                        JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
+                        JOIN "Genus" G ON P."genus_id"=G."id_genus"
+                        JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
+                        JOIN "Species" S ON P."species_id"=S."id_species"
+                        JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
+                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
+                        AND (So."name" = '${So}' OR '${So}'='NULL')
+                        AND (F."name" = '${F}' OR '${F}'='NULL')
+                        AND (Sf."name" = '${Sf}' OR '${Sf}'='NULL')
+                        AND (T."name" = '${T}' OR '${T}'='NULL')
+                        AND (G."name" = '${G}' OR '${G}'='NULL')
+                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+    
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+function get_selectionss(O, So, F, Sf, T, G, Sg, S) {
+    var searchquery = `SELECT DISTINCT Ss."name" as "name"
+                        FROM "Population" P
+                        JOIN "Order" O On P."order_id"=O."id_order"
+                        JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
+                        JOIN "Family" f ON P."family_id"=F."id_family"
+                        JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
+                        JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
+                        JOIN "Genus" G ON P."genus_id"=G."id_genus"
+                        JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
+                        JOIN "Species" S ON P."species_id"=S."id_species"
+                        JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
+                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
+                        AND (So."name" = '${So}' OR '${So}'='NULL')
+                        AND (F."name" = '${F}' OR '${F}'='NULL')
+                        AND (Sf."name" = '${Sf}' OR '${Sf}'='NULL')
+                        AND (T."name" = '${T}' OR '${T}'='NULL')
+                        AND (G."name" = '${G}' OR '${G}'='NULL')
+                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
+                        AND (S."name" = '${S}' OR '${S}'='NULL')`
+    
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+function get_selectiont(O, So, F, Sf, G, Sg, S, Ss) {
+    var searchquery = `SELECT DISTINCT T."name" as "name"
+                        FROM "Population" P
+                        JOIN "Order" O On P."order_id"=O."id_order"
+                        JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
+                        JOIN "Family" f ON P."family_id"=F."id_family"
+                        JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
+                        JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
+                        JOIN "Genus" G ON P."genus_id"=G."id_genus"
+                        JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
+                        JOIN "Species" S ON P."species_id"=S."id_species"
+                        JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
+                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
+                        AND (So."name" = '${So}' OR '${So}'='NULL')
+                        AND (F."name" = '${F}' OR '${F}'='NULL')
+                        AND (Sf."name" = '${Sf}' OR '${Sf}'='NULL')
+                        AND (G."name" = '${G}' OR '${G}'='NULL')
+                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
+                        AND (S."name" = '${S}' OR '${S}'='NULL')
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
     
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -98,6 +381,14 @@ function csvtosql(filename) {
 module.exports = {
     get_all,
     get_result,
-    get_selection,
+    get_selectiono,
+    get_selectionso,
+    get_selectiong,
+    get_selectionsg,
+    get_selectionf,
+    get_selectionsf,
+    get_selections,
+    get_selectionss,
+    get_selectiont,
     csvtosql
 }

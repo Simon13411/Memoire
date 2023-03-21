@@ -2,8 +2,17 @@
 --Order
 
 SELECT DISTINCT S.name AS "order"
-FROM "Order" S, "Population" P, "Family" F, "SubOrder" So
-WHERE S.id_order==P.order_id and P.family_id==F.id_family AND ((P.suborder_id==So.id_suborder AND So.name=varSo) OR varSo!='NULL') AND F.name=varfamily
+FROM "Order" S, "Population" P, "subOrder" So, "Genus" G, "subGenus" Sg, "Family" F, "subFamily" Sf, "Species" S, "subSpecies" Ss, "Tribu" T
+WHERE S.id_order==P.order_id 
+    AND ((P.order_id==So.id_order AND S.name=varS) OR varS!='NULL') 
+    AND ((P.suborder_id==So.id_suborder AND So.name=varSo) OR varSo!='NULL') 
+    AND ((P.genus_id==So.id_genus AND So.name=varg) OR varg!='NULL')
+    AND ((P.subgenus_id==So.id_subgenus AND So.name=varsg) OR varsg!='NULL')
+    AND ((P.family_id==So.id_family AND So.name=varf) OR varf!='NULL')
+    AND ((P.subfamily_id==So.id_subfamily AND So.name=varSf) OR varSf!='NULL')
+    AND ((P.species_id==So.id_species AND So.name=varS) OR varS!='NULL') 
+    AND ((P.subspecies_id==So.id_subspecies AND So.name=varSs) OR varSs!='NULL')  
+    AND ((P.tribu_id==So.id_tribu AND So.name=varT) OR varT!='NULL')   
 
 
 --subOrder

@@ -8,7 +8,7 @@ import Select from '@mui/material/Select';
 import Result from './Results'
 
 import axios from 'axios'
-const url = 'http://localhost:4000'
+const url = 'http://192.168.1.15:4000'
 
 class Selection extends React.Component {
   constructor (props) {
@@ -22,8 +22,7 @@ class Selection extends React.Component {
       subfamily: 'NULL',
       species: 'NULL',
       subspecies: 'NULL',
-      tribus: 'NULL',
-      subtribus: 'NULL',
+      tribu: 'NULL',
       results: [],
       orderlist: [],
       suborderlist: [],
@@ -33,8 +32,7 @@ class Selection extends React.Component {
       subfamilylist: [],
       specieslist: [],
       subspecieslist: [],
-      tribuslist: [],
-      subtribuslist: []
+      tribulist: [],
     }
   }
 
@@ -58,31 +56,78 @@ class Selection extends React.Component {
     }
   }
 
+  get_selection() {
+    axios.get(`${url}/get_selectiono/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.tribu}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}`)
+    .then((res) => {
+        this.setState({orderlist: res.data.rows})
+    })
+
+    axios.get(`${url}/get_selectionso/${this.state.order}/${this.state.family}/${this.state.subfamily}/${this.state.tribu}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}`)
+    .then((res) => {
+        this.setState({suborderlist: res.data.rows})
+    })
+
+    axios.get(`${url}/get_selectiong/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.tribu}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}`)
+    .then((res) => {
+        this.setState({genuslist: res.data.rows})
+    })
+
+    axios.get(`${url}/get_selectionsg/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.tribu}/${this.state.genus}/${this.state.species}/${this.state.subspecies}`)
+    .then((res) => {
+        this.setState({subgenuslist: res.data.rows})
+    })
+
+    axios.get(`${url}/get_selectionf/${this.state.order}/${this.state.suborder}/${this.state.subfamily}/${this.state.tribu}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}`)
+    .then((res) => {
+        this.setState({familylist: res.data.rows})
+    })
+
+    axios.get(`${url}/get_selectionsf/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.tribu}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}`)
+    .then((res) => {
+        this.setState({subfamilylist: res.data.rows})
+    })
+
+    axios.get(`${url}/get_selections/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.tribu}/${this.state.genus}/${this.state.subgenus}/${this.state.subspecies}`)
+    .then((res) => {
+        this.setState({specieslist: res.data.rows})
+    })
+
+    axios.get(`${url}/get_selectionss/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.tribu}/${this.state.genus}/${this.state.subgenus}/${this.state.species}`)
+    .then((res) => {
+        this.setState({subspecieslist: res.data.rows})
+    })
+
+    axios.get(`${url}/get_selectiont/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}`)
+    .then((res) => {
+        this.setState({tribulist: res.data.rows})
+    })
+  }
+
   OrderChange = (event) => {
-    this.setState({order: event.target.value})
+    this.setState({order: event.target.value}, this.get_selection)
   }
 
   subOrderChange = (event) => {
-    this.setState({suborder: event.target.value})
+    this.setState({suborder: event.target.value}, this.get_selection)
   }
 
   GenusChange = (event) => {
-    this.setState({genus: event.target.value})
+    this.setState({genus: event.target.value}, this.get_selection)
   }
   subGenusChange = (event) => {
-    this.setState({subgenus: event.target.value})
+    this.setState({subgenus: event.target.value}, this.get_selection)
   }
   FamilyChange = (event) => {
-    this.setState({family: event.target.value})
+    this.setState({family: event.target.value}, this.get_selection)
   }
   subFamilyChange = (event) => {
-    this.setState({subfamily: event.target.value})
+    this.setState({subfamily: event.target.value}, this.get_selection)
   }
   SpeciesChange = (event) => {
-    this.setState({species: event.target.value})
+    this.setState({species: event.target.value}, this.get_selection)
   }
   subSpeciesChange = (event) => {
-    this.setState({subspecies: event.target.value})
+    this.setState({subspecies: event.target.value}, this.get_selection)
   }
   
   componentDidMount() {
@@ -91,18 +136,15 @@ class Selection extends React.Component {
         this.setState({results: res.data.rows})
     })*/
 
-    axios.get(`${url}/get_selection`)
-    .then((res) => {
-        this.setState({orderlist: res.data.rows})
-    })
+    this.get_selection()
   }
 
   render() {
     return(
       <>
-        <Box sx={{m:1, border: 1, borderColor: 'green', width:130}}>
+        <Box sx={{m:1, border: 1, borderColor: 'green', width:180}}>
           <button buttonStyle='btn--outline' onClick={this.fetchResults}>SEARCH BOXES</button>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
             <InputLabel id="demo-simple-select-label">Order</InputLabel>
             <Select
               labelId="order-label"
@@ -115,12 +157,9 @@ class Selection extends React.Component {
                 <em>None</em>
               </MenuItem>
               {this.state.orderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-              <MenuItem value={"Hymenoptera"}>Hymenoptera</MenuItem>
-              <MenuItem value={"Lepidoptera"}>Lepidoptera</MenuItem>
-              <MenuItem value={30}>Quad</MenuItem>
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
           <InputLabel id="demo-simple-select-label">SubOrder</InputLabel>
             <Select
               labelId="suborder-label"
@@ -132,12 +171,10 @@ class Selection extends React.Component {
               <MenuItem value='NULL'>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {this.state.suborderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
           <InputLabel id="demo-simple-select-label">Genus</InputLabel>
             <Select
               labelId="genus-label"
@@ -149,12 +186,10 @@ class Selection extends React.Component {
               <MenuItem value='NULL'>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {this.state.genuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
           <InputLabel id="demo-simple-select-label">SubGenus</InputLabel>
             <Select
               labelId="subgenus-label"
@@ -166,12 +201,10 @@ class Selection extends React.Component {
               <MenuItem value='NULL'>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {this.state.subgenuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
           <InputLabel id="demo-simple-select-label">Family</InputLabel>
             <Select
               labelId="family-label"
@@ -183,12 +216,10 @@ class Selection extends React.Component {
               <MenuItem value='NULL'>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {this.state.familylist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
           <InputLabel id="demo-simple-select-label">SubFamily</InputLabel>
             <Select
               labelId="subfamily-label"
@@ -200,12 +231,10 @@ class Selection extends React.Component {
               <MenuItem value='NULL'>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {this.state.subfamilylist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
             <InputLabel id="demo-simple-select-label">Species</InputLabel>
             <Select
               labelId="species-label"
@@ -217,12 +246,10 @@ class Selection extends React.Component {
               <MenuItem value='NULL'>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Four</MenuItem>
-              <MenuItem value={30}>Quad</MenuItem>
+              {this.state.specieslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
             <InputLabel id="demo-simple-select-label">SubSpecies</InputLabel>
             <Select
               labelId="subspecies-label"
@@ -234,9 +261,22 @@ class Selection extends React.Component {
               <MenuItem value='NULL'>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Four</MenuItem>
-              <MenuItem value={30}>Quad</MenuItem>
+              {this.state.subspecieslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+            </Select>
+          </FormControl>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
+            <InputLabel id="demo-simple-select-label">Tribu</InputLabel>
+            <Select
+              labelId="subspecies-label"
+              id="subspecies-select"
+              value={this.state.subspecies}
+              label="Species"
+              onChange={this.subSpeciesChange}
+            >
+              <MenuItem value='NULL'>
+                <em>None</em>
+              </MenuItem>
+              {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
         </Box>

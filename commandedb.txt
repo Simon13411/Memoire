@@ -50,7 +50,7 @@ CREATE TABLE "Genus" (
 "id_genus" INT NOT NULL,
 "name" VARCHAR(500) NOT NULL,
 "id_sc" INT,
-"date" DATE, 
+"date" VARCHAR(15), 
 PRIMARY KEY ("id_genus"),
 UNIQUE ("id_genus"),
 UNIQUE ("name"),
@@ -62,7 +62,7 @@ CREATE TABLE "subGenus" (
 "id_subgenus" INT NOT NULL,
 "name" VARCHAR(500) NOT NULL,
 "id_sc" INT,
-"date" DATE, 
+"date" VARCHAR(15), 
 PRIMARY KEY ("id_subgenus"),
 UNIQUE ("id_subgenus"),
 UNIQUE ("name"),
@@ -75,7 +75,7 @@ CREATE TABLE "Species" (
 "id_species" INT NOT NULL,
 "name" VARCHAR(500) NOT NULL,
 "id_sc" INT,
-"date" DATE, 
+"date" VARCHAR(15), 
 PRIMARY KEY ("id_species"),
 UNIQUE ("id_species"),
 UNIQUE ("name"),
@@ -87,7 +87,7 @@ CREATE TABLE "subSpecies" (
 "id_subspecies" INT NOT NULL,
 "name" VARCHAR(500) NOT NULL,
 "id_sc" INT,
-"date" DATE, 
+"date" VARCHAR(15), 
 PRIMARY KEY ("id_subspecies"),
 UNIQUE ("id_subspecies"),
 UNIQUE ("name"),
@@ -108,14 +108,14 @@ CREATE TABLE "Population" (
 PRIMARY KEY ("id_population"),
 UNIQUE ("id_population"),
 FOREIGN KEY("order_id") REFERENCES "Order"("id_order"),
-FOREIGN KEY("suborder_id") REFERENCES "Order"("id_suborder"),
+FOREIGN KEY("suborder_id") REFERENCES "subOrder"("id_suborder"),
 FOREIGN KEY("family_id") REFERENCES "Family"("id_family"),
 FOREIGN KEY("subFamily_id") REFERENCES "subFamily"("id_subfamily"),
 FOREIGN KEY("genus_id") REFERENCES "Genus"("id_genus"),
 FOREIGN KEY("subGenus_id") REFERENCES "subGenus"("id_subgenus"),
 FOREIGN KEY("species_id") REFERENCES "Species"("id_species"),
 FOREIGN KEY("subSpecies_id") REFERENCES "subSpecies"("id_subspecies"),
-FOREIGN KEY("tribu_id") REFERENCES Tribu("id_tribu")
+FOREIGN KEY("tribu_id") REFERENCES "Tribu"("id_tribu")
 
 );
 
@@ -128,23 +128,22 @@ PRIMARY KEY ("id_collection")
 
 CREATE TABLE "SpeciesRange" (
 "id_speciesrange" INT NOT NULL,
-"range_begin" VARCHAR(5) NOT NULL,
-"range_end" VARCHAR(5) NOT NULL,
+"range_begin" VARCHAR(50) NOT NULL,
+"range_end" VARCHAR(50) NOT NULL,
 UNIQUE("id_speciesrange"),
 PRIMARY KEY ("id_speciesrange")
 );
 
 CREATE TABLE "GenusRange" (
 "id_genusrange" INT NOT NULL,
-"range_begin" VARCHAR(10) NOT NULL,
-"range_end" VARCHAR(10) NOT NULL,
+"range_begin" VARCHAR(50) NOT NULL,
+"range_end" VARCHAR(50) NOT NULL,
 UNIQUE("id_genusrange"),
 PRIMARY KEY ("id_genusrange")
 );
 
 CREATE TABLE "Box" (
 "id_box" INT NOT NULL,
-"population_id" INT NOT NULL,
 "location" VARCHAR(50),
 "speciesrange_id" INT,
 "genusrange_id" INT,
@@ -153,7 +152,6 @@ CREATE TABLE "Box" (
 "types" INT, 
 UNIQUE("id_box"),
 PRIMARY KEY ("id_box"),
-FOREIGN KEY ("population_id") REFERENCES "Population"("id_population"),
 FOREIGN KEY ("speciesrange_id") REFERENCES "SpeciesRange"("id_speciesrange"),
 FOREIGN KEY ("genusrange_id") REFERENCES "GenusRange"("id_genusrange")
 );

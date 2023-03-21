@@ -17,18 +17,20 @@ import collectionBox
 
 import pandas as pd
 import psycopg2
-import sqlite3
+import sys
 
 
-file = pd.ExcelFile("FilteredData.xlsx")
-
-data = pd.read_excel(file)
-
-#Connexion
-database = "Entomologie.db"
-conn = sqlite3.connect(database)
+conn = psycopg2.connect(
+    host="postgresc",
+    database="entomologie",
+    user="postgres",
+    password="password"
+)
 cursor = conn.cursor()
-print("Successfully Connected to the db")
+print("Successfully connected to DB")
+
+filename = sys.argv[1]
+data = pd.read_excel(filename, engine="openpyxl")
 
 
 ### Ici on  va inserer tout mais on pourrait en fonctio d'arguments lancer, ajouter seulement certain trucs ###

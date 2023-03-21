@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import axios from 'axios'
-const url = 'http://localhost:4000'
+const url = 'http://192.168.1.15:4000'
 
 class FileUploader extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class FileUploader extends Component {
     const formData = new FormData();
     formData.append('file', this.state.selectedFile);
 
-    axios.put(`http://localhost:4001/csvtosql`, formData, {
+    axios.put(`${url}/csvtosql`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data' //Contient des données binaires
       }

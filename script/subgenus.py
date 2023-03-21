@@ -7,8 +7,8 @@ def insertSubGenus(data, cursor, conn) :
     toinsertName = data["Subgenus"].values.tolist()
     toinsertDate = data["Subgenus_Date"].values.tolist()
     toinsertSc = data["Subgenus_Descriptor"].values.tolist()
-    duplicationquery =  """SELECT MAX(id_subgenus)
-                            FROM subGenus"""
+    duplicationquery =  """SELECT MAX("id_subgenus")
+                            FROM "subGenus" """
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
@@ -25,31 +25,31 @@ def insertSubGenus(data, cursor, conn) :
         for index in subgenusList:
             
             duplicationquery =  """SELECT *
-                                FROM subGenus 
-                                WHERE name = "{}" """.format(index) 
+                                FROM "subGenus" 
+                                WHERE "name" = '{}' """.format(index) 
             cursor.execute(duplicationquery)
             if cursor.fetchall() == [] :
             #S il y a un genus descriptor, on va recupere l'id du sc
-                id_sc_query = """SELECT id_sc
-                        FROM Scientific
-                        WHERE name="{}" """.format(toinsertSc[i])
+                id_sc_query = """SELECT "id_sc"
+                        FROM "Scientific"
+                        WHERE "name"='{}' """.format(toinsertSc[i])
                 cursor.execute(id_sc_query)
                 id_sc_list = cursor.fetchall()
                 if (len(id_sc_list)>1): #juste check mais normalement devrait pas aller la
                     print("Pas normal")
                     print(id_sc_list)
-                dateNull = 0
+                dateNull = "NULL"
                 if not math.isnan(toinsertDate[i]):
-                    insertquery = """INSERT INTO subGenus
-                                (id_subgenus, name, id_sc, date) 
+                    insertquery = """INSERT INTO "subGenus"
+                                ("id_subgenus", "name", "id_sc", "date") 
                                 VALUES 
-                                ({},"{}",{},{})""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
+                                ({},'{}',{},{})""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
                     print(insertquery)
                 else:
-                    insertquery = """INSERT INTO subGenus
-                                (id_subgenus, name, id_sc, date) 
+                    insertquery = """INSERT INTO "subGenus"
+                                ("id_subgenus", "name", "id_sc", "date") 
                                 VALUES 
-                                ({},"{}",{},{})""".format(Count, index, id_sc_list[0][0], dateNull)
+                                ({},'{}',{},{})""".format(Count, index, id_sc_list[0][0], dateNull)
                     print(insertquery)
                 cursor.execute(insertquery)
                 Count+=1

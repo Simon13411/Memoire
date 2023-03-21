@@ -15,8 +15,40 @@ app.get('/get_query/:order/:suborder/:family/:subfamily', (req, res) => {
     res.redirect(307, `http://${IP}:4001/get_result/${req.params.order}/${req.params.suborder}/${req.params.family}/${req.params.subfamily}`)
 })
 
-app.get('/get_selection', (req, res) => {
-    res.redirect(307, `http://${IP}:4001/get_selection`)
+app.get('/get_selectiono/:so/:f/:sf/:t/:g/:sg/:s/:ss', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_selectiono/${req.params.so}/${req.params.f}/${req.params.sf}/${req.params.t}/${req.params.g}/${req.params.sg}/${req.params.s}/${req.params.ss}`)
+})
+
+app.get('/get_selectionso/:o/:f/:sf/:t/:g/:sg/:s/:ss', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_selectionso/${req.params.o}/${req.params.f}/${req.params.sf}/${req.params.t}/${req.params.g}/${req.params.sg}/${req.params.s}/${req.params.ss}`)
+})
+
+app.get('/get_selectiong/:o/:so/:f/:sf/:t/:sg/:s/:ss', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_selectiong/${req.params.o}/${req.params.so}/${req.params.f}/${req.params.sf}/${req.params.t}/${req.params.sg}/${req.params.s}/${req.params.ss}`)
+})
+
+app.get('/get_selectionsg/:o/:so/:f/:sf/:t/:g/:s/:ss', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_selectionsg/${req.params.o}/${req.params.so}/${req.params.f}/${req.params.sf}/${req.params.t}/${req.params.g}/${req.params.s}/${req.params.ss}`)
+})
+
+app.get('/get_selectionf/:o/:so/:sf/:t/:g/:sg/:s/:ss', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_selectionf/${req.params.o}/${req.params.so}/${req.params.sf}/${req.params.t}/${req.params.g}/${req.params.sg}/${req.params.s}/${req.params.ss}`)
+})
+
+app.get('/get_selectionsf/:o/:so/:f/:t/:g/:sg/:s/:ss', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_selectionsf/${req.params.o}/${req.params.so}/${req.params.f}/${req.params.t}/${req.params.g}/${req.params.sg}/${req.params.s}/${req.params.ss}`)
+})
+
+app.get('/get_selections/:o/:so/:f/:sf/:t/:g/:sg/:ss', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_selections/${req.params.o}/${req.params.so}/${req.params.f}/${req.params.sf}/${req.params.t}/${req.params.g}/${req.params.sg}/${req.params.ss}`)
+})
+
+app.get('/get_selectionss/:o/:so/:f/:sf/:t/:g/:sg/:s', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_selectionss/${req.params.o}/${req.params.so}/${req.params.f}/${req.params.sf}/${req.params.t}/${req.params.g}/${req.params.sg}/${req.params.s}`)
+})
+
+app.get('/get_selectiont/:o/:so/:f/:sf/:g/:sg/:s/:ss', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_selectiont/${req.params.o}/${req.params.so}/${req.params.f}/${req.params.sf}/${req.params.g}/${req.params.sg}/${req.params.s}/${req.params.ss}`)
 })
 
 app.put('/csvtosql', (req, res) => {

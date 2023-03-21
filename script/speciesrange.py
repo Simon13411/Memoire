@@ -5,8 +5,8 @@ import math
 
 def insertOrder(data, cursor, conn) :
     toinsert = data["Species_range"].values.tolist()
-    duplicationquery =  """SELECT MAX(id_speciesrange)
-                            FROM SpeciesRange"""
+    duplicationquery =  """SELECT MAX("id_speciesrange")
+                            FROM "SpeciesRange" """
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
@@ -24,14 +24,14 @@ def insertOrder(data, cursor, conn) :
             else:
                end = ""
             duplicationquery =  """SELECT *
-                                    FROM SpeciesRange 
-                                    WHERE range_begin = "{}" and range_end= "{}" """.format(start, end) 
+                                    FROM "SpeciesRange" 
+                                    WHERE "range_begin" = '{}' and "range_end" = '{}' """.format(start, end) 
             cursor.execute(duplicationquery)
             if cursor.fetchall() == [] :
-                insertquery = """INSERT INTO SpeciesRange
-                                (id_speciesrange, range_begin, range_end) 
+                insertquery = """INSERT INTO "SpeciesRange"
+                                ("id_speciesrange", "range_begin", "range_end") 
                                 VALUES 
-                                ({},"{}", "{}")""".format(Count, start, end)
+                                ({},'{}', '{}') """.format(Count, start, end)
                                 #print(insertquery)
                 cursor.execute(insertquery)
                 Count+=1
