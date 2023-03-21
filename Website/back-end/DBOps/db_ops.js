@@ -33,23 +33,37 @@ function get_all() {
     })
 }
 
-function get_result(order, suborder, family, subfamily) {
-    var searchquery = `SELECT * FROM "Box" 
-                        WHERE`
-    if (order !== 'NULL') {
-        searchquery = searchquery.concat(" \"Order\"='", order, "' ", "AND")
-    }
-    if (suborder !== 'NULL') {
-        searchquery = searchquery.concat(" \"subOrder\"='", suborder, "' ", "AND")
+function get_result(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
+    var searchquery = `SELECT B."id_box", B."location", B."museum", B."paratypes", B."types", R."Order",
+                        R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", Col."name" as "Col"
+                        FROM "Box" B, "CollectionBox" ColBox, "Collection" Col,
+                        (SELECT P."box_id" as "bid", O."name" as "Order", So."name" as "subOrder", F."name" as "Family", Sf."name" as "subFamily", T."name" as "Tribu", G."name" as "Genus", Sg."name"as "subGenus", S."name" as "Species", Ss."name" as "subSpecies"
+                            FROM "PopuBox" P, "Population" P2
+                                JOIN "Order" O On P2."order_id"=O."id_order"
+                                JOIN "subOrder" So ON P2."suborder_id"=So."id_suborder"
+                                JOIN "Family" F ON P2."family_id"=F."id_family"
+                                JOIN "subFamily" Sf ON P2."subFamily_id"=Sf."id_subfamily"
+                                JOIN "Tribu" T ON P2."tribu_id"=T."id_tribu"
+                                JOIN "Genus" G ON P2."genus_id"=G."id_genus"
+                                JOIN "subGenus" Sg ON P2."subGenus_id"=Sg."id_subgenus"
+                                JOIN "Species" S ON P2."species_id"=S."id_species"
+                                JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
+                                WHERE P."population_id"=P2."id_population"
+                                    AND (O."name"='${O}' OR '${O}'='NULL')
+                                    AND (So."name"='${So}' OR '${So}'='NULL')
+                                    AND (F."name"='${F}' OR '${F}'='NULL')
+                                    AND (Sf."name"='${Sf}' OR '${Sf}'='NULL')
+                                    AND (T."name"='${T}' OR '${T}'='NULL')
+                                    AND (G."name"='${G}' OR '${G}'='NULL')
+                                    AND (Sg."name"='${Sg}' OR '${Sg}'='NULL')
+                                    AND (S."name"='${S}' OR '${S}'='NULL')
+                                    AND (Ss."name"='${Ss}' OR '${Ss}'='NULL') 
+                                LIMIT 10 OFFSET ${Offs}) AS R
+                        WHERE B."id_box" = R."bid" 
+                        AND ColBox."box_id"=B."id_box" 
+                        AND ColBox."collection_id"=Col."id_collection"`
 
-    }
-    if (family !== 'NULL') {
-        searchquery = searchquery.concat(" \"Family\"='", family, "' ", "AND")
-    }
-    if (subfamily !== 'NULL') {
-        searchquery = searchquery.concat(" \"SubFamily\"='", subfamily, "' ", "AND")
-    }
-    searchquery = searchquery.substring(0,searchquery.length-4)
+    console.log(searchquery)
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
             if (err) {

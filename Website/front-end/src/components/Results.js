@@ -9,6 +9,11 @@ class Results extends React.Component {
     render() {
         return(
             <Box sx={{m:1, border: 1, borderColor: 'green'}}>
+                {(this.props.id) ?
+                    (<div>Boite n°: {this.props.id}</div>)
+                    :
+                    (<></>)
+                }
                 {(this.props.order) ?
                     (<div>Order: {this.props.order}</div>)
                     :

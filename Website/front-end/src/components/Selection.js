@@ -42,18 +42,10 @@ class Selection extends React.Component {
   }
 
   fetchResults = () => {
-    if (!this.isselectionempty()) {
-      axios.get(`${url}/get_result/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}`)
+      axios.get(`${url}/get_result/0/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}/${this.state.tribu}`)
       .then((res) => {
           this.setState({results: res.data.rows})
       })
-    }
-    else {
-      axios.get(`${url}/get_all`)
-      .then((res) => {
-          this.setState({results: res.data.rows})
-      })
-    }
   }
 
   get_selection() {
@@ -131,10 +123,10 @@ class Selection extends React.Component {
   }
   
   componentDidMount() {
-    /*axios.get(`${url}/get_all`)
+    axios.get(`${url}/get_result/0/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}/${this.state.tribu}`)
     .then((res) => {
         this.setState({results: res.data.rows})
-    })*/
+    })
 
     this.get_selection()
   }
@@ -281,7 +273,7 @@ class Selection extends React.Component {
           </FormControl>
         </Box>
         <ul class="datalist">
-          {this.state.results.map((data) => <li><Result order={data.Order} suborder={data.subOrder} family={data.Family} subfamily={data.SubFamily}></Result></li>)}
+          {this.state.results.map((data) => <li><Result id={data.id_box} order={data.Order} suborder={data.subOrder} family={data.Family} subfamily={data.subFamily}></Result></li>)}
         </ul>
       </>
     );

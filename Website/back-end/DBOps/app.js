@@ -27,12 +27,18 @@ app.get('/get_all', (req, res) => {
 })
 
 
-app.get('/get_result/:order/:suborder/:family/:subfamily', (req, res) => {
-    const order = req.params.order
-    const suborder = req.params.suborder
-    const family = req.params.family
-    const subfamily = req.params.subfamily
-    return db.get_result(order, suborder, family, subfamily)
+app.get('/get_result/:offset/:o/:so/:f/:sf/:g/:sg/:s/:ss/:t', (req, res) => {
+    const Offs = req.params.offset
+    const O = req.params.o
+    const So = req.params.so
+    const F = req.params.f
+    const Sf = req.params.sf
+    const T = req.params.t
+    const G = req.params.g
+    const Sg = req.params.sg
+    const S = req.params.s
+    const Ss = req.params.ss
+    return db.get_result(Offs, O, So, F, Sf, T, G, Sg, S, Ss)
     .then((result) => {
         res.status(200).json(result)
     })

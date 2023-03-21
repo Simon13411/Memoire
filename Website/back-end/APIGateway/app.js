@@ -11,8 +11,8 @@ app.get('/get_all', (req, res) => {
     res.redirect(307, `http://${IP}:4001/get_all`)
 })
 
-app.get('/get_query/:order/:suborder/:family/:subfamily', (req, res) => {
-    res.redirect(307, `http://${IP}:4001/get_result/${req.params.order}/${req.params.suborder}/${req.params.family}/${req.params.subfamily}`)
+app.get('/get_result/:offset/:o/:so/:f/:sf/:g/:sg/:s/:ss/:t', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_result/${req.params.offset}/${req.params.o}/${req.params.so}/${req.params.f}/${req.params.sf}/${req.params.g}/${req.params.sg}/${req.params.s}/${req.params.ss}/${req.params.t}`)
 })
 
 app.get('/get_selectiono/:so/:f/:sf/:t/:g/:sg/:s/:ss', (req, res) => {
@@ -56,7 +56,7 @@ app.put('/csvtosql', (req, res) => {
 })
 
 
-//FileDownloader
+//FileDownloader (port 4002)
 app.get('/boxestemplate', (req, res) => {
     res.redirect(307, `http://${IP}:4002/boxestemplate`)
 })
@@ -65,7 +65,7 @@ app.get('/individualstemplate', (req, res) => {
     res.redirect(307, `http://${IP}:4002/individualstemplate`)
 })
 
-//LogIn and SignIn
+//LogIn and SignIn (port 4003)
 app.post('/login', (req, res) => {
     res.redirect(307, `http://${IP}:4003/login`)
 })
