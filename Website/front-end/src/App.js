@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 import './App.css';
 
 import axios from 'axios'
-const url = 'http://localhost:4000'
 
 import BoxDetails from './components/pages/BoxDetails';
 import InsectDetails from './components/pages/InsectDetails';
@@ -15,11 +14,14 @@ import AboutUs from './components/pages/AboutUs';
 import Authentication, {AuthWNav} from './components/pages/Authentication';
 import AdminPannel from './components/pages/AdminPannel';
 
+const url = 'http://192.168.1.15:4000'
+
 class App extends React.Component {
 
   state = {
     username: '',
     isAuthenticated: false,
+    isLoading: true,
   };
 
   componentDidMount() {
@@ -35,6 +37,10 @@ class App extends React.Component {
           }
         })
         .catch((err) => console.log(err))
+        .finally(() => this.setState({isLoading: false}))
+    }
+    else {
+      this.setState({isLoading: false})
     }
   }
 
@@ -42,9 +48,20 @@ class App extends React.Component {
     return this.state.isAuthenticated
   }
 
+  isLoading = () => {
+    return this.state.isLoading
+  }
+
+  Authenticate = () => {
+    return this.setState({ isAuthenticated: true })
+  }
+
   render() {
     return (
       <>
+      {this.state.isLoading ?
+      (<></>
+      ):(
         <Router>
           <Routes>
             <Route path='/' element={<BoxesHome/>} />
@@ -52,11 +69,12 @@ class App extends React.Component {
             <Route path='/individual' element={<InsectDetails isAuthenticated={this.isAuthenticated}/>} />
             <Route path='/box' element={<BoxDetails isAuthenticated={this.isAuthenticated}/>} />
             <Route path='/add-data' element={<AddData isAuthenticated={this.isAuthenticated}/>} />
-            <Route path='/sign-in' element={<AuthWNav/>} />
+            <Route path='/sign-in' element={<AuthWNav Authenticate={this.Authenticate}/>} />
             <Route path='/admin-pannel' element={<AdminPannel isAuthenticated={this.isAuthenticated}/>} />
             <Route path='/about-us' element={<AboutUs/>} />
           </Routes>
         </Router>
+      )}
       </>
     )
   }

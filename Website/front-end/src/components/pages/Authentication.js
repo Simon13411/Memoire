@@ -106,7 +106,8 @@ class Authentication extends React.Component {
 
 export function AuthWNav(props) {
     const navigate = useNavigate()
-    return <Authentication navigate={navigate}></Authentication>
+    const auth = props.Authenticate()
+    return <Authentication navigate={navigate} auth={auth}></Authentication>
 }
 
 export default Authentication;
