@@ -20,9 +20,11 @@ def insertSpecies(data, cursor, conn) :
         
         
         if isinstance(toinsertName[i], str) : speciesList  = toinsertName[i].split("_")
-        else : speciesList = [""]
+        else : speciesList = ["NULL"]
         
         for index in speciesList:
+            if index=="NULL": continue
+            if isinstance(toinsertSc[i], float): toinsertSc[i]="Unknown"
             
             duplicationquery =  """SELECT *
                                 FROM "Species" 
@@ -35,6 +37,7 @@ def insertSpecies(data, cursor, conn) :
                         WHERE "name"='{}' """.format(toinsertSc[i])
                 cursor.execute(id_sc_query)
                 id_sc_list = cursor.fetchall()
+                print("scientific", id_sc_list[0][0])
                 if (len(id_sc_list)>1): #juste check mais normalement devrait pas aller la
                     print("Pas normal")
                     print(id_sc_list)

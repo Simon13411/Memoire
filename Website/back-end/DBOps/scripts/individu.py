@@ -6,7 +6,7 @@ import numpy as np
 def order(insert, cursor):
     #On recupere la liste d'id de l'ordre
     if isinstance(insert, str) : ordernameList  = insert.split("_")
-    else : ordernameList = [""]
+    else : ordernameList = "NULL"
     
     returnOrder = []
     for index in ordernameList:
@@ -26,7 +26,7 @@ def order(insert, cursor):
 def suborder(insert, cursor):
     #On recupere la liste d'id du suborder
     if isinstance(insert, str) : subordernameList  = insert.split("_")
-    else : subordernameList = [""]
+    else : subordernameList = "NULL"
     
     returnSubOrder = []
     for index in subordernameList:
@@ -46,7 +46,7 @@ def suborder(insert, cursor):
 def tribu(insert, cursor):
     #On recupere la liste d'id de la tribu
     if isinstance(insert, str) : tribunameList  = insert.split("_")
-    else : tribunameList = [""]
+    else : tribunameList = "NULL"
     
     returnTribu = []
     for index in tribunameList:
@@ -66,7 +66,7 @@ def tribu(insert, cursor):
 def family(insert, cursor):
     #On recupere la liste d'id de la tribu
     if isinstance(insert, str) : familynameList  = insert.split("_")
-    else : familynameList = [""]
+    else : familynameList = "NULL"
     returnFamily = []
     for index in familynameList:
         
@@ -85,7 +85,7 @@ def family(insert, cursor):
 def subfamily(insert, cursor):
     #On recupere la liste d'id de la tribu
     if isinstance(insert, str) : subfamilynameList  = insert.split("_")
-    else : subfamilynameList = [""]
+    else : subfamilynameList = "NULL"
     returnSubFamily = []
     for index in subfamilynameList:
         
@@ -104,7 +104,7 @@ def subfamily(insert, cursor):
 def genus(insert, cursor):
     #On recupere la liste d'id de la tribu
     if isinstance(insert, str) : genusnameList  = insert.split("_")
-    else :genusnameList = [""]
+    else :genusnameList = "NULL"
     returnGenus = []
     for index in genusnameList:
         
@@ -123,7 +123,7 @@ def genus(insert, cursor):
 def subgenus(insert, cursor):
     #On recupere la liste d'id de la tribu
     if isinstance(insert, str) : subgenusnameList  = insert.split("_")
-    else : subgenusnameList = [""]
+    else : subgenusnameList = "NULL"
     returnSubGenus = []
     for index in subgenusnameList:
         
@@ -223,7 +223,7 @@ def insertIndividu(data, cursor, conn) :
             
         duplicationquery =  """SELECT *
                                 FROM "Individu" 
-                                WHERE name = "{}" """.format(toinsert[i]) 
+                                WHERE name = "{}" """.format(toinsert[i])
         cursor.execute(duplicationquery)
         if cursor.fetchall() == [] :
             

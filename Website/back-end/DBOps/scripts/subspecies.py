@@ -20,9 +20,11 @@ def insertSubSpecies(data, cursor, conn) :
         
         
         if isinstance(toinsertName[i], str) : subspeciesList  = toinsertName[i].split("_")
-        else : subspeciesList = [""]
+        else : subspeciesList = ["NULL"]
         
         for index in subspeciesList:
+            if index=="NULL": continue
+            if isinstance(toinsertSc[i], float): toinsertSc[i]="Unknown"
             
         
             duplicationquery =  """SELECT *

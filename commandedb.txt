@@ -98,7 +98,7 @@ CREATE TABLE "Population" (
 "id_population" INT NOT NULL,
 "order_id" INT NOT NULL,
 "suborder_id" INT,
-"tribu_id" INT NOT NULL,
+"tribu_id" INT,
 "family_id" INT,
 "subFamily_id" INT,
 "genus_id" INT,
