@@ -32,6 +32,7 @@ class App extends React.Component {
       axios.post(`${url}/validate-token`, { token: authToken })
         .then((res) => {
           if (res.data.success) {
+            console.log("successfully connected")
             const username = res.data.username;
             this.setState({ isAuthenticated: true, username: username});
           }
@@ -40,6 +41,7 @@ class App extends React.Component {
         .finally(() => this.setState({isLoading: false}))
     }
     else {
+      console.log("Not connected")
       this.setState({isLoading: false})
     }
   }
@@ -53,7 +55,8 @@ class App extends React.Component {
   }
 
   Authenticate = () => {
-    return this.setState({ isAuthenticated: true })
+    console.log("Successfully Connected")
+    this.setState({isAuthenticated: true})
   }
 
   render() {

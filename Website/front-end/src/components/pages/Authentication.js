@@ -35,6 +35,7 @@ class Authentication extends React.Component {
             if (res.data.success) {
                 // Stockage du jeton d'authentification dans un cookie
                 Cookies.set('auth_token', res.data.token);
+                this.props.auth()
                 this.props.navigate('/admin-pannel');
             }
             else {
@@ -106,7 +107,7 @@ class Authentication extends React.Component {
 
 export function AuthWNav(props) {
     const navigate = useNavigate()
-    const auth = props.Authenticate()
+    const auth = props.Authenticate
     return <Authentication navigate={navigate} auth={auth}></Authentication>
 }
 
