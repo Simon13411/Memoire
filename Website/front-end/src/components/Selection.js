@@ -5,7 +5,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import Result from './Results'
+import Results, {ResultsWNav} from './Results'
 
 import axios from 'axios'
 const url = 'http://192.168.1.15:4000'
@@ -273,7 +273,7 @@ class Selection extends React.Component {
           </FormControl>
         </Box>
         <ul class="datalist">
-          {this.state.results.map((data) => <li><Result id={data.id_box} order={data.Order} suborder={data.subOrder} family={data.Family} subfamily={data.subFamily}></Result></li>)}
+          {this.state.results.map((data) => <li><ResultsWNav id={data.id_box} order={data.Order} suborder={data.subOrder} family={data.Family} subfamily={data.subFamily}></ResultsWNav></li>)}
         </ul>
       </>
     );
