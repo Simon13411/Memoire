@@ -1,6 +1,7 @@
 import sqlite3
 import pandas as pd
 import numpy as np
+import math
 
 def insertScientific(data, cursor, conn) :
     toinsert = data["Genus_Descriptor"].values.tolist()
@@ -17,6 +18,7 @@ def insertScientific(data, cursor, conn) :
         Count = result[0][0]+1
 
     for i in range(0, len(toinsert)):
+        if isinstance(toinsert[i], float): toinsert[i]="Unknown"
         duplicationquery =  """SELECT *
                                 FROM "Scientific" 
                                 WHERE "name" = '{}' """.format(toinsert[i]) 

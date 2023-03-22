@@ -16,9 +16,10 @@ def insertOrder(data, cursor, conn) :
     for i in range(0, len(toinsert)):
         
         if isinstance(toinsert[i], str) : orderList  = toinsert[i].split("_")
-        else : orderList = [""]
+        else : orderList = ["NULL"]
         
         for index in orderList:
+            if index=="NULL": continue
             
             duplicationquery =  """SELECT *
                                 FROM "Order" 

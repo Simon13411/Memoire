@@ -18,10 +18,11 @@ def insertSubFamily(data, cursor, conn) :
         
         
         if isinstance(toinsert[i], str) : subfamilyList  = toinsert[i].split("_")
-        else : subfamilyList = [""]
+        else : subfamilyList = ["NULL"]
         
         
         for index in subfamilyList:
+            if index=="NULL": continue
             
             duplicationquery =  """SELECT *
                                 FROM "subFamily" 
