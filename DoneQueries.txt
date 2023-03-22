@@ -100,6 +100,7 @@ WHERE B."id_box" = R."bid" AND ColBox."box_id"=B."id_box" AND ColBox."collection
 
 ----------------------------
 GetIndividuInfo en fonctione de order sous order etc 
+
 SELECT I."id_individu", R."bid" as 'boite', I."continent", I."country", I."ecozone", R."ordre",
     R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", loan.prenom
 FROM "Individu" I,
@@ -136,6 +137,7 @@ WHERE I."box_id" = R."bid" and I."population_id"=R."popu"
 
 ---------------------
 GETindividuInfo en fonction de son id
+
 SELECT I."id_individu", R."bid" as 'boite', I."continent", I."country", I."ecozone", R."ordre",
     R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", loan.prenom
 FROM "Individu" I,
@@ -160,3 +162,20 @@ FROM "Individu" I,
     
     
 WHERE I."box_id" = R."bid" and I."population_id"=R."popu" AND I.id_individu=1
+
+
+
+-----------------
+SELECT loaner d'une box (para rapport id)
+
+Select *
+FROM  "loanBox" LB, "Loaner" L
+WHERE 4=LB."box_id" AND LB."loaner_id"=L."id_loaner"
+
+
+------------------
+SELECT loaner d'un individu(para rapport id)
+
+SELECT * 
+FROM "loanIndividu" LI, "Loaner" L
+WHERE 1=LI."individu_id" AND LI."loaner_id"=L."id_loaner"
