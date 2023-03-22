@@ -296,16 +296,16 @@ def insertBox(data, cursor, conn) :
             if cursor.fetchall()==[]:
                 #il y a pas encore de zero, on ajoute un id box 0, un id species range 0, un id genus range 0
                 
-                speciesRange = """ INSERT INTO "SpeciesRange"
+                """"speciesRange = \""" INSERT INTO "SpeciesRange"
                                     ("id_speciesrange", "range_begin", "range_end")
                                     VALUES
-                                    ({}, '{}','{}') """.format(0,"","")
+                                    ({}, '{}','{}') \""".format(0,"","")
                 cursor.execute(speciesRange)
-                genusRange = """ INSERT INTO "GenusRange"
+                genusRange = \""" INSERT INTO "GenusRange"
                                     ("id_genusrange", "range_begin", "range_end")
                                     VALUES
-                                    ({}, '{}','{}') """.format(0,"","")
-                cursor.execute(genusRange)
+                                    ({}, '{}','{}') \""".format(0,"","")
+                cursor.execute(genusRange)"""
                 #On recupere l'ordre
                 orderList = order(toinsertOrder[i], cursor)
                 
@@ -362,7 +362,7 @@ def insertBox(data, cursor, conn) :
                 insertquery = """INSERT INTO "Box"
                                 ("id_box", "location", "speciesrange_id", "genusrange_id", "museum", "paratypes", "types") 
                                 VALUES 
-                                ({},'{}',{},{},'{}',{},{})""".format(0,"", 0, 0, "", 0, 0)
+                                ({},'{}',{},{},'{}',{},{})""".format(0,"", "NULL", "NULL", "", "NULL", "NULL")
                 print(insertquery)
                 cursor.execute(insertquery)
             else:            

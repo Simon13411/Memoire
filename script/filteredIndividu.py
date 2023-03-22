@@ -34,9 +34,9 @@ for i,row in taxonomydf.iterrows():
         break
     else:
         speciCode = locationdf["Specimen code"][i]
-        continent = locationdf["Continent"][i]
-        country = locationdf["Country"][i]
-        ecozone = ""
+        if isinstance(locationdf["Continent"][i], float): continent=" "
+        if isinstance(locationdf["Country"][i], float): country=" "
+        ecozone = " "
         order = taxonomydf["Order"][i]
         suborder = ""
         tribu = ""
