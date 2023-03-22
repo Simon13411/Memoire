@@ -18,9 +18,10 @@ def insertTribu(data, cursor, conn) :
         
 
         if isinstance(toinsert[i], str) : tribuList  = toinsert[i].split("_")
-        else : tribuList = [""]
+        else : tribuList = ["NULL"]
         
         for index in tribuList:
+            if index=="NULL": continue
             
         
             duplicationquery =  """ SELECT *

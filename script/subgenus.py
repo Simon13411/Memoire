@@ -19,10 +19,12 @@ def insertSubGenus(data, cursor, conn) :
     for i in range(0, len(toinsertName)):
         
         if isinstance(toinsertName[i], str) : subgenusList  = toinsertName[i].split("_")
-        else : subgenusList = [""]
+        else : subgenusList = ["NULL"]
         
         
         for index in subgenusList:
+            if index=="NULL": continue
+            if isinstance(toinsertSc[i], float): toinsertSc[i]="Unknown"
             
             duplicationquery =  """SELECT *
                                 FROM "subGenus" 

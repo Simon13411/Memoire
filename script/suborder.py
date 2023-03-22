@@ -16,10 +16,10 @@ def insertSubOrder(data, cursor, conn) :
     for i in range(0, len(toinsert)):
         
         if isinstance(toinsert[i], str) : suborderList  = toinsert[i].split("_")
-        else : suborderList = [""]
+        else : suborderList = ["NULL"]
         
         for index in suborderList:
-            
+            if index=="NULL": continue
             duplicationquery =  """SELECT *
                                 FROM "subOrder"
                                 WHERE name = '{}' """.format(index) 

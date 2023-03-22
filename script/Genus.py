@@ -20,10 +20,12 @@ def insertGenus(data, cursor, conn) :
         
         
         if isinstance(toinsertName[i], str) : genusList  = toinsertName[i].split("_")
-        else : genusList = [""]
+        else : genusList = ["NULL"]
         
         
         for index in genusList:
+            if index=="NULL": continue
+            if isinstance(toinsertSc[i], float): toinsertSc[i]="Unknown"
             
             duplicationquery =  """SELECT *
                                 FROM "Genus" 

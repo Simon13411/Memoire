@@ -17,9 +17,10 @@ def insertFamily(data, cursor, conn) :
         
         
         if isinstance(toinsert[i], str) : familyList  = toinsert[i].split("_")
-        else : familyList = [""]
+        else : familyList = ["NULL"]
         
         for index in familyList:
+            if index=="NULL": continue
             
             duplicationquery =  """SELECT *
                                 FROM "Family"  
