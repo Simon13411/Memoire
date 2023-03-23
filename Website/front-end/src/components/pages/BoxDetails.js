@@ -1,10 +1,6 @@
 import * as React from 'react';
+import { useSearchParams } from "react-router-dom"
 import Navbar from '../Navbar';
-
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 
 import BoxDetailsAdmin from './BoxDetailsAdmin';
 
@@ -45,9 +41,9 @@ class BoxDetails extends React.Component {
   }
 
   GetBox = (event) => {
-    axios.get(`${url}/get_result/0/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}/${this.state.tribu}`)
+    axios.get(`${url}/get_boxdetails`, {params: {id: this.props.searchParams.get("id")}})
     .then((res) => {
-        this.setState({results: res.data.rows})
+        this.setState({order: res.data.rows.order})
     })
   }
 
@@ -56,6 +52,7 @@ class BoxDetails extends React.Component {
   }
 
   render() {
+    {this.GetBox()}
     return (
       <>
       {this.props.isAuthenticated() ? 
@@ -169,6 +166,11 @@ class BoxDetails extends React.Component {
     }
     </>
   )}
+}
+
+export function BoxDetailsW(props) {
+  const [searchParams] = useSearchParams();
+  return <BoxDetails searchParams={searchParams} {...props}></BoxDetails>
 }
 
 export default BoxDetails;

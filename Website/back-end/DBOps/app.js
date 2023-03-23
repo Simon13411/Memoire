@@ -15,8 +15,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-app.get('/get_all', (req, res) => {
-    return db.get_all()
+app.get('/get_boxdetails', (req, res) => {
+    const id = req.query.id
+    return db.get_boxdetails(id)
     .then((result) => {
         console.log(result.rows[0].Att1)
         res.status(200).json(result)

@@ -5,13 +5,13 @@ import './App.css';
 
 import axios from 'axios'
 
-import BoxDetails from './components/pages/BoxDetails';
+import {BoxDetailsW} from './components/pages/BoxDetails';
 import InsectDetails from './components/pages/InsectDetails';
 import BoxesHome from './components/pages/BoxesHome';
 import InsectHome from './components/pages/InsectHome';
 import AddData from './components/pages/AddData';
 import AboutUs from './components/pages/AboutUs';
-import Authentication, {AuthWNav} from './components/pages/Authentication';
+import {AuthWNav} from './components/pages/Authentication';
 import AdminPannel from './components/pages/AdminPannel';
 
 const url = 'http://192.168.1.15:4000'
@@ -70,8 +70,8 @@ class App extends React.Component {
             <Route path='/' element={<BoxesHome/>} />
             <Route path='/box-search' element={<BoxesHome/>} />
             <Route path='/individual-search' element={<InsectHome/>} />
-            <Route path='/individual/:id' element={<InsectDetails isAuthenticated={this.isAuthenticated}/>} />
-            <Route path='/box/:id' element={<BoxDetails isAuthenticated={this.isAuthenticated}/>} />
+            <Route path='/individual' element={<InsectDetails isAuthenticated={this.isAuthenticated}/>} />
+            <Route path='/box' element={<BoxDetailsW isAuthenticated={this.isAuthenticated}/>} />
             <Route path='/add-data' element={<AddData isAuthenticated={this.isAuthenticated}/>} />
             <Route path='/sign-in' element={<AuthWNav Authenticate={this.Authenticate}/>} />
             <Route path='/admin-pannel' element={<AdminPannel isAuthenticated={this.isAuthenticated}/>} />

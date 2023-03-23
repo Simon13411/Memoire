@@ -8,7 +8,7 @@ class Results extends React.Component {
     }
 
     handleClick = () => {
-        this.props.navigate(`/box/${this.props.id}`)
+        this.props.navigate(`/box?id=${this.props.id}`)
     }
 
     render() {
