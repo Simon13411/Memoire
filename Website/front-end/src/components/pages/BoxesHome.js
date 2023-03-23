@@ -5,7 +5,6 @@ function BoxesHome() {
   return (
     <>
       <Navbar />
-      Boxes
       <Selection> </Selection>
     </>
   )

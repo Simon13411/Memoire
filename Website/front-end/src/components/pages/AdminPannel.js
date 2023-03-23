@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Navbar from '../Navbar';
 import {Navigate} from 'react-router-dom';
-import './AdminPannel.css'
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';

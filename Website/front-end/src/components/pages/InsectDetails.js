@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Navbar from '../Navbar';
-import './Details.css';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';

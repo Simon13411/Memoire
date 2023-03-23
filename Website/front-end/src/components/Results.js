@@ -39,8 +39,28 @@ class Results extends React.Component {
                     :
                     (<></>)
                 }
-                {(this.props.kk) ?
-                    (<div>kk: {this.props.kk}</div>)
+                {(this.props.genus) ?
+                    (<div>Family: {this.props.genus}</div>)
+                    :
+                    (<></>)
+                }
+                {(this.props.subgenus) ?
+                    (<div>Subfamily: {this.props.subgenus}</div>)
+                    :
+                    (<></>)
+                }
+                {(this.props.species) ?
+                    (<div>Family: {this.props.species}</div>)
+                    :
+                    (<></>)
+                }
+                {(this.props.subspecies) ?
+                    (<div>Subfamily: {this.props.subspecies}</div>)
+                    :
+                    (<></>)
+                }
+                {(this.props.tribu) ?
+                    (<div>Subfamily: {this.props.tribu}</div>)
                     :
                     (<></>)
                 }

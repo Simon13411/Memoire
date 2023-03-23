@@ -68,8 +68,9 @@ class App extends React.Component {
         <Router>
           <Routes>
             <Route path='/' element={<BoxesHome/>} />
-            <Route path='/indiv-search' element={<InsectHome/>} />
-            <Route path='/individual' element={<InsectDetails isAuthenticated={this.isAuthenticated}/>} />
+            <Route path='/box-search' element={<BoxesHome/>} />
+            <Route path='/individual-search' element={<InsectHome/>} />
+            <Route path='/individual/:id' element={<InsectDetails isAuthenticated={this.isAuthenticated}/>} />
             <Route path='/box/:id' element={<BoxDetails isAuthenticated={this.isAuthenticated}/>} />
             <Route path='/add-data' element={<AddData isAuthenticated={this.isAuthenticated}/>} />
             <Route path='/sign-in' element={<AuthWNav Authenticate={this.Authenticate}/>} />

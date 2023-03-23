@@ -1,11 +1,10 @@
 import * as React from 'react';
-import './Selection.css'
-import Box from '@mui/material/Box';
+
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import Results, {ResultsWNav} from './Results'
+import  {ResultsWNav} from './Results'
 
 import axios from 'axios'
 const url = 'http://192.168.1.15:4000'
@@ -32,7 +31,7 @@ class Selection extends React.Component {
       subfamilylist: [],
       specieslist: [],
       subspecieslist: [],
-      tribulist: [],
+      tribulist: []
     }
   }
 
@@ -134,9 +133,9 @@ class Selection extends React.Component {
   render() {
     return(
       <>
-        <Box sx={{m:1, border: 1, borderColor: 'green', width:180}}>
+        <div className='selectdiv'>
           <button buttonStyle='btn--outline' onClick={this.fetchResults}>SEARCH BOXES</button>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
             <InputLabel id="demo-simple-select-label">Order</InputLabel>
             <Select
               labelId="order-label"
@@ -151,7 +150,7 @@ class Selection extends React.Component {
               {this.state.orderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
           <InputLabel id="demo-simple-select-label">SubOrder</InputLabel>
             <Select
               labelId="suborder-label"
@@ -166,7 +165,7 @@ class Selection extends React.Component {
               {this.state.suborderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
           <InputLabel id="demo-simple-select-label">Genus</InputLabel>
             <Select
               labelId="genus-label"
@@ -181,7 +180,7 @@ class Selection extends React.Component {
               {this.state.genuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
           <InputLabel id="demo-simple-select-label">SubGenus</InputLabel>
             <Select
               labelId="subgenus-label"
@@ -196,7 +195,7 @@ class Selection extends React.Component {
               {this.state.subgenuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
           <InputLabel id="demo-simple-select-label">Family</InputLabel>
             <Select
               labelId="family-label"
@@ -211,7 +210,7 @@ class Selection extends React.Component {
               {this.state.familylist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
           <InputLabel id="demo-simple-select-label">SubFamily</InputLabel>
             <Select
               labelId="subfamily-label"
@@ -226,7 +225,7 @@ class Selection extends React.Component {
               {this.state.subfamilylist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
             <InputLabel id="demo-simple-select-label">Species</InputLabel>
             <Select
               labelId="species-label"
@@ -241,7 +240,7 @@ class Selection extends React.Component {
               {this.state.specieslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
             <InputLabel id="demo-simple-select-label">SubSpecies</InputLabel>
             <Select
               labelId="subspecies-label"
@@ -256,7 +255,7 @@ class Selection extends React.Component {
               {this.state.subspecieslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
             <InputLabel id="demo-simple-select-label">Tribu</InputLabel>
             <Select
               labelId="subspecies-label"
@@ -271,7 +270,7 @@ class Selection extends React.Component {
               {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
-        </Box>
+        </div>
         <ul class="datalist">
           {this.state.results.map((data) => <li><ResultsWNav id={data.id_box} order={data.Order} suborder={data.subOrder} family={data.Family} subfamily={data.subFamily}></ResultsWNav></li>)}
         </ul>

@@ -63,9 +63,9 @@ class Authentication extends React.Component {
             <h1>Login</h1>
             <form onSubmit={(event) => { this.onSubmit(event) }}>
                 <div>
-                <label htmlFor='username'>
-                    Username
-                </label>
+                    <label htmlFor='username'>
+                        Username
+                    </label>
                     <div>
                         <input
                         type='text'
@@ -80,9 +80,10 @@ class Authentication extends React.Component {
                     <label htmlFor='password'>
                         Password
                     </label>
-                    <div className='col-md-10'>
-                        <input className='form-control'
+                    <div>
+                        <input 
                         type='password'
+                        className='form-control'
                         id='password'
                         name='password'
                         value={password}
