@@ -27,17 +27,17 @@ app.get('/get_all', (req, res) => {
 })
 
 
-app.get('/get_result/:offset/:o/:so/:f/:sf/:g/:sg/:s/:ss/:t', (req, res) => {
-    const Offs = req.params.offset
-    const O = req.params.o
-    const So = req.params.so
-    const F = req.params.f
-    const Sf = req.params.sf
-    const T = req.params.t
-    const G = req.params.g
-    const Sg = req.params.sg
-    const S = req.params.s
-    const Ss = req.params.ss
+app.get('/get_result', (req, res) => {
+    const Offs = req.query.offs
+    const O = req.query.o
+    const So = req.query.so
+    const F = req.query.f
+    const Sf = req.query.sf
+    const T = req.query.t
+    const G = req.query.g
+    const Sg = req.query.sg
+    const S = req.query.s
+    const Ss = req.query.ss
     return db.get_result(Offs, O, So, F, Sf, T, G, Sg, S, Ss)
     .then((result) => {
         res.status(200).json(result)
@@ -48,15 +48,15 @@ app.get('/get_result/:offset/:o/:so/:f/:sf/:g/:sg/:s/:ss/:t', (req, res) => {
 })
 
 //Order Selection choices
-app.get('/get_selectiono/:so/:f/:sf/:t/:g/:sg/:s/:ss', (req, res) => {
-    const So = req.params.so
-    const F = req.params.f
-    const Sf = req.params.sf
-    const T = req.params.t
-    const G = req.params.g
-    const Sg = req.params.sg
-    const S = req.params.s
-    const Ss = req.params.ss
+app.get('/get_selectiono', (req, res) => {
+    const So = req.query.so
+    const F = req.query.f
+    const Sf = req.query.sf
+    const T = req.query.t
+    const G = req.query.g
+    const Sg = req.query.sg
+    const S = req.query.s
+    const Ss = req.query.ss
     return db.get_selectiono(So, F, Sf, T, G, Sg, S, Ss)
     .then((result) => {
         res.status(200).json(result)
@@ -67,15 +67,15 @@ app.get('/get_selectiono/:so/:f/:sf/:t/:g/:sg/:s/:ss', (req, res) => {
 })
 
 //Suborder Selection choices
-app.get('/get_selectionso/:o/:f/:sf/:t/:g/:sg/:s/:ss', (req, res) => {
-    const O = req.params.o
-    const F = req.params.f
-    const Sf = req.params.sf
-    const T = req.params.t
-    const G = req.params.g
-    const Sg = req.params.sg
-    const S = req.params.s
-    const Ss = req.params.ss
+app.get('/get_selectionso', (req, res) => {
+    const O = req.query.o
+    const F = req.query.f
+    const Sf = req.query.sf
+    const T = req.query.t
+    const G = req.query.g
+    const Sg = req.query.sg
+    const S = req.query.s
+    const Ss = req.query.ss
     return db.get_selectionso(O, F, Sf, T, G, Sg, S, Ss)
     .then((result) => {
         res.status(200).json(result)
@@ -86,15 +86,15 @@ app.get('/get_selectionso/:o/:f/:sf/:t/:g/:sg/:s/:ss', (req, res) => {
 })
 
 //Genus Selection choices
-app.get('/get_selectiong/:o/:so/:f/:sf/:t/:sg/:s/:ss', (req, res) => {
-    const O = req.params.o
-    const So = req.params.so
-    const F = req.params.f
-    const Sf = req.params.sf
-    const T = req.params.t
-    const Sg = req.params.sg
-    const S = req.params.s
-    const Ss = req.params.ss
+app.get('/get_selectiong', (req, res) => {
+    const O = req.query.o
+    const So = req.query.so
+    const F = req.query.f
+    const Sf = req.query.sf
+    const T = req.query.t
+    const Sg = req.query.sg
+    const S = req.query.s
+    const Ss = req.query.ss
     return db.get_selectiong(O, So, F, Sf, T, Sg, S, Ss)
     .then((result) => {
         res.status(200).json(result)
@@ -105,15 +105,15 @@ app.get('/get_selectiong/:o/:so/:f/:sf/:t/:sg/:s/:ss', (req, res) => {
 })
 
 //SubGenus Selection choices
-app.get('/get_selectionsg/:o/:so/:f/:sf/:t/:g/:s/:ss', (req, res) => {
-    const O = req.params.o
-    const So = req.params.so
-    const F = req.params.f
-    const Sf = req.params.sf
-    const T = req.params.t
-    const G = req.params.g
-    const S = req.params.s
-    const Ss = req.params.ss
+app.get('/get_selectionsg', (req, res) => {
+    const O = req.query.o
+    const So = req.query.so
+    const F = req.query.f
+    const Sf = req.query.sf
+    const T = req.query.t
+    const G = req.query.g
+    const S = req.query.s
+    const Ss = req.query.ss
     return db.get_selectionsg(O, So, F, Sf, T, G, S, Ss)
     .then((result) => {
         res.status(200).json(result)
@@ -124,15 +124,15 @@ app.get('/get_selectionsg/:o/:so/:f/:sf/:t/:g/:s/:ss', (req, res) => {
 })
 
 //Family Selection choices
-app.get('/get_selectionf/:o/:so/:sf/:t/:g/:sg/:s/:ss', (req, res) => {
-    const O = req.params.o
-    const So = req.params.so
-    const Sf = req.params.sf
-    const T = req.params.t
-    const G = req.params.g
-    const Sg = req.params.sg
-    const S = req.params.s
-    const Ss = req.params.ss
+app.get('/get_selectionf', (req, res) => {
+    const O = req.query.o
+    const So = req.query.so
+    const Sf = req.query.sf
+    const T = req.query.t
+    const G = req.query.g
+    const Sg = req.query.sg
+    const S = req.query.s
+    const Ss = req.query.ss
     return db.get_selectionf(O, So, Sf, T, G, Sg, S, Ss)
     .then((result) => {
         res.status(200).json(result)
@@ -143,15 +143,15 @@ app.get('/get_selectionf/:o/:so/:sf/:t/:g/:sg/:s/:ss', (req, res) => {
 })
 
 //Subfamily Selection choices
-app.get('/get_selectionsf/:o/:so/:f/:t/:g/:sg/:s/:ss', (req, res) => {
-    const O = req.params.o
-    const So = req.params.so
-    const F = req.params.f
-    const T = req.params.t
-    const G = req.params.g
-    const Sg = req.params.sg
-    const S = req.params.s
-    const Ss = req.params.ss
+app.get('/get_selectionsf', (req, res) => {
+    const O = req.query.o
+    const So = req.query.so
+    const F = req.query.f
+    const T = req.query.t
+    const G = req.query.g
+    const Sg = req.query.sg
+    const S = req.query.s
+    const Ss = req.query.ss
     return db.get_selectionsf(O, So, F, T, G, Sg, S, Ss)
     .then((result) => {
         res.status(200).json(result)
@@ -162,15 +162,15 @@ app.get('/get_selectionsf/:o/:so/:f/:t/:g/:sg/:s/:ss', (req, res) => {
 })
 
 //Species Selection choices
-app.get('/get_selections/:o/:so/:f/:sf/:t/:g/:sg/:ss', (req, res) => {
-    const O = req.params.o
-    const So = req.params.so
-    const F = req.params.f
-    const Sf = req.params.sf
-    const T = req.params.t
-    const G = req.params.g
-    const Sg = req.params.sg
-    const Ss = req.params.ss
+app.get('/get_selections', (req, res) => {
+    const O = req.query.o
+    const So = req.query.so
+    const F = req.query.f
+    const Sf = req.query.sf
+    const T = req.query.t
+    const G = req.query.g
+    const Sg = req.query.sg
+    const Ss = req.query.ss
     return db.get_selections(O, So, F, Sf, T, G, Sg, Ss)
     .then((result) => {
         res.status(200).json(result)
@@ -181,15 +181,15 @@ app.get('/get_selections/:o/:so/:f/:sf/:t/:g/:sg/:ss', (req, res) => {
 })
 
 //Subspecies Selection choices
-app.get('/get_selectionss/:o/:so/:f/:sf/:t/:g/:sg/:s', (req, res) => {
-    const O = req.params.o
-    const So = req.params.so
-    const F = req.params.f
-    const Sf = req.params.sf
-    const T = req.params.t
-    const G = req.params.g
-    const Sg = req.params.sg
-    const S = req.params.s
+app.get('/get_selectionss', (req, res) => {
+    const O = req.query.o
+    const So = req.query.so
+    const F = req.query.f
+    const Sf = req.query.sf
+    const T = req.query.t
+    const G = req.query.g
+    const Sg = req.query.sg
+    const S = req.query.s
     return db.get_selectionss(O, So, F, Sf, T, G, Sg, S)
     .then((result) => {
         res.status(200).json(result)
@@ -200,15 +200,15 @@ app.get('/get_selectionss/:o/:so/:f/:sf/:t/:g/:sg/:s', (req, res) => {
 })
 
 //Subspecies Selection choices
-app.get('/get_selectiont/:o/:so/:f/:sf/:g/:sg/:s/:ss', (req, res) => {
-    const O = req.params.o
-    const So = req.params.so
-    const F = req.params.f
-    const Sf = req.params.sf
-    const G = req.params.g
-    const Sg = req.params.sg
-    const S = req.params.s
-    const Ss = req.params.ss
+app.get('/get_selectiont', (req, res) => {
+    const O = req.query.o
+    const So = req.query.so
+    const F = req.query.f
+    const Sf = req.query.sf
+    const G = req.query.g
+    const Sg = req.query.sg
+    const S = req.query.s
+    const Ss = req.query.ss
     return db.get_selectiont(O, So, F, Sf, G, Sg, S, Ss)
     .then((result) => {
         res.status(200).json(result)

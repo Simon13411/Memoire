@@ -41,54 +41,74 @@ class Selection extends React.Component {
   }
 
   fetchResults = () => {
-      axios.get(`${url}/get_result/0/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}/${this.state.tribu}`)
+      axios.get(`${url}/get_result`, {
+        params:
+        {offs: '0', o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
       .then((res) => {
           this.setState({results: res.data.rows})
       })
   }
 
   get_selection() {
-    axios.get(`${url}/get_selectiono/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.tribu}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}`)
+    axios.get(`${url}/get_selectiono`, {
+      params:
+      {so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
     .then((res) => {
         this.setState({orderlist: res.data.rows})
     })
 
-    axios.get(`${url}/get_selectionso/${this.state.order}/${this.state.family}/${this.state.subfamily}/${this.state.tribu}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}`)
+    axios.get(`${url}/get_selectionso`, {
+      params:
+      {o: this.state.order, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
     .then((res) => {
         this.setState({suborderlist: res.data.rows})
     })
 
-    axios.get(`${url}/get_selectiong/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.tribu}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}`)
+    axios.get(`${url}/get_selectiong`, {
+      params:
+      {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
     .then((res) => {
         this.setState({genuslist: res.data.rows})
     })
 
-    axios.get(`${url}/get_selectionsg/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.tribu}/${this.state.genus}/${this.state.species}/${this.state.subspecies}`)
+    axios.get(`${url}/get_selectionsg`, {
+      params:
+      {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, s: this.state.species, ss: this.state.subspecies}})
     .then((res) => {
         this.setState({subgenuslist: res.data.rows})
     })
 
-    axios.get(`${url}/get_selectionf/${this.state.order}/${this.state.suborder}/${this.state.subfamily}/${this.state.tribu}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}`)
+    axios.get(`${url}/get_selectionf`, {
+      params:
+      {o: this.state.order, so: this.state.suborder, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
     .then((res) => {
         this.setState({familylist: res.data.rows})
     })
 
-    axios.get(`${url}/get_selectionsf/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.tribu}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}`)
+    axios.get(`${url}/get_selectionsf`, {
+      params:
+      {o: this.state.order, so: this.state.suborder, f: this.state.family, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
     .then((res) => {
         this.setState({subfamilylist: res.data.rows})
     })
 
-    axios.get(`${url}/get_selections/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.tribu}/${this.state.genus}/${this.state.subgenus}/${this.state.subspecies}`)
+    axios.get(`${url}/get_selections`, {
+      params:
+      {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, ss: this.state.subspecies}})
     .then((res) => {
         this.setState({specieslist: res.data.rows})
     })
 
-    axios.get(`${url}/get_selectionss/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.tribu}/${this.state.genus}/${this.state.subgenus}/${this.state.species}`)
+    axios.get(`${url}/get_selectionss`, {
+      params:
+      {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species}})
     .then((res) => {
         this.setState({subspecieslist: res.data.rows})
     })
 
-    axios.get(`${url}/get_selectiont/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}`)
+    axios.get(`${url}/get_selectiont`, {
+      params:
+      {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
     .then((res) => {
         this.setState({tribulist: res.data.rows})
     })
@@ -122,7 +142,9 @@ class Selection extends React.Component {
   }
   
   componentDidMount() {
-    axios.get(`${url}/get_result/0/${this.state.order}/${this.state.suborder}/${this.state.family}/${this.state.subfamily}/${this.state.genus}/${this.state.subgenus}/${this.state.species}/${this.state.subspecies}/${this.state.tribu}`)
+    axios.get(`${url}/get_result`, {
+      params:
+      {offs: '0', o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
     .then((res) => {
         this.setState({results: res.data.rows})
     })

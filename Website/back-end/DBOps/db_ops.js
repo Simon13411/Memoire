@@ -63,7 +63,6 @@ function get_result(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
                         AND ColBox."box_id"=B."id_box" 
                         AND ColBox."collection_id"=Col."id_collection"`
 
-    console.log(searchquery)
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
             if (err) {
@@ -96,7 +95,7 @@ function get_selectiono(So, F, Sf, T, G, Sg, S, Ss) {
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
-    
+  
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
             if (err) {
