@@ -1,7 +1,6 @@
 const express = require('express');
 
 const loginops = require('./login_ops')
-const tokenops = require('./token_ops')
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -13,9 +12,21 @@ app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
   return loginops.login(username, password)
-  .then((token) => {
-    // Set the token as a HttpOnly cookie
-    res.status(200).json({ success: true, token: token});
+  .then(([token, role]) => {
+    res.status(200).json({ success: true, token: token, admin: role});
+  })
+  .catch((err) => {
+    console.log(err)
+    res.status(401).json({ success: false });
+  });
+});
+
+app.post('/adminright', (req, res) => {
+  const { username } = req.body;
+
+  return loginops.adminright(username)
+  .then((results) => {
+    res.status(200).json({ success: true });
   })
   .catch((err) => {
     console.log(err)
@@ -29,11 +40,9 @@ app.post('/validate-token', (req, res) => {
   const { token: authToken } = req.body;
   console.log(authToken)
 
-  return tokenops.verifytoken(authToken)
-  .then((token) => {
-    // Set the token as a HttpOnly cookie
-    res.cookie('auth_token', token, { httpOnly: true, secure: false, sameSite: 'lax', maxAge: 24 * 60 * 60 * 1000 });
-    res.status(200).json({ success: true, username: token.username });
+  return loginops.verifytoken(authToken)
+  .then((username) => {
+    res.status(200).json({ success: true, username: username });
   })
   .catch((err) => {
     console.log(err)

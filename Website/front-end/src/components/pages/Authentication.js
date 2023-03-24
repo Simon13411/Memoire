@@ -27,6 +27,7 @@ class Authentication extends React.Component {
     }
 
     loginUser = () => {
+        this.setState({loginstate: 'Authentication in progress ...'})
         axios.post(`${url}/login`, {
             username: this.state.username,
             password: this.state.password
@@ -36,7 +37,10 @@ class Authentication extends React.Component {
                 // Stockage du jeton d'authentification dans un cookie
                 Cookies.set('auth_token', res.data.token);
                 this.props.auth()
-                this.props.navigate('/admin-pannel');
+                if (res.data.admin === 1) {
+                    this.props.beadmin()
+                }
+                this.props.navigate('/');
             }
             else {
                 this.setState({loginstate: 'Wrong username or password'});
@@ -57,59 +61,68 @@ class Authentication extends React.Component {
     render() {
         const { username, password } = this.state
         return(
-        <>
-        <Navbar />
-        <div>
-            <h1>Login</h1>
-            <form onSubmit={(event) => { this.onSubmit(event) }}>
+            <>
+            {!this.props.isauth() ?
+                (<>
+                <Navbar />
                 <div>
-                    <label htmlFor='username'>
-                        Username
-                    </label>
-                    <div>
-                        <input
-                        type='text'
-                        className='form-control'
-                        id='username'
-                        name='username'
-                        value={username}
-                        onChange={this.handleInputChange} />
-                    </div>
+                    <h1>Login</h1>
+                    <form onSubmit={(event) => { this.onSubmit(event) }}>
+                        <div>
+                            <label htmlFor='username'>
+                                Username
+                            </label>
+                            <div>
+                                <input
+                                type='text'
+                                className='form-control'
+                                id='username'
+                                name='username'
+                                value={username}
+                                onChange={this.handleInputChange} />
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor='password'>
+                                Password
+                            </label>
+                            <div>
+                                <input 
+                                type='password'
+                                className='form-control'
+                                id='password'
+                                name='password'
+                                value={password}
+                                onChange={this.handleInputChange}
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <button
+                                type='submit'>
+                                    Log in
+                            </button>
+                        </div>
+                        <div>
+                            {this.state.loginstate}
+                        </div>
+                    </form>
                 </div>
-                <div>
-                    <label htmlFor='password'>
-                        Password
-                    </label>
-                    <div>
-                        <input 
-                        type='password'
-                        className='form-control'
-                        id='password'
-                        name='password'
-                        value={password}
-                        onChange={this.handleInputChange}
-                        />
-                    </div>
-                </div>
-                <div>
-                    <button
-                        type='submit'>
-                            Log in
-                    </button>
-                </div>
-                <div>
-                    {this.state.loginstate}
-                </div>
-            </form>
-        </div>
-        </>
+                </>
+                ):(
+                    this.props.navigate('/')
+                )
+            }
+            </>
     )}
 }
 
 export function AuthWNav(props) {
     const navigate = useNavigate()
+    const isauth = props.isAuthenticated
     const auth = props.Authenticate
-    return <Authentication navigate={navigate} auth={auth}></Authentication>
+    const beadmin = props.BeAdmin
+    return <Authentication navigate={navigate} isauth={isauth} auth={auth} beadmin={beadmin}></Authentication>
 }
 
 export default Authentication;

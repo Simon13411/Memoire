@@ -42,14 +42,13 @@ function get_boxdetails(id) {
                                             FROM "loanBox" LB, "Loaner" L
                                             WHERE LB.loaner_id=L.id_loaner) as loan ON B."id_box"=loan.box_id
                             WHERE (B."id_box"=${id})`
-    console.log(searchquery)
+                            
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
             if (err) {
                 console.error(err)
             }
             else {
-                console.log(res)
                 return resolve(res)
             }
         })

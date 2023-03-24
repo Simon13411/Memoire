@@ -1,0 +1,13 @@
+CREATE TABLE "Accounts" (
+	"username" VARCHAR(40) NOT NULL,
+	"password" VARCHAR(64) NOT NULL,
+	"role" INT NOT NULL,
+	PRIMARY KEY("username")
+);
+
+CREATE TABLE "auth" (
+	"username" VARCHAR(40) NOT NULL,
+	"token" VARCHAR(64) NOT NULL,
+	"expirationTime" TIMESTAMP NOT NULL,
+	FOREIGN KEY("username") REFERENCES "Accounts"("username")
+);

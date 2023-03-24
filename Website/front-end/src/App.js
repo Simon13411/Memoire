@@ -34,21 +34,19 @@ class App extends React.Component {
         .then((res) => {
           if (res.data.success) {
             const username = res.data.username;
-            axios.post(`${url}/validate-token`, { token: authToken })
+            axios.post(`${url}/adminright`, { username: username })
               .then((res) => {
-                if (res.data.rows.role === 1) {
-                  this.setState({ isAuthenticated: true, username: username, isAdmin: true});
+                if (res.data.success) {
+                  this.setState({ isAuthenticated: true, username: username, isAdmin: true, isLoading: false}, console.log("Admin Right Granted"));
                 }
                 else {
-                  this.setState({ isAuthenticated: true, username: username, isAdmin: false});
+                  this.setState({ isAuthenticated: true, username: username, isAdmin: false, isLoading: false}, console.log("Successfully Connected"));
                 }
-                console.log("successfully connected")
               })
               .catch((err) => console.log(err))
           }
         })
         .catch((err) => console.log(err))
-        .finally(() => this.setState({isLoading: false}))
     }
     else {
       console.log("Not connected")
@@ -57,11 +55,15 @@ class App extends React.Component {
   }
 
   isAuthenticated = () => {
-    return this.state.isAuthenticated
+    if (!this.isLoading()) {
+      return this.state.isAuthenticated
+    }
   }
 
   isAdmin = () => {
-    return this.state.isAdmin
+    if (!this.isLoading()) {
+      return this.state.isAdmin
+    }
   }
 
   isLoading = () => {
@@ -71,6 +73,11 @@ class App extends React.Component {
   Authenticate = () => {
     console.log("Successfully Connected")
     this.setState({isAuthenticated: true})
+  }
+
+  BeAdmin = () => {
+    console.log("Admin Right Granted")
+    this.setState({isAdmin: true})
   }
 
   render() {
@@ -87,7 +94,7 @@ class App extends React.Component {
             <Route path='/individual' element={<InsectDetails isAuthenticated={this.isAuthenticated}/>} />
             <Route path='/box' element={<BoxDetailsW isAuthenticated={this.isAuthenticated}/>} />
             <Route path='/add-data' element={<AddData isAuthenticated={this.isAuthenticated}/>} />
-            <Route path='/sign-in' element={<AuthWNav Authenticate={this.Authenticate}/>} />
+            <Route path='/sign-in' element={<AuthWNav Authenticate={this.Authenticate} BeAdmin={this.BeAdmin} isAuthenticated={this.isAuthenticated} />} />
             <Route path='/admin-pannel' element={<AdminPannel isAdmin={this.isAdmin}/>} />
             <Route path='/about-us' element={<AboutUs/>} />
           </Routes>

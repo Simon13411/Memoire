@@ -78,6 +78,10 @@ app.post('/signin', (req, res) => {
     res.redirect(307, `http://${IP}:4003/signin`)
 })
 
+app.post('/adminright', (req, res) => {
+    res.redirect(307, `http://${IP}:4003/adminright`)
+})
+
 app.post(`/validate-token`, (req, res) => {
     res.redirect(307, `http://${IP}:4003/validate-token`)
 })
