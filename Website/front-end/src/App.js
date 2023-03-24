@@ -14,13 +14,14 @@ import AboutUs from './components/pages/AboutUs';
 import {AuthWNav} from './components/pages/Authentication';
 import AdminPannel from './components/pages/AdminPannel';
 
-const url = 'http://192.168.1.15:4000'
+const url = process.env.REACT_APP_IP
 
 class App extends React.Component {
 
   state = {
     username: '',
     isAuthenticated: false,
+    isAdmin: false,
     isLoading: true,
   };
 
@@ -32,9 +33,18 @@ class App extends React.Component {
       axios.post(`${url}/validate-token`, { token: authToken })
         .then((res) => {
           if (res.data.success) {
-            console.log("successfully connected")
             const username = res.data.username;
-            this.setState({ isAuthenticated: true, username: username});
+            axios.post(`${url}/validate-token`, { token: authToken })
+              .then((res) => {
+                if (res.data.rows.role === 1) {
+                  this.setState({ isAuthenticated: true, username: username, isAdmin: true});
+                }
+                else {
+                  this.setState({ isAuthenticated: true, username: username, isAdmin: false});
+                }
+                console.log("successfully connected")
+              })
+              .catch((err) => console.log(err))
           }
         })
         .catch((err) => console.log(err))
@@ -48,6 +58,10 @@ class App extends React.Component {
 
   isAuthenticated = () => {
     return this.state.isAuthenticated
+  }
+
+  isAdmin = () => {
+    return this.state.isAdmin
   }
 
   isLoading = () => {
@@ -74,7 +88,7 @@ class App extends React.Component {
             <Route path='/box' element={<BoxDetailsW isAuthenticated={this.isAuthenticated}/>} />
             <Route path='/add-data' element={<AddData isAuthenticated={this.isAuthenticated}/>} />
             <Route path='/sign-in' element={<AuthWNav Authenticate={this.Authenticate}/>} />
-            <Route path='/admin-pannel' element={<AdminPannel isAuthenticated={this.isAuthenticated}/>} />
+            <Route path='/admin-pannel' element={<AdminPannel isAdmin={this.isAdmin}/>} />
             <Route path='/about-us' element={<AboutUs/>} />
           </Routes>
         </Router>

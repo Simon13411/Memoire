@@ -7,7 +7,8 @@ import Select from '@mui/material/Select';
 import  {ResultsWNav} from './Results'
 
 import axios from 'axios'
-const url = 'http://192.168.1.15:4000'
+
+const url = process.env.REACT_APP_IP
 
 class Selection extends React.Component {
   constructor (props) {

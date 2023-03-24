@@ -220,7 +220,7 @@ class AdminPannel extends React.Component {
     render() {
       return (
         <>
-        {this.props.isAuthenticated() ? 
+        {this.props.isAdmin() ? 
             (
             <>
                 <Navbar />

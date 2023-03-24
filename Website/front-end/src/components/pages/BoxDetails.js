@@ -5,7 +5,7 @@ import Navbar from '../Navbar';
 import BoxDetailsAdmin from './BoxDetailsAdmin';
 
 import axios from 'axios'
-const url = 'http://192.168.1.15:4000'
+const url = process.env.REACT_APP_IP
 
 class BoxDetails extends React.Component {
   constructor (props) {
@@ -21,29 +21,36 @@ class BoxDetails extends React.Component {
       subspecies: 'NULL',
       tribus: 'NULL',
       loaner: 'NULL',
-      rangebegin: 'NULL',
-      rangeend: 'NULL',
+      grangebegin: 'NULL',
+      grangeend: 'NULL',
+      srangebegin: 'NULL',
+      srangeend: 'NULL',
       collection: 'NULL',
-      orderlist: [],
-      suborderlist: [],
-      genuslist: [],
-      subgenuslist: [],
-      familylist: [],
-      subfamilylist: [],
-      specieslist: [],
-      subspecieslist: [],
-      tribuslist: [],
-      loanerlist: [],
-      rangebeginlist: [],
-      rangeendlist: [],
-      collectionlist: [],
     }
+  }
+
+  componentDidMount() {
+    {this.GetBox()}
   }
 
   GetBox = (event) => {
     axios.get(`${url}/get_boxdetails`, {params: {id: this.props.searchParams.get("id")}})
     .then((res) => {
-        this.setState({order: res.data.rows.order})
+        this.setState({order: res.data.rows[0].order})
+        this.setState({suborder: res.data.rows[0].suborder})
+        this.setState({family: res.data.rows[0].family})
+        this.setState({subfamily: res.data.rows[0].subfamily})
+        this.setState({genus: res.data.rows[0].genus})
+        this.setState({subgenus: res.data.rows[0].subgenus})
+        this.setState({species: res.data.rows[0].species})
+        this.setState({subspecies: res.data.rows[0].subspecies})
+        this.setState({tribu: res.data.rows[0].tribu})
+        this.setState({loaner: res.data.rows[0].loaner})
+        this.setState({grangebegin: res.data.rows[0].grangebegin})
+        this.setState({grangeend: res.data.rows[0].grangeend})
+        this.setState({srangebegin: res.data.rows[0].srangebegin})
+        this.setState({srangeend: res.data.rows[0].srangeend})
+        this.setState({collection: res.data.rows[0].collection})
     })
   }
 
@@ -52,7 +59,6 @@ class BoxDetails extends React.Component {
   }
 
   render() {
-    {this.GetBox()}
     return (
       <>
       {this.props.isAuthenticated() ? 
@@ -145,11 +151,27 @@ class BoxDetails extends React.Component {
               }
             </div>
             <div>
-              <p className="title">Range</p>
-              {(this.state.rangebegin) === 'NULL' ?
+              <p className="title">Genus Range</p>
+              {(this.state.grangebegin) === 'NULL' ?
                 (<></>)
                 :
-                (<p>{this.state.rangebegin}-{this.state.rangeend}</p>)
+                (<>{(this.state.grangeend) === 'NULL' ?
+                  (<p>{this.state.grangebegin}-...</p>)
+                  :
+                  (<p>{this.state.grangebegin}-{this.state.grangeend}</p>)
+                }</>)
+              }
+            </div>
+            <div>
+              <p className="title">Species Range</p>
+              {(this.state.grangebegin) === 'NULL' ?
+                (<></>)
+                :
+                (<>{(this.state.srangeend) === 'NULL' ?
+                  (<p>{this.state.srangebegin}-...</p>)
+                  :
+                  (<p>{this.state.srangebegin}-{this.state.srangeend}</p>)
+                }</>)
               }
             </div>
             <div>

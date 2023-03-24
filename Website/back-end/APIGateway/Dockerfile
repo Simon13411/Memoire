@@ -13,6 +13,6 @@ COPY gulpfile.js .
 COPY daemon.js .
 COPY app.js .
 
-ENV IP 192.168.1.15
+ENV IP localhost
 
 CMD npm start

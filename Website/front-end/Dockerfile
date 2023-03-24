@@ -10,4 +10,6 @@ RUN npm install @fontsource/source-sans-pro
 COPY public public
 COPY src src
 
+ENV REACT_APP_IP http://localhost:4000
+
 CMD npm start

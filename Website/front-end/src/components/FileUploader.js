@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import axios from 'axios'
-const url = 'http://192.168.1.15:4000'
+const url = process.env.REACT_APP_IP
 
 class FileUploader extends Component {
   constructor(props) {
