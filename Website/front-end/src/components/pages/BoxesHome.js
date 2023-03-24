@@ -1,10 +1,10 @@
 import Navbar from '../Navbar';
 import Selection from '../Selection';
 
-function BoxesHome() {
+function BoxesHome(props) {
   return (
     <>
-      <Navbar />
+      <Navbar isAuthenticated={props.isAuthenticated} isAdmin={props.isAdmin} Logout={props.Logout}/>
       <Selection> </Selection>
     </>
   )

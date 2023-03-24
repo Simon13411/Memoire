@@ -49,7 +49,7 @@ class InsectDetails extends React.Component {
           (
           //Admin's Version
           <>
-            <Navbar />
+            <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
             <div className="container">
                 <div>
                   <p className="title">Order</p>

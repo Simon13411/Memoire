@@ -36,9 +36,11 @@ class Authentication extends React.Component {
             if (res.data.success) {
                 // Stockage du jeton d'authentification dans un cookie
                 Cookies.set('auth_token', res.data.token);
-                this.props.auth()
+                this.props.Authenticate()
+                console.log(res.data)
+                console.log(res.data.admin)
                 if (res.data.admin === 1) {
-                    this.props.beadmin()
+                    this.props.BeAdmin()
                 }
                 this.props.navigate('/');
             }
@@ -62,9 +64,9 @@ class Authentication extends React.Component {
         const { username, password } = this.state
         return(
             <>
-            {!this.props.isauth() ?
+            {!this.props.isAuthenticated() ?
                 (<>
-                <Navbar />
+                <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
                 <div>
                     <h1>Login</h1>
                     <form onSubmit={(event) => { this.onSubmit(event) }}>
@@ -119,10 +121,7 @@ class Authentication extends React.Component {
 
 export function AuthWNav(props) {
     const navigate = useNavigate()
-    const isauth = props.isAuthenticated
-    const auth = props.Authenticate
-    const beadmin = props.BeAdmin
-    return <Authentication navigate={navigate} isauth={isauth} auth={auth} beadmin={beadmin}></Authentication>
+    return <Authentication navigate={navigate} {... props}></Authentication>
 }
 
 export default Authentication;

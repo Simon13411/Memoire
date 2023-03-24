@@ -17,7 +17,7 @@ class AddData extends React.Component {
       {this.props.isAuthenticated() ? 
         (
         <div>
-            <Navbar />
+            <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
             <div className="container">
             <div className="column">
               <h1>Boxes</h1>

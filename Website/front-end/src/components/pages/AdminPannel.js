@@ -223,7 +223,7 @@ class AdminPannel extends React.Component {
         {this.props.isAdmin() ? 
             (
             <>
-                <Navbar />
+                <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
                 <div className="container">
                 <div className="column">
                   <h3>Ajouter des données</h3>

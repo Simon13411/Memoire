@@ -1,15 +1,15 @@
-
 import React, { useState, useEffect } from 'react';
-import { Button } from './Button';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 
-function Navbar() {
+function Navbar(props) {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
+
+  const Logout = () => props.Logout();
 
   const showButton = () => {
     if (window.innerWidth <= 960) {
@@ -57,13 +57,82 @@ function Navbar() {
                 About Us
               </Link>
             </li>
-            <li>
-              <Link to='/admin-pannel' className='nav-links-mobile' onClick={closeMobileMenu}>
-                Admin
-              </Link>
-            </li>
+            {props.isAdmin() ?
+              (
+              <li>
+                <Link to='/admin-pannel' className='nav-links-mobile' onClick={closeMobileMenu}>
+                  ADMIN
+                </Link>
+              </li>
+              ) : (
+                <></>
+              )
+            }
+            {props.isAuthenticated() ?
+              (
+                <li>
+                  <Link to='/' className='nav-links-mobile' onClick={Logout}>
+                    SignOut
+                  </Link>
+                </li>
+              ) : (
+                <li>
+                  <Link to='/sign-in' className='nav-links-mobile' onClick={closeMobileMenu}>
+                    SignIn
+                  </Link>
+                </li>
+                )
+            }
           </ul>
-          {button && <Button buttonStyle='btn--outline'>ADMIN</Button>}
+          {props.isAdmin() ?
+              (
+                <>
+                {button 
+                && 
+                <Link to='/admin-pannel' className='btn-mobile'>
+                  <button
+                    className={`btn btn--outline btn--medium`}
+                    onClick={closeMobileMenu}
+                  >
+                    ADMIN
+                  </button>
+                </Link>
+              }
+                </>
+              ) : (
+                <></>
+              )}
+          {props.isAuthenticated() ?
+            (
+              <>
+                {button 
+                && 
+                <Link to='/' className='btn-mobile'>
+                  <button
+                    className={`btn btn--outline btn--medium`}
+                    onClick={Logout}
+                  >
+                    SignOut
+                  </button>
+                </Link>
+              }
+              </>
+            ) : (
+              <>
+                {button 
+                && 
+                <Link to='/sign-in' className='btn-mobile'>
+                  <button
+                    className={`btn btn--outline btn--medium`}
+                    onClick={closeMobileMenu}
+                  >
+                    SignIn
+                  </button>
+                </Link>
+              }
+              </>
+            )
+          }
         </div>
       </nav>
     </>

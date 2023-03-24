@@ -68,7 +68,7 @@ class BoxDetails extends React.Component {
         ) : (
         //User's Version
         <>
-        <Navbar />
+        <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
         <div className="container">
             <div>
               <p className="title">Order</p>
@@ -190,7 +190,7 @@ class BoxDetails extends React.Component {
   )}
 }
 
-export function BoxDetailsW(props) {
+export function BoxDetailsWSP(props) {
   const [searchParams] = useSearchParams();
   return <BoxDetails searchParams={searchParams} {...props}></BoxDetails>
 }

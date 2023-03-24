@@ -9,7 +9,7 @@ class AboutUs extends React.Component {
     render() {
         return (
             <>
-            <Navbar />
+            <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
                 <div>
                 <h2>Contact Us</h2>
                     <div>

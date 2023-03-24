@@ -1,11 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import './App.css';
 
 import axios from 'axios'
 
-import {BoxDetailsW} from './components/pages/BoxDetails';
+import {BoxDetailsWSP} from './components/pages/BoxDetails';
 import InsectDetails from './components/pages/InsectDetails';
 import BoxesHome from './components/pages/BoxesHome';
 import InsectHome from './components/pages/InsectHome';
@@ -71,13 +71,16 @@ class App extends React.Component {
   }
 
   Authenticate = () => {
-    console.log("Successfully Connected")
-    this.setState({isAuthenticated: true})
+    this.setState({isAuthenticated: true}, console.log("Successfully Connected"))
   }
 
   BeAdmin = () => {
-    console.log("Admin Right Granted")
-    this.setState({isAdmin: true})
+    this.setState({isAdmin: true}, console.log("Admin Right Granted"))
+  }
+
+  Logout = () => {
+    Cookies.remove('auth_token')
+    this.setState({isAdmin: false, isAuthenticated: false, username: ''}, console.log("Logged Out"))
   }
 
   render() {
@@ -88,15 +91,15 @@ class App extends React.Component {
       ):(
         <Router>
           <Routes>
-            <Route path='/' element={<BoxesHome/>} />
-            <Route path='/box-search' element={<BoxesHome/>} />
-            <Route path='/individual-search' element={<InsectHome/>} />
-            <Route path='/individual' element={<InsectDetails isAuthenticated={this.isAuthenticated}/>} />
-            <Route path='/box' element={<BoxDetailsW isAuthenticated={this.isAuthenticated}/>} />
-            <Route path='/add-data' element={<AddData isAuthenticated={this.isAuthenticated}/>} />
-            <Route path='/sign-in' element={<AuthWNav Authenticate={this.Authenticate} BeAdmin={this.BeAdmin} isAuthenticated={this.isAuthenticated} />} />
-            <Route path='/admin-pannel' element={<AdminPannel isAdmin={this.isAdmin}/>} />
-            <Route path='/about-us' element={<AboutUs/>} />
+            <Route path='/' element={<BoxesHome isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
+            <Route path='/box-search' element={<BoxesHome isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
+            <Route path='/individual-search' element={<InsectHome isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
+            <Route path='/individual' element={<InsectDetails isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
+            <Route path='/box' element={<BoxDetailsWSP isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
+            <Route path='/add-data' element={<AddData isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
+            <Route path='/sign-in' element={<AuthWNav Authenticate={this.Authenticate} BeAdmin={this.BeAdmin} isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
+            <Route path='/admin-pannel' element={<AdminPannel isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
+            <Route path='/about-us' element={<AboutUs isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
           </Routes>
         </Router>
       )}

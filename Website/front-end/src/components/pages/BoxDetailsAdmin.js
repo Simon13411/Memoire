@@ -50,7 +50,7 @@ class BoxDetailsAdmin extends React.Component {
     render() {
         return (
             <>
-            <Navbar />
+            <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
             <div className="container">
                 <div>
                 <p className="title">Order</p>
