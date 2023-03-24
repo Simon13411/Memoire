@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 import axios from 'axios'
-const url = 'http://localhost:4000'
+const url = process.env.REACT_APP_IP
 
 class BoxDetailsAdmin extends React.Component {
 
