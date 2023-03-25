@@ -43,14 +43,24 @@ class App extends React.Component {
                   this.setState({ isAuthenticated: true, username: username, isAdmin: false, isLoading: false}, console.log("Successfully Connected"));
                 }
               })
-              .catch((err) => console.log(err))
+              .catch((err) => {
+                if (!err.response) {
+                  console.log(err)
+                  this.setState({ isLoading: false }, console.log("Not Connected + Error DB"));
+                }
+                else {
+                  this.setState({ isAuthenticated: true, username: username, isAdmin: false, isLoading: false}, console.log("Successfully Connected"));
+                }
+              })
           }
         })
-        .catch((err) => console.log(err))
+        .catch((err) => {
+          console.log(err)
+          this.setState({isLoading: false}, console.log("Not connected"))
+        })
     }
     else {
-      console.log("Not connected")
-      this.setState({isLoading: false})
+      this.setState({isLoading: false}, console.log("Not connected"))
     }
   }
 
