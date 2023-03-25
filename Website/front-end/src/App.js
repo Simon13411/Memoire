@@ -76,6 +76,12 @@ class App extends React.Component {
     }
   }
 
+  getUser = () => {
+    if (!this.isLoading()) {
+      return this.state.username
+    }
+  }
+
   isLoading = () => {
     return this.state.isLoading
   }
@@ -108,7 +114,7 @@ class App extends React.Component {
             <Route path='/box' element={<BoxDetailsWSP isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
             <Route path='/add-data' element={<AddData isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
             <Route path='/sign-in' element={<AuthWNav Authenticate={this.Authenticate} BeAdmin={this.BeAdmin} isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
-            <Route path='/admin-pannel' element={<AdminPannel isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
+            <Route path='/admin-pannel' element={<AdminPannel getUser={this.getUser} isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
             <Route path='/about-us' element={<AboutUs isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
           </Routes>
         </Router>

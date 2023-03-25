@@ -123,7 +123,7 @@ function verifytoken(token) {
 
       client.query(SelectQuery, [token], (error, results) => {
           if (error) {
-              reject(error);
+              return reject(error);
           } else {
               if (results.rows.length === 1) {
                   resolve(results.rows[0].username);
@@ -131,12 +131,12 @@ function verifytoken(token) {
                   const DeleteQuery = `DELETE FROM "Tokens" WHERE "expirationTime" < NOW()`;
                   client.query(DeleteQuery, (error, results) => {
                       if (error) {
-                          reject(error);
+                          return reject(error);
                       } else {
                           if (results.rows.length > 0) {
-                              reject(new Error('Invalid token not in DB + expired tokens deleted'));
+                              return reject(new Error('Invalid token not in DB + expired tokens deleted'));
                           } else {
-                              reject(new Error('Invalid token not in DB'));
+                              return reject(new Error('Invalid token not in DB'));
                           }
                       }
                   })
@@ -144,6 +144,68 @@ function verifytoken(token) {
           }
       });
   });
+}
+
+function getusers() {
+  searchquery = `SELECT "username" FROM "Accounts"`
+
+  return new Promise((resolve, reject) => {
+    client.query(searchquery, (err, res) => {
+      if (err) {
+        console.error(err)
+        return reject(err)
+      }
+      else {
+        return resolve(res)
+      }
+    })
+  })
+}
+
+function modifypw(username, password, token) {
+  return new Promise(function (resolve, reject) {
+    if (verifyadminright(token) === false){
+      return reject(new Error("You're not an admin"))
+    }
+
+    hashedpw = SHA256(password)
+    hashedpw2 = hashedpw.toString(CryptoJS.enc.Hex)
+
+    const Updatequery = `UPDATE "Accounts"
+                        SET "password" = '${hashedpw2}'  
+                        WHERE "username"='${username}'`
+                        
+    client.query(Updatequery, (err, res) => {
+          if (err) {
+            console.error(err)
+            return reject(err)
+          }
+          else {
+            return resolve(res)
+          }
+        })
+  })
+}
+
+function modifyright(username, role, token) {
+  return new Promise(function (resolve, reject) {
+    if (verifyadminright(token) === false){
+      return reject(new Error("You're not an admin"))
+    }
+    const Updatequery = `UPDATE "Accounts"
+                        SET "role" = '${role}'  
+                        WHERE "username"='${username}'`
+
+    client.query(Updatequery, (err, res) => {
+          if (err) {
+            console.error(err)
+            return reject(err)
+          }
+          else {
+            return resolve(res)
+          }
+        })
+  })
 }
 
 function verifyadminright(token) {
@@ -178,4 +240,7 @@ module.exports = {
     signup,
     adminright,
     verifytoken,
+    getusers,
+    modifypw,
+    modifyright
 }

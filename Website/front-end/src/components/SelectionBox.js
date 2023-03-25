@@ -116,7 +116,7 @@ class Selection extends React.Component {
   }
 
   OrderChange = (event) => {
-    this.setState({order: event.target.value}, this.get_selection)
+    this.setState({order: event.target.value}, console.log(this.state.suborderlist), this.get_selection)
   }
 
   subOrderChange = (event) => {

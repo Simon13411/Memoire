@@ -90,4 +90,16 @@ app.post(`/validate-token`, (req, res) => {
     res.redirect(307, `http://${IP}:4003/validate-token`)
 })
 
+app.get(`/get-users`, (req, res) => {
+    res.redirect(307, `http://${IP}:4003/get-users`)
+})
+
+app.post(`/modifypw`, (req, res) => {
+    res.redirect(307, `http://${IP}:4003/modifypw`)
+})
+
+app.post(`/modifyright`, (req, res) => {
+    res.redirect(307, `http://${IP}:4003/modifyright`)
+})
+
 module.exports = app

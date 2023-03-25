@@ -48,9 +48,7 @@ app.post('/adminright', (req, res) => {
 
 
 app.post('/validate-token', (req, res) => {
-  console.log(req.body)
   const { token: authToken } = req.body;
-  console.log(authToken)
 
   return loginops.verifytoken(authToken)
   .then((username) => {
@@ -59,6 +57,43 @@ app.post('/validate-token', (req, res) => {
   .catch((err) => {
     console.log(err)
     res.status(401).json({ succes: false });
+  });
+});
+
+app.get('/get-users', (req, res) => {
+  return loginops.getusers()
+  .then((results) => {
+    res.status(200).json(results);
+  })
+  .catch((err) => {
+    console.log(err)
+    res.status(401).json(err);
+  });
+});
+
+app.post('/modifypw', (req, res) => {
+  const { username, password, token } = req.body
+
+  return loginops.modifypw(username, password, token)
+  .then((results) => {
+    res.status(200).json(results);
+  })
+  .catch((err) => {
+    console.log(err)
+    res.status(401).json(err);
+  });
+});
+
+app.post('/modifyright', (req, res) => {
+  const { username, role, token } = req.body
+
+  return loginops.modifyright(username, role, token)
+  .then((results) => {
+    res.status(200).json(results);
+  })
+  .catch((err) => {
+    console.log(err)
+    res.status(401).json(err);
   });
 });
 

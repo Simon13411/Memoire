@@ -193,7 +193,8 @@ function get_selectiono(So, F, Sf, T, G, Sg, S, Ss) {
                         AND (G."name" = '${G}' OR '${G}'='NULL')
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
-                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
+                        AND O."name" IS NOT NULL`
   
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -227,8 +228,10 @@ function get_selectionso(O, F, Sf, T, G, Sg, S, Ss) {
                         AND (G."name" = '${G}' OR '${G}'='NULL')
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
-                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
-    
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
+                        AND So."name" IS NOT NULL`
+
+    console.log(searchquery)
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
             if (err) {
@@ -261,7 +264,8 @@ function get_selectiong(O, So, F, Sf, T, Sg, S, Ss) {
                         AND (T."name" = '${T}' OR '${T}'='NULL')
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
-                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
+                        AND G."name" IS NOT NULL`
 
     
     return new Promise(function (resolve, reject) {
@@ -296,7 +300,8 @@ function get_selectionsg(O, So, F, Sf, T, G, S, Ss) {
                         AND (T."name" = '${T}' OR '${T}'='NULL')
                         AND (G."name" = '${G}' OR '${G}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
-                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
+                        AND Sg."name" IS NOT NULL`
     
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -330,7 +335,8 @@ function get_selectionf(O, So, Sf, T, G, Sg, S, Ss) {
                         AND (G."name" = '${G}' OR '${G}'='NULL')
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
-                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
+                        AND F."name" IS NOT NULL`
     
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -364,7 +370,8 @@ function get_selectionsf(O, So, F, T, G, Sg, S, Ss) {
                         AND (G."name" = '${G}' OR '${G}'='NULL')
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
-                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
+                        AND Sf."name" IS NOT NULL`
     
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -398,7 +405,8 @@ function get_selections(O, So, F, Sf, T, G, Sg, Ss) {
                         AND (T."name" = '${T}' OR '${T}'='NULL')
                         AND (G."name" = '${G}' OR '${G}'='NULL')
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
-                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
+                        AND S."name" IS NOT NULL`
     
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -432,8 +440,9 @@ function get_selectionss(O, So, F, Sf, T, G, Sg, S) {
                         AND (T."name" = '${T}' OR '${T}'='NULL')
                         AND (G."name" = '${G}' OR '${G}'='NULL')
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
-                        AND (S."name" = '${S}' OR '${S}'='NULL')`
-    
+                        AND (S."name" = '${S}' OR '${S}'='NULL')
+                        AND Ss."name" IS NOT NULL`
+
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
             if (err) {
@@ -466,7 +475,8 @@ function get_selectiont(O, So, F, Sf, G, Sg, S, Ss) {
                         AND (G."name" = '${G}' OR '${G}'='NULL')
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
-                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')`
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
+                        AND T."name" IS NOT NULL`
     
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
