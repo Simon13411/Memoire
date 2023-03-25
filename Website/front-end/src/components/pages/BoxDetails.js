@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useSearchParams } from "react-router-dom"
+import { Navigate, useSearchParams } from "react-router-dom"
 import Navbar from '../Navbar';
 
 import BoxDetailsAdmin from './BoxDetailsAdmin';
@@ -61,129 +61,137 @@ class BoxDetails extends React.Component {
   render() {
     return (
       <>
-      {this.props.isAuthenticated() ? 
-        (
-        //Admin's Version
-          <BoxDetailsAdmin/>
-        ) : (
-        //User's Version
-        <>
-        <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
-        <div className="container">
-            <div>
-              <p className="title">Order</p>
-              {(this.state.order) === 'NULL' ?
-                (<></>)
-                :
-                (<p>{this.state.order}</p>)
-              }
+      {!this.props.searchParams.get("id") ?
+        ( 
+        <Navigate to='/' /> 
+        ):(
+          <>
+          {this.props.isAuthenticated() ? 
+            (
+            //Admin's Version
+              <BoxDetailsAdmin isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
+            ) : (
+            //User's Version
+            <>
+            <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
+            <div className="container">
+                <div>
+                  <p className="title">Order</p>
+                  {(this.state.order) === 'NULL' ?
+                    (<></>)
+                    :
+                    (<p>{this.state.order}</p>)
+                  }
+                </div>
+                <div>
+                  <p className="title">Suborder</p>
+                  {(this.state.suborder) === 'NULL' ?
+                    (<></>)
+                    :
+                    (<p>{this.state.suborder}</p>)
+                  }
+                </div>
+                <div>
+                  <p className="title">Genus</p>
+                  {(this.state.genus) === 'NULL' ?
+                    (<></>)
+                    :
+                    (<p>{this.state.genus}</p>)
+                  }
+                </div>
+                <div>
+                  <p  className="title">Subgenus</p>
+                  {(this.state.subgenus) === 'NULL'? 
+                    (<></>)
+                    :
+                    (<p>{this.state.subgenus}</p>)
+                  }
+                </div>
+                <div>
+                  <p className="title">Family</p>
+                  {(this.state.family) === 'NULL' ?
+                    (<></>)
+                    :
+                    (<p>{this.state.family}</p>)
+                  }
+                </div>
+                <div>
+                  <p className="title">Subfamily</p>
+                  {(this.state.subfamily) === 'NULL' ?
+                    (<></>)
+                    :
+                    (<p>{this.state.subfamily}</p>)
+                  }
+                </div>
+                <div>
+                  <p className="title">Species</p>
+                  {(this.state.species) === 'NULL' ?
+                    (<></>)
+                    :
+                    (<p>{this.state.species}</p>)
+                  }
+                </div>
+                <div>
+                  <p className="title">Subspecies</p>
+                  {(this.state.subspecies) === 'NULL' ?
+                    (<></>)
+                    :
+                    (<p>{this.state.subspecies}</p>)
+                  }
+                </div>
+                <div>
+                  <p className="title">Tribus</p>
+                  {(this.state.tribus) === 'NULL' ?
+                    (<></>)
+                    :
+                    (<p>{this.state.tribus}</p>)
+                  }
+                </div>
+                <div>
+                  <p className="title">Loaner</p>
+                  {(this.state.loaner) === 'NULL' ?
+                    (<></>)
+                    :
+                    (<p>{this.state.loaner}</p>)
+                  }
+                </div>
+                <div>
+                  <p className="title">Genus Range</p>
+                  {(this.state.grangebegin) === 'NULL' ?
+                    (<></>)
+                    :
+                    (<>{(this.state.grangeend) === 'NULL' ?
+                      (<p>{this.state.grangebegin}-...</p>)
+                      :
+                      (<p>{this.state.grangebegin}-{this.state.grangeend}</p>)
+                    }</>)
+                  }
+                </div>
+                <div>
+                  <p className="title">Species Range</p>
+                  {(this.state.grangebegin) === 'NULL' ?
+                    (<></>)
+                    :
+                    (<>{(this.state.srangeend) === 'NULL' ?
+                      (<p>{this.state.srangebegin}-...</p>)
+                      :
+                      (<p>{this.state.srangebegin}-{this.state.srangeend}</p>)
+                    }</>)
+                  }
+                </div>
+                <div>
+                  <p className="title">Collection</p>
+                  {(this.state.collection) === 'NULL' ?
+                    (<></>)
+                    :
+                    (<p>{this.state.collection}</p>)
+                  }
+                </div>
             </div>
-            <div>
-              <p className="title">Suborder</p>
-              {(this.state.suborder) === 'NULL' ?
-                (<></>)
-                :
-                (<p>{this.state.suborder}</p>)
-              }
-            </div>
-            <div>
-              <p className="title">Genus</p>
-              {(this.state.genus) === 'NULL' ?
-                (<></>)
-                :
-                (<p>{this.state.genus}</p>)
-              }
-            </div>
-            <div>
-              <p  className="title">Subgenus</p>
-              {(this.state.subgenus) === 'NULL'? 
-                (<></>)
-                :
-                (<p>{this.state.subgenus}</p>)
-              }
-            </div>
-            <div>
-              <p className="title">Family</p>
-              {(this.state.family) === 'NULL' ?
-                (<></>)
-                :
-                (<p>{this.state.family}</p>)
-              }
-            </div>
-            <div>
-              <p className="title">Subfamily</p>
-              {(this.state.subfamily) === 'NULL' ?
-                (<></>)
-                :
-                (<p>{this.state.subfamily}</p>)
-              }
-            </div>
-            <div>
-              <p className="title">Species</p>
-              {(this.state.species) === 'NULL' ?
-                (<></>)
-                :
-                (<p>{this.state.species}</p>)
-              }
-            </div>
-            <div>
-              <p className="title">Subspecies</p>
-              {(this.state.subspecies) === 'NULL' ?
-                (<></>)
-                :
-                (<p>{this.state.subspecies}</p>)
-              }
-            </div>
-            <div>
-              <p className="title">Tribus</p>
-              {(this.state.tribus) === 'NULL' ?
-                (<></>)
-                :
-                (<p>{this.state.tribus}</p>)
-              }
-            </div>
-            <div>
-              <p className="title">Loaner</p>
-              {(this.state.loaner) === 'NULL' ?
-                (<></>)
-                :
-                (<p>{this.state.loaner}</p>)
-              }
-            </div>
-            <div>
-              <p className="title">Genus Range</p>
-              {(this.state.grangebegin) === 'NULL' ?
-                (<></>)
-                :
-                (<>{(this.state.grangeend) === 'NULL' ?
-                  (<p>{this.state.grangebegin}-...</p>)
-                  :
-                  (<p>{this.state.grangebegin}-{this.state.grangeend}</p>)
-                }</>)
-              }
-            </div>
-            <div>
-              <p className="title">Species Range</p>
-              {(this.state.grangebegin) === 'NULL' ?
-                (<></>)
-                :
-                (<>{(this.state.srangeend) === 'NULL' ?
-                  (<p>{this.state.srangebegin}-...</p>)
-                  :
-                  (<p>{this.state.srangebegin}-{this.state.srangeend}</p>)
-                }</>)
-              }
-            </div>
-            <div>
-              <p className="title">Collection</p>
-              {(this.state.collection) === 'NULL' ?
-                (<></>)
-                :
-                (<p>{this.state.collection}</p>)
-              }
-            </div>
-        </div>
-      </>
+            </>
+          )
+          }
+          </>
       )
     }
     </>
