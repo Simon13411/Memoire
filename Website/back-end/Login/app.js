@@ -21,6 +21,18 @@ app.post('/login', (req, res) => {
   });
 });
 
+app.post('/signup', (req, res) => {
+  const { username, password, role } = req.body;
+
+  return loginops.signup(username, password, role)
+  .then((results) => {
+    res.status(200).json( {success: true });
+  })
+  .catch((err) => {
+    res.status(401).json({ success: false, error: err.message });
+  });
+});
+
 app.post('/adminright', (req, res) => {
   const { username } = req.body;
 

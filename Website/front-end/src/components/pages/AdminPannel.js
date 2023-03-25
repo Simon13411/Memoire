@@ -10,6 +10,9 @@ import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
+import axios from 'axios'
+const url = process.env.REACT_APP_IP
+
 class AdminPannel extends React.Component {
     constructor (props) {
       super(props)
@@ -37,7 +40,7 @@ class AdminPannel extends React.Component {
         usernameToAdd: '',
         passwordToAdd: '',
         adminToAdd: '0',     //Admin Right for UserToAdd ?
-        useraddstate: '',
+        useraddstate: 'Test',
         //ModifyUser
         usernameToModify: '',
         newPassword: '',
@@ -47,57 +50,28 @@ class AdminPannel extends React.Component {
       };
     }
 
+    onSubmit (event) {
+        event.preventDefault()
+    }
+
     //Fields Change Handlers
-    handleOrderChange = (event) => {
-        this.setState({order: event.target.value})
+    handleCheck = (event) => {
+        const target = event.target;
+        const value = target.checked ? '1' : '0'; //if crossed 1 if not 0
+        const name = target.name;
+    
+        this.setState({
+          [name]: value
+        });
     }
 
-    handlesubOrderChange = (event) => {
-        this.setState({subOrder: event.target.value})
-    }
-
-    handleFamilyChange = (event) => {
-        this.setState({family: event.target.value})
-    }
-
-    handlesubFamilyChange = (event) => {
-        this.setState({subFamily: event.target.value})
-    }
-
-    handleGenusChange = (event) => {
-        this.setState({genus: event.target.value})
-    }
-
-    handlesubGenusChange = (event) => {
-        this.setState({subGenus: event.target.value})
-    }
-
-    handleSpeciesChange = (event) => {
-        this.setState({species: event.target.value})
-    }
-
-    handlesubSpeciesChange = (event) => {
-        this.setState({subSpecies: event.target.value})
-    }
-
-    handleTribuChange = (event) => {
-        this.setState({tribu: event.target.value})
-    }
-
-    handleAddedUserChange = (event) => {
-        this.setState({usernameToAdd: event.target.value})
-    }
-
-    handleAddedPWChange = (event) => {
-        this.setState({passwordToAdd: event.target.value})
-    }
-
-    handleModifiedUserChange = (event) => {
-        this.setState({usernameToModify: event.target.value})
-    }
-
-    handleAddedPWChange = (event) => {
-        this.setState({newPassword: event.target.value})
+    handleInputChange = (event) => {
+        const target = event.target
+        const value = target.value
+        const name = target.name
+        this.setState({
+            [name]: value
+        })
     }
 
     //HTTP Requests
@@ -109,7 +83,7 @@ class AdminPannel extends React.Component {
         })
     }
 
-    handleAddOrder = () => {
+    AddOrder = () => {
         axios.post(`${url}/add-order/:name`, {
             name: this.state.order
         })
@@ -118,7 +92,7 @@ class AdminPannel extends React.Component {
         })
     }
 
-    handleAddsubOrder = () => {
+    AddsubOrder = () => {
         axios.post(`${url}/add-suborder/:name`, {
             name: this.state.subOrder
         })
@@ -127,7 +101,7 @@ class AdminPannel extends React.Component {
         })
     }
 
-    handleAddFamily = () => {
+    AddFamily = () => {
         axios.post(`${url}/add-family/:name`, {
             name: this.state.family
         })
@@ -136,7 +110,7 @@ class AdminPannel extends React.Component {
         })
     }
 
-    handleAddsubFamily = () => {
+    AddsubFamily = () => {
         axios.post(`${url}/add-subfamily/:name`, {
             name: this.state.subFamily
         })
@@ -145,7 +119,7 @@ class AdminPannel extends React.Component {
         })
     }
 
-    handleAddGenus = () => {
+    AddGenus = () => {
         axios.post(`${url}/add-genus/:name`, {
             name: this.state.genus
         })
@@ -154,7 +128,7 @@ class AdminPannel extends React.Component {
         })
     }
 
-    handleAddsubGenus = () => {
+    AddsubGenus = () => {
         axios.post(`${url}/add-subgenus/:name`, {
             name: this.state.subGenus
         })
@@ -163,7 +137,7 @@ class AdminPannel extends React.Component {
         })
     }
 
-    handleAddSPecies = () => {
+    AddSPecies = () => {
         axios.post(`${url}/add-species/:name`, {
             name: this.state.species
         })
@@ -172,7 +146,7 @@ class AdminPannel extends React.Component {
         })
     }
 
-    handleAddsubSpecies = () => {
+    AddsubSpecies = () => {
         axios.post(`${url}/add-subspecies/:name`, {
             name: this.state.subSpecies
         })
@@ -181,7 +155,7 @@ class AdminPannel extends React.Component {
         })
     }
 
-    handleAddTribu = () => {
+    AddTribu = () => {
         axios.post(`${url}/add-tribu/:name`, {
             name: this.state.tribu
         })
@@ -190,21 +164,27 @@ class AdminPannel extends React.Component {
         })
     }
 
-    handleAddUser = () => {
-        axios.post(`${url}/sign-up/:user/:pass/:admin`, {
+    AddUser = () => {
+        axios.post(`${url}/signup`, {
             username: this.state.usernameToAdd,
             password: this.state.passwordToAdd,
-            admin: this.state.adminToAdd
+            role: this.state.adminToAdd
         })
         .then((res) => {
-            this.setState({useraddstate: `User ${usernameToAdd} added`});
+            console.log(res)
+            this.setState({useraddstate: `User ${this.state.usernameToAdd} added`, usernameToAdd: '', passwordToAdd: '', adminToAdd: '0'});
         })
         .catch((err) => {
-          this.setState({useraddstate: 'An error occurred while adding user'});
+            if (!err.response) {
+                this.setState({useraddstate: "Erreur Serveur"});
+            }
+            else {
+                this.setState({useraddstate: err.response.data.error});
+            }
         });
     }
 
-    handleModifyPassword = () => {
+    ModifyPassword = () => {
         axios.post(`${url}/modify/:user/:pass`, {
             username: this.state.usernameToModify,
             password: this.state.newPassword
@@ -280,17 +260,22 @@ class AdminPannel extends React.Component {
                 </div>
         
                 <div className="column">
-                  <h3>Ajouter un utilisateur</h3>
-                  <form>
-                  <label htmlFor="newusername">Username:</label>
-                    <input type="text" id="addusern" name="addusern" />
-                    <br />
-        
-                    <label htmlFor="newpassword">Password:</label>
-                    <input type="text" id="addpw" name="addpw" />
-                    <br />
-                    <button type="submit">Ajouter</button>
-                </form>
+                    <h3>Ajouter un utilisateur</h3>
+                    <form onSubmit={(event) => { this.onSubmit(event) }}>
+                        <label htmlFor="newusername">Username:</label>
+                        <input type="text" value={this.state.usernameToAdd} onChange={this.handleInputChange} name="usernameToAdd"/>
+                        <br />
+            
+                        <label htmlFor="newpassword">Password:</label>
+                        <input type="text" value={this.state.passwordToAdd} onChange={this.handleInputChange} name="passwordToAdd"/>
+                        <br />
+
+                        <FormGroup>
+                            <FormControlLabel control={<Checkbox checked={this.state.adminToAdd === '1'} onChange={this.handleCheck} name="adminToAdd"/>} label='adminacces' />
+                        </FormGroup>
+                        <button type="submit" onClick={this.AddUser}>Ajouter</button>
+                        <div>{this.state.useraddstate}</div>
+                    </form>
                 </div>
                 <div className="column">
                   <h3>Modifier un utilisateur</h3>

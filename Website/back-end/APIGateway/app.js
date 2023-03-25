@@ -74,8 +74,8 @@ app.post('/login', (req, res) => {
     res.redirect(307, `http://${IP}:4003/login`)
 })
 
-app.post('/signin', (req, res) => {
-    res.redirect(307, `http://${IP}:4003/signin`)
+app.post('/signup', (req, res) => {
+    res.redirect(307, `http://${IP}:4003/signup`)
 })
 
 app.post('/adminright', (req, res) => {

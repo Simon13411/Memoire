@@ -57,6 +57,40 @@ function login(username, pw) {
   })
 }
 
+function signup(username, pw, role) {
+  
+  const searchQuery = `SELECT "username" FROM "Accounts" WHERE "username"='${username}'`
+  return new Promise(function (resolve, reject) {
+    client.query(searchQuery, (err, res) => {
+      if (err) {
+        return reject(new Error("Erreur DB"));
+      }
+      else {
+        if (res.rowCount < 1) {
+          hashedpw = SHA256(pw)
+          hashedpw2 = hashedpw.toString(CryptoJS.enc.Hex)
+        
+          const insertQuery = `INSERT INTO "Accounts" VALUES ('${username}', '${hashedpw2}', ${role})`
+          
+          return new Promise(function (resolve2, reject) {
+            client.query(insertQuery, (err, res) => {
+              if (err) {
+                return reject(new Error("Erreur DB"));
+              }
+              else {
+                return resolve(resolve2(res));
+              }
+            });
+          })
+        }
+        else {
+          return reject(new Error("Username not available"));
+        }
+      }
+    });
+  })
+}
+
 function adminright(username) {
   searchquery = `SELECT role FROM "Accounts" WHERE "username"='${username}'`
 
@@ -112,6 +146,7 @@ function verifytoken(token) {
 
 module.exports = {
     login,
+    signup,
     adminright,
-    verifytoken
+    verifytoken,
 }
