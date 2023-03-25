@@ -1,27 +1,28 @@
 import * as React from 'react';
+import { Navigate, useSearchParams } from "react-router-dom"
 import Navbar from '../Navbar';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+
+import InsectDetailsAdmin from './InsectDetailsAdmin';
+
+import axios from 'axios'
+const url = process.env.REACT_APP_IP
 
 class InsectDetails extends React.Component {
     constructor (props) {
       super(props)
       this.state = {
-        order: 'NULL',
-        suborder: 'NULL',
-        genus: 'NULL',
-        subgenus: 'NULL',
-        family: 'NULL',
-        subfamily: 'NULL',
-        species: 'NULL',
-        subspecies: 'NULL',
-        tribus: 'NULL',
-        loaner: 'NULL',
-        rangebegin: 'NULL',
-        rangeend: 'NULL',
-        collection: 'NULL',
+        individ: undefined,
+        idbox: 0,
+        order: undefined,
+        suborder: undefined,
+        genus: undefined,
+        subgenus: undefined,
+        family: undefined,
+        subfamily: undefined,
+        species: undefined,
+        subspecies: undefined,
+        tribus: undefined,
+        loaner: undefined,
         orderlist: [],
         suborderlist: [],
         genuslist: [],
@@ -32,252 +33,156 @@ class InsectDetails extends React.Component {
         subspecieslist: [],
         tribuslist: [],
         loanerlist: [],
-        rangebeginlist: [],
-        rangeendlist: [],
-        collectionlist: [],
       }
     }
 
-    OrderChange = (event) => {
-      this.setState({order: event.target.value})
+    componentDidMount() {
+      {this.GetIndiv()}
+    }
+  
+    GetIndiv = (event) => {
+      axios.get(`${url}/get_indivdetails`, {params: {id: this.props.searchParams.get("id")}})
+      .then((res) => {
+          this.setState({individ: res.data.rows[0].id_individu})
+          this.setState({idbox: res.data.rows[0].box_id})
+          this.setState({order: res.data.rows[0].order})
+          this.setState({suborder: res.data.rows[0].suborder})
+          this.setState({family: res.data.rows[0].family})
+          this.setState({subfamily: res.data.rows[0].subfamily})
+          this.setState({genus: res.data.rows[0].genus})
+          this.setState({subgenus: res.data.rows[0].subgenus})
+          this.setState({species: res.data.rows[0].species})
+          this.setState({subspecies: res.data.rows[0].subspecies})
+          this.setState({tribu: res.data.rows[0].tribu})
+          this.setState({loaner: res.data.rows[0].loaner})
+      })
     }
 
     render() {
       return (
         <>
-        {this.props.isAuthenticated() ? 
-          (
-          //Admin's Version
-          <>
-            <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
-            <div className="container">
-                <div>
-                  <p className="title">Order</p>
-                  <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                    <InputLabel id="demo-simple-select-label">Order</InputLabel>
-                    <Select
-                      labelId="order-label"
-                      id="order-select"
-                      value={this.state.order}
-                      label="Order"
-                      onChange={this.OrderChange}
-                    >
-                      {this.state.orderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                      <MenuItem value={"Hymenoptera"}>Hymenoptera</MenuItem>
-                      <MenuItem value={"Lepidoptera"}>Lepidoptera</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
-                <div>
-                  <p className="title">Suborder</p>
-                  <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                    <InputLabel id="demo-simple-select-label">Order</InputLabel>
-                    <Select
-                      labelId="order-label"
-                      id="order-select"
-                      value={this.state.order}
-                      label="Order"
-                      onChange={this.OrderChange}
-                    >
-                      <MenuItem value='NULL'>
-                        <em>None</em>
-                      </MenuItem>
-                      {this.state.orderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                      <MenuItem value={"Hymenoptera"}>Hymenoptera</MenuItem>
-                      <MenuItem value={"Lepidoptera"}>Lepidoptera</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
-                <div>
-                  <p className="title">Genus</p>
-                  {(this.state.genus) ?
-                    (<p>{this.state.genus}</p>)
-                    :
-                    (<></>)
-                  }
-                </div>
-                <div>
-                  <p  className="title">Subgenus</p>
-                  {(this.state.subgenus) ?
-                    (<p>{this.state.subgenus}</p>)
-                    :
-                    (<></>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Family</p>
-                  {(this.state.family) ?
-                    (<p>{this.state.family}</p>)
-                    :
-                    (<></>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Subfamily</p>
-                  {(this.state.subfamily) ?
-                    (<p>{this.state.subfamily}</p>)
-                    :
-                    (<></>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Species</p>
-                  {(this.state.species) ?
-                    (<p>{this.state.species}</p>)
-                    :
-                    (<></>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Subspecies</p>
-                  {(this.state.subspecies) ?
-                    (<p>{this.state.subspecies}</p>)
-                    :
-                    (<></>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Tribus</p>
-                  {(this.state.tribus) ?
-                    (<p>{this.state.tribus}</p>)
-                    :
-                    (<></>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Loaner</p>
-                  {(this.state.loaner) ?
-                    (<p>{this.state.loaner}</p>)
-                    :
-                    (<></>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Range</p>
-                  {(this.state.rangebegin) ?
-                    (<p>{this.state.rangebegin}-{this.state.rangeend}</p>)
-                    :
-                    (<></>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Collection</p>
-                  {(this.state.rangebegin) ?
-                    (<p>{this.state.collection}</p>)
-                    :
-                    (<></>)
-                  }
-                </div>
-            </div>
-          </>
-        ) : (
-          //User's Version
-          <>
-          <Navbar />
-          <div className="container">
-              <div>
-                <p className="title">Order</p>
-                {(this.state.order) === 'NULL' ?
-                  (<></>)
-                  :
-                  (<p>{this.state.order}</p>)
-                }
+        {!this.props.searchParams.get("id") ?
+          ( 
+          <Navigate to='/' /> 
+          ):(
+            <>
+            {this.props.isAuthenticated() ? 
+              (
+              //Admin's Version
+              <InsectDetailsAdmin isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
+              ) : (
+              //User's Version
+              <>
+              <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
+              <div className="container">
+                  <div>
+                  <p className="title">Individual ID</p>
+                    {(!this.state.individ)  ?
+                      (<></>)
+                      :
+                      (<p>{this.state.individ}</p>)
+                    }
+                  </div>
+                  <div>
+                    <p className="title">Box ID</p>
+                    {(this.state.idbox) === 0 ?
+                      (<></>)
+                      :
+                      (<p>{this.state.idbox}</p>)
+                    }
+                  </div>
+                  <div>
+                    <p className="title">Order</p>
+                    {(!this.state.order) ?
+                      (<></>)
+                      :
+                      (<p>{this.state.order}</p>)
+                    }
+                  </div>
+                  <div>
+                    <p className="title">Suborder</p>
+                    {(!this.state.suborder) ?
+                      (<></>)
+                      :
+                      (<p>{this.state.suborder}</p>)
+                    }
+                  </div>
+                  <div>
+                    <p className="title">Genus</p>
+                    {(!this.state.genus) ?
+                      (<></>)
+                      :
+                      (<p>{this.state.genus}</p>)
+                    }
+                  </div>
+                  <div>
+                    <p  className="title">Subgenus</p>
+                    {(!this.state.subgenus) === ''? 
+                      (<></>)
+                      :
+                      (<p>{this.state.subgenus}</p>)
+                    }
+                  </div>
+                  <div>
+                    <p className="title">Family</p>
+                    {(!this.state.family) ?
+                      (<></>)
+                      :
+                      (<p>{this.state.family}</p>)
+                    }
+                  </div>
+                  <div>
+                    <p className="title">Subfamily</p>
+                    {(!this.state.subfamily) ?
+                      (<></>)
+                      :
+                      (<p>{this.state.subfamily}</p>)
+                    }
+                  </div>
+                  <div>
+                    <p className="title">Species</p>
+                    {(!this.state.species) ?
+                      (<></>)
+                      :
+                      (<p>{this.state.species}</p>)
+                    }
+                  </div>
+                  <div>
+                    <p className="title">Subspecies</p>
+                    {(!this.state.subspecies) ?
+                      (<></>)
+                      :
+                      (<p>{this.state.subspecies}</p>)
+                    }
+                  </div>
+                  <div>
+                    <p className="title">Tribus</p>
+                    {(!this.state.tribus) ?
+                      (<></>)
+                      :
+                      (<p>{this.state.tribus}</p>)
+                    }
+                  </div>
+                  <div>
+                    <p className="title">Loaner</p>
+                    {(!this.state.loaner) ?
+                      (<></>)
+                      :
+                      (<p>{this.state.loaner}</p>)
+                    }
+                  </div>
               </div>
-              <div>
-                <p className="title">Suborder</p>
-                {(this.state.suborder) === 'NULL' ?
-                  (<></>)
-                  :
-                  (<p>{this.state.suborder}</p>)
-                }
-              </div>
-              <div>
-                <p className="title">Genus</p>
-                {(this.state.genus) === 'NULL' ?
-                  (<></>)
-                  :
-                  (<p>{this.state.genus}</p>)
-                }
-              </div>
-              <div>
-                <p  className="title">Subgenus</p>
-                {(this.state.subgenus) === 'NULL'? 
-                  (<></>)
-                  :
-                  (<p>{this.state.subgenus}</p>)
-                }
-              </div>
-              <div>
-                <p className="title">Family</p>
-                {(this.state.family) === 'NULL' ?
-                  (<></>)
-                  :
-                  (<p>{this.state.family}</p>)
-                }
-              </div>
-              <div>
-                <p className="title">Subfamily</p>
-                {(this.state.subfamily) === 'NULL' ?
-                  (<></>)
-                  :
-                  (<p>{this.state.subfamily}</p>)
-                }
-              </div>
-              <div>
-                <p className="title">Species</p>
-                {(this.state.species) === 'NULL' ?
-                  (<></>)
-                  :
-                  (<p>{this.state.species}</p>)
-                }
-              </div>
-              <div>
-                <p className="title">Subspecies</p>
-                {(this.state.subspecies) === 'NULL' ?
-                  (<></>)
-                  :
-                  (<p>{this.state.subspecies}</p>)
-                }
-              </div>
-              <div>
-                <p className="title">Tribus</p>
-                {(this.state.tribus) === 'NULL' ?
-                  (<></>)
-                  :
-                  (<p>{this.state.tribus}</p>)
-                }
-              </div>
-              <div>
-                <p className="title">Loaner</p>
-                {(this.state.loaner) === 'NULL' ?
-                  (<></>)
-                  :
-                  (<p>{this.state.loaner}</p>)
-                }
-              </div>
-              <div>
-                <p className="title">Range</p>
-                {(this.state.rangebegin) === 'NULL' ?
-                  (<></>)
-                  :
-                  (<p>{this.state.rangebegin}-{this.state.rangeend}</p>)
-                }
-              </div>
-              <div>
-                <p className="title">Collection</p>
-                {(this.state.collection) === 'NULL' ?
-                  (<></>)
-                  :
-                  (<p>{this.state.collection}</p>)
-                }
-              </div>
-          </div>
-        </>
+              </>
+            )
+            }
+            </>
         )
       }
       </>
-    )}
+  )}
 }
 
-
-export default InsectDetails;
+export function InsectDetailsWSP(props) {
+  const [searchParams] = useSearchParams();
+  return <InsectDetails searchParams={searchParams} {...props}></InsectDetails>
+}

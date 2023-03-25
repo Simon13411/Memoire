@@ -6,7 +6,7 @@ import './App.css';
 import axios from 'axios'
 
 import {BoxDetailsWSP} from './components/pages/BoxDetails';
-import InsectDetails from './components/pages/InsectDetails';
+import {InsectDetailsWSP} from './components/pages/InsectDetails';
 import BoxesHome from './components/pages/BoxesHome';
 import InsectHome from './components/pages/InsectHome';
 import AddData from './components/pages/AddData';
@@ -94,7 +94,7 @@ class App extends React.Component {
             <Route path='/' element={<BoxesHome isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
             <Route path='/box-search' element={<BoxesHome isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
             <Route path='/individual-search' element={<InsectHome isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
-            <Route path='/individual' element={<InsectDetails isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
+            <Route path='/individual' element={<InsectDetailsWSP isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
             <Route path='/box' element={<BoxDetailsWSP isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
             <Route path='/add-data' element={<AddData isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
             <Route path='/sign-in' element={<AuthWNav Authenticate={this.Authenticate} BeAdmin={this.BeAdmin} isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />

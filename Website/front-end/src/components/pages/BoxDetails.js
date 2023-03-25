@@ -54,10 +54,6 @@ class BoxDetails extends React.Component {
     })
   }
 
-  OrderChange = (event) => {
-    this.setState({order: event.target.value})
-  }
-
   render() {
     return (
       <>
@@ -202,5 +198,3 @@ export function BoxDetailsWSP(props) {
   const [searchParams] = useSearchParams();
   return <BoxDetails searchParams={searchParams} {...props}></BoxDetails>
 }
-
-export default BoxDetails;

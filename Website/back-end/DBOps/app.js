@@ -28,7 +28,7 @@ app.get('/get_boxdetails', (req, res) => {
 })
 
 
-app.get('/get_result', (req, res) => {
+app.get('/get_boxresult', (req, res) => {
     const Offs = req.query.offs
     const O = req.query.o
     const So = req.query.so
@@ -39,7 +39,40 @@ app.get('/get_result', (req, res) => {
     const Sg = req.query.sg
     const S = req.query.s
     const Ss = req.query.ss
-    return db.get_result(Offs, O, So, F, Sf, T, G, Sg, S, Ss)
+    return db.get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss)
+    .then((result) => {
+        res.status(200).json(result)
+    })
+    .catch((err) => {
+        res.status(404).json()
+    })
+})
+
+app.get('/get_indivdetails', (req, res) => {
+    const id = req.query.id
+    return db.get_indivdetails(id)
+    .then((result) => {
+        console.log(result.rows[0].Att1)
+        res.status(200).json(result)
+    })
+    .catch((err) => {
+        res.status(404).json()
+    })
+})
+
+
+app.get('/get_indivresult', (req, res) => {
+    const Offs = req.query.offs
+    const O = req.query.o
+    const So = req.query.so
+    const F = req.query.f
+    const Sf = req.query.sf
+    const T = req.query.t
+    const G = req.query.g
+    const Sg = req.query.sg
+    const S = req.query.s
+    const Ss = req.query.ss
+    return db.get_indivresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss)
     .then((result) => {
         res.status(200).json(result)
     })
@@ -219,13 +252,14 @@ app.get('/get_selectiont', (req, res) => {
     })
 })
 
-app.put('/csvtosql', upload.single('file'), (req, res) => {
-    return db.csvtosql(req.file.path)
+app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
+    const type = req.params.type
+    return db.csvtosql(req.file.path, type)
     .then((result) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
     })
 })
 

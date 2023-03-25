@@ -47,6 +47,7 @@ function get_boxdetails(id) {
         client.query(searchquery, (err, res) => {
             if (err) {
                 console.error(err)
+                return reject(new Error("Erreur DB"))
             }
             else {
                 return resolve(res)
@@ -55,7 +56,7 @@ function get_boxdetails(id) {
     })
 }
 
-function get_result(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
+function get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
     var searchquery = `SELECT B."id_box", B."location", B."museum", B."paratypes", B."types", R."Order",
                         R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", Col."name" as "Col"
                         FROM "Box" B, "CollectionBox" ColBox, "Collection" Col,
@@ -89,6 +90,82 @@ function get_result(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
         client.query(searchquery, (err, res) => {
             if (err) {
                 console.error(err)
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+function get_indivdetails(id) {
+    var searchquery = `SELECT I."id_individu", I."box_id", I."continent", I."country", I."ecozone", O."name" as "order",
+    So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", loan."prenom" as "loaner"
+                        FROM "Individu" I
+                            LEFT OUTER JOIN "Population" P2 ON I."population_id"=P2."id_population"
+                            LEFT OUTER JOIN "PopuBox" P ON P."population_id"=P2."id_population"
+                            LEFT OUTER JOIN "Order" O On P2."order_id"=O."id_order"
+                            LEFT OUTER JOIN "subOrder" So ON P2."suborder_id"=So."id_suborder"
+                            LEFT OUTER JOIN "Family" F ON P2."family_id"=F."id_family"
+                            LEFT OUTER JOIN "subFamily" Sf ON P2."subFamily_id"=Sf."id_subfamily"
+                            LEFT OUTER JOIN "Tribu" T ON P2."tribu_id"=T."id_tribu"
+                            LEFT OUTER JOIN "Genus" G ON P2."genus_id"=G."id_genus"
+                            LEFT OUTER JOIN "subGenus" Sg ON P2."subGenus_id"=Sg."id_subgenus"
+                            LEFT OUTER JOIN "Species" S ON P2."species_id"=S."id_species"
+                            LEFT OUTER JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
+                            LEFT OUTER JOIN (SELECT L."name" as "prenom", LI."individu_id"
+                            FROM "loanIndividu" LI, "Loaner" L
+                            WHERE LI."loaner_id"=L."id_loaner") as loan on I."id_individu"=loan."individu_id"
+                        
+                        WHERE I."id_individu"=${id}`
+                            
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+function get_indivresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
+    var searchquery = `SELECT I."id_individu", I."box_id", I."continent", I."country", I."ecozone", O."name" as "Order",
+    So."name" as "subOrder", F."name" as "Family", Sf."name" as "subFamily", T."name" as "Tribu", G."name" as "Genus", Sg."name" as "subGenus" , S."name" as "Species", Ss."name" as "subSpecies"
+                        FROM "Individu" I
+                            LEFT OUTER JOIN "Population" P2 ON I."population_id"=P2."id_population"
+                            LEFT OUTER JOIN "PopuBox" P ON P."population_id"=P2."id_population"
+                            LEFT OUTER JOIN "Order" O On P2."order_id"=O."id_order"
+                            LEFT OUTER JOIN "subOrder" So ON P2."suborder_id"=So."id_suborder"
+                            LEFT OUTER JOIN "Family" F ON P2."family_id"=F."id_family"
+                            LEFT OUTER JOIN "subFamily" Sf ON P2."subFamily_id"=Sf."id_subfamily"
+                            LEFT OUTER JOIN "Tribu" T ON P2."tribu_id"=T."id_tribu"
+                            LEFT OUTER JOIN "Genus" G ON P2."genus_id"=G."id_genus"
+                            LEFT OUTER JOIN "subGenus" Sg ON P2."subGenus_id"=Sg."id_subgenus"
+                            LEFT OUTER JOIN "Species" S ON P2."species_id"=S."id_species"
+                            LEFT OUTER JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
+                                WHERE (O."name"='${O}' OR '${O}'='NULL')
+                                AND (So."name"='${So}' OR '${So}'='NULL')
+                                AND (F."name"='${F}' OR '${F}'='NULL')
+                                AND (Sf."name"='${Sf}' OR '${Sf}'='NULL')
+                                AND (T."name"='${T}' OR '${T}'='NULL')
+                                AND (G."name"='${G}' OR '${G}'='NULL')
+                                AND (Sg."name"='${Sg}' OR '${Sg}'='NULL')
+                                AND (S."name"='${S}' OR '${S}'='NULL')
+                                AND (Ss."name"='${Ss}' OR '${Ss}'='NULL') 
+                                    LIMIT 10 OFFSET ${Offs}`
+
+    console.log(searchquery)
+
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+                return reject(new Error("Erreur DB"))
             }
             else {
                 return resolve(res)
@@ -122,6 +199,7 @@ function get_selectiono(So, F, Sf, T, G, Sg, S, Ss) {
         client.query(searchquery, (err, res) => {
             if (err) {
                 console.error(err)
+                return reject(new Error("Erreur DB"))
             }
             else {
                 return resolve(res)
@@ -155,6 +233,7 @@ function get_selectionso(O, F, Sf, T, G, Sg, S, Ss) {
         client.query(searchquery, (err, res) => {
             if (err) {
                 console.error(err)
+                return reject(new Error("Erreur DB"))
             }
             else {
                 return resolve(res)
@@ -189,6 +268,7 @@ function get_selectiong(O, So, F, Sf, T, Sg, S, Ss) {
         client.query(searchquery, (err, res) => {
             if (err) {
                 console.error(err)
+                return reject(new Error("Erreur DB"))
             }
             else {
                 return resolve(res)
@@ -222,6 +302,7 @@ function get_selectionsg(O, So, F, Sf, T, G, S, Ss) {
         client.query(searchquery, (err, res) => {
             if (err) {
                 console.error(err)
+                return reject(new Error("Erreur DB"))
             }
             else {
                 return resolve(res)
@@ -255,6 +336,7 @@ function get_selectionf(O, So, Sf, T, G, Sg, S, Ss) {
         client.query(searchquery, (err, res) => {
             if (err) {
                 console.error(err)
+                return reject(new Error("Erreur DB"))
             }
             else {
                 return resolve(res)
@@ -288,6 +370,7 @@ function get_selectionsf(O, So, F, T, G, Sg, S, Ss) {
         client.query(searchquery, (err, res) => {
             if (err) {
                 console.error(err)
+                return reject(new Error("Erreur DB"))
             }
             else {
                 return resolve(res)
@@ -321,6 +404,7 @@ function get_selections(O, So, F, Sf, T, G, Sg, Ss) {
         client.query(searchquery, (err, res) => {
             if (err) {
                 console.error(err)
+                return reject(new Error("Erreur DB"))
             }
             else {
                 return resolve(res)
@@ -354,6 +438,7 @@ function get_selectionss(O, So, F, Sf, T, G, Sg, S) {
         client.query(searchquery, (err, res) => {
             if (err) {
                 console.error(err)
+                return reject(new Error("Erreur DB"))
             }
             else {
                 return resolve(res)
@@ -387,6 +472,7 @@ function get_selectiont(O, So, F, Sf, G, Sg, S, Ss) {
         client.query(searchquery, (err, res) => {
             if (err) {
                 console.error(err)
+                return reject(new Error("Erreur DB"))
             }
             else {
                 return resolve(res)
@@ -395,27 +481,52 @@ function get_selectiont(O, So, F, Sf, G, Sg, S, Ss) {
     })
 }
 
-function csvtosql(filename) {
-    console.log("Subprocess spawning")
-    const script = spawn('python3', ['ExecuteFillDb.py', filename]);
-    console.log("Subprocess spawned")
-    console.log(filename)
-    script.stdout.on('data', (data) => {
-      console.log(`stdout: ${data}`);
-    });
+function csvtosql(filename, type) {
+    return new Promise(function(resolve, reject) {
+      if (type === 'Box') {
+        console.log("Subprocess spawning")
+        const script = spawn('python3', ['ExecuteFillDb.py', filename]);
+        console.log("Subprocess spawned")
+        console.log(filename)
   
-    script.stderr.on('data', (data) => {
-      console.error(`stderr: ${data}`);
-    });
+        script.stderr.on('data', (data) => {
+          console.error(`stderr: ${data}`);
+          return reject(new Error("Error during script run"));
+        });
   
-    script.on('close', (code) => {
-      console.log(`child process exited with code ${code}`);
+        script.on('close', (code) => {
+          console.log(`child process exited with code ${code}`);
+          return resolve("Success");
+        });
+      } else if (type === 'Individual') {
+        console.log("Subprocess spawning")
+        const script = spawn('python3', ['ExecuteFillIndividu.py', filename]);
+        console.log("Subprocess spawned")
+        console.log(filename)
+  
+        script.stderr.on('data', (data) => {
+          console.error(`stderr: ${data}`);
+          return reject(new Error("Error during script run"));
+        });
+  
+        script.on('close', (code) => {
+          console.log(`child process exited with code ${code}`);
+          if (code === 1){
+            return reject(new Error("Error during script run"));
+          }
+          else {
+            return resolve("Success");
+            }
+        });
+      }
     });
   }
 
 module.exports = {
     get_boxdetails,
-    get_result,
+    get_boxresult,
+    get_indivdetails,
+    get_indivresult,
     get_selectiono,
     get_selectionso,
     get_selectiong,

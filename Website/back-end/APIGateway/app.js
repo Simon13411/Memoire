@@ -12,11 +12,15 @@ app.get('/get_boxdetails', (req, res) => {
 })
 
 app.get('/get_indivdetails', (req, res) => {
-    res.redirect(307, `http://${IP}:4001/get_details?id=${req.query.id}`)
+    res.redirect(307, `http://${IP}:4001/get_indivdetails?id=${req.query.id}`)
 })
 
-app.get('/get_result', (req, res) => {
-    res.redirect(307, `http://${IP}:4001/get_result?offs=${req.query.offs}&o=${req.query.o}&so=${req.query.so}&f=${req.query.f}&sf=${req.query.sf}&t=${req.query.t}&g=${req.query.g}&sg=${req.query.sg}&s=${req.query.s}&ss=${req.query.ss}`)
+app.get('/get_boxresult', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_boxresult?offs=${req.query.offs}&o=${req.query.o}&so=${req.query.so}&f=${req.query.f}&sf=${req.query.sf}&t=${req.query.t}&g=${req.query.g}&sg=${req.query.sg}&s=${req.query.s}&ss=${req.query.ss}`)
+})
+
+app.get('/get_indivresult', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_indivresult?offs=${req.query.offs}&o=${req.query.o}&so=${req.query.so}&f=${req.query.f}&sf=${req.query.sf}&t=${req.query.t}&g=${req.query.g}&sg=${req.query.sg}&s=${req.query.s}&ss=${req.query.ss}`)
 })
 
 app.get('/get_selectiono', (req, res) => {
@@ -55,8 +59,8 @@ app.get('/get_selectiont', (req, res) => {
     res.redirect(307, `http://${IP}:4001/get_selectiont?o=${req.query.o}&so=${req.query.so}&f=${req.query.f}&sf=${req.query.sf}&g=${req.query.g}&sg=${req.query.sg}&s=${req.query.s}&ss=${req.query.ss}`)
 })
 
-app.put('/csvtosql', (req, res) => {
-    res.redirect(307, `http://${IP}:4001/csvtosql`)
+app.put('/csvtosql/:type', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/csvtosql/${req.params.type}`)
 })
 
 

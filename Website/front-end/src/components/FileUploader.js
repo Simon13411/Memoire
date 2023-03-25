@@ -28,16 +28,45 @@ class FileUploader extends Component {
     const formData = new FormData();
     formData.append('file', this.state.selectedFile);
 
-    axios.put(`${url}/csvtosql`, formData, {
+    if (this.props.type === 'Box'){
+      this.props.Changeboxuploadstate('Veuillez Patienter...')
+    }
+    else if (this.props.type === 'Individual') {
+      this.props.Changeindivuploadstate('Veuillez Patienter...')
+    }
+
+    axios.put(`${url}/csvtosql/${this.props.type}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data' //Contient des données binaires
       }
     })
       .then(response => {
         console.log('Fichier envoyé avec succès');
+        if (this.props.type === 'Box'){
+          this.props.Changeboxuploadstate('Fichier envoyé avec succès')
+        }
+        else if (this.props.type === 'Individual') {
+          this.props.Changeindivuploadstate('Fichier envoyé avec succès')
+        }
       })
-      .catch(error => {
-        console.error('Erreur lors de l\'envoi du fichier', error);
+      .catch(err => {
+        console.error('Erreur lors de l\'envoi du fichier', err);
+        if (!err.response) {
+          if (this.props.type === 'Box'){
+            this.props.Changeboxuploadstate('Erreur Serveur')
+          }
+          else if (this.props.type === 'Individual') {
+            this.props.Changeindivuploadstate('Erreur Serveur')
+          }
+        }
+        else {
+          if (this.props.type === 'Box'){
+            this.props.Changeboxuploadstate(err.response.data.error)
+          }
+          else if (this.props.type === 'Individual') {
+            this.props.Changeindivuploadstate(err.response.data.error)
+          }
+        }
       });
   }
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useNavigate} from 'react-router-dom';
 import Box from '@mui/material/Box';
 
-class Results extends React.Component {
+class ResultsBox extends React.Component {
     constructor(props) {
         super(props)
     }
@@ -73,7 +73,5 @@ class Results extends React.Component {
 
 export function ResultsWNav(props) {
     const navigate = useNavigate()
-    return <Results navigate={navigate} {...props}></Results>
+    return <ResultsBox navigate={navigate} {...props}></ResultsBox>
 }
-
-export default Results;

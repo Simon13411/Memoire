@@ -9,6 +9,18 @@ import {Navigate} from 'react-router-dom';
 class AddData extends React.Component {
   constructor (props) {
     super(props)
+    this.state = {
+      boxuploadstate: '',
+      indivuploadstate: ''
+    }
+  }
+
+  Changeboxuploadstate = (message) => {
+    this.setState({boxuploadstate: message})
+  }
+
+  Changeindivuploadstate = (message) => {
+    this.setState({indivuploadstate: message})
   }
 
   render() {
@@ -22,19 +34,25 @@ class AddData extends React.Component {
             <div className="column">
               <h1>Boxes</h1>
               <div>
-                <FileUploader />
+                <FileUploader type='Box' Changeboxuploadstate={this.Changeboxuploadstate}/>
               </div>
               <div>
-                <FileDownloader file='Box'/>
+                <FileDownloader type='Box'/>
+              </div>
+              <div>
+                {this.state.boxuploadstate}
               </div>
             </div>
             <div className="column">
               <h1>Individuals</h1>
               <div>
-                <FileUploader/>
+                <FileUploader type='Individual' Changeindivuploadstate={this.Changeindivuploadstate}/>
               </div>
               <div>
-                <FileDownloader file='Individual'/>
+                <FileDownloader type='Individual'/>
+              </div>
+              <div>
+                {this.state.indivuploadstate}
               </div>
             </div>
             </div>

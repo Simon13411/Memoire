@@ -276,7 +276,7 @@ def insertBox(data, cursor, conn) :
     toinsertSpeciesRange = data["Species_range"].values.tolist()
     
     
-    duplicationquery =  """SELECT MAX("id_box"")
+    duplicationquery =  """SELECT MAX("id_box")
                             FROM "Box" """
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
@@ -288,7 +288,7 @@ def insertBox(data, cursor, conn) :
     for i in range(0, len(toinsertID)):
         
         if(toinsertID[i]==0):
-            
+            `
             zeroExist = """SELECT *
                                 FROM "Box" 
                                 WHERE "id_box" = '{}' """.format(toinsertID[i])

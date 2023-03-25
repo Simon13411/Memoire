@@ -4,7 +4,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import  {ResultsWNav} from './Results'
+import  {ResultsWNav} from './ResultsIndiv'
 
 import axios from 'axios'
 
@@ -42,7 +42,7 @@ class Selection extends React.Component {
   }
 
   fetchResults = () => {
-      axios.get(`${url}/get_result`, {
+      axios.get(`${url}/get_indivresult`, {
         params:
         {offs: '0', o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
       .then((res) => {
@@ -143,7 +143,7 @@ class Selection extends React.Component {
   }
   
   componentDidMount() {
-    axios.get(`${url}/get_result`, {
+    axios.get(`${url}/get_indivresult`, {
       params:
       {offs: '0', o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
     .then((res) => {
@@ -295,7 +295,7 @@ class Selection extends React.Component {
           </FormControl>
         </div>
         <ul class="datalist">
-          {this.state.results.map((data) => <li><ResultsWNav id={data.id_box} order={data.Order} suborder={data.subOrder} family={data.Family} subfamily={data.subFamily}></ResultsWNav></li>)}
+          {this.state.results.map((data) => <li><ResultsWNav id={data.id_individu} boxid={data.box_id} order={data.Order} suborder={data.subOrder} family={data.Family} subfamily={data.subFamily}></ResultsWNav></li>)}
         </ul>
       </>
     );

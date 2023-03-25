@@ -4,7 +4,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import  {ResultsWNav} from './Results'
+import  {ResultsWNav} from './ResultsBox'
 
 import axios from 'axios'
 
@@ -42,7 +42,7 @@ class Selection extends React.Component {
   }
 
   fetchResults = () => {
-      axios.get(`${url}/get_result`, {
+      axios.get(`${url}/get_boxresult`, {
         params:
         {offs: '0', o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
       .then((res) => {
@@ -143,7 +143,7 @@ class Selection extends React.Component {
   }
   
   componentDidMount() {
-    axios.get(`${url}/get_result`, {
+    axios.get(`${url}/get_boxresult`, {
       params:
       {offs: '0', o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
     .then((res) => {
