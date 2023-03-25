@@ -276,7 +276,7 @@ def insertBox(data, cursor, conn) :
     toinsertSpeciesRange = data["Species_range"].values.tolist()
     
     
-    duplicationquery =  """SELECT MAX(id_box)
+    duplicationquery =  """SELECT MAX("id_box"")
                             FROM "Box" """
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
@@ -296,16 +296,7 @@ def insertBox(data, cursor, conn) :
             if cursor.fetchall()==[]:
                 #il y a pas encore de zero, on ajoute un id box 0, un id species range 0, un id genus range 0
                 
-                """"speciesRange = \""" INSERT INTO "SpeciesRange"
-                                    ("id_speciesrange", "range_begin", "range_end")
-                                    VALUES
-                                    ({}, '{}','{}') \""".format(0,"","")
-                cursor.execute(speciesRange)
-                genusRange = \""" INSERT INTO "GenusRange"
-                                    ("id_genusrange", "range_begin", "range_end")
-                                    VALUES
-                                    ({}, '{}','{}') \""".format(0,"","")
-                cursor.execute(genusRange)"""
+            
                 #On recupere l'ordre
                 orderList = order(toinsertOrder[i], cursor)
                 

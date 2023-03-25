@@ -270,7 +270,7 @@ def insertIndividu(data, cursor, conn) :
     toinsertSpecies = data["species"].values.tolist()
     toinsertSubSpecies = data["Subspecies"].values.tolist()
     
-    duplicationquery =  """SELECT MAX(id_individu)
+    duplicationquery =  """SELECT MAX("id_individu"")
                             FROM "Individu" """
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
@@ -284,7 +284,7 @@ def insertIndividu(data, cursor, conn) :
             
         duplicationquery =  """SELECT *
                                 FROM "Individu" 
-                                WHERE name = "{}" """.format(toinsert[i])
+                                WHERE "name" = "{}" """.format(toinsert[i])
         cursor.execute(duplicationquery)
         if cursor.fetchall() == [] :
             
@@ -328,7 +328,7 @@ def insertIndividu(data, cursor, conn) :
             if toinsertEcozone[i] !=" ": ecozone = toinsertEcozone[i]
                 
             insertquery = """INSERT INTO "Individu"
-                            (id_individu, box_id, population_id, continent, country, ecozone, name) 
+                            ("id_individu", "box_id", "population_id", "continent", "country", "ecozone", "name") 
                             VALUES 
                             ({},{}, {},"{}", "{}", "{}","{}")""".format(Count, toinsertID[i], popu, continent, country, ecozone, toinsert[i])
             #print(insertquery)
