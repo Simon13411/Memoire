@@ -2,6 +2,8 @@ import * as React from 'react';
 import Navbar from '../Navbar';
 import {Navigate} from 'react-router-dom';
 
+import Cookies from 'js-cookie';
+
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -40,7 +42,7 @@ class AdminPannel extends React.Component {
         usernameToAdd: '',
         passwordToAdd: '',
         adminToAdd: '0',     //Admin Right for UserToAdd ?
-        useraddstate: 'Test',
+        useraddstate: '',
         //ModifyUser
         usernameToModify: '',
         newPassword: '',
@@ -165,10 +167,12 @@ class AdminPannel extends React.Component {
     }
 
     AddUser = () => {
+        const authToken = Cookies.get('auth_token');
         axios.post(`${url}/signup`, {
             username: this.state.usernameToAdd,
             password: this.state.passwordToAdd,
-            role: this.state.adminToAdd
+            role: this.state.adminToAdd,
+            token: authToken
         })
         .then((res) => {
             console.log(res)

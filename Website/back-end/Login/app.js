@@ -22,9 +22,9 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/signup', (req, res) => {
-  const { username, password, role } = req.body;
+  const { username, password, role, token } = req.body;
 
-  return loginops.signup(username, password, role)
+  return loginops.signup(username, password, role, token)
   .then((results) => {
     res.status(200).json( {success: true });
   })

@@ -40,7 +40,7 @@ function login(username, pw) {
             const token = crypto.randomBytes(32).toString('hex');
             const expirationTime = new Date(Date.now() + 24 * 60 * 60 * 1000); // Token is valid for 24 hours
             const insertQuery = `INSERT INTO "Tokens" VALUES ('${username}', '${token}', to_timestamp('${expirationTime.toISOString()}', 'YYYY-MM-DDTHH:MI:SS.MSZ'))`;
-            console.log(insertQuery)
+
             client.query(insertQuery, (err, res) => {
               if (err) {
                 return reject(err);
@@ -57,10 +57,13 @@ function login(username, pw) {
   })
 }
 
-function signup(username, pw, role) {
-  
+function signup(username, pw, role, token) {
+
   const searchQuery = `SELECT "username" FROM "Accounts" WHERE "username"='${username}'`
   return new Promise(function (resolve, reject) {
+    if (verifyadminright(token) === false){
+      return reject(new Error("You're not an admin"))
+    }
     client.query(searchQuery, (err, res) => {
       if (err) {
         return reject(new Error("Erreur DB"));
@@ -111,17 +114,16 @@ function adminright(username) {
 }
 
 function verifytoken(token) {
-  // Vérifie si le token est un string non vide
-  if (typeof token !== 'string' || token.trim().length === 0) {
-    return Promise.reject(new Error('Invalid format token'));
-  }
-
   return new Promise((resolve, reject) => {
       const SelectQuery = `SELECT username FROM "Tokens" WHERE "token"=$1 AND "expirationTime" > NOW()`;
 
+      if (typeof token !== 'string' || token.trim().length === 0) {
+        return reject(new Error('Invalid format token'));
+      }
+
       client.query(SelectQuery, [token], (error, results) => {
           if (error) {
-              reject(error);res.rows[0].role
+              reject(error);
           } else {
               if (results.rows.length === 1) {
                   resolve(results.rows[0].username);
@@ -142,6 +144,33 @@ function verifytoken(token) {
           }
       });
   });
+}
+
+function verifyadminright(token) {
+  if (typeof token !== 'string' || token.trim().length === 0) {
+    return false;
+  }
+  const Tokenquery = `SELECT username FROM "Tokens" WHERE "token"=$1 AND "expirationTime" > NOW()`;
+  client.query(Tokenquery, [token], (error, results) => {
+    if (error) {
+        return false
+    } else {
+      if (results.rows.length === 1) {
+        const Userquery = `SELECT role FROM "Accounts" WHERE "username"='${results.rows[0].username}'`
+        console.log(Userquery)
+        client.query(Userquery, (error2, results2) => {
+          if (error2) {
+            return false
+          }
+          else if (results2.rows[0].role === 1) {
+            return true
+          } else {
+            return false
+          }
+      })
+      }
+    }
+  })
 }
 
 module.exports = {
