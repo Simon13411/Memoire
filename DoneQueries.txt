@@ -1,45 +1,35 @@
 GetBoxInfo en fct de Order, Sous-Ordre, etc...
 
-SELECT B."id_box", B."location", B."museum", B."paratypes", B."types", R."Order",
-                            R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", Col."name",Spec."speciesRangeBegin", Spec."speciesRangeEnd", Gen."genusRangeBegin", Gen."genusRangeEnd", loan."prenom"
-                        FROM "Box" B, "CollectionBox" ColBox, "Collection" Col,
-                        (SELECT P."box_id" as "bid", O."name" as "Order", So."name" as "subOrder", F."name" as "Family", Sf."name" as "subFamily", T."name" as "Tribu", G."name" as "Genus", Sg."name"as "subGenus", S."name" as "Species", Ss."name" as "subSpecies"
-                            FROM "PopuBox" P, "Population" P2
-                                LEFT OUTER JOIN "Order" O On P2."order_id"=O."id_order"
-                                LEFT OUTER JOIN "subOrder" So ON P2."suborder_id"=So."id_suborder"
-                                LEFT OUTER JOIN "Family" F ON P2."family_id"=F."id_family"
-                                LEFT OUTER JOIN "subFamily" Sf ON P2."subFamily_id"=Sf."id_subfamily"
-                                LEFT OUTER JOIN "Tribu" T ON P2."tribu_id"=T."id_tribu"
-                                LEFT OUTER JOIN "Genus" G ON P2."genus_id"=G."id_genus"
-                                LEFT OUTER JOIN "subGenus" Sg ON P2."subGenus_id"=Sg."id_subgenus"
-                                LEFT OUTER JOIN "Species" S ON P2."species_id"=S."id_species"
-                                LEFT OUTER JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
-                                WHERE P."population_id"=P2."id_population"
-                                    AND (O."name"='${O}' OR '${O}'='NULL')
-                                    AND (So."name"='${So}' OR '${So}'='NULL')
-                                    AND (F."name"='${F}' OR '${F}'='NULL')
-                                    AND (Sf."name"='${Sf}' OR '${Sf}'='NULL')
-                                    AND (T."name"='${T}' OR '${T}'='NULL')
-                                    AND (G."name"='${G}' OR '${G}'='NULL')
-                                    AND (Sg."name"='${Sg}' OR '${Sg}'='NULL')
-                                    AND (S."name"='${S}' OR '${S}'='NULL')
-                                    AND (Ss."name"='${Ss}' OR '${Ss}'='NULL') 
-                                LIMIT 10 OFFSET ${Offs}) AS R
-
-			LEFT OUTER JOIN (SELECT SR."range_begin" as 'speciesRangeBegin', SR."range_end" as 'speciesRangeEnd', SR."id_speciesrange"
-    			FROM "SpeciesRange" SR) AS Spec ON B."speciesrange_id"=Spec."id_speciesrange"
-    
-    			LEFT OUTER JOIN (SELECT GR."range_begin" as 'genusRangeBegin', GR."range_end" as 'genusRangeEnd', GR."id_genusrange"
-    			FROM "GenusRange" GR) AS Gen ON B."genusrange_id"=Gen."id_genusrange"
-    
-    			LEFT OUTER JOIN (SELECT L."name" as "prenom", LB."box_id"
-    			FROM "LoanBox" LB, "Loaner" L
-    WHERE LB."loaner_id"=L."id_loaner") as loan on B."id_box"=loan."box_id"
-    
-                        WHERE B."id_box" = R."bid" 
-                        AND ColBox."box_id"=B."id_box" 
-                        AND ColBox."collection_id"=Col."id_collection"
-		
+SELECT B."id_box", B."location", B."museum", B."paratypes", B."types", O."name",
+    So."name", F."name", Sf."name", T."name", G."name", Sg."name", S."name", Ss."name", Col."name",Spec."range_begin", Spec."range_end", Gen."range_begin", Gen."range_end", loan."prenom"
+FROM "Box" B
+LEFT OUTER JOIN "CollectionBox" ColBox ON B."id_box"=ColBox."box_id"
+LEFT OUTER JOIN "Collection" Col ON ColBox."collection_id"=Col."id_collection"
+LEFT OUTER JOIN "PopuBox" P ON B."id_box"=P."box_id"
+LEFT OUTER JOIN "Population" P2 ON P."population_id"=P2."id_population"
+LEFT OUTER JOIN "Order" O ON P2."order_id"=O."id_order"
+LEFT OUTER JOIN "subOrder" So ON P2."suborder_id"=So."id_suborder"
+LEFT OUTER JOIN "Family" F ON P2."family_id"=F."id_family"
+LEFT OUTER JOIN "subFamily" Sf ON P2."subFamily_id"=Sf."id_subfamily"
+LEFT OUTER JOIN "Tribu" T ON P2."tribu_id"=T."id_tribu"
+LEFT OUTER JOIN "Genus" G ON P2."genus_id"=G."id_genus"
+LEFT OUTER JOIN "subGenus" Sg ON P2."subGenus_id"=Sg."id_subgenus"
+LEFT OUTER JOIN "Species" S ON P2."species_id"=S."id_species"
+LEFT OUTER JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
+LEFT OUTER JOIN "SpeciesRange" Spec ON B."speciesrange_id"=Spec."id_speciesrange"
+LEFT OUTER JOIN "GenusRange" Gen ON B."genusrange_id"=Gen."id_genusrange"
+LEFT OUTER JOIN (SELECT L."name" as prenom, LB."box_id"
+                FROM "loanBox" LB, "Loaner" L
+                WHERE LB."loaner_id"=L."id_loaner") as loan ON B."id_box"=loan."box_id"
+WHERE (O."name"='Hymenoptera' OR 'Hymenoptera'='NULL')
+        AND (So."name"='NULL' OR 'NULL'='NULL')
+        AND (F."name" = 'Pompilidae' OR 'Pompilidae'='NULL')
+        AND (Sf."name" ='Pompilinae' OR 'Pompilinae'='NULL')
+        AND (T."name" = 'NULL' OR 'NULL'='NULL')
+        AND (G."name" = 'Priochilus' OR 'Priochilus'='NULL')
+        AND (Sg."name" = 'NULL' OR 'NULL'='NULL')
+        AND (S."name" = 'NULL' OR 'NULL'='NULL')
+        AND (Ss."name" = 'NULL' OR 'NULL'='NULL')
                         
 --------------------------_
 GetOrder en fct de sous-ordre, famille, etc... (Changer WHERE pour GetsubOrder, GetFamille, etc...)
@@ -69,43 +59,37 @@ SELECT DISTINCT O."name" as "name"
 -----------------------------------------------
 GetBoxInfo en fonction de l'id de la boite
 
-SELECT B."id_box", B."location", B."museum", B."paratypes", B."types", R."ordre",
-    R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", Col."name", Spec."speciesRangeBegin", Spec."speciesRangeEnd", Gen."genusRangeBegin", Gen."genusRangeEnd", loan."prenom"
-FROM "Box" B, "Collection" Col, "CollectionBox" ColBox,
-    (SELECT P."box_id" as 'bid', O."name" as 'ordre', So."name" as 'subOrder', F."name" as 'Family', Sf."name" as 'subFamily', T."name" as 'Tribu', G."name" as 'Genus', Sg."name"as 'subGenus', S."name" as 'Species', Ss."name" as 'subSpecies'
-    FROM "PopuBox" P, Population P2
-    LEFT OUTER JOIN "Order" O On P2."order_id"=O."id_order"
-    LEFT OUTER JOIN "subOrder" So ON P2."suborder_id"=So."id_suborder"
-    LEFT OUTER JOIN "Family" F ON P2."family_id"=F."id_family"
-    LEFT OUTER JOIN "subFamily" Sf ON P2."subFamily_id"=Sf."id_subfamily"
-    LEFT OUTER JOIN "Tribu" T ON P2."tribu_id"=T."id_tribu"
-    LEFT OUTER JOIN "Genus" G ON P2."genus_id"=G."id_genus"
-    LEFT OUTER JOIN "subGenus" Sg ON P2."subGenus_id"=Sg."id_subgenus"
-    LEFT OUTER JOIN "Species" S ON P2."species_id"=S."id_species"
-    LEFT OUTER JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
-    WHERE P."population_id"==P2."id_population" 
-        AND P."box_id"=4) AS R 
-    LEFT OUTER JOIN (SELECT SR."range_begin" as 'speciesRangeBegin', SR."range_end" as 'speciesRangeEnd', SR."id_speciesrange"
-    FROM "SpeciesRange" SR) AS Spec ON B."speciesrange_id"=Spec."id_speciesrange"
-    
-    LEFT OUTER JOIN (SELECT GR."range_begin" as 'genusRangeBegin', GR."range_end" as 'genusRangeEnd', GR."id_genusrange"
-    FROM "GenusRange" GR) AS Gen ON B."genusrange_id"=Gen."id_genusrange"
-    
-    LEFT OUTER JOIN (SELECT L.name as "prenom", LB."box_id"
-    FROM "LoanBox" LB, "Loaner" L
-    WHERE LB."loaner_id"=L."id_loaner") as loan on B."id_box"=loan."box_id"
-
-WHERE B."id_box" = R."bid" AND ColBox."box_id"=B."id_box" AND ColBox."collection_id"=Col."id_collection"
-
+SELECT B."id_box", B."location", B."museum", B."paratypes", B."types", O."name",
+    So."name", F."name", Sf."name", T."name", G."name", Sg."name", S."name", Ss."name", Col."name",Spec."range_begin", Spec."range_end", Gen."range_begin", Gen."range_end", loan."prenom"
+FROM "Box" B
+LEFT OUTER JOIN "CollectionBox" ColBox ON B."id_box"=ColBox."box_id"
+LEFT OUTER JOIN "Collection" Col ON ColBox."collection_id"=Col."id_collection"
+LEFT OUTER JOIN "PopuBox" P ON B."id_box"=P."box_id"
+LEFT OUTER JOIN "Population" P2 ON P."population_id"=P2."id_population"
+LEFT OUTER JOIN "Order" O ON P2."order_id"=O."id_order"
+LEFT OUTER JOIN "subOrder" So ON P2."suborder_id"=So."id_suborder"
+LEFT OUTER JOIN "Family" F ON P2."family_id"=F."id_family"
+LEFT OUTER JOIN "subFamily" Sf ON P2."subFamily_id"=Sf."id_subfamily"
+LEFT OUTER JOIN "Tribu" T ON P2."tribu_id"=T."id_tribu"
+LEFT OUTER JOIN "Genus" G ON P2."genus_id"=G."id_genus"
+LEFT OUTER JOIN "subGenus" Sg ON P2."subGenus_id"=Sg."id_subgenus"
+LEFT OUTER JOIN "Species" S ON P2."species_id"=S."id_species"
+LEFT OUTER JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
+LEFT OUTER JOIN "SpeciesRange" Spec ON B."speciesrange_id"=Spec."id_speciesrange"
+LEFT OUTER JOIN "GenusRange" Gen ON B."genusrange_id"=Gen."id_genusrange"
+LEFT OUTER JOIN (SELECT L."name" as prenom, LB."box_id"
+                FROM "loanBox" LB, "Loaner" L
+                WHERE LB."loaner_id"=L."id_loaner") as loan ON B."id_box"=loan."box_id"
+WHERE (B."id_box"=4)
 
 ----------------------------
 GetIndividuInfo en fonctione de order sous order etc 
 
-SELECT I."id_individu", R."bid" as 'boite', I."continent", I."country", I."ecozone", R."ordre",
-    R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", loan.prenom
-FROM "Individu" I,
-    (SELECT P."box_id" as 'bid', P.population_id as 'popu', O."name" as 'ordre', So."name" as 'subOrder', F."name" as 'Family', Sf."name" as 'subFamily', T."name" as 'Tribu', G."name" as 'Genus', Sg."name"as 'subGenus', S."name" as 'Species', Ss."name" as 'subSpecies'
-    FROM "PopuBox" P, Population P2
+SELECT I."id_individu", I."box_id", I."continent", I."country", I."ecozone", O."name",
+    So."name", F."name", Sf."name", T."name", G."name", Sg."name", S."name", Ss."name", loan."prenom"
+FROM "Individu" I
+    LEFT OUTER JOIN "Population" P2 ON I."population_id"=P2."id_population"
+    LEFT OUTER JOIN "PopuBox" P ON P."population_id"=P2."id_population"
     LEFT OUTER JOIN "Order" O On P2."order_id"=O."id_order"
     LEFT OUTER JOIN "subOrder" So ON P2."suborder_id"=So."id_suborder"
     LEFT OUTER JOIN "Family" F ON P2."family_id"=F."id_family"
@@ -115,8 +99,11 @@ FROM "Individu" I,
     LEFT OUTER JOIN "subGenus" Sg ON P2."subGenus_id"=Sg."id_subgenus"
     LEFT OUTER JOIN "Species" S ON P2."species_id"=S."id_species"
     LEFT OUTER JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
-    WHERE P."population_id"==P2."id_population"
-        AND (O."name"='Hymenoptera' OR 'Hymenoptera'='NULL')
+    LEFT OUTER JOIN (SELECT L."name" as prenom, LI."individu_id"
+    FROM "loanIndividu" LI, "Loaner" L
+    WHERE LI."loaner_id"=L."id_loaner") as loan on I."id_individu"=loan."individu_id"
+
+WHERE (O."name"='Hymenoptera' OR 'Hymenoptera'='NULL')
         AND (So."name"='NULL' OR 'NULL'='NULL')
         AND (F."name" = 'NULL' OR 'NULL'='NULL')
         AND (Sf."name" ='NULL' OR 'NULL'='NULL')
@@ -124,25 +111,18 @@ FROM "Individu" I,
         AND (G."name" = 'NULL' OR 'NULL'='NULL')
         AND (Sg."name" = 'NULL' OR 'NULL'='NULL')
         AND (S."name" = 'apicalis' OR 'apicalis'='NULL')
-        AND (Ss."name" = 'NULL' OR 'NULL'='NULL')) AS R
+        AND (Ss."name" = 'NULL' OR 'NULL'='NULL')
         
-    
-    LEFT OUTER JOIN (SELECT L.name as "prenom", LI.individu_id
-    FROM "LoanIndividu" LI, "Loaner" L
-    WHERE LI.loaner_id=L.id_loaner) as loan on I."id_individu"=loan."individu_id"
-    
-    
-WHERE I."box_id" = R."bid" and I."population_id"=R."popu"
 
 
 ---------------------
 GETindividuInfo en fonction de son id
 
-SELECT I."id_individu", R."bid" as 'boite', I."continent", I."country", I."ecozone", R."ordre",
-    R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", loan.prenom
-FROM "Individu" I,
-    (SELECT P."box_id" as 'bid', P.population_id as 'popu', O."name" as 'ordre', So."name" as 'subOrder', F."name" as 'Family', Sf."name" as 'subFamily', T."name" as 'Tribu', G."name" as 'Genus', Sg."name"as 'subGenus', S."name" as 'Species', Ss."name" as 'subSpecies'
-    FROM "PopuBox" P, Population P2
+SELECT I."id_individu", I."box_id", I."continent", I."country", I."ecozone", O."name",
+    So."name", F."name", Sf."name", T."name", G."name", Sg."name", S."name", Ss."name", loan."prenom"
+FROM "Individu" I
+    LEFT OUTER JOIN "Population" P2 ON I."population_id"=P2."id_population"
+    LEFT OUTER JOIN "PopuBox" P ON P."population_id"=P2."id_population"
     LEFT OUTER JOIN "Order" O On P2."order_id"=O."id_order"
     LEFT OUTER JOIN "subOrder" So ON P2."suborder_id"=So."id_suborder"
     LEFT OUTER JOIN "Family" F ON P2."family_id"=F."id_family"
@@ -152,17 +132,12 @@ FROM "Individu" I,
     LEFT OUTER JOIN "subGenus" Sg ON P2."subGenus_id"=Sg."id_subgenus"
     LEFT OUTER JOIN "Species" S ON P2."species_id"=S."id_species"
     LEFT OUTER JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
-    WHERE P."population_id"==P2."id_population"
-    ) AS R
-        
-    
-    LEFT OUTER JOIN (SELECT L.name as "prenom", LI.individu_id
-    FROM "LoanIndividu" LI, "Loaner" L
-    WHERE LI.loaner_id=L.id_loaner) as loan on I."id_individu"=loan."individu_id"
+    LEFT OUTER JOIN (SELECT L."name" as "prenom", LI."individu_id"
+    FROM "loanIndividu" LI, "Loaner" L
+    WHERE LI."loaner_id"=L."id_loaner") as loan on I."id_individu"=loan."individu_id"
     
     
-WHERE I."box_id" = R."bid" and I."population_id"=R."popu" AND I.id_individu=1
-
+WHERE I."id_individu"=40
 
 
 -----------------
