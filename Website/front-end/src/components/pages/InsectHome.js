@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Navbar from '../Navbar';
-import Selection from '../Selection';
+import Selection from '../SelectionIndiv';
 
 function InsectHome(props) {
     return (
