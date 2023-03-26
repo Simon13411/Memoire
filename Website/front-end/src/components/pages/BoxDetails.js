@@ -11,21 +11,21 @@ class BoxDetails extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      order: 'NULL',
-      suborder: 'NULL',
-      genus: 'NULL',
-      subgenus: 'NULL',
-      family: 'NULL',
-      subfamily: 'NULL',
-      species: 'NULL',
-      subspecies: 'NULL',
-      tribus: 'NULL',
-      loaner: 'NULL',
-      grangebegin: 'NULL',
-      grangeend: 'NULL',
-      srangebegin: 'NULL',
-      srangeend: 'NULL',
-      collection: 'NULL',
+      order: undefined,
+      suborder: undefined,
+      genus: undefined,
+      subgenus: undefined,
+      family: undefined,
+      subfamily: undefined,
+      species: undefined,
+      subspecies: undefined,
+      tribus: undefined,
+      loaner: undefined,
+      grangebegin: undefined,
+      grangeend: undefined,
+      srangebegin: undefined,
+      srangeend: undefined,
+      collection: undefined,
     }
   }
 
@@ -71,118 +71,157 @@ class BoxDetails extends React.Component {
             <>
             <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
             <div className="container">
-                <div>
-                  <p className="title">Order</p>
-                  {(this.state.order) === 'NULL' ?
-                    (<></>)
-                    :
-                    (<p>{this.state.order}</p>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Suborder</p>
-                  {(this.state.suborder) === 'NULL' ?
-                    (<></>)
-                    :
-                    (<p>{this.state.suborder}</p>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Genus</p>
-                  {(this.state.genus) === 'NULL' ?
-                    (<></>)
-                    :
-                    (<p>{this.state.genus}</p>)
-                  }
-                </div>
-                <div>
-                  <p  className="title">Subgenus</p>
-                  {(this.state.subgenus) === 'NULL'? 
-                    (<></>)
-                    :
-                    (<p>{this.state.subgenus}</p>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Family</p>
-                  {(this.state.family) === 'NULL' ?
-                    (<></>)
-                    :
-                    (<p>{this.state.family}</p>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Subfamily</p>
-                  {(this.state.subfamily) === 'NULL' ?
-                    (<></>)
-                    :
-                    (<p>{this.state.subfamily}</p>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Species</p>
-                  {(this.state.species) === 'NULL' ?
-                    (<></>)
-                    :
-                    (<p>{this.state.species}</p>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Subspecies</p>
-                  {(this.state.subspecies) === 'NULL' ?
-                    (<></>)
-                    :
-                    (<p>{this.state.subspecies}</p>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Tribus</p>
-                  {(this.state.tribus) === 'NULL' ?
-                    (<></>)
-                    :
-                    (<p>{this.state.tribus}</p>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Loaner</p>
-                  {(this.state.loaner) === 'NULL' ?
-                    (<></>)
-                    :
-                    (<p>{this.state.loaner}</p>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Genus Range</p>
-                  {(this.state.grangebegin) === 'NULL' ?
-                    (<></>)
-                    :
-                    (<>{(this.state.grangeend) === 'NULL' ?
-                      (<p>{this.state.grangebegin}-...</p>)
+              <div className="column">
+                  {/*Info part*/}
+                  <div>
+                    {(!this.state.order) ?
+                      (<></>)
                       :
-                      (<p>{this.state.grangebegin}-{this.state.grangeend}</p>)
-                    }</>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Species Range</p>
-                  {(this.state.grangebegin) === 'NULL' ?
-                    (<></>)
-                    :
-                    (<>{(this.state.srangeend) === 'NULL' ?
-                      (<p>{this.state.srangebegin}-...</p>)
+                      <>
+                      <h3 className="title">Order</h3>
+                      <p>{this.state.order}</p>
+                      </>
+                    }
+                  </div>
+                  <div>
+                    {(!this.state.suborder) ?
+                      (<></>)
                       :
-                      (<p>{this.state.srangebegin}-{this.state.srangeend}</p>)
-                    }</>)
-                  }
-                </div>
-                <div>
-                  <p className="title">Collection</p>
-                  {(this.state.collection) === 'NULL' ?
-                    (<></>)
-                    :
-                    (<p>{this.state.collection}</p>)
-                  }
-                </div>
+                      <>
+                      <h3 className="title">Suborder</h3>
+                      <p>{this.state.suborder}</p>
+                      </>
+                    }
+                  </div>
+                  <div>
+                    {(!this.state.genus) ?
+                      (<></>)
+                      :
+                      <>
+                      <h3 className="title">Genus</h3>
+                      <p>{this.state.genus}</p>
+                      </>
+                    }
+                  </div>
+                  <div>
+                    {(!this.state.subgenus)? 
+                      (<></>)
+                      :
+                      <>
+                      <h3  className="title">Subgenus</h3>
+                      <p>{this.state.subgenus}</p>
+                      </>
+                    }
+                  </div>
+                  <div>
+                    {(!this.state.family) ?
+                      (<></>)
+                      :
+                      <>
+                      <h3 className="title">Family</h3>
+                      <p>{this.state.family}</p>
+                      </>
+                    }
+                  </div>
+                  <div>
+                    {(!this.state.subfamily) ?
+                      (<></>)
+                      :
+                      <>
+                      <h3 className="title">Subfamily</h3>
+                      <p>{this.state.subfamily}</p>
+                      </>
+                    }
+                  </div>
+                  <div>
+                    {(!this.state.species) ?
+                      (<></>)
+                      :
+                      <>
+                      <h3 className="title">Species</h3>
+                      <p>{this.state.species}</p>
+                      </>
+                    }
+                  </div>
+                  <div>
+                    {(!this.state.subspecies) ?
+                      (<></>)
+                      :
+                      <>
+                      <h3 className="title">Subspecies</h3>
+                      <p>{this.state.subspecies}</p>
+                      </>
+                    }
+                  </div>
+                  <div>
+                    {(!this.state.tribus) ?
+                      (<></>)
+                      :
+                      <>
+                      <h3 className="title">Tribus</h3>
+                      <p>{this.state.tribus}</p>
+                      </>
+                    }
+                  </div>
+                  <div>
+                    {(!this.state.loaner) ?
+                      (<></>)
+                      :
+                      <>
+                      <h3 className="title">Loaner</h3>
+                      <p>{this.state.loaner}</p>
+                      </>
+                    }
+                  </div>
+                  <div>
+                    {(!this.state.grangebegin) ?
+                      (<></>)
+                      :
+                      (<>{(!this.state.grangeend) ?
+                        <>
+                        <h3 className="title">Genus Range</h3>
+                        <p>{this.state.grangebegin}-...</p>
+                        </>
+                        :
+                        <>
+                        <h3 className="title">Genus Range</h3>
+                        <p>{this.state.grangebegin}-{this.state.grangeend}</p>
+                        </>
+                      }</>)
+                    }
+                  </div>
+                  <div>
+                    {(!this.state.grangebegin) ?
+                      (<></>)
+                      :
+                      (<>{(!this.state.srangeend) ?
+                        <>
+                        <h3 className="title">Species Range</h3>
+                        <p>{this.state.srangebegin}-...</p>
+                        </>
+                        :
+                        <>
+                        <h3 className="title">Species Range</h3>
+                        <p>{this.state.srangebegin}-{this.state.srangeend}</p>
+                        </>
+                      }</>)
+                    }
+                  </div>
+                  <div>
+                    {(!this.state.collection) ?
+                      (<></>)
+                      :
+                      <>
+                      <h3 className="title">Collection</h3>
+                      <p>{this.state.collection}</p>
+                      </>
+                    }
+                  </div>
+              </div>
+              <div className="column">
+                {/*Photo part*/}
+                <h3>Pictures</h3>
+              </div>
             </div>
             </>
           )

@@ -75,102 +75,133 @@ class InsectDetails extends React.Component {
               <>
               <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
               <div className="container">
-                  <div>
-                  <p className="title">Individual ID</p>
-                    {(!this.state.individ)  ?
-                      (<></>)
-                      :
-                      (<p>{this.state.individ}</p>)
-                    }
-                  </div>
-                  <div>
-                    <p className="title">Box ID</p>
-                    {(this.state.idbox) === 0 ?
-                      (<></>)
-                      :
-                      (<p>{this.state.idbox}</p>)
-                    }
-                  </div>
-                  <div>
-                    <p className="title">Order</p>
-                    {(!this.state.order) ?
-                      (<></>)
-                      :
-                      (<p>{this.state.order}</p>)
-                    }
-                  </div>
-                  <div>
-                    <p className="title">Suborder</p>
-                    {(!this.state.suborder) ?
-                      (<></>)
-                      :
-                      (<p>{this.state.suborder}</p>)
-                    }
-                  </div>
-                  <div>
-                    <p className="title">Genus</p>
-                    {(!this.state.genus) ?
-                      (<></>)
-                      :
-                      (<p>{this.state.genus}</p>)
-                    }
-                  </div>
-                  <div>
-                    <p  className="title">Subgenus</p>
-                    {(!this.state.subgenus) === ''? 
-                      (<></>)
-                      :
-                      (<p>{this.state.subgenus}</p>)
-                    }
-                  </div>
-                  <div>
-                    <p className="title">Family</p>
-                    {(!this.state.family) ?
-                      (<></>)
-                      :
-                      (<p>{this.state.family}</p>)
-                    }
-                  </div>
-                  <div>
-                    <p className="title">Subfamily</p>
-                    {(!this.state.subfamily) ?
-                      (<></>)
-                      :
-                      (<p>{this.state.subfamily}</p>)
-                    }
-                  </div>
-                  <div>
-                    <p className="title">Species</p>
-                    {(!this.state.species) ?
-                      (<></>)
-                      :
-                      (<p>{this.state.species}</p>)
-                    }
-                  </div>
-                  <div>
-                    <p className="title">Subspecies</p>
-                    {(!this.state.subspecies) ?
-                      (<></>)
-                      :
-                      (<p>{this.state.subspecies}</p>)
-                    }
-                  </div>
-                  <div>
-                    <p className="title">Tribus</p>
-                    {(!this.state.tribus) ?
-                      (<></>)
-                      :
-                      (<p>{this.state.tribus}</p>)
-                    }
-                  </div>
-                  <div>
-                    <p className="title">Loaner</p>
-                    {(!this.state.loaner) ?
-                      (<></>)
-                      :
-                      (<p>{this.state.loaner}</p>)
-                    }
-                  </div>
+                {/*Info part*/}
+                <div className="column">
+                    <div>
+                      {(!this.state.individ)  ?
+                        (<></>)
+                        :
+                        <>
+                        <h3 className="title">Individual ID</h3>
+                        <p>{this.state.individ}</p>
+                        </>
+                      }
+                    </div>
+                    <div>
+                      {(this.state.idbox) === 0 ?
+                        (<></>)
+                        :
+                        <>
+                        (<h3 className="title">Box ID</h3>
+                        <p>{this.state.idbox}</p>)
+                        </>
+                      }
+                    </div>
+                    <div>
+                      {(!this.state.order) ?
+                        (<></>)
+                        :
+                        <>
+                        <h3 className="title">Order</h3>
+                        <p>{this.state.order}</p>
+                        </>
+                      }
+                    </div>
+                    <div>
+                      {(!this.state.suborder) ?
+                        (<></>)
+                        :
+                        <>
+                        <h3 className="title">Suborder</h3>
+                        <p>{this.state.suborder}</p>
+                        </>
+                      }
+                    </div>
+                    <div>
+                      {(!this.state.genus) ?
+                        (<></>)
+                        :
+                        <>
+                        <h3 className="title">Genus</h3>
+                        <p>{this.state.genus}</p>
+                        </>
+                      }
+                    </div>
+                    <div>
+                      {(!this.state.subgenus)? 
+                        (<></>)
+                        :
+                        <>
+                        <h3  className="title">Subgenus</h3>
+                        <p>{this.state.subgenus}</p>
+                        </>
+                      }
+                    </div>
+                    <div>
+                      {(!this.state.family) ?
+                        (<></>)
+                        :
+                        <>
+                        <h3 className="title">Family</h3>
+                        <p>{this.state.family}</p>
+                        </>
+                      }
+                    </div>
+                    <div>
+                      {(!this.state.subfamily) ?
+                        (<></>)
+                        :
+                        <>
+                        <h3 className="title">Subfamily</h3>
+                        <p>{this.state.subfamily}</p>
+                        </>
+                      }
+                    </div>
+                    <div>
+                      {(!this.state.species) ?
+                        (<></>)
+                        :
+                        <>
+                        <h3 className="title">Species</h3>
+                        <p>{this.state.species}</p>
+                        </>
+                      }
+                    </div>
+                    <div>
+                      {(!this.state.subspecies) ?
+                        (<></>)
+                        :
+                        <>
+                        <h3 className="title">Subspecies</h3>
+                        <p>{this.state.subspecies}</p>
+                        </>
+                      }
+                    </div>
+                    <div>
+                      {(!this.state.tribus) ?
+                        (<></>)
+                        :
+                        <>
+                        <h3 className="title">Tribus</h3>
+                        <p>{this.state.tribus}</p>
+                        </>
+                      }
+                    </div>
+                    <div>
+                      {(!this.state.loaner) ?
+                        (<></>)
+                        :
+                        <>
+                        <h3 className="title">Loaner</h3>
+                        <p>{this.state.loaner}</p>
+                        </>
+                      }
+                    </div>
+                </div>
+                <div className="column">
+                  {/*Photo part*/}
+                  <h3>Pictures</h3>
+                </div>
               </div>
               </>
             )
