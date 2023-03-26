@@ -260,7 +260,7 @@ def insertPopulation(data, cursor, conn) :
         speciesList  = species(toinsertSpecies[i], cursor)
                 
         #On recupere la sous species
-        subSpeciesList  =subspecies(toinsertSubSpecies, cursor)
+        subSpeciesList  =subspecies(toinsertSubSpecies[i], cursor)
         """query = \"""
     SELECT * FROM Population
     WHERE order_id = {}

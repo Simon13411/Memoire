@@ -529,6 +529,10 @@ function csvtosql(filename, type) {
         const script = spawn('python3', ['ExecuteFillDb.py', filename]);
         console.log("Subprocess spawned")
         console.log(filename)
+
+        script.stdout.on('data', (data) => {
+            //console.log(`stdout: ${data}`)
+          });
   
         script.stderr.on('data', (data) => {
           console.error(`stderr: ${data}`);
@@ -544,6 +548,10 @@ function csvtosql(filename, type) {
         const script = spawn('python3', ['ExecuteFillIndividu.py', filename]);
         console.log("Subprocess spawned")
         console.log(filename)
+
+        script.stdout.on('data', (data) => {
+            //console.log(`stdout: ${data}`)
+          });
   
         script.stderr.on('data', (data) => {
           console.error(`stderr: ${data}`);

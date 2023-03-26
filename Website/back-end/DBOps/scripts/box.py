@@ -322,7 +322,7 @@ def insertBox(data, cursor, conn) :
                 speciesList  = species(toinsertSpecies[i], cursor)
                 
                 #On recupere la sous species
-                subSpeciesList  =subspecies(toinsertSubSpecies, cursor)
+                subSpeciesList  =subspecies(toinsertSubSpecies[i], cursor)
         
                 populationList = []
                 for orderValue in orderList:
@@ -382,7 +382,7 @@ def insertBox(data, cursor, conn) :
                 speciesList  = species(toinsertSpecies[i], cursor)
                 
                 #On recupere la sous species
-                subSpeciesList  =subspecies(toinsertSubSpecies, cursor)
+                subSpeciesList  =subspecies(toinsertSubSpecies[i], cursor)
         
                 populationList = []
                 for orderValue in orderList:
@@ -440,7 +440,7 @@ def insertBox(data, cursor, conn) :
             speciesList  = species(toinsertSpecies[i], cursor)
                 
             #On recupere la sous species
-            subSpeciesList  =subspecies(toinsertSubSpecies, cursor)
+            subSpeciesList  =subspecies(toinsertSubSpecies[i], cursor)
         
             populationList = []
             for orderValue in orderList:

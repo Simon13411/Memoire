@@ -62,17 +62,11 @@ class AddData extends React.Component {
               <div>
                 <FileDownloader file='BoxSQL' type='data'/>
               </div>
-              <div>
-                {this.state.boxuploadstate}
-              </div>
             </div>
             <div className="column">
               <h1>Download Individuals Data</h1>
               <div>
                 <FileDownloader file='IndividualSQL' type='data'/>
-              </div>
-              <div>
-                {this.state.indivuploadstate}
               </div>
             </div>
             </div>

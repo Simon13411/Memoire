@@ -314,7 +314,7 @@ def insertIndividu(data, cursor, conn) :
             speciesList  = species(toinsertSpecies[i], cursor)
                 
             #On recupere la sous species
-            subSpeciesList  =subspecies(toinsertSubSpecies, cursor)
+            subSpeciesList  =subspecies(toinsertSubSpecies[i], cursor)
         
 
             popu = population(orderList[0],  suborderList[0], familyList[0], subFamilyList[0], tribuList[0], genusList[0],subGenusList[0],speciesList[0],subSpeciesList[0],cursor)
