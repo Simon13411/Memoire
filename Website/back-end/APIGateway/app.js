@@ -59,6 +59,14 @@ app.get('/get_selectiont', (req, res) => {
     res.redirect(307, `http://${IP}:4001/get_selectiont?o=${req.query.o}&so=${req.query.so}&f=${req.query.f}&sf=${req.query.sf}&g=${req.query.g}&sg=${req.query.sg}&s=${req.query.s}&ss=${req.query.ss}`)
 })
 
+app.get('/get_loaners', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_loaners`)
+})
+
+app.get('/get_collections', (req, res) => {
+    res.redirect(307, `http://${IP}:4001/get_collections`)
+})
+
 app.put('/csvtosql/:type', (req, res) => {
     res.redirect(307, `http://${IP}:4001/csvtosql/${req.params.type}`)
 })

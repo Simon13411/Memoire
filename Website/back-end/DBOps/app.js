@@ -19,11 +19,10 @@ app.get('/get_boxdetails', (req, res) => {
     const id = req.query.id
     return db.get_boxdetails(id)
     .then((result) => {
-        console.log(result.rows[0].Att1)
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
     })
 })
 
@@ -44,7 +43,7 @@ app.get('/get_boxresult', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
     })
 })
 
@@ -52,11 +51,10 @@ app.get('/get_indivdetails', (req, res) => {
     const id = req.query.id
     return db.get_indivdetails(id)
     .then((result) => {
-        console.log(result.rows[0].Att1)
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
     })
 })
 
@@ -77,7 +75,7 @@ app.get('/get_indivresult', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
     })
 })
 
@@ -96,7 +94,7 @@ app.get('/get_selectiono', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
     })
 })
 
@@ -115,7 +113,7 @@ app.get('/get_selectionso', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
     })
 })
 
@@ -134,7 +132,7 @@ app.get('/get_selectiong', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
     })
 })
 
@@ -153,7 +151,7 @@ app.get('/get_selectionsg', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
     })
 })
 
@@ -172,7 +170,7 @@ app.get('/get_selectionf', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
     })
 })
 
@@ -191,7 +189,7 @@ app.get('/get_selectionsf', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
     })
 })
 
@@ -210,7 +208,7 @@ app.get('/get_selections', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
     })
 })
 
@@ -229,7 +227,7 @@ app.get('/get_selectionss', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
     })
 })
 
@@ -248,7 +246,29 @@ app.get('/get_selectiont', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json()
+        res.status(404).json({error: err.message})
+    })
+})
+
+//Get all Loaners
+app.get('/get_loaners', (req, res) => {
+    return db.get_loaners()
+    .then((results) => {
+        res.status(200).json(results)
+    })
+    .catch((err) => {
+        res.status(404).json({error: err.message})
+    })
+})
+
+//Get all collections
+app.get('/get_collections', (req, res) => {
+    return db.get_collections()
+    .then((results) => {
+        res.status(200).json(results)
+    })
+    .catch((err) => {
+        res.status(404).json({error: err.message})
     })
 })
 

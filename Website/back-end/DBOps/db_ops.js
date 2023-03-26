@@ -87,7 +87,6 @@ function get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
                         AND ColBox."collection_id"=Col."id_collection"
                         LIMIT 10 OFFSET ${Offs}`
                         
-    console.log(searchquery)
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
             if (err) {
@@ -491,6 +490,38 @@ function get_selectiont(O, So, F, Sf, G, Sg, S, Ss) {
     })
 }
 
+function get_loaners(){
+    var searchquery = `SELECT "name" FROM "Loaner"`
+                            
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+function get_collections() {
+    var searchquery = `SELECT "name" FROM "Collection"`
+                            
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
 function csvtosql(filename, type) {
     return new Promise(function(resolve, reject) {
       if (type === 'Box') {
@@ -554,6 +585,8 @@ module.exports = {
     get_selections,
     get_selectionss,
     get_selectiont,
+    get_loaners,
+    get_collections,
     csvtosql,
     boxSqlToCsv,
     indivSqlToCsv

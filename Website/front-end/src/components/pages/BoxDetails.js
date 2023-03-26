@@ -26,6 +26,7 @@ class BoxDetails extends React.Component {
       srangebegin: undefined,
       srangeend: undefined,
       collection: undefined,
+      isLoaded: false
     }
   }
 
@@ -33,25 +34,33 @@ class BoxDetails extends React.Component {
     {this.GetBox()}
   }
 
+  getStateVar = () => {
+    return this.state
+  }
+
   GetBox = (event) => {
     axios.get(`${url}/get_boxdetails`, {params: {id: this.props.searchParams.get("id")}})
     .then((res) => {
-        this.setState({order: res.data.rows[0].order})
-        this.setState({suborder: res.data.rows[0].suborder})
-        this.setState({family: res.data.rows[0].family})
-        this.setState({subfamily: res.data.rows[0].subfamily})
-        this.setState({genus: res.data.rows[0].genus})
-        this.setState({subgenus: res.data.rows[0].subgenus})
-        this.setState({species: res.data.rows[0].species})
-        this.setState({subspecies: res.data.rows[0].subspecies})
-        this.setState({tribu: res.data.rows[0].tribu})
-        this.setState({loaner: res.data.rows[0].loaner})
-        this.setState({grangebegin: res.data.rows[0].grangebegin})
-        this.setState({grangeend: res.data.rows[0].grangeend})
-        this.setState({srangebegin: res.data.rows[0].srangebegin})
-        this.setState({srangeend: res.data.rows[0].srangeend})
-        this.setState({collection: res.data.rows[0].collection})
+        this.setState({order: res.data.rows[0].order,
+                      suborder: res.data.rows[0].suborder,
+                      family: res.data.rows[0].family,
+                      subfamily: res.data.rows[0].subfamily,
+                      genus: res.data.rows[0].genus,
+                      subgenus: res.data.rows[0].subgenus,
+                      species: res.data.rows[0].species,
+                      subspecies: res.data.rows[0].subspecies,
+                      tribu: res.data.rows[0].tribu,
+                      loaner: res.data.rows[0].loaner,
+                      grangebegin: res.data.rows[0].grangebegin,
+                      grangeend: res.data.rows[0].grangeend,
+                      srangebegin: res.data.rows[0].srangebegin,
+                      srangeend: res.data.rows[0].srangeend,
+                      collection: res.data.rows[0].collection}, this.Loaded)
     })
+  }
+
+  Loaded = () => {
+    this.setState({isLoaded: true})
   }
 
   render() {
@@ -62,13 +71,6 @@ class BoxDetails extends React.Component {
         <Navigate to='/' /> 
         ):(
           <>
-          {this.props.isAuthenticated() ? 
-            (
-            //Admin's Version
-              <BoxDetailsAdmin isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
-            ) : (
-            //User's Version
-            <>
             <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
             <div className="container">
               <div className="column">
@@ -222,10 +224,15 @@ class BoxDetails extends React.Component {
                 {/*Photo part*/}
                 <h3>Pictures</h3>
               </div>
+              {this.props.isAuthenticated() && this.state.isLoaded ? 
+                  (
+                    //Admin Tools
+                    <BoxDetailsAdmin isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout} getParentStateVar={this.getStateVar}/>
+                  ) : (
+                    <></>
+                  )
+                }
             </div>
-            </>
-          )
-          }
           </>
       )
     }

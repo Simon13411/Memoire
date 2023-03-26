@@ -33,29 +33,38 @@ class InsectDetails extends React.Component {
         subspecieslist: [],
         tribuslist: [],
         loanerlist: [],
+        isLoaded: false,
       }
     }
 
     componentDidMount() {
       {this.GetIndiv()}
     }
+
+    getStateVar = () => {
+      return this.state
+    }  
   
     GetIndiv = (event) => {
       axios.get(`${url}/get_indivdetails`, {params: {id: this.props.searchParams.get("id")}})
       .then((res) => {
-          this.setState({individ: res.data.rows[0].id_individu})
-          this.setState({idbox: res.data.rows[0].box_id})
-          this.setState({order: res.data.rows[0].order})
-          this.setState({suborder: res.data.rows[0].suborder})
-          this.setState({family: res.data.rows[0].family})
-          this.setState({subfamily: res.data.rows[0].subfamily})
-          this.setState({genus: res.data.rows[0].genus})
-          this.setState({subgenus: res.data.rows[0].subgenus})
-          this.setState({species: res.data.rows[0].species})
-          this.setState({subspecies: res.data.rows[0].subspecies})
-          this.setState({tribu: res.data.rows[0].tribu})
-          this.setState({loaner: res.data.rows[0].loaner})
+          this.setState({individ: res.data.rows[0].id_individu,
+                        idbox: res.data.rows[0].box_id,
+                        order: res.data.rows[0].order,
+                        suborder: res.data.rows[0].suborder,
+                        family: res.data.rows[0].family,
+                        subfamily: res.data.rows[0].subfamily,
+                        genus: res.data.rows[0].genus,
+                        subgenus: res.data.rows[0].subgenus,
+                        species: res.data.rows[0].species,
+                        subspecies: res.data.rows[0].subspecies,
+                        tribu: res.data.rows[0].tribu,
+                        loaner: res.data.rows[0].loaner}, this.Loaded)
       })
+    }
+
+    Loaded = () => {
+      this.setState({isLoaded: true})
     }
 
     render() {
@@ -66,13 +75,6 @@ class InsectDetails extends React.Component {
           <Navigate to='/' /> 
           ):(
             <>
-            {this.props.isAuthenticated() ? 
-              (
-              //Admin's Version
-              <InsectDetailsAdmin isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
-              ) : (
-              //User's Version
-              <>
               <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
               <div className="container">
                 {/*Info part*/}
@@ -202,14 +204,19 @@ class InsectDetails extends React.Component {
                   {/*Photo part*/}
                   <h3>Pictures</h3>
                 </div>
+                {this.props.isAuthenticated() && this.state.isLoaded ? 
+                  (
+                    //Admin Tools
+                    <InsectDetailsAdmin isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout} getParentStateVar={this.getStateVar}/>
+                  ) : (
+                    <></>
+                  )
+                }
               </div>
               </>
             )
             }
             </>
-        )
-      }
-      </>
   )}
 }
 
