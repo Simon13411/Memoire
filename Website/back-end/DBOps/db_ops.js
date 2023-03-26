@@ -57,7 +57,7 @@ function get_boxdetails(id) {
 }
 
 function get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
-    var searchquery = `SELECT B."id_box", B."location", B."museum", B."paratypes", B."types", R."Order",
+    var searchquery = `SELECT COUNT(*) OVER() AS total_rows, B."id_box", B."location", B."museum", B."paratypes", B."types", R."Order",
                         R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", Col."name" as "Col"
                         FROM "Box" B, "CollectionBox" ColBox, "Collection" Col,
                         (SELECT P."box_id" as "bid", O."name" as "Order", So."name" as "subOrder", F."name" as "Family", Sf."name" as "subFamily", T."name" as "Tribu", G."name" as "Genus", Sg."name"as "subGenus", S."name" as "Species", Ss."name" as "subSpecies"
@@ -81,11 +81,13 @@ function get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
                                     AND (Sg."name"='${Sg}' OR '${Sg}'='NULL')
                                     AND (S."name"='${S}' OR '${S}'='NULL')
                                     AND (Ss."name"='${Ss}' OR '${Ss}'='NULL') 
-                                LIMIT 10 OFFSET ${Offs}) AS R
+                                ) AS R
                         WHERE B."id_box" = R."bid" 
                         AND ColBox."box_id"=B."id_box" 
-                        AND ColBox."collection_id"=Col."id_collection"`
-
+                        AND ColBox."collection_id"=Col."id_collection"
+                        LIMIT 10 OFFSET ${Offs}`
+                        
+    console.log(searchquery)
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
             if (err) {
@@ -134,7 +136,7 @@ function get_indivdetails(id) {
 }
 
 function get_indivresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
-    var searchquery = `SELECT I."id_individu", I."box_id", I."continent", I."country", I."ecozone", O."name" as "Order",
+    var searchquery = `SELECT COUNT(*) OVER() AS total_rows, I."id_individu", I."box_id", I."continent", I."country", I."ecozone", O."name" as "Order",
     So."name" as "subOrder", F."name" as "Family", Sf."name" as "subFamily", T."name" as "Tribu", G."name" as "Genus", Sg."name" as "subGenus" , S."name" as "Species", Ss."name" as "subSpecies"
                         FROM "Individu" I
                             LEFT OUTER JOIN "Population" P2 ON I."population_id"=P2."id_population"
@@ -159,7 +161,6 @@ function get_indivresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
                                 AND (Ss."name"='${Ss}' OR '${Ss}'='NULL') 
                                     LIMIT 10 OFFSET ${Offs}`
 
-    console.log(searchquery)
 
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -231,7 +232,6 @@ function get_selectionso(O, F, Sf, T, G, Sg, S, Ss) {
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
                         AND So."name" IS NOT NULL`
 
-    console.log(searchquery)
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
             if (err) {

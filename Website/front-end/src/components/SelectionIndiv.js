@@ -32,7 +32,12 @@ class Selection extends React.Component {
       subfamilylist: [],
       specieslist: [],
       subspecieslist: [],
-      tribulist: []
+      tribulist: [],
+      //pagination
+      actualpage: 0,
+      wantedpage: 0,
+      maxpage: 0,
+      wantedpagestate: ''
     }
   }
 
@@ -44,9 +49,15 @@ class Selection extends React.Component {
   fetchResults = () => {
       axios.get(`${url}/get_indivresult`, {
         params:
-        {offs: '0', o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+        {offs: (this.state.actualpage*10).toString(), o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
       .then((res) => {
           this.setState({results: res.data.rows})
+          if (res.data.rows[0].total_rows) {
+            this.setState({maxpage: parseInt(res.data.rows[0].total_rows)})
+          }
+          else {
+            this.setState({maxpage: 0})
+          }
       })
   }
 
@@ -141,11 +152,39 @@ class Selection extends React.Component {
   subSpeciesChange = (event) => {
     this.setState({subspecies: event.target.value}, this.get_selection)
   }
+
+  wantedPageChange = (event) => {
+    this.setState({wantedpage: event.target.value})
+  }
+
+  nextPage = () => {
+    const wantedpage = this.state.actualpage+1
+    this.setState({actualpage: wantedpage, wantedpage: wantedpage, wantedpagestate:''}, this.fetchResults)
+  }
+
+  previousPage = () => {
+    const wantedpage = this.state.actualpage-1
+    this.setState({actualpage: wantedpage, wantedpage: wantedpage, wantedpagestate:''}, this.fetchResults)
+  }
+
+  goToPage = () => {
+    const wantedpage = parseInt(this.state.wantedpage)
+    if (wantedpage > this.state.maxpage || wantedpage < 0) {
+      this.wrongPage()
+    }
+    else {
+      this.setState({actualpage: wantedpage, wantedpagestate: ''}, this.fetchResults)
+    }
+  }
+
+  wrongPage = () => {
+    this.setState({wantedpagestate: 'Invalid page number'})
+  }
   
   componentDidMount() {
     axios.get(`${url}/get_indivresult`, {
       params:
-      {offs: '0', o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+      {offs: (this.state.actualpage*10).toString(), o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
     .then((res) => {
         this.setState({results: res.data.rows})
     })
@@ -293,6 +332,14 @@ class Selection extends React.Component {
               {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
+          {this.state.actualpage !== 0 ?
+            (<button buttonStyle='btn--outline' onClick={this.previousPage}>Previous page</button>) : (<></>)
+          }
+          {this.state.actualpage <= this.state.maxpage ?
+            (<button buttonStyle='btn--outline' onClick={this.nextPage}>Next page</button>) : (<></>)
+          }
+          <button buttonStyle='btn--outline' onClick={this.goToPage}>Go to page n°</button><input type="number" value={this.state.wantedpage} onChange={this.wantedPageChange} size="5" />
+          {this.state.wantedpagestate}
         </div>
         <ul class="datalist">
           {this.state.results.map((data) => <li><ResultsWNav id={data.id_individu} boxid={data.box_id} order={data.Order} suborder={data.subOrder} family={data.Family} subfamily={data.subFamily}></ResultsWNav></li>)}
