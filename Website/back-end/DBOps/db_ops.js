@@ -532,6 +532,14 @@ function csvtosql(filename, type) {
     });
   }
 
+function boxSqlToCsv(){
+
+}
+
+function indivSqlToCsv() {
+
+}
+
 module.exports = {
     get_boxdetails,
     get_boxresult,
@@ -546,5 +554,7 @@ module.exports = {
     get_selections,
     get_selectionss,
     get_selectiont,
-    csvtosql
+    csvtosql,
+    boxSqlToCsv,
+    indivSqlToCsv
 }

@@ -63,6 +63,14 @@ app.put('/csvtosql/:type', (req, res) => {
     res.redirect(307, `http://${IP}:4001/csvtosql/${req.params.type}`)
 })
 
+app.get(`/boxessqltocsv`, (req, res) => {
+    res.redirect(307, `http://${IP}:4001/boxessqltocsv`)
+})
+
+app.get(`/individualssqltocsv`, (req, res) => {
+    res.redirect(307, `http://${IP}:4001/individualssqltocsv`)
+})
+
 
 //FileDownloader (port 4002)
 app.get('/boxestemplate', (req, res) => {

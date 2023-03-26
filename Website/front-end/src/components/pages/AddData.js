@@ -32,24 +32,44 @@ class AddData extends React.Component {
             <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
             <div className="container">
             <div className="column">
-              <h1>Boxes</h1>
+              <h1>Upload Boxes</h1>
               <div>
                 <FileUploader type='Box' Changeboxuploadstate={this.Changeboxuploadstate}/>
               </div>
               <div>
-                <FileDownloader type='Box'/>
+                <FileDownloader file='Box' type='template'/>
               </div>
               <div>
                 {this.state.boxuploadstate}
               </div>
             </div>
             <div className="column">
-              <h1>Individuals</h1>
+              <h1>Upload Individuals</h1>
               <div>
                 <FileUploader type='Individual' Changeindivuploadstate={this.Changeindivuploadstate}/>
               </div>
               <div>
-                <FileDownloader type='Individual'/>
+                <FileDownloader file='Individual' type='template'/>
+              </div>
+              <div>
+                {this.state.indivuploadstate}
+              </div>
+            </div>
+            </div>
+            <div className="container">
+            <div className="column">
+              <h1>Download Boxes Data</h1>
+              <div>
+                <FileDownloader file='BoxSQL' type='data'/>
+              </div>
+              <div>
+                {this.state.boxuploadstate}
+              </div>
+            </div>
+            <div className="column">
+              <h1>Download Individuals Data</h1>
+              <div>
+                <FileDownloader file='IndividualSQL' type='data'/>
               </div>
               <div>
                 {this.state.indivuploadstate}

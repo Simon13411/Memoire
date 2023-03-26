@@ -335,7 +335,7 @@ class Selection extends React.Component {
           {this.state.actualpage !== 0 ?
             (<button buttonStyle='btn--outline' onClick={this.previousPage}>Previous page</button>) : (<></>)
           }
-          {this.state.actualpage <= this.state.maxpage ?
+          {this.state.actualpage < this.state.maxpage ?
             (<button buttonStyle='btn--outline' onClick={this.nextPage}>Next page</button>) : (<></>)
           }
           <button buttonStyle='btn--outline' onClick={this.goToPage}>Go to page n°</button><input type="number" value={this.state.wantedpage} onChange={this.wantedPageChange} size="5" />

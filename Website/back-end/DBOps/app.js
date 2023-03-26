@@ -252,9 +252,32 @@ app.get('/get_selectiont', (req, res) => {
     })
 })
 
+//CSV To SQL for Users
 app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
     const type = req.params.type
     return db.csvtosql(req.file.path, type)
+    .then((result) => {
+        res.status(200).json(result)
+    })
+    .catch((err) => {
+        res.status(404).json({error: err.message})
+    })
+})
+
+//SQL to Csv (Boxes)
+app.get('/boxessqltocsv', (req, res) => {
+    return db.boxSqlToCsv(req.file.path, type)
+    .then((result) => {
+        res.status(200).json(result)
+    })
+    .catch((err) => {
+        res.status(404).json({error: err.message})
+    })
+})
+
+//SQL to Csv (Individuals)
+app.get('/individualssqltocsv', (req, res) => {
+    return db.indivSqlToCsv(req.file.path, type)
     .then((result) => {
         res.status(200).json(result)
     })
