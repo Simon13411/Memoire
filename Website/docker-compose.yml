@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+  front :
+    build: front-end/.
+    image: front
+    container_name: frontc
+    ports:
+      - "1050:80"
+    environment:
+      - POSTGRES_PASSWORD=password
+  
+  gate :
+    build: back-end/APIGateway/.
+    image: apigate
+    container_name: gatec
+    ports:
+      - "4000:80"
+    environment:
+      - POSTGRES_PASSWORD=password
+
+  db :
+    build: back-end/Database/.
+    image: postgres
+    container_name: postgresc
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - DataInsects:./var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U postgres
+
+
+  dbops :
+    build: back-end/DBOps/.
+    image: dbops
+    container_name: dbopsc
+    ports:
+      - "4001:80"
+    links:
+      - db
+    depends_on:
+      db:
+        condition: service_healthy
+
+  login :
+    build: back-end/Login/.
+    image: login
+    container_name: loginc
+    ports:
+      - "4003:80"
+    links:
+      - db
+    depends_on:
+      db:
+        condition: service_healthy
+
+  dlder :
+    build: back-end/FileDownloader/.
+    image: dlderc
+    container_name: postgresc
+    ports:
+      - "4003:80"
+    
