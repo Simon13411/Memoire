@@ -95,14 +95,21 @@ function signup(username, pw, role, token) {
 }
 
 function adminright(username) {
-  searchquery = `SELECT role FROM "Accounts" WHERE "username"='${username}'`
-
+  searchquery = `SELECT role FROM "Accounts" WHERE "username"=$1;`
+  console.log(searchquery)
   return new Promise((resolve, reject) => {
-    client.query(searchquery, (err, res) => {
+    client.query(searchquery, [username], (err, res) => {
       if (err) {
         console.error(err)
+        return reject(err)
       }
       else {
+        if (!res.rows) {
+          return reject(new Error("Request Problem"));
+        }
+        if (!res.rows[0]) {
+          return reject(new Error("User's does not exist"));
+        }
         if (res.rows[0].role === 1) {
           return resolve(res);
         } else {
