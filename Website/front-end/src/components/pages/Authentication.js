@@ -37,20 +37,20 @@ class Authentication extends React.Component {
                 // Stockage du jeton d'authentification dans un cookie
                 Cookies.set('auth_token', res.data.token);
                 this.props.Authenticate()
-                console.log(res.data)
-                console.log(res.data.admin)
+
                 if (res.data.admin === 1) {
                     this.props.BeAdmin()
                 }
                 this.props.navigate('/');
             }
-            else {
-                this.setState({loginstate: 'Wrong username or password'});
-            }
         })
         .catch((err) => {
-          console.log(err);
-          this.setState({loginstate: 'An error occurred while logging in'});
+          if (!err.response) {
+            this.setState({loginstate: 'An error occurred while logging in'});
+          }
+          else {
+            this.setState({loginstate: 'Wrong username or password'});
+          }
         });
     }
       

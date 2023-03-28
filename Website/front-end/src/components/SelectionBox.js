@@ -61,6 +61,10 @@ class Selection extends React.Component {
       })
   }
 
+  fetchResultsOnClick = () => {
+    this.setState({actualpage: 0, wantedpage: 0}, this.fetchResults)
+  }
+
   get_selection() {
     axios.get(`${url}/get_selectiono`, {
       params:
@@ -206,7 +210,7 @@ class Selection extends React.Component {
     return(
       <>
         <div className='selectdiv'>
-          <button buttonStyle='btn--outline' onClick={this.fetchResults}>SEARCH BOXES</button>
+          <button buttonStyle='btn--outline' onClick={this.fetchResultsOnClick}>SEARCH BOXES</button>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
             <InputLabel id="demo-simple-select-label">Order</InputLabel>
             <Select

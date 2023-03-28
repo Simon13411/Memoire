@@ -35,7 +35,7 @@ run-db:
 	docker run -v DataInsects:/var/lib/postgresql/data -e POSTGRES_PASSWORD=password -p 5432:5432 --name postgresc postgres
 
 run-gate:
-	docker run -p 4000:80 --name apigatec apigate
+	docker run -p 4000:80 --name apigatec --link loginc --link dbopsc --link dlderc apigate
 
 run-dbops:
 	docker run -p 4001:80 --name dbopsc --link postgresc dbops

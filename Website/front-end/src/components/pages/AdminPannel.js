@@ -45,12 +45,12 @@ class AdminPannel extends React.Component {
         adminToAdd: '0',     //Admin Right for UserToAdd ?
         useraddstate: '',
         //ModifyUser
-        usernameToModify: '',
+        usernametomodify: '',
         newPassword: '',
         users: [],
         usermodifstate: '',
         //GiveOrDeleteAdminRight
-        usernameToAdmin: '',
+        usernametoadmin: '',
         adminRight: '0',
         userrightstate: '',
         //Token
@@ -252,62 +252,86 @@ class AdminPannel extends React.Component {
     }
 
     AddUser = () => {
-        axios.post(`${url}/signup`, {
-            username: this.state.usernameToAdd,
-            password: this.state.passwordToAdd,
-            role: this.state.adminToAdd,
-            token: this.state.authToken
-        })
-        .then((res) => {
-            console.log(res)
-            this.setState({useraddstate: `User ${this.state.usernameToAdd} added`, usernameToAdd: '', passwordToAdd: '', adminToAdd: '0'});
-        })
-        .catch((err) => {
-            if (!err.response) {
-                this.setState({useraddstate: "Erreur Serveur"});
-            }
-            else {
-                this.setState({useraddstate: err.response.data.error});
-            }
-        });
+        if (this.state.usernameToAdd === 'NULL' || this.state.usernameToAdd === '') {
+            this.setState({usermodifstate: `Invalid name`});
+        }
+        else if (this.state.passwordToAdd === '') {
+            this.setState({usermodifstate: `Enter a valid value for password`})
+        }
+        else {
+            axios.post(`${url}/signup`, {
+                username: this.state.usernameToAdd,
+                password: this.state.passwordToAdd,
+                role: this.state.adminToAdd,
+                token: this.state.authToken
+            })
+            .then((res) => {
+                console.log(res)
+                this.setState({useraddstate: `User ${this.state.usernameToAdd} added`, usernameToAdd: '', passwordToAdd: '', adminToAdd: '0'});
+            })
+            .catch((err) => {
+                if (!err.response) {
+                    this.setState({useraddstate: "Erreur Serveur"});
+                }
+                else {
+                    this.setState({useraddstate: err.response.data.error});
+                }
+            });
+        }
     }
 
     ModifyPassword = () => {
-        axios.post(`${url}/modifypw`, {
-            username: this.state.usernameToModify,
-            password: this.state.newPassword,
-            token: this.state.authToken
-        })
-        .then((res) => {
-            this.setState({usermodifstate: `${usernameToModify}'s password modified`});
-        })
-        .catch((err) => {
-            if (!err.response) {
-                this.setState({useraddstate: "Erreur Serveur"});
-            }
-            else {
-                this.setState({useraddstate: err.response.data.error});
-            }
-        });
+        if (this.state.usernametomodify === 'NULL' || this.state.usernametomodify === '') {
+            this.setState({usermodifstate: `Invalid user`});
+        }
+        else if (this.state.newPassword === '') {
+            this.setState({usermodifstate: `Enter a valid value for password`});
+        }
+        else {
+            axios.post(`${url}/modifypw`, {
+                username: this.state.usernametomodify,
+                password: this.state.newPassword,
+                token: this.state.authToken
+            })
+            .then((res) => {
+                this.setState({usermodifstate: `${this.state.usernametomodify}'s password modified`});
+            })
+            .catch((err) => {
+                if (!err.response) {
+                    this.setState({usermodifstate: "Erreur Serveur"});
+                }
+                else {
+                    this.setState({usermodifstate: err.response.data.error});
+                }
+            });
+        }
     }
 
     Modifyright = () => {
-        axios.post(`${url}/modifyright`, {
-            username: this.state.usernameToAdmin,
-            role: this.state.adminRight,
-            token: this.state.authToken
-        })
-        .then((res) => {
-            this.setState({userrightstate: `${usernameToAdmin}'s rights modified`});
-        })
-        .catch((err) => {
-            if (!err.response) {
-                this.setState({useraddstate: "Erreur Serveur"});
-            }
-            else {
-                this.setState({useraddstate: err.response.data.error});
-            }
-        });
+        if (this.props.getUser() === this.state.usernametoadmin) {
+            this.setState({userrightstate: `U can't modify your own rights`});
+        }
+        else if (this.state.usernametoadmin === 'NULL' || this.state.usernametoadmin === '') {
+            this.setState({userrightstate: `Invalid user`});
+        }
+        else {
+            axios.post(`${url}/modifyright`, {
+                username: this.state.usernametoadmin,
+                role: this.state.adminRight,
+                token: this.state.authToken
+            })
+            .then((res) => {
+                this.setState({userrightstate: `${this.state.usernametoadmin}'s rights modified`});
+            })
+            .catch((err) => {
+                if (!err.response) {
+                    this.setState({userrightstate: "Erreur Serveur"});
+                }
+                else {
+                    this.setState({userrightstate: err.response.data.error});
+                }
+            });
+        }
     }
 
     render() {
@@ -399,7 +423,7 @@ class AdminPannel extends React.Component {
                         onChange={this.handleInputChange}
                         name="suborder2"
                         >
-                        <MenuItem value=''>
+                        <MenuItem value='NULL'>
                             <em>None</em>
                         </MenuItem>
                         {this.state.suborderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
@@ -418,7 +442,7 @@ class AdminPannel extends React.Component {
                         onChange={this.handleInputChange}
                         name="family2"
                         >
-                        <MenuItem value=''>
+                        <MenuItem value='NULL'>
                             <em>None</em>
                         </MenuItem>
                         {this.state.familylist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
@@ -437,7 +461,7 @@ class AdminPannel extends React.Component {
                         onChange={this.handleInputChange}
                         name="subfamily2"
                         >
-                        <MenuItem value=''>
+                        <MenuItem value='NULL'>
                             <em>None</em>
                         </MenuItem>
                         {this.state.subfamilylist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
@@ -456,7 +480,7 @@ class AdminPannel extends React.Component {
                         onChange={this.handleInputChange}
                         name="genus2"
                         >
-                        <MenuItem value=''>
+                        <MenuItem value='NULL'>
                             <em>None</em>
                         </MenuItem>
                         {this.state.genuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
@@ -475,7 +499,7 @@ class AdminPannel extends React.Component {
                         onChange={this.handleInputChange}
                         name="subgenus2"
                         >
-                        <MenuItem value=''>
+                        <MenuItem value='NULL'>
                             <em>None</em>
                         </MenuItem>
                         {this.state.subgenuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
@@ -494,7 +518,7 @@ class AdminPannel extends React.Component {
                         onChange={this.handleInputChange}
                         name="species2"
                         >
-                        <MenuItem value=''>
+                        <MenuItem value='NULL'>
                             <em>None</em>
                         </MenuItem>
                         {this.state.specieslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
@@ -513,7 +537,7 @@ class AdminPannel extends React.Component {
                         onChange={this.handleInputChange}
                         name="subspecies2"
                         >
-                        <MenuItem value=''>
+                        <MenuItem value='NULL'>
                             <em>None</em>
                         </MenuItem>
                         {this.state.subspecieslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
@@ -532,7 +556,7 @@ class AdminPannel extends React.Component {
                         onChange={this.handleInputChange}
                         name="tribu2"
                         >
-                        <MenuItem value=''>
+                        <MenuItem value='NULL'>
                             <em>None</em>
                         </MenuItem>
                         {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
@@ -568,32 +592,24 @@ class AdminPannel extends React.Component {
                 <div className="column">
                   <h3>Modifier un utilisateur</h3>
                   <form onSubmit={(event) => { this.onSubmit(event) }}>
-                  <label htmlFor="usernameToModify">Username:</label>
+                  <label htmlFor="usernametomodifyhtml">Username:</label>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
                         <InputLabel id="demo-simple-select-label"></InputLabel>
                         <Select
-                        labelId="usernameToModify"
-                        id="usernameToModify"
-                        value={this.state.usernameToModify}
-                        label="usernameToModify"
+                        labelId="usernametomodify-label"
+                        id="usernametomodify-select"
+                        value={this.state.usernametomodify}
+                        label="usernametomodify"
                         onChange={this.handleInputChange}
-                        name='usernameToModify'
+                        name="usernametomodify"
                         >
-                        <MenuItem value=''>
+                        <MenuItem value='NULL'>
                             <em>None</em>
                         </MenuItem>
-                        {this.state.users.map(user => (
-                            <>
-                            {this.props.getUser() !== user.username ?
-                                (
-                                <MenuItem key={user.username} value={user.username}>
-                                    {user.username}
-                                </MenuItem>
-                                ) : (
-                                    <></>
-                                )
-                            }
-                            </>
+                        {this.state.users.map((user) => (
+                            <MenuItem key={user.username} value={user.username}>
+                                {user.username}
+                            </MenuItem>
                         ))}
                         </Select>
                     </FormControl>
@@ -603,37 +619,28 @@ class AdminPannel extends React.Component {
                     <input type="text" value={this.state.newPassword} onChange={this.handleInputChange} name="newPassword" />
                     <br />
                     <button type="submit" onClick={this.ModifyPassword}>Modifier</button>
+                    {this.state.usermodifstate}
                 </form>
                 </div>
                 <div className="column">
                   <h3>Accès Administrateur</h3>
                   <form onSubmit={(event) => { this.onSubmit(event) }}>
-                  <label htmlFor="usernameToAdmin">Username:</label>
+                  <label htmlFor="usernametoadmin">Username:</label>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
                         <InputLabel id="demo-simple-select-label"></InputLabel>
                         <Select
-                            labelId="usernameToAdmin"
-                            id="usernameToAdmin"
-                            value={this.state.usernameToAdmin}
-                            label="usernameToAdmin"
+                            value={this.state.usernametoadmin}
+                            label="usernametoadmin"
                             onChange={this.handleInputChange}
-                            name='usernameToAdmin'
+                            name='usernametoadmin'
                         >
-                        <MenuItem value=''>
+                        <MenuItem value='NULL'>
                             <em>None</em>
                         </MenuItem>
-                        {this.state.users.map(user => (
-                            <>
-                            {this.props.getUser() !== user.username ?
-                                (
-                                <MenuItem key={user.username} value={user.username}>
-                                    {user.username}
-                                </MenuItem>
-                                ) : (
-                                    <></>
-                                )
-                            }
-                            </>
+                        {this.state.users.map((user) => (
+                            <MenuItem key={user.username} value={user.username}>
+                                {user.username}
+                            </MenuItem>
                         ))}
                         </Select>
                     </FormControl>
@@ -643,6 +650,7 @@ class AdminPannel extends React.Component {
                         <FormControlLabel control={<Checkbox checked={this.state.adminRight === '1'} onChange={this.handleCheck} name="adminRight"/>} label='adminacces' />
                     </FormGroup>
                     <button type="submit" onClick={this.Modifyright}>Modifier</button>
+                    {this.state.userrightstate}
                 </form>
                 </div>
                 </div>

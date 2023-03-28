@@ -13,11 +13,11 @@ app.post('/login', (req, res) => {
 
   return loginops.login(username, password)
   .then(([token, role]) => {
-    res.status(200).json({ success: true, token: token, admin: role});
+    res.status(200).json({ success: true, token: token, role: role});
   })
   .catch((err) => {
     console.log(err)
-    res.status(401).json({ success: false });
+    res.status(401).json({ error: err.message });
   });
 });
 
@@ -29,7 +29,8 @@ app.post('/signup', (req, res) => {
     res.status(200).json( {success: true });
   })
   .catch((err) => {
-    res.status(401).json({ success: false, error: err.message });
+    console.log(err)
+    res.status(401).json({ error: err.message });
   });
 });
 
@@ -48,9 +49,9 @@ app.post('/adminright', (req, res) => {
 
 
 app.post('/validate-token', (req, res) => {
-  const { token: authToken } = req.body;
+  const { token } = req.body
 
-  return loginops.verifytoken(authToken)
+  return loginops.verifytoken(token)
   .then((username) => {
     res.status(200).json({ success: true, username: username });
   })

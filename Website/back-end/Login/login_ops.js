@@ -96,7 +96,7 @@ function signup(username, pw, role, token) {
 
 function adminright(username) {
   searchquery = `SELECT role FROM "Accounts" WHERE "username"=$1;`
-  console.log(searchquery)
+
   return new Promise((resolve, reject) => {
     client.query(searchquery, [username], (err, res) => {
       if (err) {
@@ -159,7 +159,6 @@ function getusers() {
   return new Promise((resolve, reject) => {
     client.query(searchquery, (err, res) => {
       if (err) {
-        console.error(err)
         return reject(err)
       }
       else {
@@ -226,7 +225,7 @@ function verifyadminright(token) {
     } else {
       if (results.rows.length === 1) {
         const Userquery = `SELECT role FROM "Accounts" WHERE "username"='${results.rows[0].username}'`
-        console.log(Userquery)
+
         client.query(Userquery, (error2, results2) => {
           if (error2) {
             return false
