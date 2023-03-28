@@ -16,8 +16,10 @@ services:
     container_name: gatec
     ports:
       - "4000:80"
-    environment:
-      - POSTGRES_PASSWORD=password
+    links:
+      - dbops
+      - login
+      - dlder
 
   db :
     build: back-end/Database/.
@@ -28,7 +30,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=password
     volumes:
-      - DataInsects:./var/lib/postgresql/data
+      - DataInsects:/var/lib/postgresql/data
     healthcheck:
       test: pg_isready -U postgres
 
@@ -45,6 +47,13 @@ services:
       db:
         condition: service_healthy
 
+  dlder :
+    build: back-end/FileDownloader/.
+    image: dlder
+    container_name: dlderc
+    ports:
+      - "4002:80"
+
   login :
     build: back-end/Login/.
     image: login
@@ -56,11 +65,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
-  dlder :
-    build: back-end/FileDownloader/.
-    image: dlderc
-    container_name: postgresc
-    ports:
-      - "4003:80"
     
+volumes:
+  DataInsects:

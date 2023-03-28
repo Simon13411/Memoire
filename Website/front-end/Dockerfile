@@ -1,15 +1,25 @@
-FROM node:18.14.1-alpine3.16
+FROM node:18.14.1-alpine3.16 as build
 
-WORKDIR /usr/src/scapp-front-end
+WORKDIR src/front-end
 
-COPY package.json .
+COPY package*.json .
 
 RUN npm install -g npm@latest
-RUN npm install @fontsource/source-sans-pro
+RUN npm install browserslist
 
 COPY public public
 COPY src src
 
 ENV REACT_APP_IP http://localhost:4000
 
+#dev env
 CMD npm start
+
+#production
+#RUN npm run build
+
+# production env
+#FROM nginx:stable-alpine
+#COPY --from=build /src/front-end/build /usr/share/nginx/html
+#EXPOSE 80
+#CMD ["nginx", "-g", "daemon off;"]
