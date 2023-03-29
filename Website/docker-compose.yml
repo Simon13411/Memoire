@@ -21,16 +21,29 @@ services:
       - login
       - dlder
 
-  db :
+  db-entomo :
     build: back-end/Database/.
     image: postgres
-    container_name: postgresc
+    container_name: db-entomoc
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=password
     volumes:
-      - DataInsects:/var/lib/postgresql/data
+      - DataEntomo:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U postgres
+
+  db-login :
+    build: back-end/Database/.
+    image: postgres
+    container_name: db-loginc
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - DataLogin:/var/lib/postgresql/data
     healthcheck:
       test: pg_isready -U postgres
 
@@ -42,9 +55,9 @@ services:
     ports:
       - "4001:80"
     links:
-      - db
+      - db-entomo
     depends_on:
-      db:
+      db-entomo:
         condition: service_healthy
 
   dlder :
@@ -61,10 +74,11 @@ services:
     ports:
       - "4003:80"
     links:
-      - db
+      - db-login
     depends_on:
-      db:
+      db-login:
         condition: service_healthy
     
 volumes:
-  DataInsects:
+  DataEntomo:
+  DataLogin:

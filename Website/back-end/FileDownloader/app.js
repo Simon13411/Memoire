@@ -12,8 +12,9 @@ app.get('/individualstemplate', (req, res) => {
     console.log("Fichier Individuals.xlsx trouvé")
 
     res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Length', fileSize);
+
     res.send(fileContent);
     console.log("Fichier Individuals.xlsx envoyé")
 });
@@ -28,8 +29,9 @@ app.get('/boxestemplate', (req, res) => {
     console.log("Fichier Boxes.xlsx trouvé")
   
     res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Length', fileSize);
+
     res.send(fileContent);
     console.log("Fichier Boxes.xlsx envoyé")
   });

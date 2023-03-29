@@ -2,7 +2,7 @@ const { Client } = require('pg');
 const { spawn } = require('child_process');
 const client = new Client({
     user: 'postgres',
-    host: 'postgresc',
+    host: 'db-entomoc',
     database: 'entomologie',
     password: 'password',
     port: 5432,
@@ -541,6 +541,9 @@ function csvtosql(filename, type) {
   
         script.on('close', (code) => {
           console.log(`child process exited with code ${code}`);
+          if (code === 1 || code === '1') {
+            return reject(new Error("Error during script run"));
+          }
           return resolve("Success");
         });
       } else if (type === 'Individual') {
@@ -560,7 +563,7 @@ function csvtosql(filename, type) {
   
         script.on('close', (code) => {
           console.log(`child process exited with code ${code}`);
-          if (code === 1){
+          if (code === 1 || code === '1'){
             return reject(new Error("Error during script run"));
           }
           else {

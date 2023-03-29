@@ -5,7 +5,7 @@ CREATE TABLE "Accounts" (
 	PRIMARY KEY("username")
 );
 
-CREATE TABLE "auth" (
+CREATE TABLE "Tokens" (
 	"username" VARCHAR(40) NOT NULL,
 	"token" VARCHAR(64) NOT NULL,
 	"expirationTime" TIMESTAMP NOT NULL,

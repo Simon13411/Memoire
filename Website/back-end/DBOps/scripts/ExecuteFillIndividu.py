@@ -22,7 +22,7 @@ import sys
 
 
 conn = psycopg2.connect(
-    host="postgresc",
+    host="db-entomoc",
     database="entomologie",
     user="postgres",
     password="password"

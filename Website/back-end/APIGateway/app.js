@@ -195,34 +195,36 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
         });
 })
 
-app.get(`/boxessqltocsv`, upload.single('file'), (req, res) => {
+app.put(`/boxessqltocsv`, upload.single('file'), (req, res) => {
     const formData = new FormData();
     formData.append('file', fs.createReadStream(req.file.path));
     
     axios.put(`/boxessqltocsv`, formData, {
             headers: {
-            'Content-Type': 'multipart/form-data' //Contient des données binaires
-            }
+                'Content-Type': 'multipart/form-data' //Contient des données binaires
+            },
+            responseType: 'stream'
         })
-        .then((resu) => {
-            res.status(200).json(resu.data);
+        .then((response) => {
+            response.data.pipe(res)
         })
         .catch((err) => {
             res.status(401).json(err);
         });
 })
 
-app.get(`/individualssqltocsv`, (req, res) => {
+app.put(`/individualssqltocsv`, (req, res) => {
     const formData = new FormData();
     formData.append('file', fs.createReadStream(req.file.path));
     
-    axios.put(`/individualssqltocsv`, formData, {
+    axios.put(`/individualssqltocsv`, formData, { 
             headers: {
-            'Content-Type': 'multipart/form-data' //Contient des données binaires
-            }
+                'Content-Type': 'multipart/form-data' //Contient des données binaires
+            },
+            responseType: 'stream'
         })
-        .then((resu) => {
-            res.status(200).json(resu.data);
+        .then((response) => {
+            response.data.pipe(res)
         })
         .catch((err) => {
             res.status(401).json(err);
@@ -232,11 +234,23 @@ app.get(`/individualssqltocsv`, (req, res) => {
 
 //FileDownloader (port 4002)
 app.get('/boxestemplate', (req, res) => {
-    res.redirect(307, `http://${IP}:4002/boxestemplate`)
+    axios.get(`http://${IP_DLDER}/boxestemplate`, { responseType: 'stream' })
+    .then((response) => {
+        response.data.pipe(res)
+    })
+    .catch((err) => {
+        res.status(401).json(err);
+    });
 })
 
 app.get('/individualstemplate', (req, res) => {
-    res.redirect(307, `http://${IP}:4002/individualstemplate`)
+    axios.get(`http://${IP_DLDER}/individualstemplate`, { responseType: 'stream' })
+    .then((response) => {
+        response.data.pipe(res)
+    })
+    .catch((err) => {
+        res.status(401).json(err);
+    });
 })
 
 //LogIn and SignIn (port 4003)

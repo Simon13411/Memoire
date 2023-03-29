@@ -287,7 +287,7 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
 })
 
 //SQL to Csv (Boxes)
-app.get('/boxessqltocsv', (req, res) => {
+app.put('/boxessqltocsv', (req, res) => {
     return db.boxSqlToCsv(req.file.path, type)
     .then((result) => {
         res.status(200).json(result)
@@ -298,7 +298,7 @@ app.get('/boxessqltocsv', (req, res) => {
 })
 
 //SQL to Csv (Individuals)
-app.get('/individualssqltocsv', (req, res) => {
+app.put('/individualssqltocsv', (req, res) => {
     return db.indivSqlToCsv(req.file.path, type)
     .then((result) => {
         res.status(200).json(result)
