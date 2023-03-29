@@ -178,6 +178,26 @@ app.get('/get_collections', (req, res) => {
         });
 })
 
+app.get('/add-attribute/:attribute', (req, res) => {
+    axios.get(`http://${IP_DBOPS}/add-attribute/${req.params.attribute}`)
+        .then((resu) => {
+            res.status(200).json(resu.data);
+        })
+        .catch((err) => {
+            res.status(401).json(err);
+        });
+})
+
+app.get('/delete-attribute/:attribute', (req, res) => {
+    axios.get(`http://${IP_DBOPS}/delete-attribute/${req.params.attribute}`)
+        .then((resu) => {
+            res.status(200).json(resu.data);
+        })
+        .catch((err) => {
+            res.status(401).json(err);
+        });
+})
+
 app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
     const formData = new FormData();
     formData.append('file', fs.createReadStream(req.file.path));
@@ -202,11 +222,11 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
         });
 })
 
-app.put(`/boxessqltocsv`, upload.single('file'), (req, res) => {
+app.get(`/boxessqltocsv`, upload.single('file'), (req, res) => {
     const formData = new FormData();
     formData.append('file', fs.createReadStream(req.file.path));
     
-    axios.put(`/boxessqltocsv`, formData, {
+    axios.get(`/boxessqltocsv`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data' //Contient des données binaires
             },
@@ -227,11 +247,11 @@ app.put(`/boxessqltocsv`, upload.single('file'), (req, res) => {
         });
 })
 
-app.put(`/individualssqltocsv`, upload.single('file'), (req, res) => {
+app.get(`/individualssqltocsv`, upload.single('file'), (req, res) => {
     const formData = new FormData();
     formData.append('file', fs.createReadStream(req.file.path));
     
-    axios.put(`/individualssqltocsv`, formData, { 
+    axios.get(`/individualssqltocsv`, formData, { 
             headers: {
                 'Content-Type': 'multipart/form-data' //Contient des données binaires
             },
@@ -251,6 +271,8 @@ app.put(`/individualssqltocsv`, upload.single('file'), (req, res) => {
             console.log('File removed');
         });
 })
+
+
 
 
 //FileDownloader (port 4002)

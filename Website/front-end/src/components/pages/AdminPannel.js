@@ -20,25 +20,27 @@ class AdminPannel extends React.Component {
       super(props)
       this.state = {
         //Add Attribute
-        order: '', orderstate: '',
-        subOrder: '', suborderstate: '',
-        family: '', familystate: '',
-        subFamily: '', subfamilystate: '',
-        genus: '', genusstate: '',
-        subGenus: '', subgenusstate: '',
-        species: '', speciesstate: '',
-        subSpecies: '', subspeciesstate: '',
-        tribu: '', tribustate: '',
+        addattrstate: '',
+        order: '',
+        subOrder: '',
+        family: '',
+        subFamily: '',
+        genus: '',
+        subGenus: '',
+        species: '',
+        subSpecies: '',
+        tribu: '',
         //Delete Attribute
-        orderlist: [], order2: '', order2state: '',
-        suborderlist: [], suborder2: '', suborder2state: '',
-        familylist: [], family2: '', family2state: '',
-        subfamilylist: [], subfamily2: '', subfamily2state: '',
+        deleteattrstate: '',
+        orderlist: [], order2: '',
+        suborderlist: [], suborder2: '',
+        familylist: [], family2: '',
+        subfamilylist: [], subfamily2: '',
         genuslist: [], genus2: '', genus2state: '',
-        subgenuslist: [], subgenus2: '', subgenus2state: '',
-        specieslist: [], species2: '', species2state: '',
-        subspecieslist: [], subspecies2: '', subspecies2state: '',
-        tribulist: [], tribu2: '', tribu2state: '',
+        subgenuslist: [], subgenus2: '',
+        specieslist: [], species2: '', 
+        subspecieslist: [], subspecies2: '',
+        tribulist: [], tribu2: '',
         //AddUser
         usernameToAdd: '',
         passwordToAdd: '',
@@ -161,95 +163,46 @@ class AdminPannel extends React.Component {
         })
     }
 
-    AddOrder = () => {
-        axios.post(`${url}/add-order`, {
-            name: this.state.order,
-            token: this.state.authToken
+    AddAttribute = (event) => {
+        const target = event.target
+        const name = target.name
+        const attribute = this.state[name]
+        axios.post(`${url}/add-attribute/${name}`, {
+            attribute: attribute
         })
         .then((res) => {
-            this.setState({orderstate: 'Problem'});
+            this.setState({addattrstate: `${attribute} added to ${name} db`});
         })
+        .catch((err) => {
+            if (!err.response) {
+                this.setState({addattrstate: "Erreur Serveur"});
+            }
+            else {
+                this.setState({addattrstate: err.response.data.error});
+            }
+        });
     }
 
-    AddsubOrder = () => {
-        axios.post(`${url}/add-suborder`, {
-            name: this.state.subOrder,
-            token: this.state.authToken
+    DeleteAttribute = (event) => {
+        const target = event.target
+        const name = target.name
+        const attribute = this.state[name]
+        axios.post(`${url}/delete-attribute/${name}`, {
+            attribute: attribute
         })
         .then((res) => {
-            this.setState({suborderstate: 'Problem'});
+            this.setState({deleteattrstate: `${attribute} deleted from ${name} db`});
         })
+        .catch((err) => {
+            if (!err.response) {
+                this.setState({deleteattrstate: "Erreur Serveur"});
+            }
+            else {
+                this.setState({deleteattrstate: err.response.data.error});
+            }
+        });
     }
 
-    AddFamily = () => {
-        axios.post(`${url}/add-family`, {
-            name: this.state.family,
-            token: this.state.authToken
-        })
-        .then((res) => {
-            this.setState({familystate: 'Problem'});
-        })
-    }
-
-    AddsubFamily = () => {
-        axios.post(`${url}/add-subfamily`, {
-            name: this.state.subFamily,
-            token: this.state.authToken
-        })
-        .then((res) => {
-            this.setState({subfamilystate: 'Problem'});
-        })
-    }
-
-    AddGenus = () => {
-        axios.post(`${url}/add-genus`, {
-            name: this.state.genus,
-            token: this.state.authToken
-        })
-        .then((res) => {
-            this.setState({genusstate: 'Problem'});
-        })
-    }
-
-    AddsubGenus = () => {
-        axios.post(`${url}/add-subgenus`, {
-            name: this.state.subGenus,
-            token: this.state.authToken
-        })
-        .then((res) => {
-            this.setState({subgenusstate: 'Problem'});
-        })
-    }
-
-    AddSpecies = () => {
-        axios.post(`${url}/add-species`, {
-            name: this.state.species,
-            token: this.state.authToken
-        })
-        .then((res) => {
-            this.setState({speciesstate: 'Problem'});
-        })
-    }
-
-    AddsubSpecies = () => {
-        axios.post(`${url}/add-subspecies`, {
-            name: this.state.subSpecies,
-            token: this.state.authToken
-        })
-        .then((res) => {
-            this.setState({subspeciesstate: 'Problem'});
-        })
-    }
-
-    AddTribu = () => {
-        axios.post(`${url}/add-tribu`, {
-            name: this.state.tribu,
-            token: this.state.authToken
-        })
-        .then((res) => {
-            this.setState({tribustate: 'Problem'});
-        })
-    }
 
     AddUser = () => {
         if (this.state.usernameToAdd === 'NULL' || this.state.usernameToAdd === '') {
@@ -344,55 +297,57 @@ class AdminPannel extends React.Component {
                 <div className="container">
                 <div className="column">
                   <h3>Ajouter des classification</h3>
+                  {this.state.addattrstate}
                   <form onSubmit={(event) => { this.onSubmit(event) }}>
                     <label htmlFor="order">Order:</label>
-                    <input type="text" id="order" name="order" />
-                    <button type="submit">Ajouter</button>
+                    <input type="text" value={this.state.order} onChange={this.handleInputChange} name="order" />
+                    <button type="submit" name="order" onClick={this.AddAttribute}>Ajouter</button>
                     <br />
         
                     <label htmlFor="suborder">SubOrder:</label>
-                    <input type="text" id="suborder" name="suborder" />
-                    <button type="submit">Ajouter</button>
+                    <input type="text" value={this.state.suborder} onChange={this.handleInputChange} name="suborder" />
+                    <button type="submit" name="suborder" onClick={this.AddAttribute}>Ajouter</button>
                     <br />
         
                     <label htmlFor="family">Family:</label>
-                    <input type="text" id="family" name="family" />
-                    <button type="submit">Ajouter</button>
+                    <input type="text" value={this.state.family} onChange={this.handleInputChange} name="family" />
+                    <button type="submit" name="family" onClick={this.AddAttribute}>Ajouter</button>
                     <br />
         
                     <label htmlFor="subfamily">SubFamily:</label>
-                    <input type="text" id="subfamily" name="subfamily" />
-                    <button type="submit">Ajouter</button>
+                    <input type="text" value={this.state.subfamily} onChange={this.handleInputChange} name="subfamily" />
+                    <button type="submit" name="subfamily" onClick={this.AddAttribute}>Ajouter</button>
                     <br />
 
                     <label htmlFor="genus">Genus:</label>
-                    <input type="text" id="genus" name="genus" />
-                    <button type="submit">Ajouter</button>
+                    <input type="text" value={this.state.genus} onChange={this.handleInputChange} name="genus" />
+                    <button type="submit" name="genus" onClick={this.AddAttribute}>Ajouter</button>
                     <br />
         
                     <label htmlFor="subgenus">SubGenus:</label>
-                    <input type="text" id="subgenus" name="subgenus" />
-                    <button type="submit">Ajouter</button>
+                    <input type="text" value={this.state.subgenus} onChange={this.handleInputChange} name="subgenus" />
+                    <button type="submit" name="subgenus" onClick={this.AddAttribute}>Ajouter</button>
                     <br />
         
                     <label htmlFor="species">Species:</label>
-                    <input type="text" id="species" name="species" />
-                    <button type="submit">Ajouter</button>
+                    <input type="text" value={this.state.species} onChange={this.handleInputChange} name="species" />
+                    <button type="submit" name="species" onClick={this.AddAttribute}>Ajouter</button>
                     <br />
         
                     <label htmlFor="subspecies">SubSpecies:</label>
-                    <input type="text" id="subspecies" name="subspecies" />
-                    <button type="submit">Ajouter</button>
+                    <input type="text" value={this.state.subspecies} onChange={this.handleInputChange} name="subspecies" />
+                    <button type="submit" name="subspecies" onClick={this.AddAttribute}>Ajouter</button>
                     <br />
 
                     <label htmlFor="subfamily">Tribu:</label>
-                    <input type="text" id="tribu" name="tribu" />
-                    <button type="submit">Ajouter</button>
+                    <input type="text" value={this.state.tribu} onChange={this.handleInputChange} name="tribu" />
+                    <button type="submit" name="tribu" onClick={this.AddAttribute}>Ajouter</button>
                   </form>
                 </div>
 
                 <div className="column">
                   <h3>Supprimer des classification</h3>
+                  {this.state.deleteattrstate}
                   <form onSubmit={(event) => { this.onSubmit(event) }}>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <InputLabel id="demo-simple-select-label">Order</InputLabel>
@@ -410,7 +365,7 @@ class AdminPannel extends React.Component {
                         {this.state.orderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <button type="submit" onClick={this.AddOrder}>Supprimer</button>
+                    <button type="submit" name="order2" onClick={this.DeleteAttribute}>Supprimer</button>
                     <br />
         
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
@@ -429,7 +384,7 @@ class AdminPannel extends React.Component {
                         {this.state.suborderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <button type="submit" onClick={this.AddsubOrder}>Supprimer</button>
+                    <button type="submit" name="suborder2" onClick={this.DeleteAttribute}>Supprimer</button>
                     <br />
         
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
@@ -448,7 +403,7 @@ class AdminPannel extends React.Component {
                         {this.state.familylist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <button type="submit" onClick={this.AddFamily}>Supprimer</button>
+                    <button type="submit" name="family2" onClick={this.DeleteAttribute}>Supprimer</button>
                     <br />
         
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
@@ -467,7 +422,7 @@ class AdminPannel extends React.Component {
                         {this.state.subfamilylist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <button type="submit" onClick={this.AddsubFamily}>Supprimer</button>
+                    <button type="submit" name="subfamily2" onClick={this.DeleteAttribute}>Supprimer</button>
                     <br />
 
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
@@ -486,7 +441,7 @@ class AdminPannel extends React.Component {
                         {this.state.genuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <button type="submit" onClick={this.AddGenus}>Supprimer</button>
+                    <button type="submit" name="genus2" onClick={this.DeleteAttribute}>Supprimer</button>
                     <br />
         
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
@@ -505,7 +460,7 @@ class AdminPannel extends React.Component {
                         {this.state.subgenuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <button type="submit" onClick={this.AddsubGenus}>Supprimer</button>
+                    <button type="submit" name="subgenus2" onClick={this.DeleteAttribute}>Supprimer</button>
                     <br />
         
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
@@ -524,7 +479,7 @@ class AdminPannel extends React.Component {
                         {this.state.specieslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <button type="submit" onClick={this.AddSpecies}>Supprimer</button>
+                    <button type="submit" name="species2" onClick={this.DeleteAttribute}>Supprimer</button>
                     <br />
         
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
@@ -543,7 +498,7 @@ class AdminPannel extends React.Component {
                         {this.state.subspecieslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <button type="submit" onClick={this.AddsubSpecies}>Supprimer</button>
+                    <button type="submit" name="subspecies2" onClick={this.DeleteAttribute}>Supprimer</button>
                     <br />
 
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
@@ -562,7 +517,7 @@ class AdminPannel extends React.Component {
                         {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                         </Select>
                     </FormControl>
-                    <button type="submit" onClick={this.AddTribu}>Supprimer</button>
+                    <button type="submit" name="tribu2" onClick={this.DeleteAttribute}>Supprimer</button>
                   </form>
                 </div>
         

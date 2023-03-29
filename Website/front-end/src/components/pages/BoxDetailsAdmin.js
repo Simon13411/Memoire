@@ -134,7 +134,7 @@ class BoxDetailsAdmin extends React.Component {
     }
 
     modify = () => {
-
+        
     }
 
     render() {

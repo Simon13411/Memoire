@@ -13,10 +13,12 @@ class AboutUs extends React.Component {
                 <div>
                 <h2>Contact Us</h2>
                     <div>
-                        <p><strong>Company Name:</strong> My Group</p>
-                        <p><strong>Phone Number:</strong> 123-456-7890</p>
-                        <p><strong>Email:</strong> contact@mygroup.com</p>
-                        <p><strong>Address:</strong> 123 Main St, Anytown USA</p>
+                        <p><strong>University:</strong> ULiege</p>
+                        <p><strong>Faculty:</strong> Gembloux</p>
+                        <p><strong>Departement:</strong> Entomologie</p>
+                        <p><strong>Phone Number:</strong> </p>
+                        <p><strong>Email:</strong> gregoire.noel@uliege.be</p>
+                        <p><strong>Address:</strong> </p>
                     </div>
                 </div>
             </>

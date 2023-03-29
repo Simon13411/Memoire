@@ -522,6 +522,14 @@ function get_collections() {
     })
 }
 
+function addattribute(attribute) {
+
+}
+
+function deleteattribute(attribute) {
+    
+}
+
 function csvtosql(filename, type) {
     return new Promise(function(resolve, reject) {
       if (type === 'Box') {
@@ -598,6 +606,8 @@ module.exports = {
     get_selectiont,
     get_loaners,
     get_collections,
+    addattribute,
+    deleteattribute,
     csvtosql,
     boxSqlToCsv,
     indivSqlToCsv
