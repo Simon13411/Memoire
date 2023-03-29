@@ -193,6 +193,13 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
         .catch((err) => {
             res.status(401).json(err);
         });
+
+    fs.unlink(req.file.path, (err) => {
+        if (err) {
+            console.error(err);
+        }
+            console.log('File removed');
+        });
 })
 
 app.put(`/boxessqltocsv`, upload.single('file'), (req, res) => {
@@ -211,9 +218,16 @@ app.put(`/boxessqltocsv`, upload.single('file'), (req, res) => {
         .catch((err) => {
             res.status(401).json(err);
         });
+
+    fs.unlink(req.file.path, (err) => {
+        if (err) {
+            console.error(err);
+        }
+            console.log('File removed');
+        });
 })
 
-app.put(`/individualssqltocsv`, (req, res) => {
+app.put(`/individualssqltocsv`, upload.single('file'), (req, res) => {
     const formData = new FormData();
     formData.append('file', fs.createReadStream(req.file.path));
     
@@ -228,6 +242,13 @@ app.put(`/individualssqltocsv`, (req, res) => {
         })
         .catch((err) => {
             res.status(401).json(err);
+        });
+
+    fs.unlink(req.file.path, (err) => {
+        if (err) {
+            console.error(err);
+        }
+            console.log('File removed');
         });
 })
 
