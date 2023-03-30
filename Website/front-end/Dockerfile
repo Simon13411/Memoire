@@ -10,7 +10,8 @@ RUN npm install browserslist
 COPY public public
 COPY src src
 
-ENV REACT_APP_IP http://localhost:4000
+#ENV REACT_APP_IP http://localhost:4000
+ENV REACT_APP_IP http://gx-cloud45.segi.ulg.ac.be:4000
 
 #dev env
 #CMD npm start
