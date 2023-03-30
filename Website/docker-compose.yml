@@ -6,9 +6,7 @@ services:
     image: front
     container_name: frontc
     ports:
-      - "1050:80"
-    environment:
-      - POSTGRES_PASSWORD=password
+      - "80:80"
   
   gate :
     build: back-end/APIGateway/.
