@@ -13,6 +13,7 @@ import AddData from './components/pages/AddData';
 import AboutUs from './components/pages/AboutUs';
 import {AuthWNav} from './components/pages/Authentication';
 import AdminPannel from './components/pages/AdminPannel';
+import SettingUser from './components/pages/SettingUser';
 
 const url = process.env.REACT_APP_IP
 
@@ -116,6 +117,7 @@ class App extends React.Component {
             <Route path='/sign-in' element={<AuthWNav Authenticate={this.Authenticate} BeAdmin={this.BeAdmin} isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
             <Route path='/admin-pannel' element={<AdminPannel getUser={this.getUser} isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
             <Route path='/about-us' element={<AboutUs isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
+            <Route path='/usersettings' element={<SettingUser getUser={this.getUser} isAuthenticated={this.isAuthenticated} isAdmin={this.isAdmin} Logout={this.Logout}/>} />
           </Routes>
         </Router>
       )}

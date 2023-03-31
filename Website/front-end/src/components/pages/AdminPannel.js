@@ -43,12 +43,12 @@ class AdminPannel extends React.Component {
         tribulist: [], tribu2: '',
         //AddUser
         usernameToAdd: '',
-        passwordToAdd: '',
+        passwordToAdd: '', passwordToAdd2 : '',
         adminToAdd: '0',     //Admin Right for UserToAdd ?
         useraddstate: '',
         //ModifyUser
         usernametomodify: '',
-        newPassword: '',
+        newPassword: '', newPassword2: '',
         users: [],
         usermodifstate: '',
         //GiveOrDeleteAdminRight
@@ -206,10 +206,13 @@ class AdminPannel extends React.Component {
 
     AddUser = () => {
         if (this.state.usernameToAdd === 'NULL' || this.state.usernameToAdd === '') {
-            this.setState({usermodifstate: `Invalid name`});
+            this.setState({useraddstate: `Invalid name`});
         }
         else if (this.state.passwordToAdd === '') {
-            this.setState({usermodifstate: `Enter a valid value for password`})
+            this.setState({useraddstate: `Enter a valid value for password`})
+        }
+        else if (this.state.passwordToAdd2 !== this.state.passwordToAdd) {
+            this.setState({useraddstate: `The two passwords are not the same`});
         }
         else {
             axios.post(`${url}/signup`, {
@@ -239,6 +242,9 @@ class AdminPannel extends React.Component {
         }
         else if (this.state.newPassword === '') {
             this.setState({usermodifstate: `Enter a valid value for password`});
+        }
+        else if (this.state.newPassword2 !== this.state.newPassword) {
+            this.setState({usermodifstate: `The two passwords are not the same`});
         }
         else {
             axios.post(`${url}/modifypw`, {
@@ -534,7 +540,11 @@ class AdminPannel extends React.Component {
                         <br />
             
                         <label htmlFor="newpassword">Password:</label>
-                        <input type="text" value={this.state.passwordToAdd} onChange={this.handleInputChange} name="passwordToAdd"/>
+                        <input type="password" value={this.state.passwordToAdd} onChange={this.handleInputChange} name="passwordToAdd"/>
+                        <br />
+
+                        <label htmlFor="newpassword">Confirm password:</label>
+                        <input type="password" value={this.state.passwordToAdd2} onChange={this.handleInputChange} name="passwordToAdd2" />
                         <br />
 
                         <FormGroup>
@@ -571,7 +581,10 @@ class AdminPannel extends React.Component {
                     <br />
         
                     <label htmlFor="newpassword">New password:</label>
-                    <input type="text" value={this.state.newPassword} onChange={this.handleInputChange} name="newPassword" />
+                    <input type="password" value={this.state.newPassword} onChange={this.handleInputChange} name="newPassword" />
+                    <br />
+                    <label htmlFor="newpassword">Confirm password:</label>
+                    <input type="password" value={this.state.newPassword2} onChange={this.handleInputChange} name="newPassword2" />
                     <br />
                     <button type="submit" onClick={this.ModifyPassword}>Modifier</button>
                     {this.state.usermodifstate}

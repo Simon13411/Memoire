@@ -70,11 +70,18 @@ function Navbar(props) {
             }
             {props.isAuthenticated() ?
               (
+                <>
+                <li>
+                  <Link to='/usersettings' className='nav-links-mobile' onClick={Logout}>
+                    Settings
+                  </Link>
+                </li>
                 <li>
                   <Link to='/' className='nav-links-mobile' onClick={Logout}>
                     SignOut
                   </Link>
                 </li>
+                </>
               ) : (
                 <li>
                   <Link to='/sign-in' className='nav-links-mobile' onClick={closeMobileMenu}>
@@ -107,6 +114,17 @@ function Navbar(props) {
               <>
                 {button 
                 && 
+                <Link to='/usersettings' className='btn-mobile'>
+                  <button
+                    className={`btn btn--outline btn--medium`}
+                    onClick={closeMobileMenu}
+                  >
+                    Settings
+                  </button>
+                </Link>
+                }
+                {button 
+                && 
                 <Link to='/' className='btn-mobile'>
                   <button
                     className={`btn btn--outline btn--medium`}
@@ -115,7 +133,7 @@ function Navbar(props) {
                     SignOut
                   </button>
                 </Link>
-              }
+                }
               </>
             ) : (
               <>

@@ -170,9 +170,24 @@ function getusers() {
 
 function modifypw(username, password, token) {
   return new Promise(function (resolve, reject) {
-    if (verifyadminright(token) === false){
-      return reject(new Error("You're not an admin"))
+
+    if (typeof token !== 'string' || token.trim().length === 0) {
+        return reject("Wrong format token");
     }
+
+    const Tokenquery = `SELECT username FROM "Tokens" WHERE "token"=$1 AND username=$2 AND "expirationTime" > NOW()`;
+    client.query(Tokenquery, [token, username], (error, results) => {
+      if (error) {
+        return reject("DB Error");
+      } else {
+        if (results.rows.length === 1) { //User want to change his own password ?
+          /* Case where process continue */
+        }
+        else if (verifyadminright(token) === false) { //Not his own password and is not an admin ?
+            return reject(new Error("You don't have the right to do that"))
+        }
+      }
+    })
 
     hashedpw = SHA256(password)
     hashedpw2 = hashedpw.toString(CryptoJS.enc.Hex)

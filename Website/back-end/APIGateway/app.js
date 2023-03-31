@@ -304,7 +304,12 @@ app.post('/login', (req, res) => {
             res.status(200).json({ success: resu.data.success, token: resu.data.token, admin: resu.data.role});
         })
         .catch((err) => {
-            res.status(401).json( { err: err.response.data.error });
+            if (err.response) {
+                res.status(401).json( { err: err.response.data.error });
+            }
+            else {
+                res.status(401).json(err);
+            }
         });
 })
 
@@ -315,7 +320,12 @@ app.post('/signup', (req, res) => {
             res.status(200).json({ success: true });
         })
         .catch((err) => {
-            res.status(401).json({ err: err.response.data.error });
+            if (err.response) {
+                res.status(401).json( { err: err.response.data.error });
+            }
+            else {
+                res.status(401).json(err);
+            }
         });
 })
 
