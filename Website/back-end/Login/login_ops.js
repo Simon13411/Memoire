@@ -26,10 +26,10 @@ function login(username, pw) {
   hashedpw2 = hashedpw.toString(CryptoJS.enc.Hex)
 
   const searchquery = `SELECT role FROM "Accounts" 
-                        WHERE "username"='${username}' AND "password"='${hashedpw2}'`
+                        WHERE "username"=$1 AND "password"=$2`
   
   return new Promise(function (resolve, reject) {
-    client.query(searchquery, (err, res) => {
+    client.query(searchquery, [username, hashedpw2], (err, res) => {
         if (err) {
           console.error(err)
         }
@@ -39,9 +39,9 @@ function login(username, pw) {
             const role = res.rows[0].role
             const token = crypto.randomBytes(32).toString('hex');
             const expirationTime = new Date(Date.now() + 24 * 60 * 60 * 1000); // Token is valid for 24 hours
-            const insertQuery = `INSERT INTO "Tokens" VALUES ('${username}', '${token}', to_timestamp('${expirationTime.toISOString()}', 'YYYY-MM-DDTHH:MI:SS.MSZ'))`;
+            const insertQuery = `INSERT INTO "Tokens" VALUES ($1, $2, to_timestamp('${expirationTime.toISOString()}', 'YYYY-MM-DDTHH:MI:SS.MSZ'))`;
 
-            client.query(insertQuery, (err, res) => {
+            client.query(insertQuery, [username, token], (err, res) => {
               if (err) {
                 return reject(err);
               }
@@ -73,10 +73,10 @@ function signup(username, pw, role, token) {
           hashedpw = SHA256(pw)
           hashedpw2 = hashedpw.toString(CryptoJS.enc.Hex)
         
-          const insertQuery = `INSERT INTO "Accounts" VALUES ('${username}', '${hashedpw2}', ${role})`
+          const insertQuery = `INSERT INTO "Accounts" VALUES ($1, $2, $3)`
           
           return new Promise(function (resolve2, reject) {
-            client.query(insertQuery, (err, res) => {
+            client.query(insertQuery, [username, hashedpw2, role], (err, res) => {
               if (err) {
                 return reject(new Error("Erreur DB"));
               }
@@ -175,6 +175,7 @@ function modifypw(username, password, token) {
         return reject("Wrong format token");
     }
 
+    //Verif autorisation
     const Tokenquery = `SELECT username FROM "Tokens" WHERE "token"=$1 AND username=$2 AND "expirationTime" > NOW()`;
     client.query(Tokenquery, [token, username], (error, results) => {
       if (error) {
@@ -189,14 +190,15 @@ function modifypw(username, password, token) {
       }
     })
 
+    //ModifyPW
     hashedpw = SHA256(password)
     hashedpw2 = hashedpw.toString(CryptoJS.enc.Hex)
 
     const Updatequery = `UPDATE "Accounts"
-                        SET "password" = '${hashedpw2}'  
-                        WHERE "username"='${username}'`
+                        SET "password" = $1 
+                        WHERE "username"=$2`
                         
-    client.query(Updatequery, (err, res) => {
+    client.query(Updatequery, [hashedpw2, username], (err, res) => {
           if (err) {
             console.error(err)
             return reject(err)
@@ -214,10 +216,10 @@ function modifyright(username, role, token) {
       return reject(new Error("You're not an admin"))
     }
     const Updatequery = `UPDATE "Accounts"
-                        SET "role" = '${role}'  
-                        WHERE "username"='${username}'`
+                        SET "role" = $1  
+                        WHERE "username"=$2`
 
-    client.query(Updatequery, (err, res) => {
+    client.query(Updatequery, [username, role], (err, res) => {
           if (err) {
             console.error(err)
             return reject(err)
