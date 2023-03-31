@@ -41,10 +41,10 @@ function get_boxdetails(id) {
                             LEFT OUTER JOIN (SELECT L.name as "prenom", LB.box_id
                                             FROM "loanBox" LB, "Loaner" L
                                             WHERE LB.loaner_id=L.id_loaner) as loan ON B."id_box"=loan.box_id
-                            WHERE (B."id_box"=${id})`
+                            WHERE (B."id_box"=$1)`
                             
     return new Promise(function (resolve, reject) {
-        client.query(searchquery, (err, res) => {
+        client.query(searchquery, [id], (err, res) => {
             if (err) {
                 console.error(err)
                 return reject(new Error("Erreur DB"))
@@ -72,23 +72,23 @@ function get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
                                 LEFT OUTER JOIN "Species" S ON P2."species_id"=S."id_species"
                                 LEFT OUTER JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
                                 WHERE P."population_id"=P2."id_population"
-                                    AND (O."name"='${O}' OR '${O}'='NULL')
-                                    AND (So."name"='${So}' OR '${So}'='NULL')
-                                    AND (F."name"='${F}' OR '${F}'='NULL')
-                                    AND (Sf."name"='${Sf}' OR '${Sf}'='NULL')
-                                    AND (T."name"='${T}' OR '${T}'='NULL')
-                                    AND (G."name"='${G}' OR '${G}'='NULL')
-                                    AND (Sg."name"='${Sg}' OR '${Sg}'='NULL')
-                                    AND (S."name"='${S}' OR '${S}'='NULL')
-                                    AND (Ss."name"='${Ss}' OR '${Ss}'='NULL') 
+                                    AND (O."name"=$1 OR $1='NULL')
+                                    AND (So."name"=$2 OR $2='NULL')
+                                    AND (F."name"=$3 OR $3='NULL')
+                                    AND (Sf."name"=$4 OR $4='NULL')
+                                    AND (T."name"=$5 OR $5='NULL')
+                                    AND (G."name"=$6 OR $6='NULL')
+                                    AND (Sg."name"=$7 OR $7='NULL')
+                                    AND (S."name"=$8 OR $8='NULL')
+                                    AND (Ss."name"=$9 OR $9='NULL') 
                                 ) AS R
                         WHERE B."id_box" = R."bid" 
                         AND ColBox."box_id"=B."id_box" 
                         AND ColBox."collection_id"=Col."id_collection"
-                        LIMIT 10 OFFSET ${Offs}`
+                        LIMIT 10 OFFSET $10`
                         
     return new Promise(function (resolve, reject) {
-        client.query(searchquery, (err, res) => {
+        client.query(searchquery, [O, So, F, Sf, T, G, Sg, S, Ss, Offs], (err, res) => {
             if (err) {
                 console.error(err)
                 return reject(new Error("Erreur DB"))
@@ -119,10 +119,10 @@ function get_indivdetails(id) {
                             FROM "loanIndividu" LI, "Loaner" L
                             WHERE LI."loaner_id"=L."id_loaner") as loan on I."id_individu"=loan."individu_id"
                         
-                        WHERE I."id_individu"=${id}`
+                        WHERE I."id_individu"=$1`
                             
     return new Promise(function (resolve, reject) {
-        client.query(searchquery, (err, res) => {
+        client.query(searchquery, [id], (err, res) => {
             if (err) {
                 console.error(err)
                 return reject(new Error("Erreur DB"))
@@ -149,20 +149,20 @@ function get_indivresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
                             LEFT OUTER JOIN "subGenus" Sg ON P2."subGenus_id"=Sg."id_subgenus"
                             LEFT OUTER JOIN "Species" S ON P2."species_id"=S."id_species"
                             LEFT OUTER JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
-                                WHERE (O."name"='${O}' OR '${O}'='NULL')
-                                AND (So."name"='${So}' OR '${So}'='NULL')
-                                AND (F."name"='${F}' OR '${F}'='NULL')
-                                AND (Sf."name"='${Sf}' OR '${Sf}'='NULL')
-                                AND (T."name"='${T}' OR '${T}'='NULL')
-                                AND (G."name"='${G}' OR '${G}'='NULL')
-                                AND (Sg."name"='${Sg}' OR '${Sg}'='NULL')
-                                AND (S."name"='${S}' OR '${S}'='NULL')
-                                AND (Ss."name"='${Ss}' OR '${Ss}'='NULL') 
-                                    LIMIT 10 OFFSET ${Offs}`
+                                WHERE (O."name"=$1 OR $1='NULL')
+                                AND (So."name"=$2 OR $2='NULL')
+                                AND (F."name"=$3 OR $3='NULL')
+                                AND (Sf."name"=$4 OR $4='NULL')
+                                AND (T."name"=$5 OR $5='NULL')
+                                AND (G."name"=$6 OR $6='NULL')
+                                AND (Sg."name"=$7 OR $7='NULL')
+                                AND (S."name"=$8 OR $8='NULL')
+                                AND (Ss."name"=$9 OR $9='NULL') 
+                                    LIMIT 10 OFFSET $10`
 
 
     return new Promise(function (resolve, reject) {
-        client.query(searchquery, (err, res) => {
+        client.query(searchquery, [O, So, F, Sf, T, G, Sg, S, Ss, Offs], (err, res) => {
             if (err) {
                 console.error(err)
                 return reject(new Error("Erreur DB"))
