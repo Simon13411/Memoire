@@ -46,7 +46,7 @@ def insertSpecies(data, cursor, conn) :
                     insertquery = """INSERT INTO "Species"
                                 ("id_species", "name", "id_sc", "date") 
                                 VALUES 
-                                ({},'{}',{},{})""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
+                                ({},'{}',{},'{}')""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
                     print(insertquery)
                 else:
                     insertquery = """INSERT INTO "Species"

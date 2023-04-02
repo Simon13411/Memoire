@@ -52,7 +52,7 @@ def insertGenus(data, cursor, conn) :
                     insertquery = """INSERT INTO "Genus"
                                 ("id_genus", "name", "id_sc", "date") 
                                 VALUES 
-                                ({},'{}',{},'{}') """.format(Count, index, id_sc_list[0][0], dateNull)
+                                ({},'{}',{},{}) """.format(Count, index, id_sc_list[0][0], dateNull)
                     print(insertquery)
                 cursor.execute(insertquery)
                 Count+=1
