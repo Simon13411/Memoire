@@ -45,7 +45,7 @@ def insertSubGenus(data, cursor, conn) :
                     insertquery = """INSERT INTO "subGenus"
                                 ("id_subgenus", "name", "id_sc", "date") 
                                 VALUES 
-                                ({},'{}',{},{})""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
+                                ({},'{}',{},'{}')""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
                     print(insertquery)
                 else:
                     insertquery = """INSERT INTO "subGenus"

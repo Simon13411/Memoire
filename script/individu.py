@@ -315,22 +315,24 @@ def insertIndividu(data, cursor, conn) :
                 
             #On recupere la sous species
             subSpeciesList  =subspecies(toinsertSubSpecies[i], cursor)
-        
 
             popu = population(orderList[0],  suborderList[0], familyList[0], subFamilyList[0], tribuList[0], genusList[0],subGenusList[0],speciesList[0],subSpeciesList[0],cursor)
-            continent = ''
-            country =''
-            ecozone =''
-            if toinsertContinent[i] != " ": 
+
+            if isinstance(toinsertContinent[i], float): toinsertContinent[i]=""
+            
+            if isinstance(toinsertCountry[i], float): toinsertCountry[i]=""
+            
+            if isinstance(toinsertEcozone[i], float): toinsertEcozone[i]=""
+            """if toinsertContinent[i] != " ": 
                 continent = toinsertContinent[i]
                 print(toinsertContinent[i], continent, type(toinsertContinent[i]), type(continent))
             if toinsertCountry[i] !=" ": country = toinsertCountry[i]
-            if toinsertEcozone[i] !=" ": ecozone = toinsertEcozone[i]
+            if toinsertEcozone[i] !=" ": ecozone = toinsertEcozone[i]"""
                 
             insertquery = """INSERT INTO "Individu"
                             ("id_individu", "box_id", "population_id", "continent", "country", "ecozone", "name") 
                             VALUES 
-                            ({},{}, {},'{}', '{}', '{}','{}')""".format(Count, toinsertID[i], popu, continent, country, ecozone, toinsert[i])
+                            ({},{}, {}, '{}', '{}', '{}','{}')""".format(Count, toinsertID[i], popu, toinsertContinent[i], toinsertCountry[i], toinsertEcozone[i], toinsert[i])
             #print(insertquery)
             cursor.execute(insertquery)
             Count+=1

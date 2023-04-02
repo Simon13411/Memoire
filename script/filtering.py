@@ -137,6 +137,13 @@ for i, row in df.iterrows() :
                 continue
 
     gooddf.loc[len(gooddf)] = row
+badList = []
+for a in baddf['Num_ID']:
+    badList.append(a)
+if(len(badList)>0):
+    print("index pas bon: ", badList)
+    print("number of bad lines:", count)
+    
 
-baddf.to_excel("WrongFormatData.xlsx", index=False)
+#baddf.to_excel("WrongFormatData.xlsx", index=False)
 gooddf.to_excel("FilteredData.xlsx",index=False)
