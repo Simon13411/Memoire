@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Navbar from './Navbar';
 
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -8,12 +7,12 @@ import Select from '@mui/material/Select';
 import axios from 'axios'
 const url = process.env.REACT_APP_IP
 
-class BoxDetailsAdmin extends React.Component {
+class BoxDetailsAddPop extends React.Component {
 
     constructor (props) {
         super(props)
         this.state = {
-            order: '',
+            order: null,
             suborder: null,
             genus: null,
             subgenus: null,
@@ -22,7 +21,10 @@ class BoxDetailsAdmin extends React.Component {
             species: null,
             subspecies: null,
             tribu: null,
-            loaner: null,
+            grangebegin: null,
+            grangeend: null,
+            srangebegin: null,
+            grangebegin: null,
             orderlist: [],
             suborderlist: [],
             genuslist: [],
@@ -40,70 +42,69 @@ class BoxDetailsAdmin extends React.Component {
     }
 
     get_selection = () => {
-        const ParentVar = this.props.getParentStateVar()
-
         axios.get(`${url}/get_selectiono`, {
           params:
           {so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({orderlist: res.data.rows, order: ParentVar.order})
+            this.setState({orderlist: res.data.rows})
         })
     
         axios.get(`${url}/get_selectionso`, {
           params:
           {o: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({suborderlist: res.data.rows, suborder: ParentVar.suborder})
+            this.setState({suborderlist: res.data.rows})
         })
     
         axios.get(`${url}/get_selectiong`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({genuslist: res.data.rows, genus: ParentVar.genus})
+            this.setState({genuslist: res.data.rows,})
         })
     
         axios.get(`${url}/get_selectionsg`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({subgenuslist: res.data.rows, subgenus: ParentVar.subgenus})
+            this.setState({subgenuslist: res.data.rows})
         })
     
         axios.get(`${url}/get_selectionf`, {
           params:
           {o: 'NULL', so: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({familylist: res.data.rows, family: ParentVar.family})
+            this.setState({familylist: res.data.rows})
         })
     
         axios.get(`${url}/get_selectionsf`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({subfamilylist: res.data.rows, subfamily: ParentVar.subfamily})
+            this.setState({subfamilylist: res.data.rows})
         })
     
         axios.get(`${url}/get_selections`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({specieslist: res.data.rows, species: ParentVar.species})
+            this.setState({specieslist: res.data.rows})
         })
     
         axios.get(`${url}/get_selectionss`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL'}})
             .then((res) => {
-            this.setState({subspecieslist: res.data.rows, subspecies: ParentVar.subspecies})
+            this.setState({subspecieslist: res.data.rows})
         })
     
         axios.get(`${url}/get_selectiont`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({tribulist: res.data.rows, tribu: ParentVar.tribu})
+            this.setState({tribulist: res.data.rows})
         })
+
       }
     
     handleInputChange = (event) => {
@@ -116,14 +117,14 @@ class BoxDetailsAdmin extends React.Component {
     }
 
     modify = () => {
-
+        
     }
 
     render() {
         return (
             <div className="column">
                 <div>
-                <h2 className="title">Modify Population</h2>
+                <h2 className="title">Add Population</h2>
                 <h4 className="title">Order</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select
@@ -132,6 +133,9 @@ class BoxDetailsAdmin extends React.Component {
                         onChange={this.handleInputChange}
                         name="order"
                         >
+                        <MenuItem value={null}>
+                            <em>None</em>
+                        </MenuItem>
                         {this.state.orderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                         </Select>
                     </FormControl>
@@ -264,10 +268,12 @@ class BoxDetailsAdmin extends React.Component {
                         </Select>
                     </FormControl>
                 </div>
-                <button type='submit' onClick={this.modify}>Modifier</button>
+                <div>
+                    <button type='submit' onClick={this.modify}>Ajouter une population</button>
+                </div>
             </div>
         )
     }
 }
 
-export default BoxDetailsAdmin;
+export default BoxDetailsAddPop;

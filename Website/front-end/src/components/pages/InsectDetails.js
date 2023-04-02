@@ -4,6 +4,10 @@ import Navbar from '../Navbar';
 
 import InsectDetailsAdmin from '../InsectDetailsAdmin';
 
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 import axios from 'axios'
 const url = process.env.REACT_APP_IP
 
@@ -11,18 +15,18 @@ class InsectDetails extends React.Component {
     constructor (props) {
       super(props)
       this.state = {
-        individ: undefined,
+        individ: null,
         idbox: 0,
-        order: undefined,
-        suborder: undefined,
-        genus: undefined,
-        subgenus: undefined,
-        family: undefined,
-        subfamily: undefined,
-        species: undefined,
-        subspecies: undefined,
-        tribus: undefined,
-        loaner: undefined,
+        order: null,
+        suborder: null,
+        genus: null,
+        subgenus: null,
+        family: null,
+        subfamily: null,
+        species: null,
+        subspecies: null,
+        tribus: null,
+        loaner: null,
         orderlist: [],
         suborderlist: [],
         genuslist: [],
@@ -32,8 +36,10 @@ class InsectDetails extends React.Component {
         specieslist: [],
         subspecieslist: [],
         tribuslist: [],
-        loanerlist: [],
+        loanerslist: [],
         isLoaded: false,
+        newidbox: 0,
+        newloaner: '',
       }
     }
 
@@ -51,6 +57,7 @@ class InsectDetails extends React.Component {
       .then((res) => {
           this.setState({individ: res.data.rows[0].id_individu,
                         idbox: res.data.rows[0].box_id,
+                        newidbox: res.data.rows[0].box_id,
                         order: res.data.rows[0].order,
                         suborder: res.data.rows[0].suborder,
                         family: res.data.rows[0].family,
@@ -67,12 +74,29 @@ class InsectDetails extends React.Component {
     getLoaners = () => {
       axios.get(`${url}/get_loaners`)
       .then((res) => {
-          this.setState({loanerslist: res.data.rows, loaner: this.props.loaner})
+          this.setState({loanerslist: res.data.rows, loaner: this.state.attr[0].loaner})
       })
     }
 
     Loaded = () => {
       this.setState({isLoaded: true})
+    }
+
+    handleInputChange = (event) => {
+      const target = event.target
+      const value = target.value
+      const name = target.name
+      this.setState({
+          [name]: value
+      })
+    }
+
+    modifybox = () => {
+
+    }
+
+    modifyloaner = () => {
+
     }
 
     render() {
@@ -84,27 +108,51 @@ class InsectDetails extends React.Component {
           ):(
             <>
               <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
-              <p>Individuals n° {this.props.searchParams.get("id")} {this.state.loaner ? (<>Loaner: {this.state.loaner}</>):(<></>)}</p>
+              <p>Individual n° {this.props.searchParams.get("id")} {this.state.idbox !== 0 ? (<>From Box n° {this.state.idbox}</>):(<></>)} {this.state.loaner ? (<>Loaner: {this.state.loaner}</>):(<></>)}</p>
               <div className="container">
                 {/*Info part*/}
-                <div className="column">
+                {this.props.isAuthenticated() ?
+                (
+                  <div className="column">
                     <div>
-                      {(!this.state.individ)  ?
-                        (<></>)
-                        :
-                        <>
-                        <h3 className="title">Individual ID</h3>
-                        <p>{this.state.individ}</p>
-                        </>
-                      }
+                      <h4 className="title">Box n°</h4>
+                        <input type="number" value={this.state.newidbox} width="40" onChange={this.handleInputChange} name="newidbox" />
                     </div>
+                    <button type="submit" name="newidbox" onClick={this.modifybox}>Modifier</button>
+                    {this.state.modifyloanerstate}
+                    <div>
+                      <h4 className="title">Loaner</h4>
+                          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                              <Select
+                              id="loaner-select"
+                              value={this.state.loaner}
+                              onChange={this.handleInputChange}
+                              name="newloaner"
+                              >
+                              <MenuItem value={null}>
+                                  <em>None</em>
+                              </MenuItem>
+                              {this.state.loanerslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                              </Select>
+                          </FormControl>
+                    </div>
+                    <button type='submit' onClick={this.modifyloaner}>Modifier</button>
+                    {this.state.modifyloanerstate}
+                  </div>
+                ):(
+                  <></>
+                )
+              }
+              
+                <div className="column">
+                  <h2 className="title">Modify Population</h2>
                     <div>
                       {(this.state.idbox) === 0 ?
                         (<></>)
                         :
                         <>
-                        (<h3 className="title">Box ID</h3>
-                        <p>{this.state.idbox}</p>)
+                        <h4 className="title">Box ID</h4>
+                        <p>{this.state.idbox}</p>
                         </>
                       }
                     </div>
@@ -113,7 +161,7 @@ class InsectDetails extends React.Component {
                         (<></>)
                         :
                         <>
-                        <h3 className="title">Order</h3>
+                        <h4 className="title">Order</h4>
                         <p>{this.state.order}</p>
                         </>
                       }
@@ -123,7 +171,7 @@ class InsectDetails extends React.Component {
                         (<></>)
                         :
                         <>
-                        <h3 className="title">Suborder</h3>
+                        <h4 className="title">Suborder</h4>
                         <p>{this.state.suborder}</p>
                         </>
                       }
@@ -133,7 +181,7 @@ class InsectDetails extends React.Component {
                         (<></>)
                         :
                         <>
-                        <h3 className="title">Genus</h3>
+                        <h4 className="title">Genus</h4>
                         <p>{this.state.genus}</p>
                         </>
                       }
@@ -143,7 +191,7 @@ class InsectDetails extends React.Component {
                         (<></>)
                         :
                         <>
-                        <h3  className="title">Subgenus</h3>
+                        <h4  className="title">Subgenus</h4>
                         <p>{this.state.subgenus}</p>
                         </>
                       }
@@ -153,7 +201,7 @@ class InsectDetails extends React.Component {
                         (<></>)
                         :
                         <>
-                        <h3 className="title">Family</h3>
+                        <h4 className="title">Family</h4>
                         <p>{this.state.family}</p>
                         </>
                       }
@@ -163,7 +211,7 @@ class InsectDetails extends React.Component {
                         (<></>)
                         :
                         <>
-                        <h3 className="title">Subfamily</h3>
+                        <h4 className="title">Subfamily</h4>
                         <p>{this.state.subfamily}</p>
                         </>
                       }
@@ -173,7 +221,7 @@ class InsectDetails extends React.Component {
                         (<></>)
                         :
                         <>
-                        <h3 className="title">Species</h3>
+                        <h4 className="title">Species</h4>
                         <p>{this.state.species}</p>
                         </>
                       }
@@ -183,7 +231,7 @@ class InsectDetails extends React.Component {
                         (<></>)
                         :
                         <>
-                        <h3 className="title">Subspecies</h3>
+                        <h4 className="title">Subspecies</h4>
                         <p>{this.state.subspecies}</p>
                         </>
                       }
@@ -193,7 +241,7 @@ class InsectDetails extends React.Component {
                         (<></>)
                         :
                         <>
-                        <h3 className="title">Tribus</h3>
+                        <h4 className="title">Tribus</h4>
                         <p>{this.state.tribus}</p>
                         </>
                       }
@@ -203,7 +251,7 @@ class InsectDetails extends React.Component {
                         (<></>)
                         :
                         <>
-                        <h3 className="title">Loaner</h3>
+                        <h4 className="title">Loaner</h4>
                         <p>{this.state.loaner}</p>
                         </>
                       }
@@ -211,7 +259,7 @@ class InsectDetails extends React.Component {
                 </div>
                 <div className="column">
                   {/*Photo part*/}
-                  <h3>Pictures</h3>
+                  <h2>Pictures</h2>
                 </div>
                 {this.props.isAuthenticated() && this.state.isLoaded ? 
                   (

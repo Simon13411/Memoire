@@ -20,13 +20,13 @@ class BoxAttributes extends React.Component {
         <>
             <div className="column">
                 {/*Info part*/}
-                <h2>Population {this.props.index}</h2>
+                <h2>Population n°{this.props.index+1}</h2>
                 <div>
                 {(!this.props.order) ?
                     (<></>)
                     :
                     <>
-                    <h1 className="title">Order</h1>
+                    <h4 className="title">Order</h4>
                     <p>{this.props.order}</p>
                     </>
                 }
@@ -36,7 +36,7 @@ class BoxAttributes extends React.Component {
                     (<></>)
                     :
                     <>
-                    <h1 className="title">Suborder</h1>
+                    <h4 className="title">Suborder</h4>
                     <p>{this.props.suborder}</p>
                     </>
                 }
@@ -46,7 +46,7 @@ class BoxAttributes extends React.Component {
                     (<></>)
                     :
                     <>
-                    <h1 className="title">Genus</h1>
+                    <h4 className="title">Genus</h4>
                     <p>{this.props.genus}</p>
                     </>
                 }
@@ -56,7 +56,7 @@ class BoxAttributes extends React.Component {
                     (<></>)
                     :
                     <>
-                    <h1  className="title">Subgenus</h1>
+                    <h4  className="title">Subgenus</h4>
                     <p>{this.props.subgenus}</p>
                     </>
                 }
@@ -66,7 +66,7 @@ class BoxAttributes extends React.Component {
                     (<></>)
                     :
                     <>
-                    <h1 className="title">Family</h1>
+                    <h4 className="title">Family</h4>
                     <p>{this.props.family}</p>
                     </>
                 }
@@ -76,7 +76,7 @@ class BoxAttributes extends React.Component {
                     (<></>)
                     :
                     <>
-                    <h1 className="title">Subfamily</h1>
+                    <h4 className="title">Subfamily</h4>
                     <p>{this.props.subfamily}</p>
                     </>
                 }
@@ -86,7 +86,7 @@ class BoxAttributes extends React.Component {
                     (<></>)
                     :
                     <>
-                    <h1 className="title">Species</h1>
+                    <h4 className="title">Species</h4>
                     <p>{this.props.species}</p>
                     </>
                 }
@@ -96,7 +96,7 @@ class BoxAttributes extends React.Component {
                     (<></>)
                     :
                     <>
-                    <h1 className="title">Subspecies</h1>
+                    <h4 className="title">Subspecies</h4>
                     <p>{this.props.subspecies}</p>
                     </>
                 }
@@ -106,7 +106,7 @@ class BoxAttributes extends React.Component {
                     (<></>)
                     :
                     <>
-                    <h1 className="title">Tribus</h1>
+                    <h4 className="title">Tribus</h4>
                     <p>{this.props.tribus}</p>
                     </>
                 }

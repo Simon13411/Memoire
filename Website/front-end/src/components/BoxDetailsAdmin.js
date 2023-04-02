@@ -124,7 +124,7 @@ class BoxDetailsAdmin extends React.Component {
         return (
             <div className="column">
                 <div>
-                <h2 className="title">Modify {this.props.index}</h2>
+                <h2 className="title">Modify Popu n°{this.props.index+1}</h2>
                 <h4 className="title">Order</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select
@@ -269,7 +269,7 @@ class BoxDetailsAdmin extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                    <button type='submit' onClick={this.modify}>Ajouter une population</button>
+                    <button type='submit' onClick={this.modify}>Modifier une population</button>
                 </div>
             </div>
         )

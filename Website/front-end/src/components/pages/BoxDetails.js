@@ -7,6 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 import BoxAttributes from '../BoxAttributes'
+import BoxDetailsAddPop from '../BoxDetailsAddPop';
 
 import axios from 'axios'
 const url = process.env.REACT_APP_IP
@@ -17,10 +18,14 @@ class BoxDetails extends React.Component {
     this.state = {
       attr: [],
       isLoaded: false,
-      collection: undefined,
-      loaner: undefined,
+      collection: null,
+      loaner: null,
       collectionlist: [],
-      loanerlist: []
+      loanerlist: [],
+      newcollection: null,
+      newloaner: null,
+      modifycollectionstate: '',
+      modifyloanerstate: ''
     }
   }
 
@@ -36,24 +41,41 @@ class BoxDetails extends React.Component {
   GetBox = (event) => {
     axios.get(`${url}/get_boxdetails`, {params: {id: this.props.searchParams.get("id")}})
     .then((res) => {
-        this.setState({attr: res.data.rows}, this.Loaded)
+        this.setState({attr: res.data.rows, collection: res.data.rows[0].collection, newcollection: res.data.rows[0].collection, loaner: res.data.rows[0].loaner, newloaner: res.data.rows[0].loaner}, this.Loaded)
     })
   }
 
   getCollectionsAndLoaners = () => {
     axios.get(`${url}/get_loaners`)
     .then((res) => {
-        this.setState({loanerslist: res.data.rows, loaner: this.props.loaner})
+        this.setState({loanerslist: res.data.rows})
     })
 
     axios.get(`${url}/get_collections`)
         .then((res) => {
-            this.setState({collectionlist: res.data.rows, collection: this.props.collection})
+            this.setState({collectionlist: res.data.rows})
     })
   }
 
   Loaded = () => {
     this.setState({isLoaded: true, collection: this.state.attr[0].collection, loaner: this.state.attr[0].loaner})
+  }
+
+  handleInputChange = (event) => {
+    const target = event.target
+    const value = target.value
+    const name = target.name
+    this.setState({
+        [name]: value
+    })
+  }
+
+  modifycollection = () => {
+
+  }
+
+  modifyloaner = () => {
+
   }
 
   render() {
@@ -76,9 +98,9 @@ class BoxDetails extends React.Component {
                           <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                               <Select
                               id="collection-select"
-                              value={this.state.collection}
+                              value={this.state.newcollection}
                               onChange={this.handleInputChange}
-                              name="collection"
+                              name="newcollection"
                               >
                               <MenuItem value={null}>
                                   <em>None</em>
@@ -87,15 +109,16 @@ class BoxDetails extends React.Component {
                               </Select>
                           </FormControl>
                     </div>
-                    <button type='submit' onClick={this.modify}>Modifier</button>
+                    <button type='submit' onClick={this.modifycollection}>Modifier</button>
+                    {this.state.modifycollectionstate}
                     <div>
                       <h4 className="title">Loaner</h4>
                           <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                               <Select
                               id="loaner-select"
-                              value={this.state.loaner}
+                              value={this.state.newloaner}
                               onChange={this.handleInputChange}
-                              name="loaner"
+                              name="newloaner"
                               >
                               <MenuItem value={null}>
                                   <em>None</em>
@@ -104,6 +127,8 @@ class BoxDetails extends React.Component {
                               </Select>
                           </FormControl>
                     </div>
+                    <button type='submit' onClick={this.modifyloaner}>Modifier</button>
+                    {this.state.modifyloanerstate}
                   </div>
                 ):(
                   <></>
@@ -128,9 +153,15 @@ class BoxDetails extends React.Component {
                                                             srangebegin= {data.srangebegin}
                                                             srangeend= {data.srangeend}></BoxAttributes>)}
             </div>
+            {this.props.isAuthenticated() ?
+                <BoxDetailsAddPop/>
+              :
+                <></>
+            }
+
             <div className="column">
                 {/*Photo part*/}
-                <h3>Pictures</h3>
+                <h2>Pictures</h2>
             </div>
           </>
       )
