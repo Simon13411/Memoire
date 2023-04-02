@@ -356,7 +356,7 @@ class Selection extends React.Component {
           {this.state.wantedpagestate}
         </div>
         <ul class="datalist">
-          {this.state.results.map((data) => <li><ResultsWNav id={data.id_box} order={data.Order} suborder={data.subOrder} family={data.Family} subfamily={data.subFamily}></ResultsWNav></li>)}
+          {this.state.results.map((data) => <li><ResultsWNav id={data.id_box} order={data.Order} suborder={data.subOrder} family={data.Family} subfamily={data.subFamily} genus={data.Genus} subgenus={data.subGenus} species={data.Species} subspecies={data.subSpecies} tribu={data.Tribu}></ResultsWNav></li>)}
         </ul>
       </>
     );

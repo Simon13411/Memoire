@@ -44,28 +44,28 @@ class ResultsIndiv extends React.Component {
                     :
                     (<></>)
                 }
+                {(this.props.tribu) ?
+                    (<div>Tribu: {this.props.tribu}</div>)
+                    :
+                    (<></>)
+                }
                 {(this.props.genus) ?
-                    (<div>Family: {this.props.genus}</div>)
+                    (<div>Genus: {this.props.genus}</div>)
                     :
                     (<></>)
                 }
                 {(this.props.subgenus) ?
-                    (<div>Subfamily: {this.props.subgenus}</div>)
+                    (<div>Subgenus: {this.props.subgenus}</div>)
                     :
                     (<></>)
                 }
                 {(this.props.species) ?
-                    (<div>Family: {this.props.species}</div>)
+                    (<div>Species: {this.props.species}</div>)
                     :
                     (<></>)
                 }
                 {(this.props.subspecies) ?
-                    (<div>Subfamily: {this.props.subspecies}</div>)
-                    :
-                    (<></>)
-                }
-                {(this.props.tribu) ?
-                    (<div>Subfamily: {this.props.tribu}</div>)
+                    (<div>Subspecies: {this.props.subspecies}</div>)
                     :
                     (<></>)
                 }

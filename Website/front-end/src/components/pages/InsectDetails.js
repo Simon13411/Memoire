@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Navigate, useSearchParams } from "react-router-dom"
 import Navbar from '../Navbar';
 
-import InsectDetailsAdmin from './InsectDetailsAdmin';
+import InsectDetailsAdmin from '../InsectDetailsAdmin';
 
 import axios from 'axios'
 const url = process.env.REACT_APP_IP
@@ -38,7 +38,8 @@ class InsectDetails extends React.Component {
     }
 
     componentDidMount() {
-      {this.GetIndiv()}
+      this.GetIndiv()
+      this.getLoaners()
     }
 
     getStateVar = () => {
@@ -63,6 +64,13 @@ class InsectDetails extends React.Component {
       })
     }
 
+    getLoaners = () => {
+      axios.get(`${url}/get_loaners`)
+      .then((res) => {
+          this.setState({loanerslist: res.data.rows, loaner: this.props.loaner})
+      })
+    }
+
     Loaded = () => {
       this.setState({isLoaded: true})
     }
@@ -76,6 +84,7 @@ class InsectDetails extends React.Component {
           ):(
             <>
               <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
+              <p>Individuals n° {this.props.searchParams.get("id")} {this.state.loaner ? (<>Loaner: {this.state.loaner}</>):(<></>)}</p>
               <div className="container">
                 {/*Info part*/}
                 <div className="column">

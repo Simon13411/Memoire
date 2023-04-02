@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Navbar from '../Navbar';
+import Navbar from './Navbar';
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -33,8 +33,7 @@ class BoxDetailsAdmin extends React.Component {
             specieslist: [],
             subspecieslist: [],
             tribulist: [],
-            loanerlist: [],
-            collectionlist: [],
+            loanerslist: []
         }
     }
 
