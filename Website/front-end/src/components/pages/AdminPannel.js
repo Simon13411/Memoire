@@ -204,7 +204,7 @@ class AdminPannel extends React.Component {
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({addattrstate: "Erreur Serveur"});
+                this.setState({addattrstate: "Erreur Serveur - Gateway"});
             }
             else {
                 this.setState({addattrstate: err.response.data.error});
@@ -225,7 +225,7 @@ class AdminPannel extends React.Component {
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({deleteattrstate: "Erreur Serveur"});
+                this.setState({deleteattrstate: "Erreur serveur - Gateway"});
             }
             else {
                 this.setState({deleteattrstate: err.response.data.error});
@@ -257,7 +257,7 @@ class AdminPannel extends React.Component {
             })
             .catch((err) => {
                 if (!err.response) {
-                    this.setState({useraddstate: "Erreur Serveur"});
+                    this.setState({useraddstate: "Erreur Serveur - Gateway"});
                 }
                 else {
                     this.setState({useraddstate: err.response.data.error});
@@ -287,7 +287,7 @@ class AdminPannel extends React.Component {
             })
             .catch((err) => {
                 if (!err.response) {
-                    this.setState({usermodifstate: "Erreur Serveur"});
+                    this.setState({usermodifstate: "Erreur Serveur - Gateway"});
                 }
                 else {
                     this.setState({usermodifstate: err.response.data.error});
@@ -314,7 +314,7 @@ class AdminPannel extends React.Component {
             })
             .catch((err) => {
                 if (!err.response) {
-                    this.setState({userrightstate: "Erreur Serveur"});
+                    this.setState({userrightstate: "Erreur Serveur - Gateway"});
                 }
                 else {
                     this.setState({userrightstate: err.response.data.error});

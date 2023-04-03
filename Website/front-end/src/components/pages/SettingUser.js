@@ -54,7 +54,7 @@ class AdminPannel extends React.Component {
             })
             .catch((err) => {
                 if (!err.response) {
-                    this.setState({newpasswordstate: "Erreur Serveur"});
+                    this.setState({newpasswordstate: "Erreur Serveur - Gateway"});
                 }
                 else {
                     this.setState({newpasswordstate: err.response.data.error});

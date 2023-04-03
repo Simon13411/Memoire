@@ -45,13 +45,7 @@ class App extends React.Component {
                 }
               })
               .catch((err) => {
-                if (!err.response) {
-                  console.log(err)
-                  this.setState({ isLoading: false }, console.log("Not Connected + Error DB"));
-                }
-                else {
                   this.setState({ isAuthenticated: true, username: username, isAdmin: false, isLoading: false}, console.log("Successfully Connected"));
-                }
               })
           }
         })

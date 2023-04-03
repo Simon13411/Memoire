@@ -46,10 +46,10 @@ class Authentication extends React.Component {
         })
         .catch((err) => {
           if (!err.response) {
-            this.setState({loginstate: 'An error occurred while logging in'});
+            this.setState({loginstate: 'Wrong username or password'});
           }
           else {
-            this.setState({loginstate: 'Wrong username or password'});
+            this.setState({loginstate: err.response.data.error});
           }
         });
     }

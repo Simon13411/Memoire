@@ -53,10 +53,10 @@ class FileUploader extends Component {
         console.error('Erreur lors de l\'envoi du fichier', err);
         if (!err.response) {
           if (this.props.type === 'Box'){
-            this.props.Changeboxuploadstate('Erreur Serveur')
+            this.props.Changeboxuploadstate('Erreur Serveur - Gateway')
           }
           else if (this.props.type === 'Individual') {
-            this.props.Changeindivuploadstate('Erreur Serveur')
+            this.props.Changeindivuploadstate('Erreur Serveur - Gateway')
           }
         }
         else {

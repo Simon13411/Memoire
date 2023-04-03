@@ -102,7 +102,7 @@ class InsectDetails extends React.Component {
       })
       .catch((err) => {
         if (!err.response) {
-          this.setState({modifyboxstate: 'Erreur Serveur'})
+          this.setState({modifyboxstate: 'Erreur Serveur - Gateway'})
         }
         else {
           this.setState({modifyboxstate: err.response.data.error})
@@ -119,7 +119,7 @@ class InsectDetails extends React.Component {
       })
       .catch((err) => {
         if (!err.response) {
-          this.setState({modifyloanerstate: 'Erreur Serveur'})
+          this.setState({modifyloanerstate: 'Erreur Serveur - Gateway'})
         }
         else {
           this.setState({modifyloanerstate: err.response.data.error})

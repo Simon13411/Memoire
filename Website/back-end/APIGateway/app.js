@@ -482,14 +482,14 @@ function errorhandler(err, res) {
     console.log(err)
     if (err.response) {
         if (err.response.data) {
-            res.status(err.response.status).json(err.response.data.error);
+            res.status(err.response.status).json({ error: err.response.data.error });
         }
         else {
-            res.status(err.response.status).json({success: false});
+            res.status(err.response.status).json({ error: "Erreur serveur"});
         }
     }
     else {
-        res.status(404).json( {error : "Erreur serveur" } );
+        res.status(404).json( {error : "Erreur serveur - Inaccessible" } );
     }
 }
 
