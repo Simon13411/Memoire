@@ -55,6 +55,21 @@ class AdminPannel extends React.Component {
         usernametoadmin: '',
         adminRight: '0',
         userrightstate: '',
+        //AddCollection
+        newcollection: '',
+        addcollectionstate: '',
+        //ModifyCollection
+        collectionlist: [],
+        modifiedcollection: 'NULL',
+        modifiedcollection2: '',
+        modifycollectionstate: '',
+        //AddLoaner
+        newloanername: '',
+        //Modifyloaner
+        loanerlist: [],
+        modifiedloaner: '',
+        modifiedloanername: '',
+        modifiedloanerstate: '',
         //Token
         authToken: ''
       };
@@ -62,8 +77,9 @@ class AdminPannel extends React.Component {
 
     componentDidMount() {
         this.setState({authToken: Cookies.get('auth_token')})
-        {this.getUsers()}
-        {this.get_selection()}
+        this.getUsers()
+        this.get_selection()
+        this.getCollectionsAndLoaners()
       }
 
     onSubmit (event) {
@@ -162,6 +178,18 @@ class AdminPannel extends React.Component {
             this.setState({users: res.data.rows});
         })
     }
+
+    getCollectionsAndLoaners = () => {
+        axios.get(`${url}/get_loaners`)
+        .then((res) => {
+            this.setState({loanerlist: res.data.rows})
+        })
+    
+        axios.get(`${url}/get_collections`)
+            .then((res) => {
+                this.setState({collectionlist: res.data.rows})
+        })
+      }
 
     AddAttribute = (event) => {
         const target = event.target
@@ -293,6 +321,22 @@ class AdminPannel extends React.Component {
         }
     }
 
+    AddCollection = () => {
+
+    }
+
+    ModifyCollection = () => {
+
+    }
+
+    Addloaner = () => {
+
+    }
+
+    ModifyLoaner = () => {
+
+    }
+
     render() {
       return (
         <>
@@ -325,6 +369,11 @@ class AdminPannel extends React.Component {
                     <button type="submit" name="subfamily" onClick={this.AddAttribute}>Ajouter</button>
                     <br />
 
+                    <label htmlFor="subfamily">Tribu:</label>
+                    <input type="text" value={this.state.tribu} onChange={this.handleInputChange} name="tribu" />
+                    <button type="submit" name="tribu" onClick={this.AddAttribute}>Ajouter</button>
+                    <br />
+
                     <label htmlFor="genus">Genus:</label>
                     <input type="text" value={this.state.genus} onChange={this.handleInputChange} name="genus" />
                     <button type="submit" name="genus" onClick={this.AddAttribute}>Ajouter</button>
@@ -343,11 +392,6 @@ class AdminPannel extends React.Component {
                     <label htmlFor="subspecies">SubSpecies:</label>
                     <input type="text" value={this.state.subspecies} onChange={this.handleInputChange} name="subspecies" />
                     <button type="submit" name="subspecies" onClick={this.AddAttribute}>Ajouter</button>
-                    <br />
-
-                    <label htmlFor="subfamily">Tribu:</label>
-                    <input type="text" value={this.state.tribu} onChange={this.handleInputChange} name="tribu" />
-                    <button type="submit" name="tribu" onClick={this.AddAttribute}>Ajouter</button>
                   </form>
                 </div>
 
@@ -432,6 +476,25 @@ class AdminPannel extends React.Component {
                     <br />
 
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                        <InputLabel id="demo-simple-select-label">Tribu</InputLabel>
+                        <Select
+                        labelId="tribu2-label"
+                        id="tribu2-select"
+                        value={this.state.tribu2}
+                        label="tribu2"
+                        onChange={this.handleInputChange}
+                        name="tribu2"
+                        >
+                        <MenuItem value='NULL'>
+                            <em>None</em>
+                        </MenuItem>
+                        {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                    <button type="submit" name="tribu2" onClick={this.DeleteAttribute}>Supprimer</button>
+                    <br />
+
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <InputLabel id="demo-simple-select-label">Genus</InputLabel>
                         <Select
                         labelId="genus2-label"
@@ -505,30 +568,11 @@ class AdminPannel extends React.Component {
                         </Select>
                     </FormControl>
                     <button type="submit" name="subspecies2" onClick={this.DeleteAttribute}>Supprimer</button>
-                    <br />
-
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                        <InputLabel id="demo-simple-select-label">Tribu</InputLabel>
-                        <Select
-                        labelId="tribu2-label"
-                        id="tribu2-select"
-                        value={this.state.tribu2}
-                        label="tribu2"
-                        onChange={this.handleInputChange}
-                        name="tribu2"
-                        >
-                        <MenuItem value='NULL'>
-                            <em>None</em>
-                        </MenuItem>
-                        {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                    <button type="submit" name="tribu2" onClick={this.DeleteAttribute}>Supprimer</button>
                   </form>
                 </div>
         
                 <div className="column">
-                  <h3>Modifier données</h3>
+                  <h3>Modifier données - Overwrite mode</h3>
                   <button type="submit">Soumettre</button>
                 </div>
         
@@ -553,8 +597,6 @@ class AdminPannel extends React.Component {
                         <button type="submit" onClick={this.AddUser}>Ajouter</button>
                         <div>{this.state.useraddstate}</div>
                     </form>
-                </div>
-                <div className="column">
                   <h3>Modifier un utilisateur</h3>
                   <form onSubmit={(event) => { this.onSubmit(event) }}>
                   <label htmlFor="usernametomodifyhtml">Username:</label>
@@ -589,9 +631,7 @@ class AdminPannel extends React.Component {
                     <button type="submit" onClick={this.ModifyPassword}>Modifier</button>
                     {this.state.usermodifstate}
                 </form>
-                </div>
-                <div className="column">
-                  <h3>Accès Administrateur</h3>
+                  <h3>Modifier role utilisateur</h3>
                   <form onSubmit={(event) => { this.onSubmit(event) }}>
                   <label htmlFor="usernametoadmin">Username:</label>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
@@ -621,11 +661,92 @@ class AdminPannel extends React.Component {
                     {this.state.userrightstate}
                 </form>
                 </div>
+                <div className='column'>
+                    <h3>Ajouter une collection</h3>
+                        <form onSubmit={(event) => { this.onSubmit(event) }}>
+                            <label htmlFor="newcollection">New Collection:</label>
+                            <input type="text" value={this.state.newcollection} onChange={this.handleInputChange} name="newcollection" />
+                            <br />
+                            <button type="submit" onClick={this.AddCollection}>Ajouter</button>
+                            {this.state.addcollectionstate}
+                        </form>
+                    <h3>Modifier une collection</h3>
+                        <form onSubmit={(event) => { this.onSubmit(event) }}>
+                            <label htmlFor="modifiedcollection">Collection to modify:</label>
+                            <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
+                                <InputLabel id="demo-simple-select-label"></InputLabel>
+                                <Select
+                                    value={this.state.modifiedcollection}
+                                    label="modifiedcollection"
+                                    onChange={this.handleInputChange}
+                                    name='modifiedcollection'
+                                >
+                                <MenuItem value='NULL'>
+                                    <em>None</em>
+                                </MenuItem>
+                                {this.state.collectionlist.map((col) => (
+                                    <MenuItem key={col.name} value={col.name}>
+                                        {col.name}
+                                    </MenuItem>
+                                ))}
+                                </Select>
+                            </FormControl>
+                            <label htmlFor="modifiedcollection">New collection's name:</label>
+                            <input type="text" value={this.state.modifiedcollection2} onChange={this.handleInputChange} name="modifiedcollection2" />
+                            <br />
+                            <button type="submit" onClick={this.ModifyCollection}>Ajouter</button>
+                            {this.state.modifycollectionstate}
+                        </form>
+                </div>
+                <div className='column'>
+                    <h3>Ajouter un loaner</h3>
+                        <form onSubmit={(event) => { this.onSubmit(event) }}>
+                            <label htmlFor="newloaner">New Loaner:</label>
+                            <input type="text" value={this.state.newloanername} onChange={this.handleInputChange} name="newloanername" />
+                            <br />
+                            <button type="submit" onClick={this.Addloaner}>Ajouter</button>
+                            {this.state.addloanerstate}
+                        </form>
+                    <h3>Modifier un loaner</h3>
+                        <form onSubmit={(event) => { this.onSubmit(event) }}>
+                            <label htmlFor="modifiedloaner">Loaner to modify:</label>
+                            <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
+                                <InputLabel id="demo-simple-select-label"></InputLabel>
+                                <Select
+                                    value={this.state.modifiedloaner}
+                                    label="modifiedloaner"
+                                    onChange={this.handleInputChange}
+                                    name='modifiedloaner'
+                                >
+                                <MenuItem value='NULL'>
+                                    <em>None</em>
+                                </MenuItem>
+                                {this.state.loanerlist.map((l) => (
+                                    <MenuItem key={l.name} value={l.name}>
+                                        {l.name}
+                                    </MenuItem>
+                                ))}
+                                </Select>
+                            </FormControl>
+                            <label htmlFor="modifiedcollection">New loaner's name:</label>
+                            <input type="text" value={this.state.modifiedloanername} onChange={this.handleInputChange} name="modifiedloanername" />
+                            <br />
+                            <button type="submit" onClick={this.ModifyLoaner}>Modify</button>
+                            {this.state.modifiedloanerstate}
+                        </form>
+                </div>
                 </div>
             </>
 
             ) : (
-                <Navigate to='/sign-in' />
+                <>
+                {this.props.isAuthenticated() ?
+                (
+                    <Navigate to='/' />
+                ) : (
+                    <Navigate to='/sign-in' />
+                )}
+                </>
             )
         }
         </>

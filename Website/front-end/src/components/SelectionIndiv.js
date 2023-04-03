@@ -238,36 +238,6 @@ class Selection extends React.Component {
             </Select>
           </FormControl>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-          <InputLabel id="demo-simple-select-label">Genus</InputLabel>
-            <Select
-              labelId="genus-label"
-              id="genus-select"
-              value={this.state.genus}
-              label="Genus"
-              onChange={this.GenusChange}
-            >
-              <MenuItem value='NULL'>
-                <em>None</em>
-              </MenuItem>
-              {this.state.genuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-            </Select>
-          </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-          <InputLabel id="demo-simple-select-label">SubGenus</InputLabel>
-            <Select
-              labelId="subgenus-label"
-              id="subgenus-select"
-              value={this.state.subgenus}
-              label="subGenus"
-              onChange={this.subGenusChange}
-            >
-              <MenuItem value='NULL'>
-                <em>None</em>
-              </MenuItem>
-              {this.state.subgenuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-            </Select>
-          </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
           <InputLabel id="demo-simple-select-label">Family</InputLabel>
             <Select
               labelId="family-label"
@@ -298,6 +268,51 @@ class Selection extends React.Component {
             </Select>
           </FormControl>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+            <InputLabel id="demo-simple-select-label">Tribu</InputLabel>
+            <Select
+              labelId="subspecies-label"
+              id="subspecies-select"
+              value={this.state.subspecies}
+              label="Species"
+              onChange={this.subSpeciesChange}
+            >
+              <MenuItem value='NULL'>
+                <em>None</em>
+              </MenuItem>
+              {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+            </Select>
+          </FormControl>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+          <InputLabel id="demo-simple-select-label">Genus</InputLabel>
+            <Select
+              labelId="genus-label"
+              id="genus-select"
+              value={this.state.genus}
+              label="Genus"
+              onChange={this.GenusChange}
+            >
+              <MenuItem value='NULL'>
+                <em>None</em>
+              </MenuItem>
+              {this.state.genuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+            </Select>
+          </FormControl>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+          <InputLabel id="demo-simple-select-label">SubGenus</InputLabel>
+            <Select
+              labelId="subgenus-label"
+              id="subgenus-select"
+              value={this.state.subgenus}
+              label="subGenus"
+              onChange={this.subGenusChange}
+            >
+              <MenuItem value='NULL'>
+                <em>None</em>
+              </MenuItem>
+              {this.state.subgenuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+            </Select>
+          </FormControl>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
             <InputLabel id="demo-simple-select-label">Species</InputLabel>
             <Select
               labelId="species-label"
@@ -325,21 +340,6 @@ class Selection extends React.Component {
                 <em>None</em>
               </MenuItem>
               {this.state.subspecieslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-            </Select>
-          </FormControl>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-            <InputLabel id="demo-simple-select-label">Tribu</InputLabel>
-            <Select
-              labelId="subspecies-label"
-              id="subspecies-select"
-              value={this.state.subspecies}
-              label="Species"
-              onChange={this.subSpeciesChange}
-            >
-              <MenuItem value='NULL'>
-                <em>None</em>
-              </MenuItem>
-              {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
             </Select>
           </FormControl>
           {this.state.actualpage !== 0 ?
