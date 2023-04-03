@@ -196,7 +196,8 @@ class AdminPannel extends React.Component {
         const name = target.name
         const attribute = this.state[name]
         axios.post(`${url}/add-attribute/${name}`, {
-            attribute: attribute
+            attribute: attribute,
+            token: this.state.authToken
         })
         .then((res) => {
             this.setState({addattrstate: `${attribute} added to ${name} db`});
@@ -216,7 +217,8 @@ class AdminPannel extends React.Component {
         const name = target.name
         const attribute = this.state[name]
         axios.post(`${url}/delete-attribute/${name}`, {
-            attribute: attribute
+            attribute: attribute,
+            token: this.state.authToken
         })
         .then((res) => {
             this.setState({deleteattrstate: `${attribute} deleted from ${name} db`});

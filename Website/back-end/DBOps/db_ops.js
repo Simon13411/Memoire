@@ -522,11 +522,27 @@ function get_collections() {
     })
 }
 
-function addattribute(attribute) {
+function addattribute(name, attribute) {
 
 }
 
-function deleteattribute(attribute) {
+function deleteattribute(name, attribute) {
+    
+}
+
+function addcollection(collection) {
+
+}
+
+function modifycollection(collection, newname) {
+    
+}
+
+function addloaner(loaner) {
+
+}
+
+function modifyloaner(loaner, newname) {
     
 }
 
@@ -647,6 +663,10 @@ module.exports = {
     get_collections,
     addattribute,
     deleteattribute,
+    addcollection,
+    modifycollection,
+    addloaner,
+    modifyloaner,
     changeindivboxid,
     changeindivloaner,
     csvtosql,

@@ -23,7 +23,7 @@ app.get('/get_boxdetails', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -44,7 +44,7 @@ app.get('/get_boxresult', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -55,7 +55,7 @@ app.get('/get_indivdetails', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -76,7 +76,7 @@ app.get('/get_indivresult', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -95,7 +95,7 @@ app.get('/get_selectiono', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -114,7 +114,7 @@ app.get('/get_selectionso', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -133,7 +133,7 @@ app.get('/get_selectiong', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -152,7 +152,7 @@ app.get('/get_selectionsg', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -171,7 +171,7 @@ app.get('/get_selectionf', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -190,7 +190,7 @@ app.get('/get_selectionsf', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -209,7 +209,7 @@ app.get('/get_selections', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -228,7 +228,7 @@ app.get('/get_selectionss', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -247,7 +247,7 @@ app.get('/get_selectiont', (req, res) => {
         res.status(200).json(result)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -258,7 +258,7 @@ app.get('/get_loaners', (req, res) => {
         res.status(200).json(results)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -269,31 +269,76 @@ app.get('/get_collections', (req, res) => {
         res.status(200).json(results)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
-app.get('/add-attribute/:attribute', (req, res) => {
-    const attribute = req.params.attribute
-    return db.addattribute(attribute)
+app.post('/add-attribute/:name', (req, res) => {
+    const { attribute, token } = req.body
+    return db.addattribute(req.params.name, attribute, token)
     .then((results) => {
         res.status(200).json(results)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
-app.get('/delete-attribute/:attribute', (req, res) => {
-    const attribute = req.params.attribute
-    return db.deleteattribute(attribute)
+app.post('/delete-attribute/:name', (req, res) => {
+    const { attribute, token } = req.body
+    return db.deleteattribute(req.params.name, attribute, token)
     .then((results) => {
         res.status(200).json(results)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
+
+app.post('/addcollection', (req, res) => {
+    const {collection} = req.body
+    return db.addcollection(collection)
+    .then((results) => {
+        res.status(200).json(results)
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
+
+app.post('/modifycollection', (req, res) => {
+    const { collection, newname } = req.body
+    return db.modifucollection(collection, newname)
+    .then((results) => {
+        res.status(200).json(results)
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
+
+app.post('/addloaner', (req, res) => {
+    const { loaner } = req.body
+    return db.addcollection(loaner)
+    .then((results) => {
+        res.status(200).json(results)
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
+
+app.post('/modifyloaner', (req, res) => {
+    const { loaner, newname } = req.body
+    return db.addcollection(loaner, newname)
+    .then((results) => {
+        res.status(200).json(results)
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
+    
 
 app.post('/changeindivboxid', (req, res) => {
     const { individ, newboxid } = req.body
@@ -302,7 +347,7 @@ app.post('/changeindivboxid', (req, res) => {
         res.status(200).json(results)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -313,7 +358,7 @@ app.post('/changeindivloaner', (req, res) => {
         res.status(200).json(results)
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
     })
 })
 
@@ -333,7 +378,7 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
             });
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
         fs.unlink(req.file.path, (err) => {
             if (err) {
                 console.error(err);
@@ -356,7 +401,7 @@ app.get('/boxessqltocsv', upload.single('file'), (req, res) => {
             });
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
         fs.unlink(req.file.path, (err) => {
             if (err) {
                 console.error(err);
@@ -379,7 +424,7 @@ app.get('/individualssqltocsv', upload.single('file'), (req, res) => {
             });
     })
     .catch((err) => {
-        res.status(404).json({error: err.message})
+        errorhandler(err, res)
         fs.unlink(req.file.path, (err) => {
             if (err) {
                 console.error(err);
@@ -388,5 +433,15 @@ app.get('/individualssqltocsv', upload.single('file'), (req, res) => {
             });
     })
 })
+
+function errorhandler(err, res) {
+    console.log(err)
+    if (err.message) {
+        res.status(404).json({ error: err.message });
+    }
+    else {
+        res.status(404).json( {error : "Erreur Back-end DBOps" } );
+    }
+  }
 
 module.exports = app

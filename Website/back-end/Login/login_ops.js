@@ -6,7 +6,7 @@ const { Client } = require('pg');
 const { resolve } = require('path');
 const client = new Client({
     user: 'postgres',
-    host: 'postgresc',
+    host: 'db-login',
     database: 'login',
     password: 'password',
     port: 5432,
@@ -43,7 +43,8 @@ function login(username, pw) {
 
             client.query(insertQuery, [username, token], (err, res) => {
               if (err) {
-                return reject(err);
+                console.error(err)
+                return reject(new Error("Erreur DB"));
               }
               else {
                 return resolve([token, role]);
@@ -75,7 +76,7 @@ function signup(username, pw, role, token) {
         
           const insertQuery = `INSERT INTO "Accounts" VALUES ($1, $2, $3)`
           
-          return new Promise(function (resolve2, reject) {
+          return new Promise(function (resolve2, reject2) {
             client.query(insertQuery, [username, hashedpw2, role], (err, res) => {
               if (err) {
                 return reject(new Error("Erreur DB"));
@@ -101,7 +102,7 @@ function adminright(username) {
     client.query(searchquery, [username], (err, res) => {
       if (err) {
         console.error(err)
-        return reject(err)
+        return reject(new Error("Erreur DB"))
       }
       else {
         if (!res.rows) {
@@ -130,7 +131,7 @@ function verifytoken(token) {
 
       client.query(SelectQuery, [token], (error, results) => {
           if (error) {
-              return reject(error);
+              return reject(new Error("Erreur DB"));
           } else {
               if (results.rows.length === 1) {
                   resolve(results.rows[0].username);
@@ -138,7 +139,7 @@ function verifytoken(token) {
                   const DeleteQuery = `DELETE FROM "Tokens" WHERE "expirationTime" < NOW()`;
                   client.query(DeleteQuery, (error, results) => {
                       if (error) {
-                          return reject(error);
+                          return reject(new Error("Erreur DB"));
                       } else {
                           if (results.rows.length > 0) {
                               return reject(new Error('Invalid token not in DB + expired tokens deleted'));
@@ -159,7 +160,7 @@ function getusers() {
   return new Promise((resolve, reject) => {
     client.query(searchquery, (err, res) => {
       if (err) {
-        return reject(err)
+        return reject(new Error("Erreur DB"))
       }
       else {
         return resolve(res)
@@ -179,7 +180,7 @@ function modifypw(username, password, token) {
     const Tokenquery = `SELECT username FROM "Tokens" WHERE "token"=$1 AND username=$2 AND "expirationTime" > NOW()`;
     client.query(Tokenquery, [token, username], (error, results) => {
       if (error) {
-        return reject("DB Error");
+        return reject("Erreur DB");
       } else {
         if (results.rows.length === 1) { //User want to change his own password ?
           /* Case where process continue */
@@ -201,7 +202,7 @@ function modifypw(username, password, token) {
     client.query(Updatequery, [hashedpw2, username], (err, res) => {
           if (err) {
             console.error(err)
-            return reject(err)
+            return reject(new Error("Erreur DB"))
           }
           else {
             return resolve(res)
@@ -222,12 +223,41 @@ function modifyright(username, role, token) {
     client.query(Updatequery, [username, role], (err, res) => {
           if (err) {
             console.error(err)
-            return reject(err)
+            return reject(new Error("Erreur DB"))
           }
           else {
             return resolve(res)
           }
         })
+  })
+}
+
+function verifyadminrightrequest(token) {
+  return new Promise (function (resolve, reject) {
+    if (typeof token !== 'string' || token.trim().length === 0) {
+      return reject(new Error("Wrong admin token"));
+    }
+    const Tokenquery = `SELECT username FROM "Tokens" WHERE "token"=$1 AND "expirationTime" > NOW()`;
+    client.query(Tokenquery, [token], (error, results) => {
+      if (error) {
+        return reject(new Error("Error DB"));
+      } else {
+        if (results.rows.length === 1) {
+          const Userquery = `SELECT role FROM "Accounts" WHERE "username"='${results.rows[0].username}'`
+
+          client.query(Userquery, (error2, results2) => {
+            if (error2) {
+              return reject(new Error("Erreur DB"));
+            }
+            else if (results2.rows[0].role === 1) {
+              return resolve(res)
+            } else {
+              return reject(new Error("Wrong admin token"));
+            }
+        })
+        }
+      }
+    })
   })
 }
 
@@ -263,6 +293,7 @@ module.exports = {
     signup,
     adminright,
     verifytoken,
+    verifyadminrightrequest,
     getusers,
     modifypw,
     modifyright

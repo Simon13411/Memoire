@@ -30,22 +30,22 @@ const IP_LOGIN = process.env.IPLOGIN
 //DBOps (port 4001)
 app.get('/get_boxdetails', (req, res) => {
     axios.get(`http://${IP_DBOPS}/get_boxdetails?id=${req.query.id}`)
-    .then((resu) => {
-        res.status(200).json(resu.data);
-    })
-    .catch((err) => {
-        res.status(401).json(err);
-    });
+        .then((resu) => {
+            res.status(200).json(resu.data);
+        })
+        .catch((err) => {
+            errorhandler(err, res)
+        });
 })
 
 app.get('/get_indivdetails', (req, res) => {
     axios.get(`http://${IP_DBOPS}/get_indivdetails?id=${req.query.id}`)
-    .then((resu) => {
-        res.status(200).json(resu.data);
-    })
-    .catch((err) => {
-        res.status(401).json(err);
-    });
+        .then((resu) => {
+            res.status(200).json(resu.data);
+        })
+        .catch((err) => {
+            errorhandler(err, res)
+        });
 })
 
 app.get('/get_boxresult', (req, res) => {
@@ -54,7 +54,7 @@ app.get('/get_boxresult', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -64,7 +64,7 @@ app.get('/get_indivresult', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -74,7 +74,7 @@ app.get('/get_selectiono', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -84,7 +84,7 @@ app.get('/get_selectionso', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -94,7 +94,7 @@ app.get('/get_selectiong', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -104,7 +104,7 @@ app.get('/get_selectionsg', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -114,7 +114,7 @@ app.get('/get_selectionf', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -124,7 +124,7 @@ app.get('/get_selectionsf', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -134,7 +134,7 @@ app.get('/get_selections', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -144,7 +144,7 @@ app.get('/get_selectionss', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -154,7 +154,7 @@ app.get('/get_selectiont', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -164,7 +164,7 @@ app.get('/get_loaners', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -174,27 +174,103 @@ app.get('/get_collections', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
-app.get('/add-attribute/:attribute', (req, res) => {
-    axios.get(`http://${IP_DBOPS}/add-attribute/${req.params.attribute}`)
+app.post('/add-attribute/:name', (req, res) => {
+    const { attribute, token } = req.body
+    axios.get(`http://${IP_DBOPS}/add-attribute/${req.params.name}`, { attribute : attribute })
         .then((resu) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
-app.get('/delete-attribute/:attribute', (req, res) => {
-    axios.get(`http://${IP_DBOPS}/delete-attribute/${req.params.attribute}`)
-        .then((resu) => {
-            res.status(200).json(resu.data);
+app.post('/delete-attribute/:name', (req, res) => {
+    const { attribute, token } = req.body
+    axios.post(`http://${IP_DBLOGIN}/verifyadminright`, {token: token})
+        .then(() => {
+            axios.get(`http://${IP_DBOPS}/delete-attribute/${req.params.name}`, { attribute : attribute })
+                .then((resu) => {
+                    res.status(200).json(resu.data);
+                })
+                .catch((err) => {
+                    errorhandler(err, res)
+                });
         })
-        .catch((err) => {
-            res.status(401).json(err);
+        .catch((err1) => {
+            errorhandler(err1, res)
+        });
+})
+
+app.post('/addcollection', (req, res) => {
+    const {collection, token} = req.body
+    axios.post(`http://${IP_DBLOGIN}/verifyadminright`, {token: token})
+        .then(() => {
+            axios.get(`http://${IP_DBOPS}/addcollection`, { collection: collection })
+                .then((resu) => {
+                    res.status(200).json(resu.data);
+                })
+                .catch((err) => {
+                    errorhandler(err, res)
+                });
+            })
+        .catch((err1) => {
+            errorhandler(err1, res)
+        });
+})
+
+app.post('/modifycollection', (req, res) => {
+    const { collection, newname, token } = req.body
+    axios.post(`http://${IP_DBLOGIN}/verifyadminright`, {token: token})
+        .then(() => {
+            axios.get(`http://${IP_DBOPS}/modifycollection`, { collection: collection, newname: newname })
+                .then((resu) => {
+                    res.status(200).json(resu.data);
+                })
+                .catch((err) => {
+                    errorhandler(err, res)
+                });
+            })
+        .catch((err1) => {
+            errorhandler(err1, res)
+        });
+})
+
+app.post('/addloaner', (req, res) => {
+    const { loaner, token } = req.body
+    axios.post(`http://${IP_DBLOGIN}/verifyadminright`, {token: token})
+        .then(() => {
+            axios.get(`http://${IP_DBOPS}/addloaner`, { loaner: loaner })
+                .then((resu) => {
+                    res.status(200).json(resu.data);
+                })
+                .catch((err) => {
+                    errorhandler(err, res)
+                });
+            })
+        .catch((err1) => {
+            errorhandler(err1, res)
+        });
+})
+
+app.post('/modifyloaner', (req, res) => {
+    const { loaner, newname, token } = req.body
+    axios.post(`http://${IP_DBLOGIN}/verifyadminright`, {token: token})
+        .then(() => {
+            axios.get(`http://${IP_DBOPS}/modifyloaner`, { loaner: loaner, newname: newname })
+                .then((resu) => {
+                    res.status(200).json(resu.data);
+                })
+                .catch((err) => {
+                    errorhandler(err, res)
+                });
+            })
+        .catch((err1) => {
+            errorhandler(err1, res)
         });
 })
 
@@ -206,12 +282,7 @@ app.post('/changeindivboxid', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            if (err.response) {
-                res.status(401).json( { error: err.response.data.error });
-            }
-            else {
-                res.status(401).json(err);
-            }
+            errorhandler(err, res)
         })
 })
 
@@ -222,12 +293,7 @@ app.post('/changeindivloaner', (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            if (err.response) {
-                res.status(401).json( { error: err.response.data.error });
-            }
-            else {
-                res.status(401).json(err);
-            }
+            errorhandler(err, res)
         })
 })
 
@@ -244,7 +310,7 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 
     fs.unlink(req.file.path, (err) => {
@@ -269,7 +335,7 @@ app.get(`/boxessqltocsv`, upload.single('file'), (req, res) => {
             response.data.pipe(res)
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 
     fs.unlink(req.file.path, (err) => {
@@ -294,7 +360,7 @@ app.get(`/individualssqltocsv`, upload.single('file'), (req, res) => {
             response.data.pipe(res)
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 
     fs.unlink(req.file.path, (err) => {
@@ -315,7 +381,7 @@ app.get('/boxestemplate', (req, res) => {
         response.data.pipe(res)
     })
     .catch((err) => {
-        res.status(401).json(err);
+        errorhandler(err, res)
     });
 })
 
@@ -325,7 +391,7 @@ app.get('/individualstemplate', (req, res) => {
         response.data.pipe(res)
     })
     .catch((err) => {
-        res.status(401).json(err);
+        errorhandler(err, res)
     });
 })
 
@@ -337,12 +403,7 @@ app.post('/login', (req, res) => {
             res.status(200).json({ success: resu.data.success, token: resu.data.token, admin: resu.data.role});
         })
         .catch((err) => {
-            if (err.response) {
-                res.status(401).json( { err: err.response.data.error });
-            }
-            else {
-                res.status(401).json(err);
-            }
+            errorhandler(err, res)
         });
 })
 
@@ -369,7 +430,7 @@ app.post('/adminright', (req, res) => {
             res.status(200).json({ success: true });
         })
         .catch((err) => {
-            res.status(401).json({success: false});
+            errorhandler(err, res)
         });
 })
 
@@ -380,7 +441,7 @@ app.post(`/validate-token`, (req, res) => {
             res.status(200).json({ success: true , username: resu.data.username});
         })
         .catch((err) => {
-            res.status(401).json({success: false});
+            errorhandler(err, res)
         });
 })
 
@@ -390,7 +451,7 @@ app.get(`/get-users`, (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -401,8 +462,7 @@ app.post(`/modifypw`, (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            console.log(err)
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
 
@@ -413,9 +473,24 @@ app.post(`/modifyright`, (req, res) => {
             res.status(200).json(resu.data);
         })
         .catch((err) => {
-            console.log(err)
-            res.status(401).json(err);
+            errorhandler(err, res)
         });
 })
+
+//helper
+function errorhandler(err, res) {
+    console.log(err)
+    if (err.response) {
+        if (err.response.data) {
+            res.status(err.response.status).json(err.response.data.error);
+        }
+        else {
+            res.status(err.response.status).json({success: false});
+        }
+    }
+    else {
+        res.status(404).json( {error : "Erreur serveur" } );
+    }
+}
 
 module.exports = app

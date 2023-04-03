@@ -16,8 +16,7 @@ app.post('/login', (req, res) => {
     res.status(200).json({ success: true, token: token, role: role});
   })
   .catch((err) => {
-    console.log(err)
-    res.status(401).json({ error: err.message });
+    errorhandler(err, res)
   });
 });
 
@@ -29,8 +28,7 @@ app.post('/signup', (req, res) => {
     res.status(200).json( {success: true });
   })
   .catch((err) => {
-    console.log(err)
-    res.status(401).json({ error: err.message });
+    errorhandler(err, res)
   });
 });
 
@@ -42,8 +40,7 @@ app.post('/adminright', (req, res) => {
     res.status(200).json({ success: true });
   })
   .catch((err) => {
-    console.log(err)
-    res.status(401).json({ success: false });
+    errorhandler(err, res)
   });
 });
 
@@ -56,8 +53,7 @@ app.post('/validate-token', (req, res) => {
     res.status(200).json({ success: true, username: username });
   })
   .catch((err) => {
-    console.log(err)
-    res.status(401).json({ succes: false });
+    errorhandler(err, res)
   });
 });
 
@@ -67,8 +63,7 @@ app.get('/get-users', (req, res) => {
     res.status(200).json(results);
   })
   .catch((err) => {
-    console.log(err)
-    res.status(401).json(err);
+    errorhandler(err, res)
   });
 });
 
@@ -80,8 +75,7 @@ app.post('/modifypw', (req, res) => {
     res.status(200).json(results);
   })
   .catch((err) => {
-    console.log(err)
-    res.status(401).json(err);
+    errorhandler(err, res)
   });
 });
 
@@ -93,9 +87,30 @@ app.post('/modifyright', (req, res) => {
     res.status(200).json(results);
   })
   .catch((err) => {
-    console.log(err)
-    res.status(401).json(err);
+    errorhandler(err, res)
   });
 });
+
+app.post('/verifyadminright', (req, res) => {
+  const { token } = req.body
+  return loginops.verifyadminrightrequest(username, role, token)
+  .then((results) => {
+    res.status(200).json({success: true});
+  })
+  .catch((err) => {
+    errorhandler(err, res)
+  });
+})
+
+function errorhandler(err, res) {
+  console.log(err)
+  if (err.message) {
+      res.status(401).json( {error: err.message});
+  }
+  else {
+      res.status(404).json( {error : "Erreur Back-end Login" } );
+  }
+}
+
 
 module.exports = app
