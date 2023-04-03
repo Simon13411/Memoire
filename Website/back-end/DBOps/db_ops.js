@@ -2,7 +2,7 @@ const { Client } = require('pg');
 const { spawn } = require('child_process');
 const client = new Client({
     user: 'postgres',
-    host: 'db-entomoc',
+    host: 'db-entomo',
     database: 'entomologie',
     password: 'password',
     port: 5432,
@@ -530,6 +530,45 @@ function deleteattribute(attribute) {
     
 }
 
+function changeindivboxid(individ, newboxid) {
+    var Queryverifnewboxid = `SELECT *
+                            FROM "Box"
+                            Where "id_box" = $1;`
+
+    return new Promise(function (resolve, reject) {
+        client.query(Queryverifnewboxid, [newboxid], (err, res) => {
+            if (err) {
+                console.error(err)
+                console.log("Cas1")
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                if (res.rowCount > 0) {
+                    var UpdateQuery = `Update "Individu" 
+                                        set "box_id" = $1 
+                                        where "id_individu"=$2;`
+                    client.query(UpdateQuery, [newboxid, individ], (err2, res2) => {
+                        if (err) {
+                            console.error(err2)
+                            return reject(new Error("Erreur DB"))
+                        }
+                        else {
+                            return resolve(res2)
+                        }
+                    })
+                }
+                else {
+                    return reject(new Error(`BoxID ${newboxid} doesn't exist`))
+                }
+            }
+        })
+    })
+}
+
+function changeindivloaner(individ, newloaner) {
+    
+}
+
 function csvtosql(filename, type) {
     return new Promise(function(resolve, reject) {
       if (type === 'Box') {
@@ -608,6 +647,8 @@ module.exports = {
     get_collections,
     addattribute,
     deleteattribute,
+    changeindivboxid,
+    changeindivloaner,
     csvtosql,
     boxSqlToCsv,
     indivSqlToCsv

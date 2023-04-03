@@ -40,6 +40,8 @@ class InsectDetails extends React.Component {
         isLoaded: false,
         newidbox: 0,
         newloaner: '',
+        modifyboxstate: '',
+        modifyloanerstate: ''
       }
     }
 
@@ -74,7 +76,7 @@ class InsectDetails extends React.Component {
     getLoaners = () => {
       axios.get(`${url}/get_loaners`)
       .then((res) => {
-          this.setState({loanerslist: res.data.rows, loaner: this.state.attr[0].loaner})
+          this.setState({loanerslist: res.data.rows})
       })
     }
 
@@ -92,11 +94,37 @@ class InsectDetails extends React.Component {
     }
 
     modifybox = () => {
-
+      this.setState({modifyboxstate: 'Changement en cours...'})
+      const newboxid = parseInt(this.state.newidbox)
+      axios.post(`${url}/changeindivboxid`, {individ: this.state.individ, newboxid: newboxid})
+      .then((res) => {
+        this.setState({idbox: newboxid, modifyboxstate: `Assigné à la box n° ${newboxid}`})
+      })
+      .catch((err) => {
+        if (!err.response) {
+          this.setState({modifyboxstate: 'Erreur Serveur'})
+        }
+        else {
+          this.setState({modifyboxstate: err.response.data.error})
+        }
+      })
     }
 
     modifyloaner = () => {
-
+      this.setState({modifyboxstate: 'Changement en cours...'})
+      const newloaner = this.state.newloaner
+      axios.post(`${url}/changeindivloaner`, {individ: this.state.individ, newloaner: newloaner})
+      .then((res) => {
+        this.setState({loaner: newloaner, modifyloanerstate: `Loaner est maintenat ${newloaner}`})
+      })
+      .catch((err) => {
+        if (!err.response) {
+          this.setState({modifyloanerstate: 'Erreur Serveur'})
+        }
+        else {
+          this.setState({modifyloanerstate: err.response.data.error})
+        }
+      })
     }
 
     render() {
@@ -115,28 +143,32 @@ class InsectDetails extends React.Component {
                 (
                   <div className="column">
                     <div>
-                      <h4 className="title">Box n°</h4>
-                        <input type="number" value={this.state.newidbox} width="40" onChange={this.handleInputChange} name="newidbox" />
+                      <div>
+                        <h4 className="title">Box n°</h4>
+                          <input type="number" value={this.state.newidbox} width="40" onChange={this.handleInputChange} name="newidbox" />
+                      </div>
+                      <button type="submit" name="newidbox" onClick={this.modifybox}>Modifier</button>
                     </div>
-                    <button type="submit" name="newidbox" onClick={this.modifybox}>Modifier</button>
-                    {this.state.modifyloanerstate}
+                    {this.state.modifyboxstate}
                     <div>
-                      <h4 className="title">Loaner</h4>
-                          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                              <Select
-                              id="loaner-select"
-                              value={this.state.loaner}
-                              onChange={this.handleInputChange}
-                              name="newloaner"
-                              >
-                              <MenuItem value={null}>
-                                  <em>None</em>
-                              </MenuItem>
-                              {this.state.loanerslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                              </Select>
-                          </FormControl>
+                      <div>
+                        <h4 className="title">Loaner</h4>
+                            <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                                <Select
+                                id="loaner-select"
+                                value={this.state.loaner}
+                                onChange={this.handleInputChange}
+                                name="newloaner"
+                                >
+                                <MenuItem value={null}>
+                                    <em>None</em>
+                                </MenuItem>
+                                {this.state.loanerslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                                </Select>
+                            </FormControl>
+                      </div>
+                      <button type='submit' onClick={this.modifyloaner}>Modifier</button>
                     </div>
-                    <button type='submit' onClick={this.modifyloaner}>Modifier</button>
                     {this.state.modifyloanerstate}
                   </div>
                 ):(

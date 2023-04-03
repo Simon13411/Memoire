@@ -198,6 +198,39 @@ app.get('/delete-attribute/:attribute', (req, res) => {
         });
 })
 
+app.post('/changeindivboxid', (req, res) => {
+    const { individ, newboxid } = req.body
+    console.log(newboxid)
+    axios.post(`http://${IP_DBOPS}/changeindivboxid`, { individ: individ, newboxid: newboxid })
+        .then((resu) => {
+            res.status(200).json(resu.data);
+        })
+        .catch((err) => {
+            if (err.response) {
+                res.status(401).json( { error: err.response.data.error });
+            }
+            else {
+                res.status(401).json(err);
+            }
+        })
+})
+
+app.post('/changeindivloaner', (req, res) => {
+    const { individ, newloaner } = req.body
+    axios.post(`http://${IP_DBOPS}/changeindivloaner`, { individ: individ, newloaner: newloaner })
+        .then((resu) => {
+            res.status(200).json(resu.data);
+        })
+        .catch((err) => {
+            if (err.response) {
+                res.status(401).json( { error: err.response.data.error });
+            }
+            else {
+                res.status(401).json(err);
+            }
+        })
+})
+
 app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
     const formData = new FormData();
     formData.append('file', fs.createReadStream(req.file.path));

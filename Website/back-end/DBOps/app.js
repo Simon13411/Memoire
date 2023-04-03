@@ -295,6 +295,28 @@ app.get('/delete-attribute/:attribute', (req, res) => {
     })
 })
 
+app.post('/changeindivboxid', (req, res) => {
+    const { individ, newboxid } = req.body
+    return db.changeindivboxid(individ, newboxid)
+    .then((results) => {
+        res.status(200).json(results)
+    })
+    .catch((err) => {
+        res.status(404).json({error: err.message})
+    })
+})
+
+app.post('/changeindivloaner', (req, res) => {
+    const { individ, newloaner } = req.body
+    return db.changeindivloaner(individ, newloaner)
+    .then((results) => {
+        res.status(200).json(results)
+    })
+    .catch((err) => {
+        res.status(404).json({error: err.message})
+    })
+})
+
 //CSV To SQL for Users
 app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
     const type = req.params.type
