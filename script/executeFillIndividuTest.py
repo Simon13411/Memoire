@@ -1,4 +1,4 @@
-import TestFiltering as filtre
+import IndividuFilteredTest as filtre
 import pandas as pd
 
 import ordre
@@ -15,33 +15,40 @@ import tribu
 import suborder
 import subspecies
 import population
-import box
+import boxexist
 import collectionBox
-
+import individu
 
 import psycopg2
-import sys
 import sqlite3
 
 
-file = pd.ExcelFile("GoodFormat.xlsx")
-database = "Gembloux5_4.db"
 
-a,b,data,d = filtre.filterExcel(file)
+file = pd.ExcelFile("templateIndividuBis.xlsx")
+database  = "Gembloux5_4.db"
 
-#On va regarder pour l'admin si les boites existent deja, si oui on les supprimes et elle seront remise après
-#Verifier si boite existe sinon oups probleme
+#On va regarder si les individus existe deja par rapport a l'admin
+
+
+#On regarde si l'id de la boite existe sinon probleme
+box, colOk = boxexist.boxExist(file, database)
+if(len(box)>0):
+    #il y a des boites qui n'existe pas encore
+    print(box, colOk)
+admin=True
+a,b,data,d = filtre.filterIndividu(file)
 print(a,b,data,d)
-admin = True
-if (b>0):
-    print("There is some problem")
+
+if b>0:
+    #il y a des lignes qui ont des problemes
+    print("there is some problem")
 else:
     
-
     conn = sqlite3.connect(database)
     cursor = conn.cursor()
     print("Successfully Connected to the db")
-
+    
+    
 ### Ici on  va inserer tout mais on pourrait en fonctio d'arguments lancer, ajouter seulement certain trucs ###
 ### On peut également mettre certain insert en commentaires pour ajouter que ceux désirés ###
 
@@ -56,13 +63,12 @@ else:
     subgenus.insertSubGenus(data, cursor, conn)
     species.insertSpecies(data, cursor, conn)
     subspecies.insertSubSpecies(data, cursor, conn)
-    Collection.insertCollection(data, cursor, conn)
     population.insertPopulation(data, cursor, conn)
-    box.insertBox(data, cursor, conn, admin)
-    #collectionBox.insertCollectionBox(data, cursor, conn)
-        
-        
-
+    
+    individu.insertIndividu(data, cursor, conn, admin)
+    
+    
+    
     cursor.close()
     
 #gooddf.to_excel("FiltreTestBis.xlsx",index=False)

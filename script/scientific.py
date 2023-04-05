@@ -24,6 +24,7 @@ def insertScientific(data, cursor, conn) :
                                 WHERE "name" = '{}' """.format(toinsert[i]) 
         cursor.execute(duplicationquery)
         if cursor.fetchall() == [] :
+            print("here")
             insertquery = """INSERT INTO "Scientific"
                             ("id_sc", "name") 
                             VALUES 
