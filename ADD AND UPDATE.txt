@@ -8,10 +8,10 @@ Update Box???
 Update loaner Info (DONE)
 
 ADD -> COllection (Done)
-DELETE -> Collection
+DELETE -> Collection 
 
 ADD -> Loaner (Done)
-DELETE -> Loaner
+DELETE -> Loaner (Done)
 
 Update loaner de --> Box (Done)
 		 --> Individu (Done)
@@ -296,6 +296,27 @@ DELETE
 FROM "subSpecies" 
 WHERE "name" = 'I'
 
+----------DELETE Loaner si il ne loue plus rien--------
+SELECT *
+FROM "loanBox" LB, "loanIndividu" LI
+WHERE LB."loaner_id"= (SELECT "id_loaner" FROM "Loaner" WHERE "name"='NEwSimon' )
+	OR LI."loaner_id"=(SELECT "id_loaner" FROM "Loaner" WHERE "name"='NEwSimon' )
+
+--Si vide il ne loue rien
+DELETE 
+FROM "Loaner"
+WHERE "name" = 'NEwSimon'
+
+
+
+------DELETE Collection si elle n'est plus présente dans collBox-----
+SELECT *
+FROM "CollectionBox"
+WHERE "collection_id"=(SELECT "id_collection" FROM "Collection" WHERE "name"='simoncoll')
+    --Si pas dans CollectionBox on peut delete
+DELETE 
+FROM "Collection"
+WHERE "name" = 'simoncoll'
 
 
 --------------------------------------------------------------
