@@ -1,0 +1,199 @@
+DELETE -> Order, Suborder, ....
+ADD -> Order, suborder, .... (Done)
+
+
+
+Update Box???
+
+Update loaner Info (DONE)
+
+ADD -> COllection (Done)
+DELETE -> Collection
+
+ADD -> Loaner (Done)
+DELETE -> Loaner
+
+Update loaner de --> Box (Done)
+		 --> Individu (Done)
+
+Update collection --> Box
+
+Update population --> Box
+		  --> Individu
+
+---------------------UPDATE id_box FROM "Individu"----------------------
+
+SELECT *
+FROM "Box"
+Where "id_box" = 568262;
+--IF premiere requete >0 tu peux update
+Update "Individu" 
+set "box_id" = 9999999 
+where "id_individu"= 886586; 
+
+------------------------------------------------------------------------
+------------ADD Order---------
+INSERT INTO "Order"
+("id_order", "name")
+VALUES
+((SELECT COALESCE(MAX("id_order"),0)+1 FROM "Order"), 'sifds')
+
+
+
+
+--------add suborder---------
+INSERT INTO "subOrder"
+("id_suborder", "name")
+VALUES
+((SELECT COALESCE(MAX("id_suborder"),0)+1 FROM "subOrder"), 'simonsubO');
+
+
+---------add family-------
+INSERT INTO "Family"
+("id_family", "name")
+VALUES
+((SELECT COALESCE(MAX("id_family"),0)+1 FROM "Family"), 'simonfamily');
+
+
+-----------add subFamily---------
+INSERT INTO "subFamily"
+("id_subfamily", "name")
+VALUES
+((SELECT COALESCE(MAX("id_subfamily"),0)+1 FROM "subFamily"), 'simonsubfamily');
+
+
+------add tribu--------
+INSERT INTO "Tribu"
+("id_tribu", "name")
+VALUES
+((SELECT COALESCE(MAX("id_tribu"),0)+1 FROM "Tribu"), 'simontribu')
+
+
+
+-------add genus---------
+
+INSERT INTO "Genus"
+("id_genus", "name", id_sc,date )
+VALUES
+((SELECT COALESCE(MAX("id_genus"),0)+1 FROM "Genus"), 'simongenus', (SELECT "id_sc"FROM "Scientific" WHERE "name"='Unknown'), NULL)
+
+
+----------addsubgenus-----------
+INSERT INTO "subGenus"
+("id_subgenus", "name", id_sc,date )
+VALUES
+((SELECT COALESCE(MAX("id_subgenus"),0)+1 FROM "subGenus"), 'simonsubgenus', (SELECT "id_sc"FROM "Scientific" WHERE "name"='Unknown'), NULL)
+
+---------- add species--------
+INSERT INTO "Species"
+("id_species", "name", id_sc,date )
+VALUES
+((SELECT COALESCE(MAX("id_species"),0)+1 FROM "Species"), 'simonspeciess', (SELECT "id_sc"FROM "Scientific" WHERE "name"='Unknown'), NULL)
+
+
+
+----------add subspecies-----------
+INSERT INTO "subSpecies"
+("id_subspecies", "name", id_sc,date )
+VALUES
+((SELECT COALESCE(MAX("id_subspecies"),0)+1 FROM "subSpecies"), 'simonsubspeciess', (SELECT "id_sc"FROM "Scientific" WHERE "name"='Unknown'), NULL);
+
+
+
+---------add collection------
+INSERT INTO "Collection"
+("id_collection", "name")
+VALUES
+((SELECT COALESCE(MAX("id_collection"),0)+1 FROM "Collection"), 'simoncoll')
+
+
+------------add loaner---------
+
+
+INSERT INTO "Loaner"
+("id_loaner", "name", "mail","phone")
+VALUES
+((SELECT COALESCE(MAX("id_loaner"),0)+1 FROM "Loaner"), 'simonloaner', 'grognardsimon@gmail.com', '05065484')
+
+
+
+-----------update loaner info---------
+	---- fait par id--------------
+SELECT Count(*)
+FROM "Loaner"
+Where "id_loaner"=1;
+
+--IF ok tu peux update
+
+UPDATE "Loaner"
+Set "name" = 'NEwSimon',"mail"='newmaile@gmail.com', "phone"='0123456'
+WHERE "id_loaner"=1;
+
+
+	------ fait par le name----------
+SELECT Count(*)
+FROM "Loaner"
+Where "name"="NEwSimon";
+
+--IF ok tu peux update
+
+UPDATE "Loaner"
+Set "mail"='mail@gmail.com', "phone"='0789'
+WHERE "name"='NEwSimon';
+
+
+
+-----------add loaner de box-----------
+
+SELECT Count(*)
+FROM "Loaner"
+Where "name"="NEwSimon";
+
+--IF ok tu peux update
+
+INSERT INTO "loanBox"
+("loaner_id", "box_id", "begin_date", "end_date")
+VALUES
+((SELECT "id_loaner"
+FROM "Loaner"
+Where "name"='NEwSimon'), 63, '2023-12-15','2356-05-21')
+
+-----------update loaner de box-------------
+SELECT Count(*)
+FROM "Loaner"
+Where "name"='simonloaner';
+
+--IF ok tu peux update
+UPDATE "loanBox"
+SET "loaner_id" = (SELECT "id_loaner" FROM "Loaner" Where "name"='simonloaner'), "begin_date"='2023-12-15', "end_date"='2356-05-28'
+WHERE "box_id" = 1
+
+
+
+-----------add loaner d'individu---------
+SELECT Count(*)
+FROM "Loaner"
+Where "name"='NEwSimon';
+
+--IF ok tu peux update
+
+INSERT INTO "loanIndividu"
+("loaner_id", "individu_id", "begin_date", "end_date")
+VALUES
+((SELECT "id_loaner"
+FROM "Loaner"
+Where "name"='NEwSimon'), 1, '2023-10-12','2356-06-24')
+
+
+--------update loaner d'individu---------
+SELECT Count(*)
+FROM "Loaner"
+Where "name"="loanerdeux";
+
+--IF ok tu peux update
+UPDATE "loanIndividu"
+SET "loaner_id" = (SELECT "id_loaner" FROM "Loaner" Where "name"='simonloaner'), "begin_date"='2023-12-15', "end_date"='2356-05-21'
+WHERE "individu_id" = 1
+
+
+----------
