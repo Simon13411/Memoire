@@ -1,4 +1,4 @@
-DELETE -> Order, Suborder, ....
+DELETE -> Order, Suborder, ....(Done) 
 ADD -> Order, suborder, .... (Done)
 
 
@@ -196,4 +196,123 @@ SET "loaner_id" = (SELECT "id_loaner" FROM "Loaner" Where "name"='simonloaner'),
 WHERE "individu_id" = 1
 
 
-----------
+----------DELETE order si pas utilser dans Population------
+SELECT COUNT(*) FROM "Population"
+WHERE "order_id"=(SELECT "id_order" FROM "Order" WHERE "name"='A')
+
+-- Si Vide on peut supprimer
+
+DELETE 
+FROM "Order" 
+WHERE "name" = 'A'
+
+
+----------delete subOrder si pas dnas Population--------
+SELECT COUNT(*) FROM "Population"
+WHERE "suborder_id"=(SELECT "id_suborder" FROM "subOrder" WHERE "name"='B')
+
+-- Si Vide on peut supprimer
+
+DELETE 
+FROM "subOrder" 
+WHERE "name" = 'B'
+
+--------DELETE family si pas dans population----------
+SELECT COUNT(*) FROM "Population"
+WHERE "family_id"=(SELECT "id_family" FROM "Family" WHERE "name"='C')
+
+-- Si Vide on peut supprimer
+
+DELETE 
+FROM "Family" 
+WHERE "name" = 'C'
+
+
+---------DELETE subFamily si pas dans population-------
+SELECT COUNT(*) FROM "Population"
+WHERE "subFamily_id"=(SELECT "id_subfamily" FROM "subFamily" WHERE "name"='D')
+
+-- Si Vide on peut supprimer
+
+DELETE 
+FROM "subFamily" 
+WHERE "name" = 'D'
+
+
+
+------------DELETE tribu si pas dans population------
+SELECT COUNT(*) FROM "Population"
+WHERE "tribu_id"=(SELECT "id_tribu" FROM "Tribu" WHERE "name"='E')
+
+-- Si Vide on peut supprimer
+
+DELETE 
+FROM "Tribu" 
+WHERE "name" = 'E'
+
+
+
+------DELETE Genus si pas dans population--------
+SELECT COUNT(*) FROM "Population"
+WHERE "genus_id"=(SELECT "id_genus" FROM "Genus" WHERE "name"='F')
+
+-- Si Vide on peut supprimer
+
+DELETE 
+FROM "Genus" 
+WHERE "name" = 'F'
+
+
+-------Delete subGenus si pas dans population----
+SELECT COUNT(*) FROM "Population"
+WHERE "subGenus_id"=(SELECT "id_subgenus" FROM "subGenus" WHERE "name"='G')
+
+-- Si Vide on peut supprimer
+
+DELETE 
+FROM "subGenus" 
+WHERE "name" = 'G'
+
+
+
+-------DELETE species si pas dans population------
+SELECT COUNT(*) FROM "Population"
+WHERE "species_id"=(SELECT "id_species" FROM "Species" WHERE "name"='H')
+
+-- Si Vide on peut supprimer
+
+DELETE 
+FROM "Species" 
+WHERE "name" = 'H'
+
+
+-------DELETE SubSpecies si pas dans population--------
+SELECT COUNT(*) FROM "Population"
+WHERE "subSpecies_id"=(SELECT "id_subspecies" FROM "subSpecies" WHERE "name"='I')
+
+-- Si Vide on peut supprimer
+
+DELETE 
+FROM "subSpecies" 
+WHERE "name" = 'I'
+
+
+
+--------------------------------------------------------------
+
+INSERT INTO "CollectionBox"
+("collection_id", "box_id")
+VALUES
+(1, (Select "id_collection" FROM "Collection" WHERE "name" = 'simoncoll'))
+ON CONFLICT ("box_id")	DO UPDATE 
+	SET "collection_id"=(Select "id_collection" FROM "Collection" WHERE "name" = 'simoncoll')
+
+
+
+INSERT INTO "CollectionBox"
+("collection_id", "box_id")
+VALUES
+(1, (Select "id_collection" FROM "Collection" WHERE "name" = 'simoncoll'))
+ON CONFLICT ("box_id", "collection_id")	DO UPDATE 
+	SET "collection_id"=(Select "id_collection" FROM "Collection" WHERE "name" = 'Hodister') WHERE "box_id" = 
+
