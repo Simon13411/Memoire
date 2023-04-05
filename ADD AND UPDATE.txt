@@ -8,7 +8,7 @@ Update Box???
 Update loaner Info (DONE)
 
 ADD -> COllection (Done)
-DELETE -> Collection 
+DELETE -> Collection (Done)
 
 ADD -> Loaner (Done)
 DELETE -> Loaner (Done)
