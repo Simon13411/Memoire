@@ -2,7 +2,7 @@ const { Client } = require('pg');
 const { spawn } = require('child_process');
 const client = new Client({
     user: 'postgres',
-    host: 'db-entomo',
+    host: 'postgresc',
     database: 'entomologie',
     password: 'password',
     port: 5432,
