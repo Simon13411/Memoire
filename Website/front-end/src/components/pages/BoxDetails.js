@@ -147,11 +147,7 @@ class BoxDetails extends React.Component {
                                                             species= {data.species}
                                                             subspecies= {data.subspecies}
                                                             tribu= {data.tribu}
-                                                            loaner= {data.loaner}
-                                                            grangebegin= {data.grangebegin}
-                                                            grangeend= {data.grangeend}
-                                                            srangebegin= {data.srangebegin}
-                                                            srangeend= {data.srangeend}></BoxAttributes>)}
+                                                            loaner= {data.loaner}></BoxAttributes>)}
             </div>
             {this.props.isAuthenticated() ?
                 <BoxDetailsAddPop/>

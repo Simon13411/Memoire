@@ -6,7 +6,7 @@ const { Client } = require('pg');
 const { resolve } = require('path');
 const client = new Client({
     user: 'postgres',
-    host: 'db-login',
+    host: 'postgresc',
     database: 'login',
     password: 'password',
     port: 5432,

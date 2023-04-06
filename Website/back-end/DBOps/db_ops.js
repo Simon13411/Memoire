@@ -21,7 +21,7 @@ client.connect((err) => {
 
 function get_boxdetails(id) {
     var searchquery = `SELECT B."id_box", B."location", B."museum", B."paratypes", B."types", O."name" as "order",
-                        So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", Col."name" as "collection", Spec."range_begin" as "srangebegin", Spec."range_end" as "srangeend", Gen."range_begin" as "grangebegin", Gen."range_end" as "grangeend", loan."prenom" as "loaner"
+                        So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", Col."name" as "collection", loan."prenom" as "loaner"
                             FROM "Box" B
                             LEFT OUTER JOIN "CollectionBox" ColBox ON B."id_box"=ColBox."box_id"
                             LEFT OUTER JOIN "Collection" Col ON ColBox."collection_id"=Col."id_collection"
@@ -36,8 +36,6 @@ function get_boxdetails(id) {
                             LEFT OUTER JOIN "subGenus" Sg ON P2."subGenus_id"=Sg."id_subgenus"
                             LEFT OUTER JOIN "Species" S ON P2."species_id"=S."id_species"
                             LEFT OUTER JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
-                            LEFT OUTER JOIN "SpeciesRange" Spec ON B."speciesrange_id"=Spec."id_speciesrange"
-                            LEFT OUTER JOIN "GenusRange" Gen ON B."genusrange_id"=Gen."id_genusrange"
                             LEFT OUTER JOIN (SELECT L.name as "prenom", LB.box_id
                                             FROM "loanBox" LB, "Loaner" L
                                             WHERE LB.loaner_id=L.id_loaner) as loan ON B."id_box"=loan.box_id
