@@ -175,7 +175,13 @@ function get_indivresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
 }
 
 function get_selectiono(So, F, Sf, T, G, Sg, S, Ss) {
-    var searchquery = `SELECT DISTINCT O."name" as "name"
+    var searchquery = "";
+
+    if (So === "NULL" && F === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
+        searchquery = `SELECT "name" FROM "Order"`
+    }
+    else {
+        searchquery = `SELECT DISTINCT O."name" as "name"
                         FROM "Population" P
                         LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
                         LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
@@ -195,6 +201,7 @@ function get_selectiono(So, F, Sf, T, G, Sg, S, Ss) {
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
                         AND O."name" IS NOT NULL`
+    }
   
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -210,7 +217,13 @@ function get_selectiono(So, F, Sf, T, G, Sg, S, Ss) {
 }
 
 function get_selectionso(O, F, Sf, T, G, Sg, S, Ss) {
-    var searchquery = `SELECT DISTINCT So."name" as "name"
+    var searchquery = "";
+
+    if (O === "NULL" && F === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
+        searchquery = `SELECT "name" FROM "subOrder"`
+    }
+    else {
+        searchquery = `SELECT DISTINCT So."name" as "name"
                         FROM "Population" P
                         LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
                         LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
@@ -230,6 +243,7 @@ function get_selectionso(O, F, Sf, T, G, Sg, S, Ss) {
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
                         AND So."name" IS NOT NULL`
+    }
 
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -245,7 +259,13 @@ function get_selectionso(O, F, Sf, T, G, Sg, S, Ss) {
 }
 
 function get_selectiong(O, So, F, Sf, T, Sg, S, Ss) {
-    var searchquery = `SELECT DISTINCT G."name" as "name"
+    var searchquery = "";
+
+    if (O === "NULL" && So === "NULL" && F === "NULL" && Sf === "NULL" && T === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
+        searchquery = `SELECT "name" FROM "Genus"`
+    }
+    else {
+        searchquery = `SELECT DISTINCT G."name" as "name"
                         FROM "Population" P
                         LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
                         LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
@@ -265,6 +285,7 @@ function get_selectiong(O, So, F, Sf, T, Sg, S, Ss) {
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
                         AND G."name" IS NOT NULL`
+    }
 
     
     return new Promise(function (resolve, reject) {
@@ -281,7 +302,13 @@ function get_selectiong(O, So, F, Sf, T, Sg, S, Ss) {
 }
 
 function get_selectionsg(O, So, F, Sf, T, G, S, Ss) {
-    var searchquery = `SELECT DISTINCT Sg."name" as "name"
+    var searchquery = "";
+
+    if (O === "NULL" && So === "NULL" && F === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && S === "NULL" && Ss === "NULL") {
+        searchquery = `SELECT "name" FROM "subGenus"`
+    }
+    else {
+        searchquery = `SELECT DISTINCT Sg."name" as "name"
                         FROM "Population" P
                         LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
                         LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
@@ -301,6 +328,7 @@ function get_selectionsg(O, So, F, Sf, T, G, S, Ss) {
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
                         AND Sg."name" IS NOT NULL`
+    }
     
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -316,7 +344,13 @@ function get_selectionsg(O, So, F, Sf, T, G, S, Ss) {
 }
 
 function get_selectionf(O, So, Sf, T, G, Sg, S, Ss) {
-    var searchquery = `SELECT DISTINCT F."name" as "name"
+    var searchquery = "";
+
+    if (O === "NULL" && So === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
+        searchquery = `SELECT "name" FROM "Family"`
+    }
+    else {
+        searchquery = `SELECT DISTINCT F."name" as "name"
                         FROM "Population" P
                         LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
                         LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
@@ -336,6 +370,7 @@ function get_selectionf(O, So, Sf, T, G, Sg, S, Ss) {
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
                         AND F."name" IS NOT NULL`
+    }
     
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -351,7 +386,13 @@ function get_selectionf(O, So, Sf, T, G, Sg, S, Ss) {
 }
 
 function get_selectionsf(O, So, F, T, G, Sg, S, Ss) {
-    var searchquery = `SELECT DISTINCT Sf."name" as "name"
+    var searchquery = "";
+
+    if (O === "NULL" && So === "NULL" && F === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
+        searchquery = `SELECT "name" FROM "subFamily"`
+    }
+    else {
+        searchquery = `SELECT DISTINCT Sf."name" as "name"
                         FROM "Population" P
                         LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
                         LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
@@ -371,6 +412,7 @@ function get_selectionsf(O, So, F, T, G, Sg, S, Ss) {
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
                         AND Sf."name" IS NOT NULL`
+    }
     
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -386,7 +428,13 @@ function get_selectionsf(O, So, F, T, G, Sg, S, Ss) {
 }
 
 function get_selections(O, So, F, Sf, T, G, Sg, Ss) {
-    var searchquery = `SELECT DISTINCT S."name" as "name"
+    var searchquery = "";
+
+    if (O === "NULL" && So === "NULL" && F === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && Ss === "NULL") {
+        searchquery = `SELECT "name" FROM "Species"`
+    }
+    else {
+        searchquery = `SELECT DISTINCT S."name" as "name"
                         FROM "Population" P
                         LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
                         LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
@@ -406,6 +454,7 @@ function get_selections(O, So, F, Sf, T, G, Sg, Ss) {
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
                         AND S."name" IS NOT NULL`
+    }
     
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -421,7 +470,13 @@ function get_selections(O, So, F, Sf, T, G, Sg, Ss) {
 }
 
 function get_selectionss(O, So, F, Sf, T, G, Sg, S) {
-    var searchquery = `SELECT DISTINCT Ss."name" as "name"
+    var searchquery = "";
+
+    if (O === "NULL" && So === "NULL" && F === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL") {
+        searchquery = `SELECT "name" FROM "subSpecies"`
+    }
+    else {
+        searchquery = `SELECT DISTINCT Ss."name" as "name"
                         FROM "Population" P
                         LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
                         LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
@@ -441,6 +496,7 @@ function get_selectionss(O, So, F, Sf, T, G, Sg, S) {
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND Ss."name" IS NOT NULL`
+    }
 
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -456,7 +512,13 @@ function get_selectionss(O, So, F, Sf, T, G, Sg, S) {
 }
 
 function get_selectiont(O, So, F, Sf, G, Sg, S, Ss) {
-    var searchquery = `SELECT DISTINCT T."name" as "name"
+    var searchquery = "";
+
+    if (O === "NULL" && So === "NULL" && F === "NULL" && Sf === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
+        searchquery = `SELECT "name" FROM "Tribu"`
+    }
+    else {
+        searchquery = `SELECT DISTINCT T."name" as "name"
                         FROM "Population" P
                         LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
                         LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
@@ -476,6 +538,7 @@ function get_selectiont(O, So, F, Sf, G, Sg, S, Ss) {
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
                         AND T."name" IS NOT NULL`
+    }
     
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -522,24 +585,245 @@ function get_collections() {
     })
 }
 
-function addattribute(name, attribute) {
-
+function addattribute(table, attribute) {
+    var query = '';
+    console.log("Here3")
+    return new Promise(function (resolve, reject) {
+        if (table === "order") {
+            query = `INSERT INTO "Order"
+                    ("id_order", "name")
+                    VALUES
+                    ((SELECT COALESCE(MAX("id_order"),0)+1 FROM "Order"), $1);`
+        }
+        else if (table === "subOrder") {
+            query = `INSERT INTO "subOrder"
+                    ("id_suborder", "name")
+                    VALUES
+                    ((SELECT COALESCE(MAX("id_order"),0)+1 FROM "subOrder"), $1);`
+        }
+        else if (table === "family") {
+            query = `INSERT INTO "Family"
+                    ("id_family", "name")
+                    VALUES
+                    ((SELECT COALESCE(MAX("id_family"),0)+1 FROM "Family"), $1);`
+        }
+        else if (table === "subFamily") {
+            query = `INSERT INTO "subFamily"
+                    ("id_subfamily", "name")
+                    VALUES
+                    ((SELECT COALESCE(MAX("id_subfamily"),0)+1 FROM "subFamily"), $1);`
+        }
+        else if (table === "tribu") {
+            query = `INSERT INTO "Tribu"
+                    ("id_tribu", "name")
+                    VALUES
+                    ((SELECT COALESCE(MAX("id_tribu"),0)+1 FROM "Tribu"), $1)`
+        }
+        else if (table === "genus") {
+            query = `INSERT INTO "Genus"
+                    ("id_genus", "name", id_sc,date )
+                    VALUES
+                    ((SELECT COALESCE(MAX("id_genus"),0)+1 FROM "Genus"), $1, (SELECT "id_sc"FROM "Scientific" WHERE "name"='Unknown'), NULL)`
+        }
+        else if (table === "subGenus") {
+            query = `INSERT INTO "subGenus"
+                    ("id_subgenus", "name", id_sc,date )
+                    VALUES
+                    ((SELECT COALESCE(MAX("id_subgenus"),0)+1 FROM "subGenus"), $1, (SELECT "id_sc"FROM "Scientific" WHERE "name"='Unknown'), NULL)`
+        }
+        else if (table === "species") {
+            query = `INSERT INTO "Species"
+                    ("id_species", "name", id_sc,date )
+                    VALUES
+                    ((SELECT COALESCE(MAX("id_species"),0)+1 FROM "Species"), $1, (SELECT "id_sc"FROM "Scientific" WHERE "name"='Unknown'), NULL)`
+        }
+        else if (table === "subSpecies") {
+            query = `INSERT INTO "subSpecies"
+                    ("id_subspecies", "name", id_sc,date )
+                    VALUES
+                    ((SELECT COALESCE(MAX("id_subspecies"),0)+1 FROM "subSpecies"), $1, (SELECT "id_sc"FROM "Scientific" WHERE "name"='Unknown'), NULL);`
+        }
+        else {
+            console.error("Invalid table")
+            return reject(new Error("Invalid table"))
+        }
+        console.log("Here4")
+        client.query(query, [attribute], (err, res) => {
+            if (err) {
+                console.error(err)
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                return resolve({success : true})
+            }
+        })
+    })
 }
 
-function deleteattribute(name, attribute) {
-    
+function deleteattribute(table, attribute) {
+
+    var verifquery = "";
+    var deletequery= "";
+    var tablename = "";
+
+    return new Promise(function (resolve, reject) {
+        if (table === "order2") {
+            verifquery = `SELECT * FROM "Population"
+                            WHERE "order_id"=(SELECT "id_order" FROM "Order" WHERE "name"=$1);`
+
+            deletequery = `DELETE 
+                            FROM "Order" 
+                            WHERE "name" = $1;`
+            
+            tablename = "Order"
+        }
+        else if (table === "suborder2") {
+            verifquery = `SELECT * FROM "Population"
+                            WHERE "suborder_id"=(SELECT "id_suborder" FROM "subOrder" WHERE "name"=$1);`
+
+            deletequery = `DELETE 
+                            FROM "subOrder" 
+                            WHERE "name" = $1;`
+
+            tablename = "subOrder"
+        }
+        else if (table === "family2") {
+            verifquery = `SELECT * FROM "Population"
+                            WHERE "family_id"=(SELECT "id_family" FROM "Family" WHERE "name"=$1);`
+
+            deletequery = `DELETE 
+                            FROM "Family" 
+                            WHERE "name" = $1;`
+
+            tablename = "Family"
+        }
+        else if (table === "subfamily2") {
+            verifquery = `SELECT * FROM "Population"
+                            WHERE "subfamily_id"=(SELECT "id_subfamily" FROM "subFamily" WHERE "name"=$1);`
+
+            deletequery = `DELETE 
+                            FROM "subFamily" 
+                            WHERE "name" = $1;`
+
+            tablename = "subFamily"
+        }
+        else if (table === "tribu2") {
+            verifquery = `SELECT * FROM "Population"
+                            WHERE "tribu_id"=(SELECT "id_tribu" FROM "Tribu" WHERE "name"=$1);`
+
+            deletequery = `DELETE 
+                            FROM "Tribu" 
+                            WHERE "name" = $1;`
+
+            tablename = "Tribu"
+        }
+        else if (table === "genus2") {
+            verifquery = `SELECT * FROM "Population"
+                            WHERE "genus_id"=(SELECT "id_genus" FROM "Genus" WHERE "name"=$1);`
+
+            deletequery = `DELETE 
+                            FROM "Genus" 
+                            WHERE "name" = $1;`
+
+            tablename = "Genus"
+        }
+        else if (table === "subgenus2") {
+            verifquery = `SELECT * FROM "Population"
+                            WHERE "subgenus_id"=(SELECT "id_subgenus" FROM "subGenus" WHERE "name"=$1);`
+
+            deletequery = `DELETE 
+                            FROM "subGenus" 
+                            WHERE "name" = $1;`
+
+            tablename = "subGenus"
+        }
+        else if (table === "species2") {
+            verifquery = `SELECT * FROM "Population"
+                            WHERE "species_id"=(SELECT "id_species" FROM "Species" WHERE "name"=$1);`
+
+            deletequery = `DELETE 
+                            FROM "Species" 
+                            WHERE "name" = $1;`
+
+            tablename = "Species"
+        }
+        else if (table === "subspecies2") {
+            verifquery = `SELECT * FROM "Population"
+                            WHERE "species_id"=(SELECT "id_species" FROM "Species" WHERE "name"=$1);`
+
+            deletequery = `DELETE 
+                            FROM "subSpecies" 
+                            WHERE "name" = $1;`
+
+            tablename = "subSpecies"
+        }
+        else {
+            console.error("Invalid attribute name")
+            return reject(new Error("Invalid attribute name"))
+        }
+
+        client.query(verifquery, [attribute], (err, res) => {
+            if (err) {
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                if (res.rowCount === 0) {
+                    client.query(deletequery, [attribute], (err2, res2) => {
+                        if (err) {
+                            console.error(err2)
+                            return reject(new Error("Erreur DB"))
+                        }
+                        else {
+                            return resolve(res2)
+                        }
+                    })
+                }
+                else {
+                    return reject(new Error(`${tablename} ${attribute} is in use and can't be deleted`))
+                }
+            }
+        })
+    })
 }
 
 function addcollection(collection) {
+    query = `INSERT INTO "Collection"
+            ("id_collection", "name")
+            VALUES
+            ((SELECT COALESCE(MAX("id_collection"),0)+1 FROM "Collection"), $1)`
 
+    return new Promise(function (resolve, reject) {
+        client.query(query, [collection], (err, res) => {
+            if (err) {
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                return resolve({success: true})
+            }
+        })
+    })
 }
 
 function modifycollection(collection, newname) {
     
 }
 
-function addloaner(loaner) {
+function addloaner(name, mail, phone) {
+    query = `INSERT INTO "Loaner"
+    ("id_loaner", "name", "mail","phone")
+    VALUES
+    ((SELECT COALESCE(MAX("id_loaner"),0)+1 FROM "Loaner"), $1, $2, $3)`
 
+    return new Promise(function (resolve, reject) {
+        client.query(query, [name, mail, phone], (err, res) => {
+            if (err) {
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                return resolve({success: true})
+            }
+        })
+    })
 }
 
 function modifyloaner(loaner, newname) {
@@ -554,8 +838,6 @@ function changeindivboxid(individ, newboxid) {
     return new Promise(function (resolve, reject) {
         client.query(Queryverifnewboxid, [newboxid], (err, res) => {
             if (err) {
-                console.error(err)
-                console.log("Cas1")
                 return reject(new Error("Erreur DB"))
             }
             else {

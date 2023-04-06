@@ -200,7 +200,7 @@ class AdminPannel extends React.Component {
             token: this.state.authToken
         })
         .then((res) => {
-            this.setState({addattrstate: `${attribute} added to ${name} db`});
+            this.setState({addattrstate: `${attribute} added to ${name} db`}, this.get_selection);
         })
         .catch((err) => {
             if (!err.response) {
@@ -221,7 +221,7 @@ class AdminPannel extends React.Component {
             token: this.state.authToken
         })
         .then((res) => {
-            this.setState({deleteattrstate: `${attribute} deleted from ${name} db`});
+            this.setState({deleteattrstate: `${attribute} deleted from ${name} db`}, this.get_selection);
         })
         .catch((err) => {
             if (!err.response) {
@@ -253,7 +253,7 @@ class AdminPannel extends React.Component {
             })
             .then((res) => {
                 console.log(res)
-                this.setState({useraddstate: `User ${this.state.usernameToAdd} added`, usernameToAdd: '', passwordToAdd: '', adminToAdd: '0'});
+                this.setState({useraddstate: `User ${this.state.usernameToAdd} added`, usernameToAdd: '', passwordToAdd: '', passwordToAdd2: '', adminToAdd: '0'}, this.getUsers);
             })
             .catch((err) => {
                 if (!err.response) {

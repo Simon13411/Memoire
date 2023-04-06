@@ -93,8 +93,9 @@ app.post('/modifyright', (req, res) => {
 
 app.post('/verifyadminright', (req, res) => {
   const { token } = req.body
-  return loginops.verifyadminrightrequest(username, role, token)
+  return loginops.verifyadminrightrequest(token)
   .then((results) => {
+    console.log(results)
     res.status(200).json({success: true});
   })
   .catch((err) => {

@@ -243,14 +243,14 @@ function verifyadminrightrequest(token) {
         return reject(new Error("Error DB"));
       } else {
         if (results.rows.length === 1) {
-          const Userquery = `SELECT role FROM "Accounts" WHERE "username"='${results.rows[0].username}'`
-
+          const Userquery = `SELECT * FROM "Accounts" WHERE "username"='${results.rows[0].username}' AND "role" = 1`
+          
           client.query(Userquery, (error2, results2) => {
             if (error2) {
               return reject(new Error("Erreur DB"));
             }
-            else if (results2.rows[0].role === 1) {
-              return resolve(res)
+            else if (results2.rowCount === 1) {
+              return resolve(results2)
             } else {
               return reject(new Error("Wrong admin token"));
             }

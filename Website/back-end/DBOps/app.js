@@ -274,7 +274,9 @@ app.get('/get_collections', (req, res) => {
 })
 
 app.post('/add-attribute/:name', (req, res) => {
+    console.log("Here1")
     const { attribute, token } = req.body
+    console.log("Here2")
     return db.addattribute(req.params.name, attribute, token)
     .then((results) => {
         res.status(200).json(results)
@@ -308,7 +310,7 @@ app.post('/addcollection', (req, res) => {
 
 app.post('/modifycollection', (req, res) => {
     const { collection, newname } = req.body
-    return db.modifucollection(collection, newname)
+    return db.modifycollection(collection, newname)
     .then((results) => {
         res.status(200).json(results)
     })
@@ -318,8 +320,8 @@ app.post('/modifycollection', (req, res) => {
 })
 
 app.post('/addloaner', (req, res) => {
-    const { loaner } = req.body
-    return db.addcollection(loaner)
+    const { name, mail, phone } = req.body
+    return db.addcollection(name, mail, phone)
     .then((results) => {
         res.status(200).json(results)
     })

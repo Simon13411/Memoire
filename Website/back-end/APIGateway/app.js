@@ -180,20 +180,23 @@ app.get('/get_collections', (req, res) => {
 
 app.post('/add-attribute/:name', (req, res) => {
     const { attribute, token } = req.body
-    axios.get(`http://${IP_DBOPS}/add-attribute/${req.params.name}`, { attribute : attribute })
-        .then((resu) => {
-            res.status(200).json(resu.data);
-        })
-        .catch((err) => {
-            errorhandler(err, res)
-        });
+    axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
+        .then(() => {
+            axios.post(`http://${IP_DBOPS}/add-attribute/${req.params.name}`, { attribute : attribute })
+                .then((resu) => {
+                    res.status(200).json(resu.data);
+                })
+                .catch((err) => {
+                    errorhandler(err, res)
+                });
+            })
 })
 
 app.post('/delete-attribute/:name', (req, res) => {
     const { attribute, token } = req.body
-    axios.post(`http://${IP_DBLOGIN}/verifyadminright`, {token: token})
+    axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
         .then(() => {
-            axios.get(`http://${IP_DBOPS}/delete-attribute/${req.params.name}`, { attribute : attribute })
+            axios.post(`http://${IP_DBOPS}/delete-attribute/${req.params.name}`, { attribute : attribute })
                 .then((resu) => {
                     res.status(200).json(resu.data);
                 })
@@ -208,7 +211,7 @@ app.post('/delete-attribute/:name', (req, res) => {
 
 app.post('/addcollection', (req, res) => {
     const {collection, token} = req.body
-    axios.post(`http://${IP_DBLOGIN}/verifyadminright`, {token: token})
+    axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
         .then(() => {
             axios.get(`http://${IP_DBOPS}/addcollection`, { collection: collection })
                 .then((resu) => {
@@ -225,7 +228,7 @@ app.post('/addcollection', (req, res) => {
 
 app.post('/modifycollection', (req, res) => {
     const { collection, newname, token } = req.body
-    axios.post(`http://${IP_DBLOGIN}/verifyadminright`, {token: token})
+    axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
         .then(() => {
             axios.get(`http://${IP_DBOPS}/modifycollection`, { collection: collection, newname: newname })
                 .then((resu) => {
@@ -241,10 +244,10 @@ app.post('/modifycollection', (req, res) => {
 })
 
 app.post('/addloaner', (req, res) => {
-    const { loaner, token } = req.body
-    axios.post(`http://${IP_DBLOGIN}/verifyadminright`, {token: token})
+    const { name, mail, phone, token } = req.body
+    axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
         .then(() => {
-            axios.get(`http://${IP_DBOPS}/addloaner`, { loaner: loaner })
+            axios.get(`http://${IP_DBOPS}/addloaner`, { name, mail, phone })
                 .then((resu) => {
                     res.status(200).json(resu.data);
                 })
@@ -259,7 +262,7 @@ app.post('/addloaner', (req, res) => {
 
 app.post('/modifyloaner', (req, res) => {
     const { loaner, newname, token } = req.body
-    axios.post(`http://${IP_DBLOGIN}/verifyadminright`, {token: token})
+    axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
         .then(() => {
             axios.get(`http://${IP_DBOPS}/modifyloaner`, { loaner: loaner, newname: newname })
                 .then((resu) => {
