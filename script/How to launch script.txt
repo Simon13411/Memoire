@@ -21,3 +21,6 @@ Individu)	Ensuite lancer "exececuteFillIndividuTest.py" avec comme fichier excel
 			Les raisons des erreurs sont encore à faire
 		d) Si pas d'erreur retourne le pandas DataFrame
 	lors de l'execution des scripts, il faut assigner la variable "admin" à True ou False 
+
+
+Les fichiers selectbox et selectindividu sont pour les sql to CSV

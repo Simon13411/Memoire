@@ -35,7 +35,7 @@ box, colOk = boxexist.boxExist(file, database)
 if(len(box)>0):
     #il y a des boites qui n'existe pas encore
     print(box, colOk)
-admin=True
+admin=False
 a,b,data,d = filtre.filterIndividu(file)
 print(a,b,data,d)
 

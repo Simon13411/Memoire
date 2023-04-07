@@ -32,7 +32,7 @@ a,b,data,d = filtre.filterExcel(file)
 #On va regarder pour l'admin si les boites existent deja, si oui on les supprimes et elle seront remise après
 #Verifier si boite existe sinon oups probleme
 print(a,b,data,d)
-admin = True
+admin = False
 if (b>0):
     print("There is some problem")
 else:
