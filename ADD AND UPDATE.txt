@@ -1,9 +1,11 @@
 DELETE -> Order, Suborder, ....(Done) 
 ADD -> Order, suborder, .... (Done)
 
+DELETE Individu
 
+DELETE Box si pas individu (Done)
 
-Update Box info
+Update Box info (Done)
 
 Update loaner Info (DONE)
 
@@ -16,7 +18,7 @@ DELETE -> Loaner (Done)
 Update loaner de --> Box (Done)
 		 --> Individu (Done)
 
-Update collection --> Box
+Update collection --> Box (Done)
 
 Update population --> Box
 		  --> Individu
@@ -309,31 +311,52 @@ WHERE "name" = 'NEwSimon'
 
 
 
-------DELETE Collection si elle n'est plus présente dans collBox-----
-SELECT *
-FROM "CollectionBox"
-WHERE "collection_id"=(SELECT "id_collection" FROM "Collection" WHERE "name"='simoncoll')
-    --Si pas dans CollectionBox on peut delete
+------DELETE Collection si elle n'est plus présente dans Box----------
+SELECT Count(*)
+FROM "Box"
+WHERE "collection_id"=(SELECT "id_collection" FROM "Collection" WHERE "name"='Jean')
+
+--Si count=0 on peut delete la collection
+
 DELETE 
 FROM "Collection"
-WHERE "name" = 'simoncoll'
+WHERE "name"='Jean'
 
 
+
+------------Update BoxInfo-------- (avec id collection)
+UPDATE  "Box"
+SET  "collection_id" = 4 ,"location" = 'bxl', "museum"= 'gembloux', "paratypes" = 5, "types"= 1
+WHERE "id_box" = 1
+
+
+------------Update BoxInfo-------- (avec name collection)
+UPDATE  "Box"
+SET  "collection_id" = (SELECT "id_collection" FROM "Collection" WHERE "name"='BImbim') ,"location" = 'bxl', "museum"= 'gembloux', "paratypes" = 5, "types"= 1
+WHERE "id_box" = 1
+
+
+---------Update juste la collection d'une boite--------
+UPDATE  "Box"
+SET  "collection_id" = (SELECT "id_collection" FROM "Collection" WHERE "name"='Jean')
+WHERE "id_box" = 1
+
+
+
+
+-------------DELETE box si pas d'individu dedans----------
+SELECT Count(*)
+FROM "Individu"
+WHERE "box_id"=2
+
+--IF Zero on peut delete la boite
+
+DELETE 
+FROM "Box"
+WHERE "id_box"=2
+
+---------DELETE un individu------------------(aucune verif ici)
+DELETE 
+FROM "Individu"
+WHERE "id_individu"=1
 --------------------------------------------------------------
-
-INSERT INTO "CollectionBox"
-("collection_id", "box_id")
-VALUES
-(1, (Select "id_collection" FROM "Collection" WHERE "name" = 'simoncoll'))
-ON CONFLICT ("box_id")	DO UPDATE 
-	SET "collection_id"=(Select "id_collection" FROM "Collection" WHERE "name" = 'simoncoll')
-
-
-
-INSERT INTO "CollectionBox"
-("collection_id", "box_id")
-VALUES
-(1, (Select "id_collection" FROM "Collection" WHERE "name" = 'simoncoll'))
-ON CONFLICT ("box_id", "collection_id")	DO UPDATE 
-	SET "collection_id"=(Select "id_collection" FROM "Collection" WHERE "name" = 'Hodister') WHERE "box_id" = 
-
