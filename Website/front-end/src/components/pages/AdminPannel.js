@@ -70,7 +70,6 @@ class AdminPannel extends React.Component {
         newloanerstate: '',
         //Modifyloaner
         loanerlist: [],
-        modifiedloaner: '',
         modifiedloanername: '',
         modifiedloanername2: '',
         modifiedloanermail: '',
@@ -199,6 +198,35 @@ class AdminPannel extends React.Component {
                 this.setState({collectionlist: res.data.rows})
         })
       }
+
+    getLoanerInfo = (event) => {
+        const target = event.target
+        const value = target.value
+        const name = target.name
+        if (value !== '') {
+            this.setState({
+                [name]: value
+            }, this.getLoanerInfoHelper
+            )
+        }
+        else {
+            this.setState({[name]: ''})
+        }
+    }
+
+    getLoanerInfoHelper = () => {
+        axios.get(`${url}/get_loanerinfo/${this.state.modifiedloanername}`)
+        .then((res) => {
+            this.setState({
+                modifiedloanername2: res.data.rows[0].name,
+                modifiedloanerphone: res.data.rows[0].phone,
+                modifiedloanermail: res.data.rows[0].mail})
+        })
+        .catch((err) => {
+            //Nothing
+        })
+    }
+
 
     AddAttribute = (event) => {
         const target = event.target
@@ -806,7 +834,7 @@ class AdminPannel extends React.Component {
                                 <Select
                                     value={this.state.modifiedloanername}
                                     label="modifiedloanername"
-                                    onChange={this.handleInputChange}
+                                    onChange={this.getLoanerInfo}
                                     name='modifiedloanername'
                                 >
                                 <MenuItem value='NULL'>

@@ -568,6 +568,22 @@ function get_loaners(){
     })
 }
 
+function getloanerinfo(name){
+    var searchquery = `SELECT "name", "phone", "mail" FROM "Loaner" WHERE "name"=$1`
+                            
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, [name], (err, res) => {
+            if (err) {
+                console.error(err)
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
 function get_collections() {
     var searchquery = `SELECT "name" FROM "Collection"`
                             
@@ -1089,6 +1105,7 @@ module.exports = {
     get_selectionss,
     get_selectiont,
     get_loaners,
+    getloanerinfo,
     get_collections,
     addattribute,
     deleteattribute,

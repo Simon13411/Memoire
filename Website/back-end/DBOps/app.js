@@ -330,6 +330,16 @@ app.post('/addloaner', (req, res) => {
     })
 })
 
+app.get('/get_loanerinfo/:name', (req, res) => {
+    return db.getloanerinfo(req.params.name)
+        .then((resu) => {
+            res.status(200).json(resu);
+        })
+        .catch((err) => {
+            errorhandler(err, res)
+        });
+})
+
 app.post('/modifyloaner', (req, res) => {
     const { loaner, name, mail, phone } = req.body
     return db.modifyloaner(loaner, name, mail, phone)

@@ -260,6 +260,16 @@ app.post('/addloaner', (req, res) => {
         });
 })
 
+app.get('/get_loanerinfo/:name', (req, res) => {
+    axios.get(`http://${IP_DBOPS}/get_loanerinfo/${req.params.name}`)
+        .then((resu) => {
+            res.status(200).json(resu.data);
+        })
+        .catch((err) => {
+            errorhandler(err, res)
+        });
+})
+
 app.post('/modifyloaner', (req, res) => {
     const { loaner, name, mail, phone, token } = req.body
     axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
