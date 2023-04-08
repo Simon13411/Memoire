@@ -1,17 +1,23 @@
 import pandas as pd
-
-
+import io
+import json
+import base64
 
 import psycopg2
-import sqlite3
 
+#comment the 2 following to show warnings 
+import warnings
+warnings.filterwarnings('ignore')
 
-database = "Gembloux5_4.db"
-conn = sqlite3.connect(database)
+conn = psycopg2.connect(
+    host="db-entomo",
+    database="entomologie",
+    user="postgres",
+    password="password"
+)
 cursor = conn.cursor()
-print("Successfully Connected to the db")
 
-selectBox = """SELECT I."box_id", I."name" as SpeciCode, I."continent", I."country", I."ecozone", I."latitude", I."longitude" ,O."name" as ordre,
+selectBox = """SELECT I."box_id", I."name" as "SpeciCode", I."continent", I."country", I."ecozone", I."latitude", I."longitude" ,O."name" as ordre,
     So."name" as suborder, F."name" as family, Sf."name" as subfamily, T."name" as tribu, G."name" as genus, Sg."name" as subgenus, S."name" as species, Ss."name" as subspecies, 
     G."date" as gendate, Sg."date" as subgendate, S."date" spedate, Ss."date" as subspedate,
     Sgen."name" as scgen, Ssubgen."name" as subgen, Sspe."name" as spe, Ssubspe."name" as subspe
@@ -40,14 +46,10 @@ checkCol = ["SpecimenCode", "Order", "Suborder", "Tribu", "Family","Subfamily", 
        "species", "Subspecies", "Genus_Descriptor", "Species_Descriptor", "Subgenus_Descriptor", 
        "Subspecies_descriptor", "Genus_Date","Subgenus_Date","Species_Date","Subspecies_Date", "Num_ID","Continent", "Country", "Ecozone","Latitude", "Longitude"]
 newDf = pd.DataFrame(columns = checkCol)
-#print(cursor.fetchall()[0][0])
-print(list(map(lambda x: x[0], cursor.description)))
+
 df = pd.read_sql_query(selectBox, conn)
 
 row = df.loc[0]
-print(row)
-        
-
         
 for i, row in df.iterrows():
     new_row= {'Num_ID':row.box_id, 
@@ -76,6 +78,14 @@ for i, row in df.iterrows():
               'Longitude': row.longitude}
     newDf.loc[len(newDf)] = new_row
 
-writer = pd.ExcelWriter('individufoo.xlsx')
-newDf.to_excel(writer, sheet_name='bar', index=False)
+output = io.BytesIO()
+writer = pd.ExcelWriter(output)
+newDf.to_excel(writer, index=False)
 writer.save()
+
+excel_bytes = output.getvalue()
+
+result = {'filename': 'IndividualsData.xlsx', 'content': base64.b64encode(excel_bytes).decode('utf-8')}
+
+result_json = json.dumps(result)
+print(result_json)

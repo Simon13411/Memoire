@@ -391,11 +391,25 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
 })
 
 //SQL to Csv (Boxes)
-app.get('/boxessqltocsv', upload.single('file'), (req, res) => {
-    return db.boxSqlToCsv(req.file.path, type)
+app.get('/boxessqltocsv', (req, res) => {
+    return db.boxSqlToCsv()
     .then((result) => {
-        res.status(200).json(result)
-        fs.unlink(req.file.path, (err) => {
+        const filePath = 'FilesToReturn/BoxesData.xlsx'; // chemin absolu du fichier
+        const fileName = 'BoxesData.xlsx'; // nom du fichier à télécharger
+        console.log("Recherche du fichier BoxesData.xlsx")
+        const fileContent = fs.readFileSync(filePath);
+        const stats = fs.statSync(filePath);
+        const fileSize = stats.size;
+        console.log("Fichier BoxesData.xlsx trouvé")
+    
+        res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Length', fileSize);
+    
+        res.send(fileContent);
+        console.log("Fichier BoxesData.xlsx envoyé")
+
+        fs.unlink(filePath, (err) => {
             if (err) {
                 console.error(err);
             }
@@ -404,21 +418,29 @@ app.get('/boxessqltocsv', upload.single('file'), (req, res) => {
     })
     .catch((err) => {
         errorhandler(err, res)
-        fs.unlink(req.file.path, (err) => {
-            if (err) {
-                console.error(err);
-            }
-                console.log('File removed');
-            });
     })
 })
 
 //SQL to Csv (Individuals)
-app.get('/individualssqltocsv', upload.single('file'), (req, res) => {
-    return db.indivSqlToCsv(req.file.path, type)
+app.get('/individualssqltocsv', (req, res) => {
+    return db.indivSqlToCsv()
     .then((result) => {
-        res.status(200).json(result)
-        fs.unlink(req.file.path, (err) => {
+        const filePath = 'FilesToReturn/IndividualsData.xlsx'; // chemin absolu du fichier
+        const fileName = 'IndividualsData.xlsx'; // nom du fichier à télécharger
+        console.log("Recherche du fichier IndividualsData.xlsx")
+        const fileContent = fs.readFileSync(filePath);
+        const stats = fs.statSync(filePath);
+        const fileSize = stats.size;
+        console.log("Fichier IndividualsData.xlsx trouvé")
+    
+        res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Length', fileSize);
+    
+        res.send(fileContent);
+        console.log("Fichier IndividualsData.xlsx envoyé")
+
+        fs.unlink(filePath, (err) => {
             if (err) {
                 console.error(err);
             }
@@ -427,12 +449,6 @@ app.get('/individualssqltocsv', upload.single('file'), (req, res) => {
     })
     .catch((err) => {
         errorhandler(err, res)
-        fs.unlink(req.file.path, (err) => {
-            if (err) {
-                console.error(err);
-            }
-                console.log('File removed');
-            });
     })
 })
 

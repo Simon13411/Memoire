@@ -1,15 +1,21 @@
-
 import pandas as pd
-
-
+import io
+import json
+import base64
 
 import psycopg2
-import sqlite3
 
-database = "Gembloux5_4.db"
-conn = sqlite3.connect(database)
+#comment the 2 following to show warnings 
+import warnings
+warnings.filterwarnings('ignore')
+
+conn = psycopg2.connect(
+    host="db-entomo",
+    database="entomologie",
+    user="postgres",
+    password="password"
+)
 cursor = conn.cursor()
-print("Successfully Connected to the db")
 
 selectBox = """SELECT B."id_box", B."location", B."museum", B."paratypes", B."types",O."name" as ordre,
     So."name" as suborder, F."name" as family, Sf."name" as subfamily, T."name" as tribu, G."name" as genus, Sg."name" as subgenus, S."name" as species, Ss."name" as subspecies, Col."name" col,
@@ -42,14 +48,10 @@ fetch = cursor.fetchall()
 
 checkCol = ['Num_ID', 'Order', 'Suborder', 'Family', 'Subfamily', 'Tribu', 'Genus', 'Genus_Descriptor', 'Genus_Date', 'Subgenus', 'Subgenus_Descriptor', 'Subgenus_Date', 'species', 'Species_Descriptor', 'Species_Date', 'Subspecies', 'Subspecies_descriptor', 'Subspecies_Date', 'Types', 'Paratypes', 'Museum', 'Box_Localization', 'Collection_Name']
 newDf = pd.DataFrame(columns = checkCol)
-#print(cursor.fetchall()[0][0])
-print(list(map(lambda x: x[0], cursor.description)))
+
 df = pd.read_sql_query(selectBox, conn)
 
 row = df.loc[0]
-print(row)
-        
-
         
 #On met la premiere boite 
 new_row= {'Num_ID':row.id_box, 
@@ -82,7 +84,6 @@ for i, row in df.iterrows():
     
     #ICI on va devoir concat les differents Ordre, etc
     elif (newDf.loc[len(newDf)-1].Num_ID == row.id_box and i>0 ):
-        print(i)
         if (row.ordre != newDf.loc[len(newDf)-1].Order ):
             order = newDf.loc[len(newDf)-1].Order + "_" + row.ordre
         else:
@@ -146,36 +147,39 @@ for i, row in df.iterrows():
         newDf.loc[len(newDf)-1] = new_row
     
     else:
-        
-
-
-        
-        
         new_row= {'Num_ID':row.id_box, 
-              'Order':row.ordre, 
-              'Suborder':row.suborder, 
-              'Family':row.family, 
-              'Subfamily':row.subfamily, 
-              'Tribu':row.tribu, 
-              'Genus':row.genus, 
-              'Genus_Descriptor':row.scgen, 
-              'Genus_Date':row.gendate, 
-              'Subgenus':row.subgenus,
-              'Subgenus_Descriptor':row.subgen, 
-              'Subgenus_Date':row.subgendate, 
-              'species':row.species, 
-              'Species_Descriptor':row.spe, 
-              'Species_Date':row.spedate, 
-              'Subspecies':row.subspecies, 
-              'Subspecies_descriptor':row.subspe, 
-              'Subspecies_Date':row.subspedate,
-              'Types':row.types, 
-              'Paratypes':row.paratypes, 
-              'Museum':row.museum, 
-              'Box_Localization':row.location, 
-              'Collection_Name':row.col}
+            'Order':row.ordre, 
+            'Suborder':row.suborder, 
+            'Family':row.family, 
+            'Subfamily':row.subfamily, 
+            'Tribu':row.tribu, 
+            'Genus':row.genus, 
+            'Genus_Descriptor':row.scgen, 
+            'Genus_Date':row.gendate, 
+            'Subgenus':row.subgenus,
+            'Subgenus_Descriptor':row.subgen, 
+            'Subgenus_Date':row.subgendate, 
+            'species':row.species, 
+            'Species_Descriptor':row.spe, 
+            'Species_Date':row.spedate, 
+            'Subspecies':row.subspecies, 
+            'Subspecies_descriptor':row.subspe, 
+            'Subspecies_Date':row.subspedate,
+            'Types':row.types, 
+            'Paratypes':row.paratypes, 
+            'Museum':row.museum, 
+            'Box_Localization':row.location, 
+            'Collection_Name':row.col}
         newDf.loc[len(newDf)] = new_row
 
-writer = pd.ExcelWriter('foo.xlsx')
-newDf.to_excel(writer, sheet_name='bar', index=False)
+output = io.BytesIO()
+writer = pd.ExcelWriter(output)
+newDf.to_excel(writer, index=False)
 writer.save()
+
+excel_bytes = output.getvalue()
+
+result = {'filename': 'BoxesData.xlsx', 'content': base64.b64encode(excel_bytes).decode('utf-8')}
+
+result_json = json.dumps(result)
+print(result_json)

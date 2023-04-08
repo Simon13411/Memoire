@@ -1,9 +1,6 @@
 import pandas as pd
 import numpy as np
 import math
-import sqlite3
-
-
 
 
 def filterIndividu(olddf):

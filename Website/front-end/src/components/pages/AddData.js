@@ -59,15 +59,11 @@ class AddData extends React.Component {
             <div className="container">
             <div className="column">
               <h1>Download Boxes Data</h1>
-              <div>
                 <FileDownloader file='BoxSQL' type='data'/>
-              </div>
             </div>
             <div className="column">
               <h1>Download Individuals Data</h1>
-              <div>
                 <FileDownloader file='IndividualSQL' type='data'/>
-              </div>
             </div>
             </div>
         </div>

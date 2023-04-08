@@ -329,53 +329,23 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
         });
 })
 
-app.get(`/boxessqltocsv`, upload.single('file'), (req, res) => {
-    const formData = new FormData();
-    formData.append('file', fs.createReadStream(req.file.path));
-    
-    axios.get(`/boxessqltocsv`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data' //Contient des données binaires
-            },
-            responseType: 'stream'
-        })
+app.get(`/boxessqltocsv`, (req, res) => {
+    axios.get(`http://${IP_DBOPS}/boxessqltocsv`, { responseType: 'stream' })
         .then((response) => {
             response.data.pipe(res)
         })
         .catch((err) => {
             errorhandler(err, res)
-        });
-
-    fs.unlink(req.file.path, (err) => {
-        if (err) {
-            console.error(err);
-        }
-            console.log('File removed');
         });
 })
 
-app.get(`/individualssqltocsv`, upload.single('file'), (req, res) => {
-    const formData = new FormData();
-    formData.append('file', fs.createReadStream(req.file.path));
-    
-    axios.get(`/individualssqltocsv`, formData, { 
-            headers: {
-                'Content-Type': 'multipart/form-data' //Contient des données binaires
-            },
-            responseType: 'stream'
-        })
+app.get(`/individualssqltocsv`, (req, res) => {
+    axios.get(`http://${IP_DBOPS}/individualssqltocsv`, { responseType: 'stream' })
         .then((response) => {
             response.data.pipe(res)
         })
         .catch((err) => {
             errorhandler(err, res)
-        });
-
-    fs.unlink(req.file.path, (err) => {
-        if (err) {
-            console.error(err);
-        }
-            console.log('File removed');
         });
 })
 

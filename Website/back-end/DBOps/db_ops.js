@@ -1,3 +1,6 @@
+const fs = require('fs')
+const path = require('path');
+
 const { Client } = require('pg');
 const { spawn } = require('child_process');
 const client = new Client({
@@ -916,11 +919,99 @@ function csvtosql(filename, type) {
   }
 
 function boxSqlToCsv(){
+    return new Promise(function(resolve, reject) {
+        console.log("Subprocess spawning")
+        const script = spawn('python3', ['SQLToCsvBox.py']);
+        console.log("Subprocess spawned")
 
+        fileDataString = '';
+
+        script.stdout.on('data', (data) => {
+            try {
+                fileDataString += data.toString();
+            }
+            catch (err) {
+                console.log(err)
+                return reject(new Error("Error during script run"));
+            }
+        });
+
+
+        script.stderr.on('data', (data) => {
+        console.error(`stderr: ${data}`);
+        return reject(new Error("Error during script run"));
+        });
+
+        script.on('close', (code) => {
+        console.log(`child process exited with code ${code}`);
+        if (code === 1 || code === '1') {
+            return reject(new Error("Error during script run"));
+        }
+        const fileData = JSON.parse(fileDataString.toString());
+        const filename = fileData.filename;
+        const contentBase64 = fileData.content;
+        const content = Buffer.from(contentBase64, 'base64');
+
+        const filePath = path.join(__dirname, 'FilesToReturn', filename);
+
+        fs.writeFile(filePath, content, (err) => {
+            if (err){
+                console.log(err)
+                return reject(new Error("Erreur lors de l'écriture du fichier"));
+            }
+            console.log(`${filename} has been saved.`);
+            return resolve("Success");
+        });
+        });
+    });
 }
 
 function indivSqlToCsv() {
+    return new Promise(function(resolve, reject) {
+        console.log("Subprocess spawning")
+        const script = spawn('python3', ['SQLToCsvIndividu.py']);
+        console.log("Subprocess spawned")
 
+        fileDataString = '';
+
+        script.stdout.on('data', (data) => {
+            try {
+                fileDataString += data.toString();
+            }
+            catch (err) {
+                console.log(err)
+                return reject(new Error("Error during script run"));
+            }
+        });
+
+
+        script.stderr.on('data', (data) => {
+        console.error(`stderr: ${data}`);
+        return reject(new Error("Error during script run"));
+        });
+
+        script.on('close', (code) => {
+        console.log(`child process exited with code ${code}`);
+        if (code === 1 || code === '1') {
+            return reject(new Error("Error during script run"));
+        }
+        const fileData = JSON.parse(fileDataString.toString());
+        const filename = fileData.filename;
+        const contentBase64 = fileData.content;
+        const content = Buffer.from(contentBase64, 'base64');
+
+        const filePath = path.join(__dirname, 'FilesToReturn', filename);
+
+        fs.writeFile(filePath, content, (err) => {
+            if (err){
+                console.log(err)
+                return reject(new Error("Erreur lors de l'écriture du fichier"));
+            }
+            console.log(`${filename} has been saved.`);
+            return resolve("Success");
+        });
+        });
+    });
 }
 
 module.exports = {
