@@ -155,7 +155,7 @@ function verifytoken(token) {
 }
 
 function getusers() {
-  searchquery = `SELECT "username" FROM "Accounts"`
+  searchquery = `SELECT "username" FROM "Accounts" ORDER BY "username" ASC`
 
   return new Promise((resolve, reject) => {
     client.query(searchquery, (err, res) => {

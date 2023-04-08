@@ -177,7 +177,7 @@ function get_selectiono(So, F, Sf, T, G, Sg, S, Ss) {
     var searchquery = "";
 
     if (So === "NULL" && F === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
-        searchquery = `SELECT "name" FROM "Order"`
+        searchquery = `SELECT "name" FROM "Order" ORDER BY "name" ASC`
     }
     else {
         searchquery = `SELECT DISTINCT O."name" as "name"
@@ -199,9 +199,10 @@ function get_selectiono(So, F, Sf, T, G, Sg, S, Ss) {
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
-                        AND O."name" IS NOT NULL`
+                        AND O."name" IS NOT NULL
+                        ORDER BY "name" ASC`
     }
-  
+  console
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
             if (err) {
@@ -219,7 +220,7 @@ function get_selectionso(O, F, Sf, T, G, Sg, S, Ss) {
     var searchquery = "";
 
     if (O === "NULL" && F === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
-        searchquery = `SELECT "name" FROM "subOrder"`
+        searchquery = `SELECT "name" FROM "subOrder" ORDER BY "name" ASC`
     }
     else {
         searchquery = `SELECT DISTINCT So."name" as "name"
@@ -241,7 +242,8 @@ function get_selectionso(O, F, Sf, T, G, Sg, S, Ss) {
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
-                        AND So."name" IS NOT NULL`
+                        AND So."name" IS NOT NULL
+                        ORDER BY "name" ASC`
     }
 
     return new Promise(function (resolve, reject) {
@@ -261,7 +263,7 @@ function get_selectiong(O, So, F, Sf, T, Sg, S, Ss) {
     var searchquery = "";
 
     if (O === "NULL" && So === "NULL" && F === "NULL" && Sf === "NULL" && T === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
-        searchquery = `SELECT "name" FROM "Genus"`
+        searchquery = `SELECT "name" FROM "Genus" ORDER BY "name" ASC`
     }
     else {
         searchquery = `SELECT DISTINCT G."name" as "name"
@@ -283,7 +285,8 @@ function get_selectiong(O, So, F, Sf, T, Sg, S, Ss) {
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
-                        AND G."name" IS NOT NULL`
+                        AND G."name" IS NOT NULL
+                        ORDER BY "name" ASC`
     }
 
     
@@ -304,7 +307,7 @@ function get_selectionsg(O, So, F, Sf, T, G, S, Ss) {
     var searchquery = "";
 
     if (O === "NULL" && So === "NULL" && F === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && S === "NULL" && Ss === "NULL") {
-        searchquery = `SELECT "name" FROM "subGenus"`
+        searchquery = `SELECT "name" FROM "subGenus" ORDER BY "name" ASC`
     }
     else {
         searchquery = `SELECT DISTINCT Sg."name" as "name"
@@ -326,7 +329,8 @@ function get_selectionsg(O, So, F, Sf, T, G, S, Ss) {
                         AND (G."name" = '${G}' OR '${G}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
-                        AND Sg."name" IS NOT NULL`
+                        AND Sg."name" IS NOT NULL
+                        ORDER BY "name" ASC`
     }
     
     return new Promise(function (resolve, reject) {
@@ -346,7 +350,7 @@ function get_selectionf(O, So, Sf, T, G, Sg, S, Ss) {
     var searchquery = "";
 
     if (O === "NULL" && So === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
-        searchquery = `SELECT "name" FROM "Family"`
+        searchquery = `SELECT "name" FROM "Family" ORDER BY "name" ASC`
     }
     else {
         searchquery = `SELECT DISTINCT F."name" as "name"
@@ -368,7 +372,8 @@ function get_selectionf(O, So, Sf, T, G, Sg, S, Ss) {
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
-                        AND F."name" IS NOT NULL`
+                        AND F."name" IS NOT NULL
+                        ORDER BY "name" ASC`
     }
     
     return new Promise(function (resolve, reject) {
@@ -388,7 +393,7 @@ function get_selectionsf(O, So, F, T, G, Sg, S, Ss) {
     var searchquery = "";
 
     if (O === "NULL" && So === "NULL" && F === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
-        searchquery = `SELECT "name" FROM "subFamily"`
+        searchquery = `SELECT "name" FROM "subFamily" ORDER BY "name" ASC`
     }
     else {
         searchquery = `SELECT DISTINCT Sf."name" as "name"
@@ -410,7 +415,8 @@ function get_selectionsf(O, So, F, T, G, Sg, S, Ss) {
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
-                        AND Sf."name" IS NOT NULL`
+                        AND Sf."name" IS NOT NULL
+                        ORDER BY "name" ASC`
     }
     
     return new Promise(function (resolve, reject) {
@@ -430,7 +436,7 @@ function get_selections(O, So, F, Sf, T, G, Sg, Ss) {
     var searchquery = "";
 
     if (O === "NULL" && So === "NULL" && F === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && Ss === "NULL") {
-        searchquery = `SELECT "name" FROM "Species"`
+        searchquery = `SELECT "name" FROM "Species" ORDER BY "name" ASC`
     }
     else {
         searchquery = `SELECT DISTINCT S."name" as "name"
@@ -452,7 +458,8 @@ function get_selections(O, So, F, Sf, T, G, Sg, Ss) {
                         AND (G."name" = '${G}' OR '${G}'='NULL')
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
-                        AND S."name" IS NOT NULL`
+                        AND S."name" IS NOT NULL
+                        ORDER BY "name" ASC`
     }
     
     return new Promise(function (resolve, reject) {
@@ -472,7 +479,7 @@ function get_selectionss(O, So, F, Sf, T, G, Sg, S) {
     var searchquery = "";
 
     if (O === "NULL" && So === "NULL" && F === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL") {
-        searchquery = `SELECT "name" FROM "subSpecies"`
+        searchquery = `SELECT "name" FROM "subSpecies" ORDER BY "name" ASC`
     }
     else {
         searchquery = `SELECT DISTINCT Ss."name" as "name"
@@ -494,7 +501,8 @@ function get_selectionss(O, So, F, Sf, T, G, Sg, S) {
                         AND (G."name" = '${G}' OR '${G}'='NULL')
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
-                        AND Ss."name" IS NOT NULL`
+                        AND Ss."name" IS NOT NULL
+                        ORDER BY "name" ASC`
     }
 
     return new Promise(function (resolve, reject) {
@@ -514,7 +522,7 @@ function get_selectiont(O, So, F, Sf, G, Sg, S, Ss) {
     var searchquery = "";
 
     if (O === "NULL" && So === "NULL" && F === "NULL" && Sf === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
-        searchquery = `SELECT "name" FROM "Tribu"`
+        searchquery = `SELECT "name" FROM "Tribu" ORDER BY "name" ASC`
     }
     else {
         searchquery = `SELECT DISTINCT T."name" as "name"
@@ -536,7 +544,8 @@ function get_selectiont(O, So, F, Sf, G, Sg, S, Ss) {
                         AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
                         AND (S."name" = '${S}' OR '${S}'='NULL')
                         AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
-                        AND T."name" IS NOT NULL`
+                        AND T."name" IS NOT NULL
+                        ORDER BY "name" ASC`
     }
     
     return new Promise(function (resolve, reject) {
@@ -553,7 +562,7 @@ function get_selectiont(O, So, F, Sf, G, Sg, S, Ss) {
 }
 
 function get_loaners(){
-    var searchquery = `SELECT "name" FROM "Loaner"`
+    var searchquery = `SELECT "name" FROM "Loaner" ORDER BY "name" ASC`
                             
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -585,7 +594,7 @@ function getloanerinfo(name){
 }
 
 function get_collections() {
-    var searchquery = `SELECT "name" FROM "Collection"`
+    var searchquery = `SELECT "name" FROM "Collection" ORDER BY "name" ASC`
                             
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
