@@ -47,13 +47,14 @@ class Selection extends React.Component {
   }
 
   fetchResults = () => {
+    console.log(this.state.maxpage)
       axios.get(`${url}/get_indivresult`, {
         params:
         {offs: (this.state.actualpage*10).toString(), o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
       .then((res) => {
           this.setState({results: res.data.rows})
           if (res.data.rows.length > 0) {
-            this.setState({maxpage: parseInt(res.data.rows[0].total_rows)})
+            this.setState({maxpage: Math.floor(parseInt(res.data.rows[0].total_rows)/10)})
           }
           else {
             this.setState({maxpage: 0})
@@ -192,7 +193,7 @@ class Selection extends React.Component {
     .then((res) => {
         this.setState({results: res.data.rows})
         if (res.data.rows[0].total_rows) {
-          this.setState({maxpage: parseInt(res.data.rows[0].total_rows)/10})
+          this.setState({maxpage: Math.floor(parseInt(res.data.rows[0].total_rows)/10)})
         }
         else {
           this.setState({maxpage: 0})

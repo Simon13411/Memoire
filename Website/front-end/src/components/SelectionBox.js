@@ -53,7 +53,7 @@ class Selection extends React.Component {
       .then((res) => {
           this.setState({results: res.data.rows})
           if (res.data.rows.length > 0) {
-            this.setState({maxpage: parseInt(res.data.rows[0].total_rows)/10})
+            this.setState({maxpage: Math.floor(parseInt(res.data.rows[0].total_rows)/10)})
           }
           else {
             this.setState({maxpage: 0})
@@ -196,7 +196,7 @@ class Selection extends React.Component {
     .then((res) => {
         this.setState({results: res.data.rows})
         if (res.data.rows[0].total_rows) {
-          this.setState({maxpage: parseInt(res.data.rows[0].total_rows)/10})
+          this.setState({maxpage: Math.floor(parseInt(res.data.rows[0].total_rows)/10)})
         }
         else {
           this.setState({maxpage: 0})
