@@ -5,7 +5,7 @@ import math
 
 def insertSubGenus(data, cursor, conn) :
     toinsertName = data["Subgenus"].values.tolist()
-    toinsertDate = data["Subgenus_Date"].values.tolist()
+    toinsertDate = data["Subgenus_Date"].fillna("NULL").values.tolist()
     toinsertSc = data["Subgenus_Descriptor"].values.tolist()
     duplicationquery =  """SELECT MAX("id_subgenus")
                             FROM "subGenus" """
@@ -41,18 +41,24 @@ def insertSubGenus(data, cursor, conn) :
                     print("Pas normal")
                     print(id_sc_list)
                 dateNull = "NULL"
-                if not math.isnan(toinsertDate[i]):
-                    insertquery = """INSERT INTO "subGenus"
+                """if not math.isnan(toinsertDate[i]):
+                    insertquery = \"""INSERT INTO "subGenus"
+                                ("id_subgenus", "name", "id_sc", "date") 
+                                VALUES 
+                                ({},'{}',{},'{}')\""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
+                    print(insertquery)
+                else:
+                    insertquery = \"""INSERT INTO "subGenus"
+                                ("id_subgenus", "name", "id_sc", "date") 
+                                VALUES 
+                                ({},'{}',{},{})\""".format(Count, index, id_sc_list[0][0], dateNull)
+                    print(insertquery)"""
+                    
+                insertquery = """INSERT INTO "subGenus"
                                 ("id_subgenus", "name", "id_sc", "date") 
                                 VALUES 
                                 ({},'{}',{},{})""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
-                    print(insertquery)
-                else:
-                    insertquery = """INSERT INTO "subGenus"
-                                ("id_subgenus", "name", "id_sc", "date") 
-                                VALUES 
-                                ({},'{}',{},{})""".format(Count, index, id_sc_list[0][0], dateNull)
-                    print(insertquery)
+                print(insertquery)
                 cursor.execute(insertquery)
                 Count+=1
     conn.commit()

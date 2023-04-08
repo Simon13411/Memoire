@@ -311,16 +311,21 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
         })
         .then((resu) => {
             res.status(200).json(resu.data);
+            fs.unlink(req.file.path, (err) => {
+                if (err) {
+                    console.error(err);
+                }
+                    console.log('File removed');
+                });
         })
         .catch((err) => {
             errorhandler(err, res)
-        });
-
-    fs.unlink(req.file.path, (err) => {
-        if (err) {
-            console.error(err);
-        }
-            console.log('File removed');
+            fs.unlink(req.file.path, (err) => {
+                if (err) {
+                    console.error(err);
+                }
+                    console.log('File removed');
+                });
         });
 })
 

@@ -5,7 +5,7 @@ import math
 
 def insertSpecies(data, cursor, conn) :
     toinsertName = data["species"].values.tolist()
-    toinsertDate = data["Species_Date"].values.tolist()
+    toinsertDate = data["Species_Date"].fillna("NULL").values.tolist()
     toinsertSc = data["Species_Descriptor"].values.tolist()
     duplicationquery =  """ SELECT MAX("id_species")
                             FROM "Species" """
@@ -42,18 +42,23 @@ def insertSpecies(data, cursor, conn) :
                     print("Pas normal")
                     print(id_sc_list)
                 dateNull = "NULL"
-                if not math.isnan(toinsertDate[i]):
-                    insertquery = """INSERT INTO "Species"
+                """if not math.isnan(toinsertDate[i]):
+                    insertquery = \"""INSERT INTO "Species"
+                                ("id_species", "name", "id_sc", "date") 
+                                VALUES 
+                                ({},'{}',{},'{}')\""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
+                    print(insertquery)
+                else:
+                    insertquery = \"""INSERT INTO "Species"
+                                ("id_species", "name", "id_sc", "date") 
+                                VALUES 
+                                ({},'{}',{},{})\""".format(Count, index, id_sc_list[0][0], dateNull)"""
+                insertquery = """INSERT INTO "Species"
                                 ("id_species", "name", "id_sc", "date") 
                                 VALUES 
                                 ({},'{}',{},{})""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
-                    print(insertquery)
-                else:
-                    insertquery = """INSERT INTO "Species"
-                                ("id_species", "name", "id_sc", "date") 
-                                VALUES 
-                                ({},'{}',{},{})""".format(Count, index, id_sc_list[0][0], dateNull)
-                    print(insertquery)
+                                
+                print(insertquery)
                 cursor.execute(insertquery)
                 Count+=1
     conn.commit()

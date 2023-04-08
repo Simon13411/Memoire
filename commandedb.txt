@@ -6,7 +6,7 @@ UNIQUE ("id_order"),
 UNIQUE ("name")
 );
 
-﻿CREATE TABLE "subOrder" (
+CREATE TABLE "subOrder" (
 "id_suborder" INT NOT NULL,
 "name" VARCHAR(500) NOT NULL,
 PRIMARY KEY ("id_suborder"),

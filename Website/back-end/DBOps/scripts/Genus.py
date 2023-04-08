@@ -5,7 +5,7 @@ import math
 
 def insertGenus(data, cursor, conn) :
     toinsertName = data["Genus"].values.tolist()
-    toinsertDate = data["Genus_Date"].values.tolist()
+    toinsertDate = data["Genus_Date"].fillna("NULL").values.tolist()
     toinsertSc = data["Genus_Descriptor"].values.tolist()
     duplicationquery =  """SELECT MAX("id_genus")
                             FROM "Genus" """
@@ -42,18 +42,23 @@ def insertGenus(data, cursor, conn) :
                     print("Pas normal")
                     print(id_sc_list)
                 dateNull = "NULL"
-                if not math.isnan(toinsertDate[i]):
-                    insertquery = """INSERT INTO "Genus"
+                """if not math.isnan(toinsertDate[i]):
+                    insertquery = \"""INSERT INTO "Genus"
                                 ("id_genus", "name", "id_sc", "date") 
                                 VALUES 
-                                ({},'{}',{},'{}') """.format(Count, index, id_sc_list[0][0], toinsertDate[i])
+                                ({},{},{},{}) \""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
                     print(insertquery)
                 else:
-                    insertquery = """INSERT INTO "Genus"
+                    insertquery = \"""INSERT INTO "Genus"
                                 ("id_genus", "name", "id_sc", "date") 
                                 VALUES 
-                                ({},'{}',{},'{}') """.format(Count, index, id_sc_list[0][0], dateNull)
-                    print(insertquery)
+                                ({},'{}',{},{}) \""".format(Count, index, id_sc_list[0][0], dateNull)"""
+                
+                insertquery = """INSERT INTO "Genus"
+                                ("id_genus", "name", "id_sc", "date") 
+                                VALUES 
+                                ({},'{}',{},{}) """.format(Count, index, id_sc_list[0][0], toinsertDate[i])
+                print(insertquery)
                 cursor.execute(insertquery)
                 Count+=1
     conn.commit()

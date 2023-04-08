@@ -254,13 +254,13 @@ def population(order, suborder, family, subfamily, tribu, genus, subgenus, speci
         print(id_populationList)
     return id_populationList[0][0]
 
-def insertBox(data, cursor, conn) :
+def insertBox(data, cursor, conn, admin) :
     toinsertID = data["Num_ID"].values.tolist()
     toinsertLocation = data["Box_Localization"].values.tolist()
     toinsertMuseum = data["Museum"].values.tolist()
-    toinsertParaType = data["Paratypes"].values.tolist()
-    toinsertType = data["Types"].values.tolist()
-    
+    toinsertParaType = data["Paratypes"].fillna("NULL").values.tolist()
+    toinsertType = data["Types"].fillna("NULL").values.tolist()
+    toinsertCollection = data["Collection_Name"].tolist()
     toinsertOrder = data["Order"].values.tolist()
     toinsertSubOrder = data["Suborder"].values.tolist()
     toinsertTribu = data["Tribu"].values.tolist()
@@ -272,8 +272,6 @@ def insertBox(data, cursor, conn) :
     toinsertSubSpecies = data["Subspecies"].values.tolist()
     
     
-    toinsertGenusRange = data["Genus_range"].values.tolist()
-    toinsertSpeciesRange = data["Species_range"].values.tolist()
     
     
     duplicationquery =  """SELECT MAX("id_box")
@@ -286,129 +284,7 @@ def insertBox(data, cursor, conn) :
         Count = result[0][0]+1
 
     for i in range(0, len(toinsertID)):
-        
-        if(toinsertID[i]==0):
-            
-            zeroExist = """SELECT *
-                                FROM "Box" 
-                                WHERE "id_box" = '{}' """.format(toinsertID[i])
-            cursor.execute(zeroExist)
-            if cursor.fetchall()==[]:
-                #il y a pas encore de zero, on ajoute un id box 0, un id species range 0, un id genus range 0
-                
-            
-                #On recupere l'ordre
-                orderList = order(toinsertOrder[i], cursor)
-                
-                #On recupere le sous ordre
-                suborderList = suborder(toinsertSubOrder[i], cursor)
-                
-                #On recupere la tribu
-                tribuList = tribu(toinsertTribu[i], cursor)
-                 
-                #On recupere la famille
-                familyList = family(toinsertFamily[i], cursor)
-                
-                #On recupere la sous famille
-                subFamilyList = subfamily(toinsertSubFamily[i], cursor)
-                
-                #On recupere le genus
-                genusList = genus(toinsertGenus[i], cursor)
-                
-                #On recupere le sous genus
-                subGenusList = subgenus(toinsertSubGenus[i], cursor)
-                
-                #On recupere la species
-                speciesList  = species(toinsertSpecies[i], cursor)
-                
-                #On recupere la sous species
-                subSpeciesList  =subspecies(toinsertSubSpecies[i], cursor)
-        
-                populationList = []
-                for orderValue in orderList:
-                    for subOrderValue in suborderList:
-                        for familyValue in familyList:
-                            for subFamilyValue in subFamilyList:
-                                for tribuValue in tribuList:
-                                    for genusValue in genusList:
-                                        for subGenusValue in subGenusList:
-                                            for speciesValue in speciesList:
-                                                for subSpeciesValue in subSpeciesList:
-                                            
-                                                    #Il va falloir recuperer toutes les id populations qui existent avec les id de classement
-                                                    #qu'on a 
-                                                    populationList.append(population(orderValue,  subOrderValue, familyValue, subFamilyValue, tribuValue, genusValue,subGenusValue,speciesValue,subSpeciesValue,cursor))
-                for pop in populationList:
-                    duplicate = """SELECT *
-                             FROM "PopuBox"
-                             WHERE "box_id" = {} and "population_id" = {} """.format(toinsertID[i], pop)
-                    cursor.execute(duplicate)
-                    if(cursor.fetchall()==[]):
-                        insertPopuBox = """INSERT INTO "PopuBox"
-                                     ("population_id", "box_id")
-                                     VALUES
-                                     ({},{}) """.format(pop, toinsertID[i])
-                        cursor.execute(insertPopuBox)   
-                
-                insertquery = """INSERT INTO "Box"
-                                ("id_box", "location", "speciesrange_id", "genusrange_id", "museum", "paratypes", "types") 
-                                VALUES 
-                                ({},'{}',{},{},'{}',{},{})""".format(0,"", "NULL", "NULL", "", "NULL", "NULL")
-                print(insertquery)
-                cursor.execute(insertquery)
-            else:            
-                #On recupere l'ordre
-                orderList = order(toinsertOrder[i], cursor)
-                
-                #On recupere le sous ordre
-                suborderList = suborder(toinsertSubOrder[i], cursor)
-                
-                #On recupere la tribu
-                tribuList = tribu(toinsertTribu[i], cursor)
-                 
-                #On recupere la famille
-                familyList = family(toinsertFamily[i], cursor)
-                
-                #On recupere la sous famille
-                subFamilyList = subfamily(toinsertSubFamily[i], cursor)
-                
-                #On recupere le genus
-                genusList = genus(toinsertGenus[i], cursor)
-                
-                #On recupere le sous genus
-                subGenusList = subgenus(toinsertSubGenus[i], cursor)
-                
-                #On recupere la species
-                speciesList  = species(toinsertSpecies[i], cursor)
-                
-                #On recupere la sous species
-                subSpeciesList  =subspecies(toinsertSubSpecies[i], cursor)
-        
-                populationList = []
-                for orderValue in orderList:
-                    for subOrderValue in suborderList:
-                        for familyValue in familyList:
-                            for subFamilyValue in subFamilyList:
-                                for tribuValue in tribuList:
-                                    for genusValue in genusList:
-                                        for subGenusValue in subGenusList:
-                                            for speciesValue in speciesList:
-                                                for subSpeciesValue in subSpeciesList:
-                                            
-                                                    #Il va falloir recuperer toutes les id populations qui existent avec les id de classement
-                                                    #qu'on a 
-                                                    populationList.append(population(orderValue,  subOrderValue, familyValue, subFamilyValue, tribuValue, genusValue,subGenusValue,speciesValue,subSpeciesValue,cursor))
-                for pop in populationList:
-                    duplicate = """SELECT *
-                             FROM "PopuBox"
-                             WHERE "box_id" = {} and "population_id" = {} """.format(toinsertID[i], pop)
-                    cursor.execute(duplicate)
-                    if(cursor.fetchall()==[]):
-                        insertPopuBox = """INSERT INTO "PopuBox"
-                                     ("population_id", "box_id")
-                                     VALUES
-                                     ({},{}) """.format(pop, toinsertID[i])
-                        cursor.execute(insertPopuBox)  
+          
                
         duplicationquery =  """SELECT *
                                 FROM "Box" 
@@ -471,71 +347,122 @@ def insertBox(data, cursor, conn) :
                     cursor.execute(insertPopuBox)
                     
             
-            #On recupere l'id du genus range
-            genusFlag = False
-            if isinstance(toinsertGenusRange[i], str):
             
-                genusrangeList = toinsertGenusRange[i].split("_")
-                start = genusrangeList[0]
-                if(len(genusrangeList)==2):
-                    end = genusrangeList[1]
-                else:
-                    end = ""   
-                #S il y a un genus descriptor, on va recupere l'id du sc
-                id_genusRange =  """SELECT "id_genusrange"
-                                FROM "GenusRange" 
-                                WHERE "range_begin" = '{}' and "range_end" = '{}'  """.format(start, end) 
-                cursor.execute(id_genusRange)
-                id_genusRangeList = cursor.fetchall()
-                if (len(id_genusRangeList)>1): #juste check mais normalement devrait pas aller la
-                    print("Pas normal")
-                    print(id_genusRangeList)
-                genusFlag = True
-            #On recupere l'id du species range   
-            speciesFlag = False
-            if isinstance(toinsertSpeciesRange[i], str):
-            
-                speciesrangeList = toinsertSpeciesRange[i].split("_")
-                speciesstart = speciesrangeList[0]
-                if(len(speciesrangeList)==2):
-                    speciesend = speciesrangeList[1]
-                else:
-                    speciesend = ""   
-                #S il y a un genus descriptor, on va recupere l'id du sc
-                id_speciesRange =  """SELECT "id_speciesrange"
-                                FROM "SpeciesRange" 
-                                WHERE "range_begin" = '{}' and "range_end" = '{}' """.format(speciesstart, speciesend) 
-                cursor.execute(id_speciesRange)
-                id_speciesRangeList = cursor.fetchall()
-                if (len(id_speciesRangeList)>1): #juste check mais normalement devrait pas aller la
-                    print("Pas normal")
-                    print(id_speciesRangeList)
-                speciesFlag = True
-                
+            collection = """ SELECT "id_collection" 
+                            FROM "Collection"
+                            WHERE "name" = '{}' """.format(toinsertCollection[i])
+            cursor.execute(collection)
+            collectionList = cursor.fetchall()
+            print("colection", collectionList[0][0])
+            if (len(collectionList)>1): #juste check mais normalement devrait pas aller la
+                print("Pas normal")
+                print(collectionList)
             location = toinsertLocation[i] if isinstance(toinsertLocation[i],str) else ""
             museum = toinsertMuseum[i] if isinstance(toinsertMuseum[i], str) else ""
             
-            paratype = math.nan if isinstance(toinsertParaType[i], str) else toinsertParaType[i]
-            paratype = paratype if not math.isnan(paratype) else 0
-            paratype = 0 if isinstance(paratype, str) else paratype
-            types = toinsertType[i] if not math.isnan(toinsertType[i]) else 0
-            genusrangeID = id_genusRangeList[0][0] if genusFlag else "NULL"
-            speciesrangeID = id_speciesRangeList[0][0] if speciesFlag else "NULL"
-            print("type: ", types)
-            print("paratype: ", paratype)
             print("id population: ", populationList)
             print("location: ", location)
             print("museum: ", museum)
-            print("genus range: ", genusrangeID)
-            print("species range: ", speciesrangeID)
+            
             
             
                 
             insertquery = """INSERT INTO "Box"
-                                ("id_box", "location", "speciesrange_id", "genusrange_id", "museum", "paratypes", "types") 
+                                ("id_box", "collection_id" ,"location", "museum", "paratypes", "types") 
                                 VALUES 
-                                ({},'{}',{},{},'{}',{},{})""".format(toinsertID[i], location, speciesrangeID, genusrangeID, museum, paratype, types)
+                                ({}, {},'{}','{}',{},{})""".format(toinsertID[i], collectionList[0][0], location, museum, toinsertParaType[i], toinsertType[i])
             print(insertquery)
             cursor.execute(insertquery)
             Count+=1
+        elif(admin):
+            
+            deletePopuBox= """
+                        DELETE
+                        FROM "PopuBox"
+                        WHERE "box_id"={} """.format(toinsertID[i])
+            print(deletePopuBox)
+            cursor.execute(deletePopuBox)
+            
+            #On recupere l'ordre
+            orderList = order(toinsertOrder[i], cursor)
+                
+            #On recupere le sous ordre
+            suborderList = suborder(toinsertSubOrder[i], cursor)
+                
+            #On recupere la tribu
+            tribuList = tribu(toinsertTribu[i], cursor)
+                 
+            #On recupere la famille
+            familyList = family(toinsertFamily[i], cursor)
+                
+            #On recupere la sous famille
+            subFamilyList = subfamily(toinsertSubFamily[i], cursor)
+                
+            #On recupere le genus
+            genusList = genus(toinsertGenus[i], cursor)
+                
+            #On recupere le sous genus
+            subGenusList = subgenus(toinsertSubGenus[i], cursor)
+                
+            #On recupere la species
+            speciesList  = species(toinsertSpecies[i], cursor)
+                
+            #On recupere la sous species
+            subSpeciesList  =subspecies(toinsertSubSpecies[i], cursor)
+        
+            populationList = []
+            for orderValue in orderList:
+                for subOrderValue in suborderList:
+                    for familyValue in familyList:
+                        for subFamilyValue in subFamilyList:
+                            for tribuValue in tribuList:
+                                for genusValue in genusList:
+                                    for subGenusValue in subGenusList:
+                                        for speciesValue in speciesList:
+                                            for subSpeciesValue in subSpeciesList:
+                                            
+                                                #Il va falloir recuperer toutes les id populations qui existent avec les id de classement
+                                                #qu'on a 
+                                                populationList.append(population(orderValue,  subOrderValue, familyValue, subFamilyValue, tribuValue, genusValue,subGenusValue,speciesValue,subSpeciesValue,cursor))
+             
+            for pop in populationList:
+                print(pop)
+                duplicate = """SELECT *
+                             FROM "PopuBox"
+                             WHERE "box_id" = {} and "population_id" = {} """.format(toinsertID[i], pop)
+                cursor.execute(duplicate)
+                if(cursor.fetchall()==[]):
+                    insertPopuBox = """INSERT INTO "PopuBox"
+                                     ("population_id", "box_id")
+                                     VALUES
+                                     ({},{}) """.format(pop, toinsertID[i])
+                    cursor.execute(insertPopuBox)
+                    
+            
+            
+            collection = """ SELECT "id_collection" 
+                            FROM "Collection"
+                            WHERE "name" = '{}' """.format(toinsertCollection[i])
+            cursor.execute(collection)
+            collectionList = cursor.fetchall()
+            print("colection", collectionList[0][0])
+            if (len(collectionList)>1): #juste check mais normalement devrait pas aller la
+                print("Pas normal")
+                print(collectionList)
+            location = toinsertLocation[i] if isinstance(toinsertLocation[i],str) else ""
+            museum = toinsertMuseum[i] if isinstance(toinsertMuseum[i], str) else ""
+            
+            print("id population: ", populationList)
+            print("location: ", location)
+            print("museum: ", museum)
+            
+            
+            
+                
+            insertquery = """UPDATE  "Box"
+                            SET  "collection_id" = {} ,"location" = '{}', "museum"= '{}', "paratypes" = {}, "types"= {}
+                            WHERE "id_box" = {} """.format( collectionList[0][0], location, museum, toinsertParaType[i], toinsertType[i],toinsertID[i])
+            print(insertquery)
+            cursor.execute(insertquery)
+                
     conn.commit()

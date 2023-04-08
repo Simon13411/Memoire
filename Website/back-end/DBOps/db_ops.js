@@ -2,7 +2,7 @@ const { Client } = require('pg');
 const { spawn } = require('child_process');
 const client = new Client({
     user: 'postgres',
-    host: 'db-entomoc',
+    host: 'db-entomo',
     database: 'entomologie',
     password: 'password',
     port: 5432,
@@ -23,8 +23,7 @@ function get_boxdetails(id) {
     var searchquery = `SELECT B."id_box", B."location", B."museum", B."paratypes", B."types", O."name" as "order",
                         So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", Col."name" as "collection", loan."prenom" as "loaner"
                             FROM "Box" B
-                            LEFT OUTER JOIN "CollectionBox" ColBox ON B."id_box"=ColBox."box_id"
-                            LEFT OUTER JOIN "Collection" Col ON ColBox."collection_id"=Col."id_collection"
+                            LEFT OUTER JOIN "Collection" Col ON B."collection_id"=Col."id_collection"
                             LEFT OUTER JOIN "PopuBox" P ON B."id_box"=P."box_id"
                             LEFT OUTER JOIN "Population" P2 ON P."population_id"=P2."id_population"
                             LEFT OUTER JOIN "Order" O ON P2."order_id"=O."id_order"
@@ -57,7 +56,7 @@ function get_boxdetails(id) {
 function get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
     var searchquery = `SELECT COUNT(*) OVER() AS total_rows, B."id_box", B."location", B."museum", B."paratypes", B."types", R."Order",
                         R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", Col."name" as "Col"
-                        FROM "Box" B, "CollectionBox" ColBox, "Collection" Col,
+                        FROM "Box" B, "Collection" Col,
                         (SELECT P."box_id" as "bid", O."name" as "Order", So."name" as "subOrder", F."name" as "Family", Sf."name" as "subFamily", T."name" as "Tribu", G."name" as "Genus", Sg."name"as "subGenus", S."name" as "Species", Ss."name" as "subSpecies"
                             FROM "PopuBox" P, "Population" P2
                                 LEFT OUTER JOIN "Order" O On P2."order_id"=O."id_order"
@@ -81,8 +80,7 @@ function get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
                                     AND (Ss."name"=$9 OR $9='NULL') 
                                 ) AS R
                         WHERE B."id_box" = R."bid" 
-                        AND ColBox."box_id"=B."id_box" 
-                        AND ColBox."collection_id"=Col."id_collection"
+                            AND B."collection_id"=Col."id_collection" 
                         LIMIT 10 OFFSET $10`
                         
     return new Promise(function (resolve, reject) {

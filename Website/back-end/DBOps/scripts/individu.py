@@ -253,12 +253,14 @@ def population(order, suborder, family, subfamily, tribu, genus, subgenus, speci
         print(id_populationList)
     return id_populationList[0][0]
 
-def insertIndividu(data, cursor, conn) :
-    toinsert = data["Specimen code"].values.tolist()
+def insertIndividu(data, cursor, conn, admin) :
+    toinsert = data["SpecimenCode"].values.tolist()
     toinsertCountry = data["Country"].values.tolist()
     toinsertContinent = data["Continent"].values.tolist()
     toinsertEcozone = data["Ecozone"].values.tolist()
     toinsertID = data["Num_ID"].values.tolist()
+    toinsertLatitude = data["Latitude"].tolist()
+    toinsertLongitude = data["Longitude"].tolist()
     
     toinsertOrder = data["Order"].values.tolist()
     toinsertSubOrder = data["Suborder"].values.tolist()
@@ -282,11 +284,12 @@ def insertIndividu(data, cursor, conn) :
     for i in range(0, len(toinsert)):
 
             
-        duplicationquery =  """SELECT *
+        duplicationquery =  """SELECT "id_individu"
                                 FROM "Individu" 
                                 WHERE "name" = '{}' """.format(toinsert[i])
         cursor.execute(duplicationquery)
-        if cursor.fetchall() == [] :
+        id_indivList = cursor.fetchall()
+        if id_indivList == [] :
             
             
             #On recupere l'ordre
@@ -315,23 +318,71 @@ def insertIndividu(data, cursor, conn) :
                 
             #On recupere la sous species
             subSpeciesList  =subspecies(toinsertSubSpecies[i], cursor)
-        
 
             popu = population(orderList[0],  suborderList[0], familyList[0], subFamilyList[0], tribuList[0], genusList[0],subGenusList[0],speciesList[0],subSpeciesList[0],cursor)
-            continent = ''
-            country =''
-            ecozone =''
-            if toinsertContinent[i] != " ": 
-                continent = toinsertContinent[i]
-                print(toinsertContinent[i], continent, type(toinsertContinent[i]), type(continent))
-            if toinsertCountry[i] !=" ": country = toinsertCountry[i]
-            if toinsertEcozone[i] !=" ": ecozone = toinsertEcozone[i]
-                
+
+            
+            if isinstance(toinsertContinent[i], float): toinsertContinent[i]=""
+            
+            if isinstance(toinsertCountry[i], float): toinsertCountry[i]=""
+            
+            if isinstance(toinsertEcozone[i], float): toinsertEcozone[i]=""
+            
+            if isinstance(toinsertLatitude[i], float): toinsertLatitude[i]=""
+            
+            if isinstance(toinsertLongitude[i], float): toinsertLongitude[i]=""
+            
             insertquery = """INSERT INTO "Individu"
-                            ("id_individu", "box_id", "population_id", "continent", "country", "ecozone", "name") 
+                            ("id_individu", "box_id", "population_id", "continent", "country", "ecozone", "name", "latitude", "longitude") 
                             VALUES 
-                            ({},{}, {},'{}', '{}', '{}','{}')""".format(Count, toinsertID[i], popu, continent, country, ecozone, toinsert[i])
-            #print(insertquery)
+                            ({},{}, {}, '{}', '{}', '{}','{}', '{}','{}')""".format(Count, toinsertID[i], popu, toinsertContinent[i], toinsertCountry[i], toinsertEcozone[i], toinsert[i], toinsertLatitude[i], toinsertLongitude[i])
+            print(insertquery)
             cursor.execute(insertquery)
             Count+=1
+        elif(admin):
+            #On recupere l'ordre
+            orderList = order(toinsertOrder[i], cursor)
+                
+            #On recupere le sous ordre
+            suborderList = suborder(toinsertSubOrder[i], cursor)
+                
+            #On recupere la tribu
+            tribuList = tribu(toinsertTribu[i], cursor)
+                 
+            #On recupere la famille
+            familyList = family(toinsertFamily[i], cursor)
+                
+            #On recupere la sous famille
+            subFamilyList = subfamily(toinsertSubFamily[i], cursor)
+                
+            #On recupere le genus
+            genusList = genus(toinsertGenus[i], cursor)
+                
+            #On recupere le sous genus
+            subGenusList = subgenus(toinsertSubGenus[i], cursor)
+                
+            #On recupere la species
+            speciesList  = species(toinsertSpecies[i], cursor)
+                
+            #On recupere la sous species
+            subSpeciesList  =subspecies(toinsertSubSpecies[i], cursor)
+
+            popu = population(orderList[0],  suborderList[0], familyList[0], subFamilyList[0], tribuList[0], genusList[0],subGenusList[0],speciesList[0],subSpeciesList[0],cursor)
+
+            
+            if isinstance(toinsertContinent[i], float): toinsertContinent[i]=""
+            
+            if isinstance(toinsertCountry[i], float): toinsertCountry[i]=""
+            
+            if isinstance(toinsertEcozone[i], float): toinsertEcozone[i]=""
+            
+            if isinstance(toinsertLatitude[i], float): toinsertLatitude[i]=""
+            
+            if isinstance(toinsertLongitude[i], float): toinsertLongitude[i]=""
+            
+            insertquery = """UPDATE "Individu"
+                             SET "box_id" = {}, "population_id" ={}, "continent"='{}', "country"='{}', "ecozone"='{}', "name"='{}', "latitude"='{}', "longitude"='{}' 
+                            WHERE "id_individu" = {} """.format(toinsertID[i], popu, toinsertContinent[i], toinsertCountry[i], toinsertEcozone[i], toinsert[i], toinsertLatitude[i], toinsertLongitude[i], id_indivList[0][0])
+            print(insertquery)
+            cursor.execute(insertquery)
     conn.commit()
