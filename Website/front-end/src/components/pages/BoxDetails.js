@@ -21,7 +21,7 @@ class BoxDetails extends React.Component {
       collection: null,
       loaner: null,
       collectionlist: [],
-      loanerlist: [],
+      loanerslist: [],
       newcollection: null,
       newloaner: null,
       modifycollectionstate: '',
@@ -31,7 +31,8 @@ class BoxDetails extends React.Component {
 
   componentDidMount() {
     this.GetBox()
-    this.getCollectionsAndLoaners()
+    this.getCollections()
+    this.getLoaners()
   }
 
   getStateVar = () => {
@@ -45,15 +46,17 @@ class BoxDetails extends React.Component {
     })
   }
 
-  getCollectionsAndLoaners = () => {
-    axios.get(`${url}/get_loaners`)
-    .then((res) => {
-        this.setState({loanerslist: res.data.rows})
-    })
-
+  getCollections = () => {
     axios.get(`${url}/get_collections`)
         .then((res) => {
             this.setState({collectionlist: res.data.rows})
+    })
+  }
+
+  getLoaners = () => {
+    axios.get(`${url}/get_loaners`)
+    .then((res) => {
+        this.setState({loanerslist: res.data.rows})
     })
   }
 
@@ -71,11 +74,37 @@ class BoxDetails extends React.Component {
   }
 
   modifycollection = () => {
-
+    this.setState({modifycollectionstate: 'Changement en cours...'})
+    const newcollection = this.state.newcollection
+    axios.post(`${url}/changeboxcollection`, {boxid: this.props.searchParams.get("id"), collection: newcollection})
+    .then((res) => {
+      this.setState({collection: newcollection, modifycollectionstate: `La boite appartient maintenant à la collection ${newcollection}`})
+    })
+    .catch((err) => {
+      if (!err.response) {
+        this.setState({modifycollectionstate: 'Erreur Serveur - Gateway'})
+      }
+      else {
+        this.setState({modifycollectionstate: err.response.data.error})
+      }
+    })
   }
 
   modifyloaner = () => {
-
+    this.setState({modifyloanerstate: 'Changement en cours...'})
+    const newloaner = this.state.newloaner
+    axios.post(`${url}/changeboxloaner`, {boxid: this.props.searchParams.get("id"), newloaner: newloaner})
+    .then((res) => {
+      this.setState({loaner: newloaner, modifyloanerstate: `Loaner est maintenant ${newloaner}`})
+    })
+    .catch((err) => {
+      if (!err.response) {
+        this.setState({modifyloanerstate: 'Erreur Serveur - Gateway'})
+      }
+      else {
+        this.setState({modifyloanerstate: err.response.data.error})
+      }
+    })
   }
 
   render() {
@@ -110,25 +139,25 @@ class BoxDetails extends React.Component {
                           </FormControl>
                     </div>
                     <button type='submit' onClick={this.modifycollection}>Modifier</button>
-                    {this.state.modifycollectionstate}
+                    <div>{this.state.modifycollectionstate}</div>
                     <div>
                       <h4 className="title">Loaner</h4>
-                          <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                              <Select
-                              id="loaner-select"
-                              value={this.state.newloaner}
-                              onChange={this.handleInputChange}
-                              name="newloaner"
-                              >
-                              <MenuItem value={null}>
-                                  <em>None</em>
-                              </MenuItem>
-                              {this.state.loanerlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                              </Select>
-                          </FormControl>
+                        <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                            <Select
+                            id="loaner-select"
+                            value={this.state.newloaner}
+                            onChange={this.handleInputChange}
+                            name="newloaner"
+                            >
+                            <MenuItem value={null}>
+                                <em>None</em>
+                            </MenuItem>
+                            {this.state.loanerslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                            </Select>
+                        </FormControl>
                     </div>
                     <button type='submit' onClick={this.modifyloaner}>Modifier</button>
-                    {this.state.modifyloanerstate}
+                    <div>{this.state.modifyloanerstate}</div>
                   </div>
                 ):(
                   <></>

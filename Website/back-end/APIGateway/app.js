@@ -289,7 +289,6 @@ app.post('/modifyloaner', (req, res) => {
 
 app.post('/changeindivboxid', (req, res) => {
     const { individ, newboxid } = req.body
-    console.log(newboxid)
     axios.post(`http://${IP_DBOPS}/changeindivboxid`, { individ: individ, newboxid: newboxid })
         .then((resu) => {
             res.status(200).json(resu.data);
@@ -302,6 +301,28 @@ app.post('/changeindivboxid', (req, res) => {
 app.post('/changeindivloaner', (req, res) => {
     const { individ, newloaner } = req.body
     axios.post(`http://${IP_DBOPS}/changeindivloaner`, { individ: individ, newloaner: newloaner })
+        .then((resu) => {
+            res.status(200).json(resu.data);
+        })
+        .catch((err) => {
+            errorhandler(err, res)
+        })
+})
+
+app.post('/changeboxcollection', (req, res) => {
+    const { boxid, collection } = req.body
+    axios.post(`http://${IP_DBOPS}/changeboxcollection`, { boxid: boxid, collection: collection })
+        .then((resu) => {
+            res.status(200).json(resu.data);
+        })
+        .catch((err) => {
+            errorhandler(err, res)
+        })
+})
+
+app.post('/changeboxloaner', (req, res) => {
+    const { boxid, newloaner } = req.body
+    axios.post(`http://${IP_DBOPS}/changeboxloaner`, { boxid: boxid, newloaner: newloaner })
         .then((resu) => {
             res.status(200).json(resu.data);
         })

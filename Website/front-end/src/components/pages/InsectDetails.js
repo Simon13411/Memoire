@@ -39,7 +39,7 @@ class InsectDetails extends React.Component {
         loanerslist: [],
         isLoaded: false,
         newidbox: 0,
-        newloaner: '',
+        newloaner: null,
         modifyboxstate: '',
         modifyloanerstate: ''
       }
@@ -111,11 +111,11 @@ class InsectDetails extends React.Component {
     }
 
     modifyloaner = () => {
-      this.setState({modifyboxstate: 'Changement en cours...'})
+      this.setState({modifyloanerstate: 'Changement en cours...'})
       const newloaner = this.state.newloaner
       axios.post(`${url}/changeindivloaner`, {individ: this.state.individ, newloaner: newloaner})
       .then((res) => {
-        this.setState({loaner: newloaner, modifyloanerstate: `Loaner est maintenat ${newloaner}`})
+        this.setState({loaner: newloaner, modifyloanerstate: `Loaner est maintenant ${newloaner}`})
       })
       .catch((err) => {
         if (!err.response) {
@@ -156,7 +156,7 @@ class InsectDetails extends React.Component {
                             <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                                 <Select
                                 id="loaner-select"
-                                value={this.state.loaner}
+                                value={this.state.newloaner}
                                 onChange={this.handleInputChange}
                                 name="newloaner"
                                 >

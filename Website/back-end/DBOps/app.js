@@ -374,6 +374,28 @@ app.post('/changeindivloaner', (req, res) => {
     })
 })
 
+app.post('/changeboxcollection', (req, res) => {
+    const { boxid, collection } = req.body
+    return db.changeboxcollection(boxid, collection)
+    .then((results) => {
+        res.status(200).json(results)
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
+
+app.post('/changeboxloaner', (req, res) => {
+    const { boxid, newloaner } = req.body
+    return db.changeboxloaner(boxid, newloaner)
+    .then((results) => {
+        res.status(200).json(results)
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
+
 //CSV To SQL for Users
 app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
     const type = req.params.type

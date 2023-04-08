@@ -939,7 +939,151 @@ function changeindivboxid(individ, newboxid) {
 }
 
 function changeindivloaner(individ, newloaner) {
-    
+    verifquery = `SELECT *
+                    FROM "Loaner"
+                    Where "name"=$1;`
+
+    deletequery = `DELETE FROM "loanIndividu" WHERE "individu_id"=$1;`
+    insertquery = `INSERT INTO "loanIndividu"
+                    ("loaner_id", "individu_id")
+                    VALUES
+                    ((SELECT "id_loaner"
+                    FROM "Loaner"
+                    WHERE "name"=$1), $2);`
+
+    return new Promise(function (resolve, reject) {
+        if (newloaner === null) {
+            client.query(deletequery, [individ], (err, res) => {
+                if (err) {
+                    console.error(err)
+                    return reject(new Error("Erreur DB"))
+                }
+                else {
+                    return resolve(res)
+                }
+            })
+        }
+        client.query(verifquery, [newloaner], (err, res) => {
+            if (err) {
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                if (res.rowCount !== 0) {
+                    client.query(deletequery, [individ], (err2, res2) => {
+                        if (err) {
+                            console.error(err2)
+                            return reject(new Error("Erreur DB"))
+                        }
+                        else {
+                            client.query(insertquery, [newloaner, individ], (err3, res3) => {
+                                if (err3) {
+                                    console.error(err3)
+                                    return reject(new Error("Erreur DB"))
+                                }
+                                else {
+                                    return resolve(res3)
+                                }
+                            })
+                        }
+                    })
+                }
+                else {
+                    return reject(new Error(`${newloaner} is not in use`))
+                }
+            }
+        })
+    })
+}
+
+function changeboxcollection(boxid, collection) {
+    verifquery = `SELECT *
+                    FROM "Collection"
+                    Where "name"=$1;`
+
+    updatequery = `UPDATE "Box"
+                    SET  "collection_id" = (SELECT "id_collection" FROM "Collection" WHERE "name"=$1)
+                    WHERE "id_box" = $2`
+
+    return new Promise(function (resolve, reject) {
+        client.query(verifquery, [collection], (err, res) => {
+            if (err) {
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                if (res.rowCount !== 0) {
+                    client.query(updatequery, [collection, boxid], (err2, res2) => {
+                        if (err2) {
+                            console.error(err2)
+                            return reject(new Error("Erreur DB"))
+                        }
+                        else {
+                            return resolve(res2)
+                        }
+                    })
+                }
+                else {
+                    return reject(new Error(`${loaner} is not in use`))
+                }
+            }
+        })
+    })
+}
+
+function changeboxloaner(boxid, newloaner) {
+    verifquery = `SELECT *
+                    FROM "Loaner"
+                    Where "name"=$1;`
+
+    deletequery = `DELETE FROM "loanBox" WHERE "box_id"=$1;`
+    insertquery = `INSERT INTO "loanBox"
+                    ("loaner_id", "box_id")
+                    VALUES
+                    ((SELECT "id_loaner"
+                    FROM "Loaner"
+                    WHERE "name"=$1),$2);`
+
+    return new Promise(function (resolve, reject) {
+        if (newloaner === null) {
+            client.query(deletequery, [boxid], (err, res) => {
+                if (err) {
+                    console.error(err)
+                    return reject(new Error("Erreur DB"))
+                }
+                else {
+                    return resolve(res)
+                }
+            })
+        }
+        client.query(verifquery, [newloaner], (err, res) => {
+            if (err) {
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                if (res.rowCount !== 0) {
+                    client.query(deletequery, [parseInt(boxid)], (err2, res2) => {
+                        if (err2) {
+                            console.error(err2)
+                            return reject(new Error("Erreur DB"))
+                        }
+                        else {
+                            client.query(insertquery, [newloaner, parseInt(boxid)], (err3, res3) => {
+                                if (err3) {
+                                    console.error(err3)
+                                    return reject(new Error("Erreur DB"))
+                                }
+                                else {
+                                    return resolve(res3)
+                                }
+                            })
+                        }
+                    })
+                }
+                else {
+                    return reject(new Error(`${newloaner} is not in use`))
+                }
+            }
+        })
+    })
 }
 
 function csvtosql(filename, type) {
@@ -1115,6 +1259,8 @@ module.exports = {
     modifyloaner,
     changeindivboxid,
     changeindivloaner,
+    changeboxloaner,
+    changeboxcollection,
     csvtosql,
     boxSqlToCsv,
     indivSqlToCsv
