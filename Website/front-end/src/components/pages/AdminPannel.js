@@ -65,10 +65,16 @@ class AdminPannel extends React.Component {
         modifycollectionstate: '',
         //AddLoaner
         newloanername: '',
+        newloanerphone: '',
+        newloanermail: '',
+        newloanerstate: '',
         //Modifyloaner
         loanerlist: [],
         modifiedloaner: '',
         modifiedloanername: '',
+        modifiedloanername2: '',
+        modifiedloanermail: '',
+        modifiedloanerphone: '',
         modifiedloanerstate: '',
         //Token
         authToken: ''
@@ -79,7 +85,8 @@ class AdminPannel extends React.Component {
         this.setState({authToken: Cookies.get('auth_token')})
         this.getUsers()
         this.get_selection()
-        this.getCollectionsAndLoaners()
+        this.getCollections()
+        this.getLoaners()
       }
 
     onSubmit (event) {
@@ -179,12 +186,14 @@ class AdminPannel extends React.Component {
         })
     }
 
-    getCollectionsAndLoaners = () => {
+    getLoaners = () => {
         axios.get(`${url}/get_loaners`)
         .then((res) => {
             this.setState({loanerlist: res.data.rows})
         })
-    
+    }
+
+    getCollections = () => {
         axios.get(`${url}/get_collections`)
             .then((res) => {
                 this.setState({collectionlist: res.data.rows})
@@ -324,19 +333,93 @@ class AdminPannel extends React.Component {
     }
 
     AddCollection = () => {
-
+        if (this.state.newcollection === '') {
+            this.setState({addcollectionstate: `Collection name can't be empty`})
+        }
+        axios.post(`${url}/addcollection`, {
+            collection: this.state.newcollection,
+            token: this.state.authToken
+        })
+        .then((res) => {
+            this.setState({addcollectionstate: `${this.state.newcollection} added to db`}, this.getCollections);
+        })
+        .catch((err) => {
+            if (!err.response) {
+                this.setState({addcollectionstate: "Erreur Serveur - Gateway"});
+            }
+            else {
+                this.setState({addcollectionstate: err.response.data.error});
+            }
+        });
     }
 
     ModifyCollection = () => {
-
+        if (this.state.modifiedcollection2 === '') {
+            this.setState({modifycollectionstate: `Collection name can't be empty`})
+        }
+        axios.post(`${url}/modifycollection`, {
+            collection: this.state.modifiedcollection,
+            newname: this.state.modifiedcollection2,
+            token: this.state.authToken
+        })
+        .then((res) => {
+            this.setState({modifycollectionstate: `${this.state.modifiedcollection} changed to ${this.state.modifiedcollection2}`}, this.getCollections);
+        })
+        .catch((err) => {
+            if (!err.response) {
+                this.setState({modifycollectionstate: "Erreur Serveur - Gateway"});
+            }
+            else {
+                this.setState({modifycollectionstate: err.response.data.error});
+            }
+        });
     }
 
     Addloaner = () => {
-
+        if (this.state.newloanername === '') {
+            this.setState({newloanerstate: `Loaner's name can't be empty`})
+        }
+        axios.post(`${url}/addloaner`, {
+            name: this.state.newloanername,
+            mail: this.state.newloanermail, 
+            phone: this.state.newloanerphone,
+            token: this.state.authToken
+        })
+        .then((res) => {
+            this.setState({newloanerstate: `Loaner ${this.state.newloanername} added to db`}, this.getLoaners);
+        })
+        .catch((err) => {
+            if (!err.response) {
+                this.setState({newloanerstate: "Erreur Serveur - Gateway"});
+            }
+            else {
+                this.setState({newloanerstate: err.response.data.error});
+            }
+        });
     }
 
     ModifyLoaner = () => {
-
+        if (this.state.modifiedloanername === '') {
+            this.setState({modifiedloanerstate: `Loaner's name can't be empty`})
+        }
+        axios.post(`${url}/modifyloaner`, {
+            loaner: this.state.modifiedloanername,
+            name: this.state.modifiedloanername2,
+            mail: this.state.modifiedloanermail,
+            phone: this.state.modifiedloanerphone,
+            token: this.state.authToken
+        })
+        .then((res) => {
+            this.setState({modifiedloanerstate: `${this.state.modifiedloanername}'s information changed`}, this.getLoaners);
+        })
+        .catch((err) => {
+            if (!err.response) {
+                this.setState({modifiedloanerstate: "Erreur Serveur - Gateway"});
+            }
+            else {
+                this.setState({modifiedloanerstate: err.response.data.error});
+            }
+        });
     }
 
     render() {
@@ -696,18 +779,24 @@ class AdminPannel extends React.Component {
                             <label htmlFor="modifiedcollection">New collection's name:</label>
                             <input type="text" value={this.state.modifiedcollection2} onChange={this.handleInputChange} name="modifiedcollection2" />
                             <br />
-                            <button type="submit" onClick={this.ModifyCollection}>Ajouter</button>
+                            <button type="submit" onClick={this.ModifyCollection}>Modifier</button>
                             {this.state.modifycollectionstate}
                         </form>
                 </div>
                 <div className='column'>
                     <h3>Ajouter un loaner</h3>
                         <form onSubmit={(event) => { this.onSubmit(event) }}>
-                            <label htmlFor="newloaner">New Loaner:</label>
+                            <label htmlFor="newloaner">New Loaner's name:</label>
                             <input type="text" value={this.state.newloanername} onChange={this.handleInputChange} name="newloanername" />
                             <br />
+                            <label htmlFor="newloaner">New Loaner's mail:</label>
+                            <input type="text" value={this.state.newloanermail} onChange={this.handleInputChange} name="newloanermail" />
+                            <br />
+                            <label htmlFor="newloaner">New Loaner's phone:</label>
+                            <input type="text" value={this.state.newloanerphone} onChange={this.handleInputChange} name="newloanerphone" />
+                            <br />
                             <button type="submit" onClick={this.Addloaner}>Ajouter</button>
-                            {this.state.addloanerstate}
+                            {this.state.newloanerstate}
                         </form>
                     <h3>Modifier un loaner</h3>
                         <form onSubmit={(event) => { this.onSubmit(event) }}>
@@ -715,10 +804,10 @@ class AdminPannel extends React.Component {
                             <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
                                 <InputLabel id="demo-simple-select-label"></InputLabel>
                                 <Select
-                                    value={this.state.modifiedloaner}
-                                    label="modifiedloaner"
+                                    value={this.state.modifiedloanername}
+                                    label="modifiedloanername"
                                     onChange={this.handleInputChange}
-                                    name='modifiedloaner'
+                                    name='modifiedloanername'
                                 >
                                 <MenuItem value='NULL'>
                                     <em>None</em>
@@ -730,10 +819,16 @@ class AdminPannel extends React.Component {
                                 ))}
                                 </Select>
                             </FormControl>
-                            <label htmlFor="modifiedcollection">New loaner's name:</label>
-                            <input type="text" value={this.state.modifiedloanername} onChange={this.handleInputChange} name="modifiedloanername" />
+                            <label htmlFor="modifiedcollection">Loaner's name:</label>
+                            <input type="text" value={this.state.modifiedloanername2} onChange={this.handleInputChange} name="modifiedloanername2" />
                             <br />
-                            <button type="submit" onClick={this.ModifyLoaner}>Modify</button>
+                            <label htmlFor="newloaner">Loaner's mail:</label>
+                            <input type="text" value={this.state.modifiedloanermail} onChange={this.handleInputChange} name="modifiedloanermail" />
+                            <br />
+                            <label htmlFor="newloaner">Loaner's phone:</label>
+                            <input type="text" value={this.state.modifiedloanerphone} onChange={this.handleInputChange} name="modifiedloanerphone" />
+                            <br />
+                            <button type="submit" onClick={this.ModifyLoaner}>Modifier</button>
                             {this.state.modifiedloanerstate}
                         </form>
                 </div>

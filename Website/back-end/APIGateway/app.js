@@ -213,7 +213,7 @@ app.post('/addcollection', (req, res) => {
     const {collection, token} = req.body
     axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
         .then(() => {
-            axios.get(`http://${IP_DBOPS}/addcollection`, { collection: collection })
+            axios.post(`http://${IP_DBOPS}/addcollection`, { collection: collection })
                 .then((resu) => {
                     res.status(200).json(resu.data);
                 })
@@ -230,7 +230,7 @@ app.post('/modifycollection', (req, res) => {
     const { collection, newname, token } = req.body
     axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
         .then(() => {
-            axios.get(`http://${IP_DBOPS}/modifycollection`, { collection: collection, newname: newname })
+            axios.post(`http://${IP_DBOPS}/modifycollection`, { collection: collection, newname: newname })
                 .then((resu) => {
                     res.status(200).json(resu.data);
                 })
@@ -247,7 +247,7 @@ app.post('/addloaner', (req, res) => {
     const { name, mail, phone, token } = req.body
     axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
         .then(() => {
-            axios.get(`http://${IP_DBOPS}/addloaner`, { name, mail, phone })
+            axios.post(`http://${IP_DBOPS}/addloaner`, { name: name, mail: mail, phone: phone })
                 .then((resu) => {
                     res.status(200).json(resu.data);
                 })
@@ -261,10 +261,10 @@ app.post('/addloaner', (req, res) => {
 })
 
 app.post('/modifyloaner', (req, res) => {
-    const { loaner, newname, token } = req.body
+    const { loaner, name, mail, phone, token } = req.body
     axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
         .then(() => {
-            axios.get(`http://${IP_DBOPS}/modifyloaner`, { loaner: loaner, newname: newname })
+            axios.post(`http://${IP_DBOPS}/modifyloaner`, { loaner: loaner, name: name, mail: mail, phone: phone })
                 .then((resu) => {
                     res.status(200).json(resu.data);
                 })

@@ -804,7 +804,37 @@ function addcollection(collection) {
 }
 
 function modifycollection(collection, newname) {
-    
+    verifquery = `SELECT *
+                FROM "Collection"
+                WHERE "name"=$1;`
+
+    updatequery =`UPDATE "Collection"
+                    Set "name" = $1
+                    WHERE "name"=$2;`
+
+    return new Promise(function (resolve, reject) {
+        client.query(verifquery, [collection], (err, res) => {
+            if (err) {
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                if (res.rowCount !== 0) {
+                    client.query(updatequery, [newname, collection], (err2, res2) => {
+                        if (err) {
+                            console.error(err2)
+                            return reject(new Error("Erreur DB"))
+                        }
+                        else {
+                            return resolve(res2)
+                        }
+                    })
+                }
+                else {
+                    return reject(new Error(`${collection} is not in use`))
+                }
+            }
+        })
+    })
 }
 
 function addloaner(name, mail, phone) {
@@ -825,8 +855,38 @@ function addloaner(name, mail, phone) {
     })
 }
 
-function modifyloaner(loaner, newname) {
-    
+function modifyloaner(loaner, name, mail, phone) {
+    verifquery = `SELECT *
+                FROM "Loaner"
+                WHERE "name"=$1;`
+
+    updatequery = `UPDATE "Loaner"
+                    Set "name" = $1,"mail"=$2, "phone"=$3
+                    WHERE "name"=$4;`
+
+    return new Promise(function (resolve, reject) {
+        client.query(verifquery, [loaner], (err, res) => {
+            if (err) {
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                if (res.rowCount !== 0) {
+                    client.query(updatequery, [name, mail, phone, loaner], (err2, res2) => {
+                        if (err) {
+                            console.error(err2)
+                            return reject(new Error("Erreur DB"))
+                        }
+                        else {
+                            return resolve(res2)
+                        }
+                    })
+                }
+                else {
+                    return reject(new Error(`${loaner} is not in use`))
+                }
+            }
+        })
+    })
 }
 
 function changeindivboxid(individ, newboxid) {

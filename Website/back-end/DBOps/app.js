@@ -321,7 +321,7 @@ app.post('/modifycollection', (req, res) => {
 
 app.post('/addloaner', (req, res) => {
     const { name, mail, phone } = req.body
-    return db.addcollection(name, mail, phone)
+    return db.addloaner(name, mail, phone)
     .then((results) => {
         res.status(200).json(results)
     })
@@ -331,8 +331,8 @@ app.post('/addloaner', (req, res) => {
 })
 
 app.post('/modifyloaner', (req, res) => {
-    const { loaner, newname } = req.body
-    return db.addcollection(loaner, newname)
+    const { loaner, name, mail, phone } = req.body
+    return db.modifyloaner(loaner, name, mail, phone)
     .then((results) => {
         res.status(200).json(results)
     })
