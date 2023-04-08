@@ -12,6 +12,8 @@ import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
+import FileUploaderAdmin from '../FileUploaderAdmin';
+
 import axios from 'axios'
 const url = process.env.REACT_APP_IP
 
@@ -76,7 +78,10 @@ class AdminPannel extends React.Component {
         modifiedloanerphone: '',
         modifiedloanerstate: '',
         //Token
-        authToken: ''
+        authToken: '',
+        //Upload
+        boxuploadstate: '',
+        indivuploadstate: ''
       };
     }
 
@@ -90,6 +95,14 @@ class AdminPannel extends React.Component {
 
     onSubmit (event) {
         event.preventDefault()
+    }
+
+    Changeboxuploadstate = (message) => {
+        this.setState({boxuploadstate: message})
+    }
+    
+    Changeindivuploadstate = (message) => {
+    this.setState({indivuploadstate: message})
     }
 
     get_selection() {
@@ -685,8 +698,13 @@ class AdminPannel extends React.Component {
                 </div>
         
                 <div className="column">
-                  <h3>Modifier données - Overwrite mode</h3>
-                  <button type="submit">Soumettre</button>
+                    <h3>Modifier données Boxes - Overwrite mode</h3>
+                    <div><FileUploaderAdmin type='Box' Changeboxuploadstate={this.Changeboxuploadstate}></FileUploaderAdmin></div>
+                    <div>{this.state.boxuploadstate}</div>
+                    <br />
+                    <h3>Modifier données Individus - Overwrite mode</h3>
+                    <div><FileUploaderAdmin type='Individual' Changeindivuploadstate={this.Changeindivuploadstate}></FileUploaderAdmin></div>
+                    <div>{this.state.indivuploadstate}</div>
                 </div>
         
                 <div className="column">

@@ -8,7 +8,7 @@ def boxExist(olddf, dbName):
     
     
     conn = psycopg2.connect(
-        host="db-entomo",
+        host="db-entomoc",
         database=dbName,
         user="postgres",
         password="password"

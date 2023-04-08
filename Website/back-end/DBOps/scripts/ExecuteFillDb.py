@@ -25,13 +25,13 @@ a,b,data,d = filtre.filterExcel(extracteddata)
 
 #On va regarder pour l'admin si les boites existent deja, si oui on les supprimes et elle seront remise après
 #Verifier si boite existe sinon oups probleme
-admin = False
+admin = sys.argv[2]
 if (b>0):
     print("kk")
 
 else:
     conn = psycopg2.connect(
-        host="db-entomo",
+        host="db-entomoc",
         database="entomologie",
         user="postgres",
         password="password"

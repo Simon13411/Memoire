@@ -360,6 +360,35 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
         });
 })
 
+app.put('/csvtosqladmin/:type', upload.single('file'), (req, res) => {
+    const formData = new FormData();
+    formData.append('file', fs.createReadStream(req.file.path));
+
+    axios.put(`http://${IP_DBOPS}/csvtosql/${req.params.type}`, formData, {
+            headers: {
+            'Content-Type': 'multipart/form-data' //Contient des données binaires
+            }
+        })
+        .then((resu) => {
+            res.status(200).json(resu.data);
+            fs.unlink(req.file.path, (err) => {
+                if (err) {
+                    console.error(err);
+                }
+                    console.log('File removed');
+                });
+        })
+        .catch((err) => {
+            errorhandler(err, res)
+            fs.unlink(req.file.path, (err) => {
+                if (err) {
+                    console.error(err);
+                }
+                    console.log('File removed');
+                });
+        });
+})
+
 app.get(`/boxessqltocsv`, (req, res) => {
     axios.get(`http://${IP_DBOPS}/boxessqltocsv`, { responseType: 'stream' })
         .then((response) => {

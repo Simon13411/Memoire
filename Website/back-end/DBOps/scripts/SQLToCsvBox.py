@@ -10,7 +10,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 conn = psycopg2.connect(
-    host="db-entomo",
+    host="db-entomoc",
     database="entomologie",
     user="postgres",
     password="password"

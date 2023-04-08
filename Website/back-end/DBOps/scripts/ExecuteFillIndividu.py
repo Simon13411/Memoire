@@ -25,7 +25,7 @@ box, colOk = boxexist.boxExist(extracteddata, "entomologie")
 if(len(box)>0):
     #il y a des boites qui n'existe pas encore
     print(box, colOk)
-admin=False
+filename = sys.argv[2]
 a,b,data,d = filtre.filterIndividu(extracteddata)
 print(a,b,data,d)
 
@@ -34,7 +34,7 @@ if b>0:
     print("there is some problem")
 else:
     conn = psycopg2.connect(
-        host="db-entomo",
+        host="db-entomoc",
         database="entomologie",
         user="postgres",
         password="password"

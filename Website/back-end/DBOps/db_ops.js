@@ -5,7 +5,7 @@ const { Client } = require('pg');
 const { spawn } = require('child_process');
 const client = new Client({
     user: 'postgres',
-    host: 'db-entomo',
+    host: 'db-entomoc',
     database: 'entomologie',
     password: 'password',
     port: 5432,
@@ -1099,7 +1099,7 @@ function csvtosql(filename, type) {
     return new Promise(function(resolve, reject) {
       if (type === 'Box') {
         console.log("Subprocess spawning")
-        const script = spawn('python3', ['ExecuteFillDb.py', filename]);
+        const script = spawn('python3', ['ExecuteFillDb.py', filename, false]);
         console.log("Subprocess spawned")
         console.log(filename)
 
@@ -1121,7 +1121,59 @@ function csvtosql(filename, type) {
         });
       } else if (type === 'Individual') {
         console.log("Subprocess spawning")
-        const script = spawn('python3', ['ExecuteFillIndividu.py', filename]);
+        const script = spawn('python3', ['ExecuteFillIndividu.py', filename, false]);
+        console.log("Subprocess spawned")
+        console.log(filename)
+
+        script.stdout.on('data', (data) => {
+            //console.log(`stdout: ${data}`)
+          });
+  
+        script.stderr.on('data', (data) => {
+          console.error(`stderr: ${data}`);
+          return reject(new Error("Error during script run"));
+        });
+  
+        script.on('close', (code) => {
+          console.log(`child process exited with code ${code}`);
+          if (code === 1 || code === '1'){
+            return reject(new Error("Error during script run"));
+          }
+          else {
+            return resolve("Success");
+            }
+        });
+      }
+    });
+  }
+
+  function csvtosqladmin(filename, type) {
+    return new Promise(function(resolve, reject) {
+      if (type === 'Box') {
+        console.log("Subprocess spawning")
+        const script = spawn('python3', ['ExecuteFillDb.py', filename, true]);
+        console.log("Subprocess spawned")
+        console.log(filename)
+
+        script.stdout.on('data', (data) => {
+            //console.log(`stdout: ${data}`)
+          });
+  
+        script.stderr.on('data', (data) => {
+          console.error(`stderr: ${data}`);
+          return reject(new Error("Error during script run"));
+        });
+  
+        script.on('close', (code) => {
+          console.log(`child process exited with code ${code}`);
+          if (code === 1 || code === '1') {
+            return reject(new Error("Error during script run"));
+          }
+          return resolve("Success");
+        });
+      } else if (type === 'Individual') {
+        console.log("Subprocess spawning")
+        const script = spawn('python3', ['ExecuteFillIndividu.py', filename, true]);
         console.log("Subprocess spawned")
         console.log(filename)
 
@@ -1271,6 +1323,7 @@ module.exports = {
     changeboxloaner,
     changeboxcollection,
     csvtosql,
+    csvtosqladmin,
     boxSqlToCsv,
     indivSqlToCsv
 }

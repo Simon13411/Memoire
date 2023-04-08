@@ -422,6 +422,32 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
     })
 })
 
+//CSV To SQL for Admins
+app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
+    const type = req.params.type
+    console.log(req.file)
+
+    return db.csvtosqladmin(req.file.path, type)
+    .then((result) => {
+        res.status(200).json(result)
+        fs.unlink(req.file.path, (err) => {
+            if (err) {
+                console.error(err);
+            }
+                console.log('File removed');
+            });
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+        fs.unlink(req.file.path, (err) => {
+            if (err) {
+                console.error(err);
+            }
+                console.log('File removed');
+            });
+    })
+})
+
 //SQL to Csv (Boxes)
 app.get('/boxessqltocsv', (req, res) => {
     return db.boxSqlToCsv()
