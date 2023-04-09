@@ -25,7 +25,12 @@ a,b,data,d = filtre.filterExcel(extracteddata)
 
 #On va regarder pour l'admin si les boites existent deja, si oui on les supprimes et elle seront remise après
 #Verifier si boite existe sinon oups probleme
-admin = sys.argv[2]
+admin = False
+if (sys.argv[2] == "true") :
+    admin = True
+elif (sys.argv[2] == "false") :
+    admin= False
+
 if (b>0):
     print(f"{b} lignes problématiques: {a} -> {d}")
 
@@ -37,7 +42,7 @@ else:
         password="password"
     )
     cursor = conn.cursor()
-    print("Successfully connected to DB")
+    print("[MY_APP_LOG] Successfully connected to DB")
 
 
     tribu.insertTribu(data, cursor, conn)

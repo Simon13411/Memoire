@@ -5,7 +5,7 @@ const { Client } = require('pg');
 const { spawn } = require('child_process');
 const client = new Client({
     user: 'postgres',
-    host: 'db-entomo',
+    host: 'db-entomoc',
     database: 'entomologie',
     password: 'password',
     port: 5432,
@@ -84,6 +84,7 @@ function get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
                                 ) AS R
                         WHERE B."id_box" = R."bid" 
                             AND B."collection_id"=Col."id_collection" 
+                        ORDER BY B."id_box" ASC
                         LIMIT 10 OFFSET $10`
                         
     return new Promise(function (resolve, reject) {
@@ -100,7 +101,7 @@ function get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
 }
 
 function get_indivdetails(id) {
-    var searchquery = `SELECT I."id_individu", I."box_id", I."continent", I."country", I."ecozone", O."name" as "order",
+    var searchquery = `SELECT I."id_individu", I."box_id", I."name", I."continent", I."country", I."ecozone", O."name" as "order",
     So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", loan."prenom" as "loaner"
                         FROM "Individu" I
                             LEFT OUTER JOIN "Population" P2 ON I."population_id"=P2."id_population"
@@ -134,7 +135,7 @@ function get_indivdetails(id) {
 }
 
 function get_indivresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
-    var searchquery = `SELECT DISTINCT COUNT(*) OVER() AS total_rows, I."id_individu", I."box_id", I."continent", I."country", I."ecozone", O."name" as "Order",
+    var searchquery = `SELECT DISTINCT COUNT(*) OVER() AS total_rows, I."id_individu", I."name", I."box_id", I."continent", I."country", I."ecozone", O."name" as "Order",
     So."name" as "subOrder", F."name" as "Family", Sf."name" as "subFamily", T."name" as "Tribu", G."name" as "Genus", Sg."name" as "subGenus" , S."name" as "Species", Ss."name" as "subSpecies"
                         FROM "Individu" I
                             LEFT OUTER JOIN "Population" P2 ON I."population_id"=P2."id_population"
@@ -157,6 +158,7 @@ function get_indivresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
                                 AND (Sg."name"=$7 OR $7='NULL')
                                 AND (S."name"=$8 OR $8='NULL')
                                 AND (Ss."name"=$9 OR $9='NULL') 
+                                ORDER BY I."id_individu" ASC
                                     LIMIT 10 OFFSET $10`
 
 
@@ -1099,7 +1101,7 @@ function csvtosql(filename, type) {
     return new Promise(function(resolve, reject) {
       if (type === 'Box') {
         console.log("Subprocess spawning")
-        const script = spawn('python3', ['ExecuteFillDb.py', filename, false]);
+        const script = spawn('python3', ['ExecuteFillDb.py', filename, "false"]);
         console.log("Subprocess spawned")
         console.log(filename)
 
@@ -1118,6 +1120,7 @@ function csvtosql(filename, type) {
 
             // Chercher le premier message qui ne commence pas par le préfixe spécifique
             const lines = output.split('\n');
+            lines.pop()
             const result = lines.findIndex(line => !line.startsWith('[MY_APP_LOG]'));
 
             if (result !== -1) {
@@ -1141,7 +1144,7 @@ function csvtosql(filename, type) {
         });
       } else if (type === 'Individual') {
         console.log("Subprocess spawning")
-        const script = spawn('python3', ['ExecuteFillIndividu.py', filename, false]);
+        const script = spawn('python3', ['ExecuteFillIndividu.py', filename, "false"]);
         console.log("Subprocess spawned")
         console.log(filename)
 
@@ -1160,6 +1163,7 @@ function csvtosql(filename, type) {
 
             // Chercher le premier message qui ne commence pas par le préfixe spécifique
             const lines = output.split('\n');
+            lines.pop()
             const result = lines.findIndex(line => !line.startsWith('[MY_APP_LOG]'));
 
             if (result !== -1) {
@@ -1191,12 +1195,33 @@ function csvtosql(filename, type) {
     return new Promise(function(resolve, reject) {
       if (type === 'Box') {
         console.log("Subprocess spawning")
-        const script = spawn('python3', ['ExecuteFillDb.py', filename, true]);
+        const script = spawn('python3', ['ExecuteFillDb.py', filename, "true"]);
         console.log("Subprocess spawned")
         console.log(filename)
 
         script.stdout.on('data', (data) => {
-            //console.log(`stdout: ${data}`)
+            const output = data.toString();
+            /** 
+             * UNCOMMENT THESE LINES IF YOU WANT TO SEE CHILD PROCESS LOGS
+            // Convertir la sortie du processus Python en chaîne de caractères
+
+            // Filtrer les messages de log qui commencent par le préfixe spécifique
+            const filteredOutput = output.split('\n').filter(line => line.startsWith('[MY_APP_LOG]')).join('\n');
+
+            // Afficher les messages de log filtrés avec console.log()
+            console.log(filteredOutput);
+            **/
+
+            // Chercher le premier message qui ne commence pas par le préfixe spécifique
+            const lines = output.split('\n');
+            lines.pop()
+            const result = lines.findIndex(line => !line.startsWith('[MY_APP_LOG]'));
+
+            if (result !== -1) {
+                // Renvoyer le premier message qui ne commence pas par le préfixe spécifique avec une promesse
+                const firstNonAppLogLine = lines[result];
+                return reject(new Error(firstNonAppLogLine));
+            }
           });
   
         script.stderr.on('data', (data) => {
@@ -1213,12 +1238,33 @@ function csvtosql(filename, type) {
         });
       } else if (type === 'Individual') {
         console.log("Subprocess spawning")
-        const script = spawn('python3', ['ExecuteFillIndividu.py', filename, true]);
+        const script = spawn('python3', ['ExecuteFillIndividu.py', filename, "true"]);
         console.log("Subprocess spawned")
         console.log(filename)
 
         script.stdout.on('data', (data) => {
-            //console.log(`stdout: ${data}`)
+            const output = data.toString();
+            /** 
+             * UNCOMMENT THESE LINES IF YOU WANT TO SEE CHILD PROCESS LOGS
+            // Convertir la sortie du processus Python en chaîne de caractères
+
+            // Filtrer les messages de log qui commencent par le préfixe spécifique
+            const filteredOutput = output.split('\n').filter(line => line.startsWith('[MY_APP_LOG]')).join('\n');
+
+            // Afficher les messages de log filtrés avec console.log()
+            console.log(filteredOutput);
+            **/
+
+            // Chercher le premier message qui ne commence pas par le préfixe spécifique
+            const lines = output.split('\n');
+            lines.pop()
+            const result = lines.findIndex(line => !line.startsWith('[MY_APP_LOG]'));
+
+            if (result !== -1) {
+                // Renvoyer le premier message qui ne commence pas par le préfixe spécifique avec une promesse
+                const firstNonAppLogLine = lines[result];
+                return reject(new Error(firstNonAppLogLine));
+            }
           });
   
         script.stderr.on('data', (data) => {

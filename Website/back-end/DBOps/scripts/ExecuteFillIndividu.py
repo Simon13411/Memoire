@@ -21,7 +21,11 @@ import sys
 filename = sys.argv[1]
 extracteddata = pd.read_excel(filename, engine="openpyxl")
 
-admin = sys.argv[2]
+admin = False
+if (sys.argv[2] == "true") :
+    admin = True
+elif (sys.argv[2] == "false") :
+    admin= False
 a,b,data,d = filtre.filterIndividu(extracteddata)
 
 if b>0:

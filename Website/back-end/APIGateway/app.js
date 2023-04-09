@@ -364,7 +364,7 @@ app.put('/csvtosqladmin/:type', upload.single('file'), (req, res) => {
     const formData = new FormData();
     formData.append('file', fs.createReadStream(req.file.path));
 
-    axios.put(`http://${IP_DBOPS}/csvtosql/${req.params.type}`, formData, {
+    axios.put(`http://${IP_DBOPS}/csvtosqladmin/${req.params.type}`, formData, {
             headers: {
             'Content-Type': 'multipart/form-data' //Contient des données binaires
             }

@@ -423,7 +423,7 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
 })
 
 //CSV To SQL for Admins
-app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
+app.put('/csvtosqladmin/:type', upload.single('file'), (req, res) => {
     const type = req.params.type
     console.log(req.file)
 
