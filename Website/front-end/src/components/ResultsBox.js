@@ -15,7 +15,7 @@ class ResultsBox extends React.Component {
         return(
             <Box sx={{m:1, border: 1, borderColor: 'green'}}>
                 {(this.props.id) ?
-                    (<div>Boite n°: {this.props.id}</div>)
+                    (<div>Box n°: {this.props.id}</div>)
                     :
                     (<></>)
                 }

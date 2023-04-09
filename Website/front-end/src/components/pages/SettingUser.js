@@ -72,13 +72,13 @@ class AdminPannel extends React.Component {
                 <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
                 <div className="container">
                     <div className="column">
-                    <h3>Modifier mot de passe</h3>
+                    <h3>Modify password</h3>
                     <form onSubmit={(event) => { this.onSubmit(event) }}>
                         <label htmlFor="newpassword">New password:</label>
                         <input type="password" value={this.state.newPassword} onChange={this.handleInputChange} name="newPassword" />
                         <label htmlFor="newpassword2">Confirm password:</label>
                         <input type="password" value={this.state.newPassword2} onChange={this.handleInputChange} name="newPassword2" />
-                        <button type="submit" name="newPassword" onClick={this.ModifyPassword}>Modifier</button>
+                        <button type="submit" name="newPassword" onClick={this.ModifyPassword}>Modify</button>
                         {this.state.newpasswordstate}
                         <br />
                     </form>

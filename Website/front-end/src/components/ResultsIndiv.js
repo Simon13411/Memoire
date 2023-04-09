@@ -15,12 +15,12 @@ class ResultsIndiv extends React.Component {
         return(
             <Box sx={{m:1, border: 1, borderColor: 'green'}}>
                 {(this.props.id) ?
-                    (<div>Invididu n°: {this.props.id}</div>)
+                    (<div>Invididual n°: {this.props.id}</div>)
                     :
                     (<></>)
                 }
                 {(this.props.name) ?
-                    (<div>Boite n°: {this.props.name}</div>)
+                    (<div>Name: {this.props.name}</div>)
                     :
                     (<></>)
                 }

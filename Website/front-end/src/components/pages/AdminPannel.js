@@ -472,57 +472,57 @@ class AdminPannel extends React.Component {
                 <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
                 <div className="container">
                 <div className="column">
-                  <h3>Ajouter des classification</h3>
+                  <h3>Add classifications</h3>
                   {this.state.addattrstate}
                   <form onSubmit={(event) => { this.onSubmit(event) }}>
                     <label htmlFor="order">Order:</label>
                     <input type="text" value={this.state.order} onChange={this.handleInputChange} name="order" />
-                    <button type="submit" name="order" onClick={this.AddAttribute}>Ajouter</button>
+                    <button type="submit" name="order" onClick={this.AddAttribute}>Add</button>
                     <br />
         
                     <label htmlFor="suborder">SubOrder:</label>
                     <input type="text" value={this.state.suborder} onChange={this.handleInputChange} name="suborder" />
-                    <button type="submit" name="suborder" onClick={this.AddAttribute}>Ajouter</button>
+                    <button type="submit" name="suborder" onClick={this.AddAttribute}>Add</button>
                     <br />
         
                     <label htmlFor="family">Family:</label>
                     <input type="text" value={this.state.family} onChange={this.handleInputChange} name="family" />
-                    <button type="submit" name="family" onClick={this.AddAttribute}>Ajouter</button>
+                    <button type="submit" name="family" onClick={this.AddAttribute}>Add</button>
                     <br />
         
                     <label htmlFor="subfamily">SubFamily:</label>
                     <input type="text" value={this.state.subfamily} onChange={this.handleInputChange} name="subfamily" />
-                    <button type="submit" name="subfamily" onClick={this.AddAttribute}>Ajouter</button>
+                    <button type="submit" name="subfamily" onClick={this.AddAttribute}>Add</button>
                     <br />
 
                     <label htmlFor="subfamily">Tribu:</label>
                     <input type="text" value={this.state.tribu} onChange={this.handleInputChange} name="tribu" />
-                    <button type="submit" name="tribu" onClick={this.AddAttribute}>Ajouter</button>
+                    <button type="submit" name="tribu" onClick={this.AddAttribute}>Add</button>
                     <br />
 
                     <label htmlFor="genus">Genus:</label>
                     <input type="text" value={this.state.genus} onChange={this.handleInputChange} name="genus" />
-                    <button type="submit" name="genus" onClick={this.AddAttribute}>Ajouter</button>
+                    <button type="submit" name="genus" onClick={this.AddAttribute}>Add</button>
                     <br />
         
                     <label htmlFor="subgenus">SubGenus:</label>
                     <input type="text" value={this.state.subgenus} onChange={this.handleInputChange} name="subgenus" />
-                    <button type="submit" name="subgenus" onClick={this.AddAttribute}>Ajouter</button>
+                    <button type="submit" name="subgenus" onClick={this.AddAttribute}>Add</button>
                     <br />
         
                     <label htmlFor="species">Species:</label>
                     <input type="text" value={this.state.species} onChange={this.handleInputChange} name="species" />
-                    <button type="submit" name="species" onClick={this.AddAttribute}>Ajouter</button>
+                    <button type="submit" name="species" onClick={this.AddAttribute}>Add</button>
                     <br />
         
                     <label htmlFor="subspecies">SubSpecies:</label>
                     <input type="text" value={this.state.subspecies} onChange={this.handleInputChange} name="subspecies" />
-                    <button type="submit" name="subspecies" onClick={this.AddAttribute}>Ajouter</button>
+                    <button type="submit" name="subspecies" onClick={this.AddAttribute}>Add</button>
                   </form>
                 </div>
 
                 <div className="column">
-                  <h3>Supprimer des classification</h3>
+                  <h3>Delete classification</h3>
                   {this.state.deleteattrstate}
                   <form onSubmit={(event) => { this.onSubmit(event) }}>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
@@ -698,17 +698,17 @@ class AdminPannel extends React.Component {
                 </div>
         
                 <div className="column">
-                    <h3>Modifier données Boxes - Overwrite mode</h3>
+                    <h3>Modify Boxes data - Overwrite mode</h3>
                     <div><FileUploaderAdmin type='Box' Changeboxuploadstate={this.Changeboxuploadstate}></FileUploaderAdmin></div>
                     <div>{this.state.boxuploadstate}</div>
                     <br />
-                    <h3>Modifier données Individus - Overwrite mode</h3>
+                    <h3>Modify Individuals data - Overwrite mode</h3>
                     <div><FileUploaderAdmin type='Individual' Changeindivuploadstate={this.Changeindivuploadstate}></FileUploaderAdmin></div>
                     <div>{this.state.indivuploadstate}</div>
                 </div>
         
                 <div className="column">
-                    <h3>Ajouter un utilisateur</h3>
+                    <h3>Add user</h3>
                     <form onSubmit={(event) => { this.onSubmit(event) }}>
                         <label htmlFor="newusername">Username:</label>
                         <input type="text" value={this.state.usernameToAdd} onChange={this.handleInputChange} name="usernameToAdd"/>
@@ -725,10 +725,10 @@ class AdminPannel extends React.Component {
                         <FormGroup>
                             <FormControlLabel control={<Checkbox checked={this.state.adminToAdd === '1'} onChange={this.handleCheck} name="adminToAdd"/>} label='adminacces' />
                         </FormGroup>
-                        <button type="submit" onClick={this.AddUser}>Ajouter</button>
+                        <button type="submit" onClick={this.AddUser}>Add</button>
                         <div>{this.state.useraddstate}</div>
                     </form>
-                  <h3>Modifier un utilisateur</h3>
+                  <h3>Modify user</h3>
                   <form onSubmit={(event) => { this.onSubmit(event) }}>
                   <label htmlFor="usernametomodifyhtml">Username:</label>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
@@ -759,10 +759,10 @@ class AdminPannel extends React.Component {
                     <label htmlFor="newpassword">Confirm password:</label>
                     <input type="password" value={this.state.newPassword2} onChange={this.handleInputChange} name="newPassword2" />
                     <br />
-                    <button type="submit" onClick={this.ModifyPassword}>Modifier</button>
+                    <button type="submit" onClick={this.ModifyPassword}>Modify</button>
                     {this.state.usermodifstate}
                 </form>
-                  <h3>Modifier role utilisateur</h3>
+                  <h3>Modify user right</h3>
                   <form onSubmit={(event) => { this.onSubmit(event) }}>
                   <label htmlFor="usernametoadmin">Username:</label>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
@@ -788,20 +788,21 @@ class AdminPannel extends React.Component {
                     <FormGroup>
                         <FormControlLabel control={<Checkbox checked={this.state.adminRight === '1'} onChange={this.handleCheck} name="adminRight"/>} label='adminacces' />
                     </FormGroup>
-                    <button type="submit" onClick={this.Modifyright}>Modifier</button>
+                    <button type="submit" onClick={this.Modifyright}>Modify</button>
                     {this.state.userrightstate}
                 </form>
                 </div>
                 <div className='column'>
-                    <h3>Ajouter une collection</h3>
+                    <h3>Add collection</h3>
                         <form onSubmit={(event) => { this.onSubmit(event) }}>
                             <label htmlFor="newcollection">New Collection:</label>
                             <input type="text" value={this.state.newcollection} onChange={this.handleInputChange} name="newcollection" />
                             <br />
-                            <button type="submit" onClick={this.AddCollection}>Ajouter</button>
+                            <button type="submit" onClick={this.AddCollection}>Add</button>
                             {this.state.addcollectionstate}
                         </form>
-                    <h3>Modifier une collection</h3>
+                        <br />
+                    <h3>Modify collection</h3>
                         <form onSubmit={(event) => { this.onSubmit(event) }}>
                             <label htmlFor="modifiedcollection">Collection to modify:</label>
                             <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
@@ -825,28 +826,29 @@ class AdminPannel extends React.Component {
                             <label htmlFor="modifiedcollection">New collection's name:</label>
                             <input type="text" value={this.state.modifiedcollection2} onChange={this.handleInputChange} name="modifiedcollection2" />
                             <br />
-                            <button type="submit" onClick={this.ModifyCollection}>Modifier</button>
+                            <button type="submit" onClick={this.ModifyCollection}>Modify</button>
                             {this.state.modifycollectionstate}
                         </form>
                 </div>
                 <div className='column'>
-                    <h3>Ajouter un loaner</h3>
+                    <h3>Add borrower</h3>
                         <form onSubmit={(event) => { this.onSubmit(event) }}>
-                            <label htmlFor="newloaner">New Loaner's name:</label>
+                            <label htmlFor="newloaner">New borrower's name:</label>
                             <input type="text" value={this.state.newloanername} onChange={this.handleInputChange} name="newloanername" />
                             <br />
-                            <label htmlFor="newloaner">New Loaner's mail:</label>
+                            <label htmlFor="newloaner">New borrower's mail:</label>
                             <input type="text" value={this.state.newloanermail} onChange={this.handleInputChange} name="newloanermail" />
                             <br />
-                            <label htmlFor="newloaner">New Loaner's phone:</label>
+                            <label htmlFor="newloaner">New borrower's phone:</label>
                             <input type="text" value={this.state.newloanerphone} onChange={this.handleInputChange} name="newloanerphone" />
                             <br />
-                            <button type="submit" onClick={this.Addloaner}>Ajouter</button>
+                            <button type="submit" onClick={this.Addloaner}>Add</button>
                             {this.state.newloanerstate}
                         </form>
-                    <h3>Modifier un loaner</h3>
+                        <br />
+                    <h3>Modify borrower</h3>
                         <form onSubmit={(event) => { this.onSubmit(event) }}>
-                            <label htmlFor="modifiedloaner">Loaner to modify:</label>
+                            <label htmlFor="modifiedloaner">Borrower to modify:</label>
                             <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
                                 <InputLabel id="demo-simple-select-label"></InputLabel>
                                 <Select
@@ -865,18 +867,19 @@ class AdminPannel extends React.Component {
                                 ))}
                                 </Select>
                             </FormControl>
-                            <label htmlFor="modifiedcollection">Loaner's name:</label>
+                            <label htmlFor="modifiedcollection">Borrower's name:</label>
                             <input type="text" value={this.state.modifiedloanername2} onChange={this.handleInputChange} name="modifiedloanername2" />
                             <br />
-                            <label htmlFor="newloaner">Loaner's mail:</label>
+                            <label htmlFor="newloaner">Borrower's mail:</label>
                             <input type="text" value={this.state.modifiedloanermail} onChange={this.handleInputChange} name="modifiedloanermail" />
                             <br />
-                            <label htmlFor="newloaner">Loaner's phone:</label>
+                            <label htmlFor="newloaner">Borrower's phone:</label>
                             <input type="text" value={this.state.modifiedloanerphone} onChange={this.handleInputChange} name="modifiedloanerphone" />
                             <br />
-                            <button type="submit" onClick={this.ModifyLoaner}>Modifier</button>
+                            <button type="submit" onClick={this.ModifyLoaner}>Modify</button>
                             {this.state.modifiedloanerstate}
                         </form>
+                        <br />
                 </div>
                 </div>
             </>
