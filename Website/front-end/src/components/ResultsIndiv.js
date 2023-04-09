@@ -19,8 +19,8 @@ class ResultsIndiv extends React.Component {
                     :
                     (<></>)
                 }
-                {(this.props.boxid !==0) ?
-                    (<div>Boite n°: {this.props.id}</div>)
+                {(this.props.name) ?
+                    (<div>Boite n°: {this.props.name}</div>)
                     :
                     (<></>)
                 }

@@ -16,6 +16,7 @@ class InsectDetails extends React.Component {
       super(props)
       this.state = {
         individ: null,
+        name: null,
         idbox: 0,
         order: null,
         suborder: null,
@@ -58,6 +59,7 @@ class InsectDetails extends React.Component {
       axios.get(`${url}/get_indivdetails`, {params: {id: this.props.searchParams.get("id")}})
       .then((res) => {
           this.setState({individ: res.data.rows[0].id_individu,
+                        name: res.data.rows[0].name,
                         idbox: res.data.rows[0].box_id,
                         newidbox: res.data.rows[0].box_id,
                         order: res.data.rows[0].order,
@@ -136,7 +138,7 @@ class InsectDetails extends React.Component {
           ):(
             <>
               <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
-              <p>Individual n° {this.props.searchParams.get("id")} {this.state.idbox !== 0 ? (<>From Box n° {this.state.idbox}</>):(<></>)} {this.state.loaner ? (<>Loaner: {this.state.loaner}</>):(<></>)}</p>
+              <p>Individual n° {this.props.searchParams.get("id")} {this.state.name ? (<>Name: {this.state.name}</>):(<></>)} {this.state.idbox !== 0 ? (<>From Box n° {this.state.idbox}</>):(<></>)} {this.state.loaner ? (<>Loaner: {this.state.loaner}</>):(<></>)}</p>
               <div className="container">
                 {/*Info part*/}
                 {this.props.isAuthenticated() ?
