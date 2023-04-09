@@ -9,7 +9,7 @@ def insertCollection(data, cursor, conn) :
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
-    print(result)
+    #print(result)
     if result != [(None,)] :
         Count = result[0][0]+1
 
@@ -23,7 +23,7 @@ def insertCollection(data, cursor, conn) :
                             ("id_collection", "name") 
                             VALUES 
                             ({},'{}') """.format(Count, toinsert[i])
-            #print(insertquery)
+            ##print(insertquery)
             cursor.execute(insertquery)
             Count+=1
     conn.commit()

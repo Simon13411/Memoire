@@ -5,7 +5,7 @@ const { Client } = require('pg');
 const { spawn } = require('child_process');
 const client = new Client({
     user: 'postgres',
-    host: 'db-entomoc',
+    host: 'db-entomo',
     database: 'entomologie',
     password: 'password',
     port: 5432,
@@ -1104,7 +1104,27 @@ function csvtosql(filename, type) {
         console.log(filename)
 
         script.stdout.on('data', (data) => {
-            //console.log(`stdout: ${data}`)
+            const output = data.toString();
+            /** 
+             * UNCOMMENT THESE LINES IF YOU WANT TO SEE CHILD PROCESS LOGS
+            // Convertir la sortie du processus Python en chaîne de caractères
+
+            // Filtrer les messages de log qui commencent par le préfixe spécifique
+            const filteredOutput = output.split('\n').filter(line => line.startsWith('[MY_APP_LOG]')).join('\n');
+
+            // Afficher les messages de log filtrés avec console.log()
+            console.log(filteredOutput);
+            **/
+
+            // Chercher le premier message qui ne commence pas par le préfixe spécifique
+            const lines = output.split('\n');
+            const result = lines.findIndex(line => !line.startsWith('[MY_APP_LOG]'));
+
+            if (result !== -1) {
+                // Renvoyer le premier message qui ne commence pas par le préfixe spécifique avec une promesse
+                const firstNonAppLogLine = lines[result];
+                return reject(new Error(firstNonAppLogLine));
+            }
           });
   
         script.stderr.on('data', (data) => {
@@ -1126,7 +1146,27 @@ function csvtosql(filename, type) {
         console.log(filename)
 
         script.stdout.on('data', (data) => {
-            //console.log(`stdout: ${data}`)
+            const output = data.toString();
+            /** 
+             * UNCOMMENT THESE LINES IF YOU WANT TO SEE CHILD PROCESS LOGS
+            // Convertir la sortie du processus Python en chaîne de caractères
+
+            // Filtrer les messages de log qui commencent par le préfixe spécifique
+            const filteredOutput = output.split('\n').filter(line => line.startsWith('[MY_APP_LOG]')).join('\n');
+
+            // Afficher les messages de log filtrés avec console.log()
+            console.log(filteredOutput);
+            **/
+
+            // Chercher le premier message qui ne commence pas par le préfixe spécifique
+            const lines = output.split('\n');
+            const result = lines.findIndex(line => !line.startsWith('[MY_APP_LOG]'));
+
+            if (result !== -1) {
+                // Renvoyer le premier message qui ne commence pas par le préfixe spécifique avec une promesse
+                const firstNonAppLogLine = lines[result];
+                return reject(new Error(firstNonAppLogLine));
+            }
           });
   
         script.stderr.on('data', (data) => {

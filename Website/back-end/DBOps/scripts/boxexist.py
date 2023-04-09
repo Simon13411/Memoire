@@ -34,28 +34,31 @@ def boxExist(olddf, dbName):
     noBox = []
     
     for i, row in df.iterrows():
-        
-        if(row.Num_ID==0):
-            
-            zeroExist = """SELECT *
-                                FROM "Box" 
-                                WHERE "id_box" = '{}' """.format(row.Num_ID)
-            cursor.execute(zeroExist)
-            if cursor.fetchall()==[]:
-                insertquery = """INSERT INTO "Box"
-                                ("id_box", "location", "museum", "paratypes", "types") 
-                                VALUES 
-                                ({},'{}','{}',{},{})""".format(0,"", "", "NULL", "NULL")
-                print(insertquery)
-                cursor.execute(insertquery)
-        else:
-            duplicationquery =  """SELECT *
-                                FROM "Box" 
-                                WHERE "id_box" = {} """.format(row.Num_ID) 
-            cursor.execute(duplicationquery)
-            if(cursor.fetchall()==[]):
-                noBox.append(i+2)
-        conn.commit()
+        try:
+            if(row.Num_ID==0):
+                
+                zeroExist = """SELECT *
+                                    FROM "Box" 
+                                    WHERE "id_box" = '{}' """.format(row.Num_ID)
+                cursor.execute(zeroExist)
+                if cursor.fetchall()==[]:
+                    insertquery = """INSERT INTO "Box"
+                                    ("id_box", "location", "museum", "paratypes", "types") 
+                                    VALUES 
+                                    ({},'{}','{}',{},{})""".format(0,"", "", "NULL", "NULL")
+                    print(insertquery)
+                    cursor.execute(insertquery)
+            else:
+                duplicationquery =  """SELECT *
+                                    FROM "Box" 
+                                    WHERE "id_box" = {} """.format(row.Num_ID) 
+                cursor.execute(duplicationquery)
+                if(cursor.fetchall()==[]):
+                    noBox.append(i+2)
+            conn.commit()
+
+        except:
+            a = "a"
 
     cursor.close()
     return noBox, "Certaines boites ne sont pas encore crée"

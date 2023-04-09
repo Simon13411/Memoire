@@ -12,7 +12,7 @@ def insertSubSpecies(data, cursor, conn) :
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
-    print(result)
+    print(f"[MY_APP_LOG] {result}")
     if result != [(None,)] :
         Count = result[0][0]+1
 
@@ -39,26 +39,26 @@ def insertSubSpecies(data, cursor, conn) :
                 cursor.execute(id_sc_query)
                 id_sc_list = cursor.fetchall()
                 if (len(id_sc_list)>1): #juste check mais normalement devrait pas aller la
-                    print("Pas normal")
-                    print(id_sc_list)
+                    print("[MY_APP_LOG] Pas normal")
+                    print(f"[MY_APP_LOG] {id_sc_list}")
                 dateNull = "NULL"
                 """if not math.isnan(toinsertDate[i]):
                     insertquery = \"""INSERT INTO "subSpecies"
                                 ("id_subspecies", "name", "id_sc", "date") 
                                 VALUES 
                                 ({},'{}',{},'{}') \""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
-                    print(insertquery)
+                    print(f"[MY_APP_LOG] {insertquery}")
                 else:
                     insertquery = \"""INSERT INTO "subSpecies"
                                 ("id_subspecies", "name", "id_sc", "date") 
                                 VALUES 
                                 ({},'{}',{},{}) \""".format(Count, index, id_sc_list[0][0], dateNull)
-                    print(insertquery)"""
+                    print(f"[MY_APP_LOG] {insertquery}")"""
                 insertquery = """INSERT INTO "subSpecies"
                                 ("id_subspecies", "name", "id_sc", "date") 
                                 VALUES 
                                 ({},'{}',{},{}) """.format(Count, index, id_sc_list[0][0], toinsertDate[i])
-                print(insertquery)
+                print(f"[MY_APP_LOG] {insertquery}")
                 cursor.execute(insertquery)
                 Count+=1
     conn.commit()

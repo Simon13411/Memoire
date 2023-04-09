@@ -13,7 +13,7 @@ def insertScientific(data, cursor, conn) :
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
-    print(result)
+    #print(result)
     if result != [(None,)] :
         Count = result[0][0]+1
 
@@ -24,7 +24,7 @@ def insertScientific(data, cursor, conn) :
                                 WHERE "name" = '{}' """.format(toinsert[i]) 
         cursor.execute(duplicationquery)
         if cursor.fetchall() == [] :
-            print("here")
+            #print("here")
             insertquery = """INSERT INTO "Scientific"
                             ("id_sc", "name") 
                             VALUES 

@@ -10,7 +10,7 @@ def insertTribu(data, cursor, conn) :
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
-    print(result)
+    print(f"[MY_APP_LOG] {result}")
     if result != [(None,)] :
         Count = result[0][0]+1
 
@@ -33,7 +33,7 @@ def insertTribu(data, cursor, conn) :
                             ("id_tribu", "name") 
                             VALUES 
                             ({},'{}') """.format(Count, index)
-                print(insertquery)
+                print(f"[MY_APP_LOG] {insertquery}")
                 cursor.execute(insertquery)
                 Count+=1
     conn.commit()

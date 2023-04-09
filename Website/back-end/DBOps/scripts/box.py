@@ -20,9 +20,6 @@ def order(insert, cursor):
         cursor.execute(order)
         orderList = cursor.fetchall()
         returnOrder.append(orderList[0][0])
-        if (len(orderList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(orderList)
     return returnOrder
                 
     
@@ -42,11 +39,8 @@ def suborder(insert, cursor):
                         WHERE "name"='{}' """.format(index)
         cursor.execute(suborder)
         suborderList = cursor.fetchall()
-        print("suborderList:" , returnSubOrder)
+        #print("suborderList:" , returnSubOrder)
         returnSubOrder.append(suborderList[0][0])
-        if (len(suborderList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(suborderList)
     return returnSubOrder
     
     
@@ -67,9 +61,6 @@ def tribu(insert, cursor):
         cursor.execute(tribu)
         tribuList = cursor.fetchall()
         returnTribu.append(tribuList[0][0])
-        if (len(tribuList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(tribuList)
     return returnTribu
     
     
@@ -89,9 +80,6 @@ def family(insert, cursor):
         cursor.execute(family)
         familyList = cursor.fetchall()
         returnFamily.append(familyList[0][0])
-        if (len(familyList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(familyList)
     return returnFamily
     
     
@@ -111,9 +99,6 @@ def subfamily(insert, cursor):
         cursor.execute(subFamily)
         subFamilyList = cursor.fetchall()
         returnSubFamily.append(subFamilyList[0][0])
-        if (len(subFamilyList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(subFamilyList)
     return returnSubFamily
     
     
@@ -133,9 +118,6 @@ def genus(insert, cursor):
         cursor.execute(genus)
         genusList = cursor.fetchall()
         returnGenus.append(genusList[0][0])
-        if (len(genusList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(genusList)
     return returnGenus
     
     
@@ -155,9 +137,6 @@ def subgenus(insert, cursor):
         cursor.execute(subGenus)
         subGenusList = cursor.fetchall()
         returnSubGenus.append(subGenusList[0][0])
-        if (len(subGenusList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(subGenusList)
     return returnSubGenus
     
     
@@ -177,9 +156,6 @@ def species(insert, cursor):
         cursor.execute(species)
         speciesList = cursor.fetchall()
         returnSpecies.append(speciesList[0][0])
-        if (len(speciesList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(speciesList)
     return returnSpecies
     
     
@@ -199,9 +175,6 @@ def subspecies(insert, cursor):
         cursor.execute(subSpecies)
         subSpeciesList = cursor.fetchall()
         returnSubSpecies.append(subSpeciesList[0][0])
-        if (len(subSpeciesList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(subSpeciesList)
     return returnSubSpecies
     
     
@@ -246,12 +219,6 @@ def population(order, suborder, family, subfamily, tribu, genus, subgenus, speci
         query+= """ AND "subSpecies_id" IS NULL"""   
     cursor.execute(query)
     id_populationList = cursor.fetchall()
-    if (len(id_populationList)>1): #juste check mais normalement devrait pas aller la
-        print("Pas normal")
-        print(id_populationList)
-    if(len(id_populationList)==0):
-        print("HEYYYYYY PAS BIEN")
-        print(id_populationList)
     return id_populationList[0][0]
 
 def insertBox(data, cursor, conn, admin) :
@@ -279,7 +246,7 @@ def insertBox(data, cursor, conn, admin) :
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
-    print(result)
+    #print(result)
     if result != [(None,)] :
         Count = result[0][0]+1
 
@@ -334,7 +301,7 @@ def insertBox(data, cursor, conn, admin) :
                                                 populationList.append(population(orderValue,  subOrderValue, familyValue, subFamilyValue, tribuValue, genusValue,subGenusValue,speciesValue,subSpeciesValue,cursor))
              
             for pop in populationList:
-                print(pop)
+                #print(pop)
                 duplicate = """SELECT *
                              FROM "PopuBox"
                              WHERE "box_id" = {} and "population_id" = {} """.format(toinsertID[i], pop)
@@ -353,16 +320,13 @@ def insertBox(data, cursor, conn, admin) :
                             WHERE "name" = '{}' """.format(toinsertCollection[i])
             cursor.execute(collection)
             collectionList = cursor.fetchall()
-            print("colection", collectionList[0][0])
-            if (len(collectionList)>1): #juste check mais normalement devrait pas aller la
-                print("Pas normal")
-                print(collectionList)
+            #print("colection", collectionList[0][0])
             location = toinsertLocation[i] if isinstance(toinsertLocation[i],str) else ""
             museum = toinsertMuseum[i] if isinstance(toinsertMuseum[i], str) else ""
             
-            print("id population: ", populationList)
-            print("location: ", location)
-            print("museum: ", museum)
+            #print("id population: ", populationList)
+            #print("location: ", location)
+            #print("museum: ", museum)
             
             
             
@@ -371,7 +335,7 @@ def insertBox(data, cursor, conn, admin) :
                                 ("id_box", "collection_id" ,"location", "museum", "paratypes", "types") 
                                 VALUES 
                                 ({}, {},'{}','{}',{},{})""".format(toinsertID[i], collectionList[0][0], location, museum, toinsertParaType[i], toinsertType[i])
-            print(insertquery)
+            #print(insertquery)
             cursor.execute(insertquery)
             Count+=1
         elif(admin):
@@ -380,7 +344,7 @@ def insertBox(data, cursor, conn, admin) :
                         DELETE
                         FROM "PopuBox"
                         WHERE "box_id"={} """.format(toinsertID[i])
-            print(deletePopuBox)
+            #print(deletePopuBox)
             cursor.execute(deletePopuBox)
             
             #On recupere l'ordre
@@ -426,7 +390,7 @@ def insertBox(data, cursor, conn, admin) :
                                                 populationList.append(population(orderValue,  subOrderValue, familyValue, subFamilyValue, tribuValue, genusValue,subGenusValue,speciesValue,subSpeciesValue,cursor))
              
             for pop in populationList:
-                print(pop)
+                #print(pop)
                 duplicate = """SELECT *
                              FROM "PopuBox"
                              WHERE "box_id" = {} and "population_id" = {} """.format(toinsertID[i], pop)
@@ -445,16 +409,13 @@ def insertBox(data, cursor, conn, admin) :
                             WHERE "name" = '{}' """.format(toinsertCollection[i])
             cursor.execute(collection)
             collectionList = cursor.fetchall()
-            print("colection", collectionList[0][0])
-            if (len(collectionList)>1): #juste check mais normalement devrait pas aller la
-                print("Pas normal")
-                print(collectionList)
+            #print("colection", collectionList[0][0])
             location = toinsertLocation[i] if isinstance(toinsertLocation[i],str) else ""
             museum = toinsertMuseum[i] if isinstance(toinsertMuseum[i], str) else ""
             
-            print("id population: ", populationList)
-            print("location: ", location)
-            print("museum: ", museum)
+            #print("id population: ", populationList)
+            #print("location: ", location)
+            #print("museum: ", museum)
             
             
             
@@ -462,7 +423,7 @@ def insertBox(data, cursor, conn, admin) :
             insertquery = """UPDATE  "Box"
                             SET  "collection_id" = {} ,"location" = '{}', "museum"= '{}', "paratypes" = {}, "types"= {}
                             WHERE "id_box" = {} """.format( collectionList[0][0], location, museum, toinsertParaType[i], toinsertType[i],toinsertID[i])
-            print(insertquery)
+            #print(insertquery)
             cursor.execute(insertquery)
                 
     conn.commit()

@@ -9,7 +9,7 @@ def insertFamily(data, cursor, conn) :
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
-    print(result)
+    #print(result)
     if result != [(None,)] :
         Count = result[0][0]+1
 
@@ -31,7 +31,7 @@ def insertFamily(data, cursor, conn) :
                             ("id_family", "name") 
                             VALUES 
                             ({},'{}') """.format(Count, index)
-                print(insertquery)
+                #print(insertquery)
                 cursor.execute(insertquery)
                 Count+=1
     conn.commit()

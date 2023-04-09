@@ -21,17 +21,18 @@ import sys
 filename = sys.argv[1]
 extracteddata = pd.read_excel(filename, engine="openpyxl")
 
-box, colOk = boxexist.boxExist(extracteddata, "entomologie")
-if(len(box)>0):
-    #il y a des boites qui n'existe pas encore
-    print(box, colOk)
-filename = sys.argv[2]
+admin = sys.argv[2]
 a,b,data,d = filtre.filterIndividu(extracteddata)
-print(a,b,data,d)
 
 if b>0:
     #il y a des lignes qui ont des problemes
-    print("there is some problem")
+    print(f"{b} lignes problématiques: {a} -> {d}")
+
+box, colOk = boxexist.boxExist(extracteddata, "entomologie")
+if(len(box)>0):
+    #il y a des boites qui n'existe pas encore
+    print(f"{box}, {colOk}")
+
 else:
     conn = psycopg2.connect(
         host="db-entomoc",
@@ -40,7 +41,7 @@ else:
         password="password"
     )
     cursor = conn.cursor()
-    print("Successfully connected to DB")
+    print("[MY_APP_LOG] Successfully connected to DB")
 
 
     ### Ici on  va inserer tout mais on pourrait en fonctio d'arguments lancer, ajouter seulement certain trucs ###

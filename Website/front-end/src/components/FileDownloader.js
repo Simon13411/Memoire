@@ -10,7 +10,6 @@ function FileDownloader({file, type}) {
   const handleDownload = () => {
     setDownloadstate('Veuillez patienter...')
     if (file === 'Box') {
-        downloadstate = 'Veuillez patienter...'
         axios.get(`${url}/boxestemplate`, { responseType: 'blob' })
             .then(response => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));

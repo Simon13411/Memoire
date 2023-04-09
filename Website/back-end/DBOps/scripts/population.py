@@ -20,9 +20,6 @@ def order(insert, cursor):
         cursor.execute(order)
         orderList = cursor.fetchall()
         returnOrder.append(orderList[0][0])
-        if (len(orderList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(orderList)
     return returnOrder
                 
     
@@ -42,11 +39,8 @@ def suborder(insert, cursor):
                         WHERE "name"='{}' """.format(index)
         cursor.execute(suborder)
         suborderList = cursor.fetchall()
-        print("suborderList:" , returnSubOrder)
+        #print("suborderList:" , returnSubOrder)
         returnSubOrder.append(suborderList[0][0])
-        if (len(suborderList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(suborderList)
     return returnSubOrder
     
     
@@ -67,9 +61,6 @@ def tribu(insert, cursor):
         cursor.execute(tribu)
         tribuList = cursor.fetchall()
         returnTribu.append(tribuList[0][0])
-        if (len(tribuList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(tribuList)
     return returnTribu
     
     
@@ -89,9 +80,6 @@ def family(insert, cursor):
         cursor.execute(family)
         familyList = cursor.fetchall()
         returnFamily.append(familyList[0][0])
-        if (len(familyList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(familyList)
     return returnFamily
     
     
@@ -111,9 +99,6 @@ def subfamily(insert, cursor):
         cursor.execute(subFamily)
         subFamilyList = cursor.fetchall()
         returnSubFamily.append(subFamilyList[0][0])
-        if (len(subFamilyList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(subFamilyList)
     return returnSubFamily
     
     
@@ -133,9 +118,6 @@ def genus(insert, cursor):
         cursor.execute(genus)
         genusList = cursor.fetchall()
         returnGenus.append(genusList[0][0])
-        if (len(genusList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(genusList)
     return returnGenus
     
     
@@ -155,9 +137,6 @@ def subgenus(insert, cursor):
         cursor.execute(subGenus)
         subGenusList = cursor.fetchall()
         returnSubGenus.append(subGenusList[0][0])
-        if (len(subGenusList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(subGenusList)
     return returnSubGenus
     
     
@@ -177,9 +156,6 @@ def species(insert, cursor):
         cursor.execute(species)
         speciesList = cursor.fetchall()
         returnSpecies.append(speciesList[0][0])
-        if (len(speciesList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(speciesList)
     return returnSpecies
     
     
@@ -199,9 +175,6 @@ def subspecies(insert, cursor):
         cursor.execute(subSpecies)
         subSpeciesList = cursor.fetchall()
         returnSubSpecies.append(subSpeciesList[0][0])
-        if (len(subSpeciesList)>1): #juste check mais normalement devrait pas aller la
-            print("Pas normal")
-            print(subSpeciesList)
     return returnSubSpecies
     
     
@@ -230,7 +203,7 @@ def insertPopulation(data, cursor, conn) :
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
-    print(result)
+    #print(result)
     if result != [(None,)] :
         Count = result[0][0]+1
 
@@ -339,7 +312,7 @@ if subSpecies_id is not None:
                                                             ("id_population", "order_id", "suborder_id" , "tribu_id" , "family_id" ,"subFamily_id", "genus_id", "subGenus_id" , "species_id", "subSpecies_id") 
                                                             VALUES 
                                                             ({},{},{},{},{},{},{},{},{},{})""".format(Count, orderValue, subOrderValue, tribuValue, familyValue, subFamilyValue, genusValue, subGenusValue, speciesValue, subSpeciesValue)
-                                                print(insertquery)
+                                                #print(insertquery)
                                                 cursor.execute(insertquery)
                                                 Count+=1
     conn.commit()

@@ -12,7 +12,7 @@ def insertSubGenus(data, cursor, conn) :
     cursor.execute(duplicationquery)
     result = cursor.fetchall()
     Count = 1
-    print(result)
+    #print(result)
     if result != [(None,)] :
         Count = result[0][0]+1
 
@@ -37,28 +37,25 @@ def insertSubGenus(data, cursor, conn) :
                         WHERE "name"='{}' """.format(toinsertSc[i])
                 cursor.execute(id_sc_query)
                 id_sc_list = cursor.fetchall()
-                if (len(id_sc_list)>1): #juste check mais normalement devrait pas aller la
-                    print("Pas normal")
-                    print(id_sc_list)
                 dateNull = "NULL"
                 """if not math.isnan(toinsertDate[i]):
                     insertquery = \"""INSERT INTO "subGenus"
                                 ("id_subgenus", "name", "id_sc", "date") 
                                 VALUES 
                                 ({},'{}',{},'{}')\""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
-                    print(insertquery)
+                    #print(insertquery)
                 else:
                     insertquery = \"""INSERT INTO "subGenus"
                                 ("id_subgenus", "name", "id_sc", "date") 
                                 VALUES 
                                 ({},'{}',{},{})\""".format(Count, index, id_sc_list[0][0], dateNull)
-                    print(insertquery)"""
+                    #print(insertquery)"""
                     
                 insertquery = """INSERT INTO "subGenus"
                                 ("id_subgenus", "name", "id_sc", "date") 
                                 VALUES 
                                 ({},'{}',{},{})""".format(Count, index, id_sc_list[0][0], toinsertDate[i])
-                print(insertquery)
+                #print(insertquery)
                 cursor.execute(insertquery)
                 Count+=1
     conn.commit()

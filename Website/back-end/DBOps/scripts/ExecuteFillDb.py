@@ -27,7 +27,7 @@ a,b,data,d = filtre.filterExcel(extracteddata)
 #Verifier si boite existe sinon oups probleme
 admin = sys.argv[2]
 if (b>0):
-    print("kk")
+    print(f"{b} lignes problématiques: {a} -> {d}")
 
 else:
     conn = psycopg2.connect(
