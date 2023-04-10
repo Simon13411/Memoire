@@ -6,7 +6,7 @@ app.get('/getpicture/:type/:id', (req, res) => {
     const type = req.params.type
     const id = req.params.id
     const Path = `usr/picturenfs/share/${type}`; // chemin absolu du fichier
-    const fileName = `${id}.png`; // nom du fichier à télécharger
+    const fileName = `${id}.bmp`; // nom du fichier à télécharger
     console.log(`Recherche de la photo ${id} dans le dossier ${type}`)
     const fileContent = fs.readFileSync(filePath);
     const stats = fs.statSync(filePath);
