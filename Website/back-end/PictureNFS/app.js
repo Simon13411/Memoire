@@ -14,7 +14,7 @@ app.get('/getpicture/:type/:id', (req, res) => {
     console.log(`Fichier ${filename} trouvé`)
 
     res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Type', 'image/bmp');
     res.setHeader('Content-Length', fileSize);
 
     res.send(fileContent);
