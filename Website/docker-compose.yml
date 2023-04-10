@@ -81,7 +81,7 @@ services:
   picturenfs :
     build: back-end/PictureNFS/.
     image: picturenfs
-    conatiner_name: picturenfsc
+    container_name: picturenfsc
     ports: 
       - "4004:80"
     volumes:
