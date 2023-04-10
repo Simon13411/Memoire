@@ -26,6 +26,7 @@ const FormData = require('form-data');
 const IP_DBOPS = process.env.IPDBOPS
 const IP_DLDER = process.env.IPDLDER
 const IP_LOGIN = process.env.IPLOGIN
+const IP_PICTU = process.env.IPPICTURES  
 
 //DBOps (port 4001)
 app.get('/get_boxdetails', (req, res) => {
@@ -513,6 +514,18 @@ app.post(`/modifyright`, (req, res) => {
         .catch((err) => {
             errorhandler(err, res)
         });
+})
+
+
+//Pictures (Port 4004)
+app.get(`/getpicture/:type/:id`, (req, res) => {
+    axios.get(`http://${IP_PICTU}/getpicture/${req.params.type}/${req.params.id}`, { responseType: 'stream' })
+    .then((response) => {
+        response.data.pipe(res)
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    });
 })
 
 //helper

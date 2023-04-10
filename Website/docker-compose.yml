@@ -18,6 +18,7 @@ services:
       - dbops
       - login
       - dlder
+      - picturenfs
 
   db-entomo :
     build: back-end/Database/.
@@ -76,7 +77,16 @@ services:
     depends_on:
       db-login:
         condition: service_healthy
+
+  picturenfs :
+    build: back-end/PictureNFS/.
+    image: picturenfs
+    conatiner_name: picturenfsc
+    ports: "4004:80"
+    volumes:
+      - Pictures:/usr/picturenfs/share
     
 volumes:
   DataEntomo:
   DataLogin:
+  Pictures:

@@ -25,7 +25,8 @@ class BoxDetails extends React.Component {
       newcollection: null,
       newloaner: null,
       modifycollectionstate: '',
-      modifyloanerstate: ''
+      modifyloanerstate: '',
+      imageUrl: null
     }
   }
 
@@ -33,6 +34,7 @@ class BoxDetails extends React.Component {
     this.GetBox()
     this.getCollections()
     this.getLoaners()
+    this.getPicture()
   }
 
   getStateVar = () => {
@@ -58,6 +60,14 @@ class BoxDetails extends React.Component {
     .then((res) => {
         this.setState({loanerslist: res.data.rows})
     })
+  }
+
+  getPicture = () => {
+    axios.get(`${url}/getpicture`, {params: {type:"Boxes", id: this.props.searchParams.get("id")}}, { responseType: 'blob' })
+    .then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        imageUrl = url
+      })
   }
 
   Loaded = () => {
@@ -187,6 +197,13 @@ class BoxDetails extends React.Component {
             <div className="column">
                 {/*Photo part*/}
                 <h2>Pictures</h2>
+                {this.state.imageUrl ?
+                  (
+                    <img src={this.state.imageURL} alt="Picture" />
+                  ):(
+                    <></>
+                  )
+                }
             </div>
           </>
       )
