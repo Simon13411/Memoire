@@ -30,7 +30,7 @@ COPY db_ops.js .
 COPY daemon.js .
 COPY app.js .
 COPY scripts/ .
-COPY FilesToReturn/ FilesToReturn/.
+RUN mkdir FilesToReturn
 
 ENV DB_HOST scapp_dbprod
 ENV DB_NAME products
