@@ -1,0 +1,147 @@
+-----------PERMET de recuperer le nouvel id population-----
+------return l'id si existe, sinon return rien----
+------Il faudra l'id, donc si besoin d'un count peut etre le faire à cote-----
+
+
+SELECT "id_population" as newpopu
+    FROM "Population" P
+    WHERE (P."order_id"=(SELECT "id_order" FROM "Order" WHERE "name"='Z') AND
+            (CASE WHEN NULL IS NULL THEN
+                P."suborder_id" is NULL
+            ELSE
+                P."suborder_id" = (SELECT "id_suborder" FROM "subOrder" WHERE "name"=NULL)
+        	END)
+        AND
+            (CASE WHEN NULL IS NULL THEN
+                P."family_id" is NULL
+            ELSE
+                P."family_id" = (SELECT "id_family" FROM "Family" WHERE "name"=NULL)
+        END) AND
+          (CASE WHEN NULL IS NULL THEN
+                P."subFamily_id" is NULL
+            ELSE
+                P."subFamily_id" = (SELECT "id_subfamily" FROM "subFamily" WHERE "name"=NULL)
+        END) AND
+          (CASE WHEN NULL IS NULL THEN
+                P."tribu_id" is NULL
+            ELSE
+                P."tribu_id" = (SELECT "id_tribu" FROM "Tribu" WHERE "name"=NULL)
+        END) AND
+          (CASE WHEN NULL IS NULL THEN
+                P."genus_id" is NULL
+            ELSE
+                P."genus_id" = (SELECT "id_genus" FROM "Genus" WHERE "name"=NULL)
+        END) AND
+          (CASE WHEN NULL IS NULL THEN
+                P."subGenus_id" is NULL
+            ELSE
+                P."subGenus_id" = (SELECT "id_subgenus" FROM "subGenus" WHERE "name"=NULL)
+        END) AND
+          (CASE WHEN NULL IS NULL THEN
+                P."species_id" is NULL
+            ELSE
+                P."species_id" = (SELECT "id_species" FROM "Species" WHERE "name"=NULL)
+        END) AND
+          (CASE WHEN NULL IS NULL THEN
+                P."subSpecies_id" is NULL
+            ELSE
+                P."subSpecies_id" = (SELECT "id_subspecies" FROM "subSpecies" WHERE "name"=NULL)
+        END))
+
+----------------SELECT old popu dans la table Population--------------
+SELECT "id_population" 
+    FROM "Population" P
+    WHERE (P."order_id"=(SELECT "id_order" FROM "Order" WHERE "name"='Z') AND
+            (CASE WHEN NULL IS NULL THEN
+                P."suborder_id" is NULL
+            ELSE
+                P."suborder_id" = (SELECT "id_suborder" FROM "subOrder" WHERE "name"=NULL)
+        	END)
+        AND
+            (CASE WHEN NULL IS NULL THEN
+                P."family_id" is NULL
+            ELSE
+                P."family_id" = (SELECT "id_family" FROM "Family" WHERE "name"=NULL)
+        END) AND
+          (CASE WHEN NULL IS NULL THEN
+                P."subFamily_id" is NULL
+            ELSE
+                P."subFamily_id" = (SELECT "id_subfamily" FROM "subFamily" WHERE "name"=NULL)
+        END) AND
+          (CASE WHEN NULL IS NULL THEN
+                P."tribu_id" is NULL
+            ELSE
+                P."tribu_id" = (SELECT "id_tribu" FROM "Tribu" WHERE "name"=NULL)
+        END) AND
+          (CASE WHEN NULL IS NULL THEN
+                P."genus_id" is NULL
+            ELSE
+                P."genus_id" = (SELECT "id_genus" FROM "Genus" WHERE "name"=NULL)
+        END) AND
+          (CASE WHEN NULL IS NULL THEN
+                P."subGenus_id" is NULL
+            ELSE
+                P."subGenus_id" = (SELECT "id_subgenus" FROM "subGenus" WHERE "name"=NULL)
+        END) AND
+          (CASE WHEN NULL IS NULL THEN
+                P."species_id" is NULL
+            ELSE
+                P."species_id" = (SELECT "id_species" FROM "Species" WHERE "name"=NULL)
+        END) AND
+          (CASE WHEN NULL IS NULL THEN
+                P."subSpecies_id" is NULL
+            ELSE
+                P."subSpecies_id" = (SELECT "id_subspecies" FROM "subSpecies" WHERE "name"=NULL)
+        END))
+
+
+
+----------------Update PopuBox---------------
+------------En fonction de la nouvelle population-----
+---------En fonction de l'idbox et de l'ancienne population------
+
+UPDATE "PopuBox"
+SET "population_id"=81
+WHERE "box_id"=1 and "population_id"=1
+
+
+------------Update Individu------
+---------En fonction de la nouvel population-----
+--------En focntion de l'id individu--------
+UPDATE "Individu"
+SET "population_id"=81
+WHERE "id_individu" = 1
+
+
+
+----------ADD new population if not exist---------
+ 
+ INSERT INTO "Population" ("id_population","order_id", "suborder_id", "family_id", "subFamily_id", "tribu_id", "genus_id", "subGenus_id", "species_id", "subSpecies_id")
+VALUES
+((SELECT MAX("id_population")+1 FROM "Population"),
+(SELECT "id_order" FROM "Order" WHERE "name"='A'),
+(SELECT "id_suborder" FROM "subOrder" WHERE "name"='B') ,
+(SELECT "id_family" FROM "Family" WHERE "name"='C' ),
+(SELECT "id_subfamily" FROM "subFamily" WHERE "name"='D' ),
+(SELECT "id_tribu" FROM "Tribu" WHERE "name"=NULL ),
+(SELECT "id_genus" FROM "Genus" WHERE "name"=NULL ),
+(SELECT "id_subgenus" FROM "subGenus" WHERE "name"=NULL ),
+(SELECT "id_species" FROM "Species" WHERE "name"=NULL ),
+(SELECT "id_subspecies" FROM "subSpecies" WHERE "name"=NULL ))
+
+---------CHECK if oldpopu in Individu------
+SELECT Count(*)
+FROM "Individu" I
+WHERE I."population_id"=1
+ 
+
+------CHECK if oldpopu in PopuBox----------
+SELECT Count(*)
+FROM "PopuBox" I
+WHERE I."population_id"=1
+
+-------if la somme des deux =0--------
+---------On peut delete la population---
+DELETE 
+FROM "Population"
+WHERE "id_population"=1
