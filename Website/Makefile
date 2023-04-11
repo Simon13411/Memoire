@@ -4,8 +4,9 @@ DATABASE = back-end/Database
 DBOPS = back-end/DBOps
 DLDER = back-end/FileDownloader
 LOGIN = back-end/Login
+SHARE = back-end/PictureNFS
 
-build: build-front build-gate build-dbops build-db build-dlder build-login
+build: build-front build-gate build-dbops build-db build-dlder build-login build-share
 
 build-front:
 	docker build -t front $(FRONTEND)/
@@ -25,6 +26,9 @@ build-dlder:
 build-login:
 	docker build -t login $(LOGIN)/
 
+build-share:
+	docker build -t picturenfs $(SHARE)/
+
 
 run: run-front run-db run-gate run-dbops run-dlder run-login
 
@@ -35,7 +39,7 @@ run-db:
 	docker run -v DataInsects:/var/lib/postgresql/data -e POSTGRES_PASSWORD=password -p 5432:5432 --name postgresc postgres
 
 run-gate:
-	docker run -p 4000:80 --name apigatec --link loginc --link dbopsc --link dlderc apigate
+	docker run -p 4000:80 --name apigatec --link loginc --link dbopsc --link dlderc --link picturenfsc apigate
 
 run-dbops:
 	docker run -p 4001:80 --name dbopsc --link postgresc dbops
@@ -45,6 +49,9 @@ run-dlder:
 
 run-login:
 	docker run -p 4003:80 --name loginc --link postgresc login
+
+run-share:
+	docker run -p 4004:80 --name picturenfsc picturenfs
 
 
 stop: stop-front stop-db stop-gate stop-dbops stop-dlder stop-login
@@ -68,7 +75,7 @@ stop-login:
 	docker stop loginc
 
 
-clean: clean-front clean-db clean-gate clean-dbops clean-dlder clean-login
+clean: clean-front clean-db clean-gate clean-dbops clean-dlder clean-login clean-share
 
 clean-front:
 	docker rm frontc
@@ -87,3 +94,6 @@ clean-dlder:
 
 clean-login:
 	docker rm loginc
+
+clean-share:
+	docker rm picturenfsc
