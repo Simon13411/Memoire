@@ -518,8 +518,8 @@ app.post(`/modifyright`, (req, res) => {
 
 
 //Pictures (Port 4004)
-app.get(`/getpicture/:type/:id`, (req, res) => {
-    axios.get(`http://${IP_PICTU}/getpicture/${req.params.type}/${req.params.id}`, { responseType: 'stream' })
+app.get(`/getpicture`, (req, res) => {
+    axios.get(`http://${IP_PICTU}/getpicture?type=${req.query.type}&id=${req.query.id}`, { responseType: 'stream' })
     .then((response) => {
         response.data.pipe(res)
     })
