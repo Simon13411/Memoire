@@ -33,7 +33,7 @@ def insertTribu(data, cursor, conn) :
                             ("id_tribu", "name") 
                             VALUES 
                             ({},'{}') """.format(Count, index)
-                print(f"[MY_APP_LOG] {insertquery}")
+
                 cursor.execute(insertquery)
                 Count+=1
     conn.commit()
