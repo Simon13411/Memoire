@@ -39,7 +39,7 @@ SELECT "id_population" as newpopu
             ELSE
                 P."genus_id" = (SELECT "id_genus" FROM "Genus" WHERE "name"=$6)
         END) AND
-          (CASE WHEN $ 7 IS NULL THEN
+          (CASE WHEN $7 IS NULL THEN
                 P."subGenus_id" is NULL
             ELSE
                 P."subGenus_id" = (SELECT "id_subgenus" FROM "subGenus" WHERE "name"=$7)
@@ -99,7 +99,7 @@ SELECT "id_population" as oldpopu
             ELSE
                 P."genus_id" = (SELECT "id_genus" FROM "Genus" WHERE "name"=$6)
         END) AND
-          (CASE WHEN $ 7 IS NULL THEN
+          (CASE WHEN $7 IS NULL THEN
                 P."subGenus_id" is NULL
             ELSE
                 P."subGenus_id" = (SELECT "id_subgenus" FROM "subGenus" WHERE "name"=$7)
@@ -195,7 +195,7 @@ WHERE I."population_id"=$1
 
 SELECT Count(*)
 FROM "PopuBox" I
-WHERE I."population_id"=1
+WHERE I."population_id"=$1
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
