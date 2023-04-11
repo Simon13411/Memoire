@@ -3,9 +3,12 @@ const fs = require('fs');
 const app = express();
 
 app.get('/getpicture/:type/:id', (req, res) => {
+    console.log("Here")
     const type = req.params.type
+    console.log(type)
     const id = req.params.id
-    const Path = `usr/picturenfs/share/${type}`; // chemin absolu du fichier
+    console.log(id)
+    const filePath = `usr/picturenfs/share/${type}`; // chemin absolu du fichier
     const fileName = `${id}.bmp`; // nom du fichier à télécharger
     console.log(`Recherche de la photo ${id} dans le dossier ${type}`)
     const fileContent = fs.readFileSync(filePath);
