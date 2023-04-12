@@ -410,6 +410,15 @@ app.get(`/individualssqltocsv`, (req, res) => {
         });
 })
 
+app.post('/modifypopu', (req, res) => {
+    axios.post(`http://${IP_DBOPS}/modifypopu`, req.body)
+    .then((results) => {
+        res.status(200).json({success: "ok"})
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
 
 
 

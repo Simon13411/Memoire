@@ -26,7 +26,7 @@ class InsectDetails extends React.Component {
         subfamily: null,
         species: null,
         subspecies: null,
-        tribus: null,
+        tribu: null,
         loaner: null,
         orderlist: [],
         suborderlist: [],
@@ -47,7 +47,7 @@ class InsectDetails extends React.Component {
     }
 
     componentDidMount() {
-      this.GetIndiv()
+      this.getIndiv()
       this.getLoaners()
     }
 
@@ -55,7 +55,7 @@ class InsectDetails extends React.Component {
       return this.state
     }  
   
-    GetIndiv = (event) => {
+    getIndiv = () => {
       axios.get(`${url}/get_indivdetails`, {params: {id: this.props.searchParams.get("id")}})
       .then((res) => {
           this.setState({individ: res.data.rows[0].id_individu,
@@ -117,7 +117,7 @@ class InsectDetails extends React.Component {
       const newloaner = this.state.newloaner
       axios.post(`${url}/changeindivloaner`, {individ: this.state.individ, newloaner: newloaner})
       .then((res) => {
-        this.setState({loaner: newloaner, modifyloanerstate: `Loaner est maintenant ${newloaner}`})
+        this.setState({loaner: newloaner, modifyloanerstate: `Borrower est maintenant ${newloaner}`})
       })
       .catch((err) => {
         if (!err.response) {
@@ -271,12 +271,12 @@ class InsectDetails extends React.Component {
                       }
                     </div>
                     <div>
-                      {(!this.state.tribus) ?
+                      {(!this.state.tribu) ?
                         (<></>)
                         :
                         <>
-                        <h4 className="title">Tribus</h4>
-                        <p>{this.state.tribus}</p>
+                        <h4 className="title">Tribu</h4>
+                        <p>{this.state.tribu}</p>
                         </>
                       }
                     </div>
@@ -298,7 +298,9 @@ class InsectDetails extends React.Component {
                 {this.props.isAuthenticated() && this.state.isLoaded ? 
                   (
                     //Admin Tools
-                    <InsectDetailsAdmin isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout} getParentStateVar={this.getStateVar}/>
+                    <InsectDetailsAdmin isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout} getIndiv={this.getIndiv}
+                    id={this.state.individ} order={this.state.order} suborder={this.state.suborder} genus={this.state.genus} subgenus={this.state.subgenus}
+                    family={this.state.family} subfamily={this.state.subfamily} species={this.state.species} subspecies={this.state.subspecies} tribu={this.state.tribu}/>
                   ) : (
                     <></>
                   )

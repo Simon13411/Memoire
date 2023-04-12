@@ -13,7 +13,7 @@ class BoxDetailsAdmin extends React.Component {
     constructor (props) {
         super(props)
         this.state = {
-            order: '',
+            order: null,
             suborder: null,
             genus: null,
             subgenus: null,
@@ -32,6 +32,7 @@ class BoxDetailsAdmin extends React.Component {
             specieslist: [],
             subspecieslist: [],
             tribulist: [],
+            changestate: ''
         }
     }
 
@@ -40,69 +41,67 @@ class BoxDetailsAdmin extends React.Component {
     }
 
     get_selection = () => {
-        const ParentVar = this.props.getParentStateVar()
-
         axios.get(`${url}/get_selectiono`, {
           params:
           {so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({orderlist: res.data.rows, order: ParentVar.order})
+            this.setState({orderlist: res.data.rows}, this.setState({order: this.props.order}))
         })
     
         axios.get(`${url}/get_selectionso`, {
           params:
           {o: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({suborderlist: res.data.rows, suborder: ParentVar.suborder})
+            this.setState({suborderlist: res.data.rows}, this.setState({suborder: this.props.suborder}))
         })
     
         axios.get(`${url}/get_selectiong`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({genuslist: res.data.rows, genus: ParentVar.genus})
+            this.setState({genuslist: res.data.rows}, this.setState({genus: this.props.genus}))
         })
     
         axios.get(`${url}/get_selectionsg`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({subgenuslist: res.data.rows, subgenus: ParentVar.subgenus})
+            this.setState({subgenuslist: res.data.rows}, this.setState({subgenus: this.props.subgenus}))
         })
     
         axios.get(`${url}/get_selectionf`, {
           params:
           {o: 'NULL', so: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({familylist: res.data.rows, family: ParentVar.family})
+            this.setState({familylist: res.data.rows}, this.setState({family: this.props.family}))
         })
     
         axios.get(`${url}/get_selectionsf`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({subfamilylist: res.data.rows, subfamily: ParentVar.subfamily})
+            this.setState({subfamilylist: res.data.rows}, this.setState({subfamily: this.props.subfamily}))
         })
     
         axios.get(`${url}/get_selections`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({specieslist: res.data.rows, species: ParentVar.species})
+            this.setState({specieslist: res.data.rows}, this.setState({species: this.props.species}))
         })
     
         axios.get(`${url}/get_selectionss`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL'}})
             .then((res) => {
-            this.setState({subspecieslist: res.data.rows, subspecies: ParentVar.subspecies})
+            this.setState({subspecieslist: res.data.rows}, this.setState({subspecies: this.props.subspecies}))
         })
     
         axios.get(`${url}/get_selectiont`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({tribulist: res.data.rows, tribu: ParentVar.tribu})
+            this.setState({tribulist: res.data.rows}, this.setState({tribu: this.props.tribu}))
         })
       }
     
@@ -116,7 +115,24 @@ class BoxDetailsAdmin extends React.Component {
     }
 
     modify = () => {
-
+        axios.post(`${url}/modifypopu`, {type: "Individual", id: this.props.id, order: this.props.order, suborder: this.props.suborder, 
+                                        family: this.props.family, subfamily: this.props.subfamily, tribu: this.props.tribu, 
+                                        genus: this.props.genus, subgenus: this.props.subgenus, species: this.props.species, 
+                                        subspecies: this.props.subspecies, neworder: this.state.order, newsuborder: this.state.suborder, 
+                                        newfamily: this.state.family, newsubfamily: this.state.subfamily, newtribu: this.state.tribu, 
+                                        newgenus: this.state.genus, newsubgenus: this.state.subgenus, 
+                                        newspecies: this.state.species, newsubspecies: this.state.subspecies})
+            .then((res) => {
+                this.setState({changestate: 'Population has been changed with success'}, this.props.getIndiv)
+            })
+            .catch((err) => {
+                if (!err.response) {
+                  this.setState({changestate: 'Erreur Serveur - Gateway'})
+                }
+                else {
+                  this.setState({changestate: err.response.data.error})
+                }
+            })
     }
 
     render() {
@@ -124,6 +140,7 @@ class BoxDetailsAdmin extends React.Component {
             <div className="column">
                 <div>
                 <h2 className="title">Modify Population</h2>
+                {this.state.changestate}
                 <h4 className="title">Order</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select

@@ -2,17 +2,35 @@ import * as React from 'react';
 
 import BoxDetailsAdmin from './BoxDetailsAdmin';
 
+import axios from 'axios'
+const url = process.env.REACT_APP_IP
 
 class BoxAttributes extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isLoaded: false
+      order: this.props.order,
+      suborder: this.props.suborder,
+      family: this.props.family,
+      subfamily: this.props.subfamily,
+      tribu: this.props.tribu,
+      genus: this.props.genus,
+      subgenus: this.props.subgenus,
+      species: this.props.species,
+      subspecies: this.props.subspecies
     }
   }
 
-  Loaded = () => {
-    this.setState({isLoaded: true})
+  changefetchedpop = (childstatevar) => {
+    this.setState({order: childstatevar.order,
+    suborder: childstatevar.suborder,
+    family: childstatevar.family,
+    subfamily: childstatevar.subfamily,
+    tribu: childstatevar.tribu,
+    genus: childstatevar.genus,
+    subgenus: childstatevar.subgenus,
+    species: childstatevar.species,
+    subspecies: childstatevar.subspecies})
   }
 
   render() {
@@ -22,92 +40,92 @@ class BoxAttributes extends React.Component {
                 {/*Info part*/}
                 <h2>Population n°{this.props.index+1}</h2>
                 <div>
-                {(!this.props.order) ?
+                {(!this.state.order) ?
                     (<></>)
                     :
                     <>
                     <h4 className="title">Order</h4>
-                    <p>{this.props.order}</p>
+                    <p>{this.state.order}</p>
                     </>
                 }
                 </div>
                 <div>
-                {(!this.props.suborder) ?
+                {(!this.state.suborder) ?
                     (<></>)
                     :
                     <>
                     <h4 className="title">Suborder</h4>
-                    <p>{this.props.suborder}</p>
+                    <p>{this.state.suborder}</p>
                     </>
                 }
                 </div>
                 <div>
-                {(!this.props.genus) ?
-                    (<></>)
-                    :
-                    <>
-                    <h4 className="title">Genus</h4>
-                    <p>{this.props.genus}</p>
-                    </>
-                }
-                </div>
-                <div>
-                {(!this.props.subgenus)? 
-                    (<></>)
-                    :
-                    <>
-                    <h4  className="title">Subgenus</h4>
-                    <p>{this.props.subgenus}</p>
-                    </>
-                }
-                </div>
-                <div>
-                {(!this.props.family) ?
+                {(!this.state.family) ?
                     (<></>)
                     :
                     <>
                     <h4 className="title">Family</h4>
-                    <p>{this.props.family}</p>
+                    <p>{this.state.family}</p>
                     </>
                 }
                 </div>
                 <div>
-                {(!this.props.subfamily) ?
+                {(!this.state.subfamily) ?
                     (<></>)
                     :
                     <>
                     <h4 className="title">Subfamily</h4>
-                    <p>{this.props.subfamily}</p>
+                    <p>{this.state.subfamily}</p>
                     </>
                 }
                 </div>
                 <div>
-                {(!this.props.species) ?
+                {(!this.state.tribu) ?
+                    (<></>)
+                    :
+                    <>
+                    <h4 className="title">Tribu</h4>
+                    <p>{this.state.tribu}</p>
+                    </>
+                }
+                </div>
+                <div>
+                {(!this.state.genus) ?
+                    (<></>)
+                    :
+                    <>
+                    <h4 className="title">Genus</h4>
+                    <p>{this.state.genus}</p>
+                    </>
+                }
+                </div>
+                <div>
+                {(!this.state.subgenus)? 
+                    (<></>)
+                    :
+                    <>
+                    <h4  className="title">Subgenus</h4>
+                    <p>{this.state.subgenus}</p>
+                    </>
+                }
+                </div>
+                <div>
+                {(!this.state.species) ?
                     (<></>)
                     :
                     <>
                     <h4 className="title">Species</h4>
-                    <p>{this.props.species}</p>
+                    <p>{this.state.species}</p>
                     </>
                 }
                 </div>
                 <div>
-                {(!this.props.subspecies) ?
+                {(!this.state.subspecies) ?
                     (<></>)
                     :
                     <>
                     <h4 className="title">Subspecies</h4>
-                    <p>{this.props.subspecies}</p>
-                    </>
-                }
-                </div>
-                <div>
-                {(!this.props.tribus) ?
-                    (<></>)
-                    :
-                    <>
-                    <h4 className="title">Tribus</h4>
-                    <p>{this.props.tribus}</p>
+                    <p>{this.state.subspecies}</p>
                     </>
                 }
                 </div>
@@ -115,7 +133,7 @@ class BoxAttributes extends React.Component {
             {this.props.isAuthenticated() ? 
                 (
                 //Admin Tools
-                <BoxDetailsAdmin {...this.props}/>
+                <BoxDetailsAdmin changefetchedpop={this.changefetchedpop} {...this.props}/>
                 ) : (
                 <></>
                 )

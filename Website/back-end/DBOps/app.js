@@ -510,6 +510,18 @@ app.get('/individualssqltocsv', (req, res) => {
     })
 })
 
+//Modifypopu (Box and Indiv)
+app.post('/modifypopu', (req, res) => {
+    const { type, id, order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies, neworder, newsuborder, newfamily, newsubfamily, newtribu, newgenus, newsubgenus, newspecies, newsubspecies } = req.body
+    return db.modifypopu(type, id, order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies, neworder, newsuborder, newfamily, newsubfamily, newtribu, newgenus, newsubgenus, newspecies, newsubspecies)
+    .then((results) => {
+        res.status(200).json({success: "ok"})
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
+
 function errorhandler(err, res) {
     console.log(err)
     if (err.message) {

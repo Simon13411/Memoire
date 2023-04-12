@@ -178,6 +178,7 @@ class BoxDetails extends React.Component {
               
             
               {this.state.attr.map((data, index) => <BoxAttributes isAuthenticated={this.props.isAuthenticated}
+                                                            id={this.props.searchParams.get("id")}
                                                             index={index}
                                                             order={data.order}
                                                             suborder= {data.suborder}

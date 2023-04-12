@@ -30,6 +30,7 @@ class BoxDetailsAdmin extends React.Component {
             specieslist: [],
             subspecieslist: [],
             tribulist: [],
+            changestate: ''
         }
     }
 
@@ -42,63 +43,63 @@ class BoxDetailsAdmin extends React.Component {
           params:
           {so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({orderlist: res.data.rows}, this.setState({order: this.props.order}))
+            this.setState({orderlist: res.data.rows}, this.setState({order: this.props.order, actualorder: this.props.order}))
         })
     
         axios.get(`${url}/get_selectionso`, {
           params:
           {o: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({suborderlist: res.data.rows, suborder: this.props.suborder})
+            this.setState({suborderlist: res.data.rows, suborder: this.props.suborder, actualsuborder: this.props.suborder})
         })
     
         axios.get(`${url}/get_selectiong`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({genuslist: res.data.rows, genus: this.props.genus})
+            this.setState({genuslist: res.data.rows, genus: this.props.genus, actualgenus: this.props.genus})
         })
     
         axios.get(`${url}/get_selectionsg`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({subgenuslist: res.data.rows, subgenus: this.props.subgenus})
+            this.setState({subgenuslist: res.data.rows, subgenus: this.props.subgenus, actualsubgenus: this.props.subgenus})
         })
     
         axios.get(`${url}/get_selectionf`, {
           params:
           {o: 'NULL', so: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({familylist: res.data.rows, family: this.props.family})
+            this.setState({familylist: res.data.rows, family: this.props.family, actualfamily: this.props.family})
         })
     
         axios.get(`${url}/get_selectionsf`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({subfamilylist: res.data.rows, subfamily: this.props.subfamily})
+            this.setState({subfamilylist: res.data.rows, subfamily: this.props.subfamily, actualsubfamily: this.props.subfamily})
         })
     
         axios.get(`${url}/get_selections`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({specieslist: res.data.rows, species: this.props.species})
+            this.setState({specieslist: res.data.rows, species: this.props.species, actualspecies: this.props.species})
         })
     
         axios.get(`${url}/get_selectionss`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', t: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL'}})
             .then((res) => {
-            this.setState({subspecieslist: res.data.rows, subspecies: this.props.subspecies})
+            this.setState({subspecieslist: res.data.rows, subspecies: this.props.subspecies, actualsubspecies: this.props.subspecies})
         })
     
         axios.get(`${url}/get_selectiont`, {
           params:
           {o: 'NULL', so: 'NULL', f: 'NULL', sf: 'NULL', g: 'NULL', sg: 'NULL', s: 'NULL', ss: 'NULL'}})
             .then((res) => {
-            this.setState({tribulist: res.data.rows, tribu: this.props.tribu})
+            this.setState({tribulist: res.data.rows, tribu: this.props.tribu, actualtribu: this.props.tribu})
         })
 
       }
@@ -113,7 +114,25 @@ class BoxDetailsAdmin extends React.Component {
     }
 
     modify = () => {
-        
+        axios.post(`${url}/modifypopu`, {type: "Box", id: this.props.id, order: this.props.order, suborder: this.props.suborder, 
+                                        family: this.props.family, subfamily: this.props.subfamily, tribu: this.props.tribu, 
+                                        genus: this.props.genus, subgenus: this.props.subgenus, species: this.props.species, 
+                                        subspecies: this.props.subspecies, neworder: this.state.order, newsuborder: this.state.suborder, 
+                                        newfamily: this.state.family, newsubfamily: this.state.subfamily, newtribu: this.state.tribu, 
+                                        newgenus: this.state.genus, newsubgenus: this.state.subgenus, 
+                                        newspecies: this.state.species, newsubspecies: this.state.subspecies}, 
+                                        this.props.changefetchedpop(this.state))
+            .then((res) => {
+                this.setState({changestate: 'Population has been changed with success'})
+            })
+            .catch((err) => {
+                if (!err.response) {
+                  this.setState({changestate: 'Erreur Serveur - Gateway'})
+                }
+                else {
+                  this.setState({changestate: err.response.data.error})
+                }
+            })
     }
 
     render() {
@@ -121,6 +140,7 @@ class BoxDetailsAdmin extends React.Component {
             <div className="column">
                 <div>
                 <h2 className="title">Modify Popu n°{this.props.index+1}</h2>
+                {this.state.changestate}
                 <h4 className="title">Order</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select
@@ -129,9 +149,6 @@ class BoxDetailsAdmin extends React.Component {
                         onChange={this.handleInputChange}
                         name="order"
                         >
-                        <MenuItem value={null}>
-                            <em>None</em>
-                        </MenuItem>
                         {this.state.orderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                         </Select>
                     </FormControl>
@@ -149,38 +166,6 @@ class BoxDetailsAdmin extends React.Component {
                             <em>None</em>
                         </MenuItem>
                         {this.state.suborderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div>
-                <h4 className="title">Genus</h4>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                        <Select
-                        id="genus-select"
-                        value={this.state.genus}
-                        onChange={this.handleInputChange}
-                        name="genus"
-                        >
-                        <MenuItem value={null}>
-                            <em>None</em>
-                        </MenuItem>
-                        {this.state.genuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div>
-                <h4  className="title">Subgenus</h4>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                        <Select
-                        id="subgenus-select"
-                        value={this.state.subgenus}
-                        onChange={this.handleInputChange}
-                        name="subgenus"
-                        >
-                        <MenuItem value={null}>
-                            <em>None</em>
-                        </MenuItem>
-                        {this.state.subgenuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                         </Select>
                     </FormControl>
                 </div>
@@ -217,6 +202,54 @@ class BoxDetailsAdmin extends React.Component {
                     </FormControl>
                 </div>
                 <div>
+                <h4 className="title">Tribu</h4>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                        <Select
+                        id="tribu-select"
+                        value={this.state.tribu}
+                        onChange={this.handleInputChange}
+                        name="tribu"
+                        >
+                        <MenuItem value={null}>
+                            <em>None</em>
+                        </MenuItem>
+                        {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                </div>
+                <div>
+                <h4 className="title">Genus</h4>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                        <Select
+                        id="genus-select"
+                        value={this.state.genus}
+                        onChange={this.handleInputChange}
+                        name="genus"
+                        >
+                        <MenuItem value={null}>
+                            <em>None</em>
+                        </MenuItem>
+                        {this.state.genuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                </div>
+                <div>
+                <h4  className="title">Subgenus</h4>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                        <Select
+                        id="subgenus-select"
+                        value={this.state.subgenus}
+                        onChange={this.handleInputChange}
+                        name="subgenus"
+                        >
+                        <MenuItem value={null}>
+                            <em>None</em>
+                        </MenuItem>
+                        {this.state.subgenuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                </div>
+                <div>
                 <h4 className="title">Species</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select
@@ -249,23 +282,7 @@ class BoxDetailsAdmin extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                <h4 className="title">Tribu</h4>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                        <Select
-                        id="tribu-select"
-                        value={this.state.tribu}
-                        onChange={this.handleInputChange}
-                        name="tribu"
-                        >
-                        <MenuItem value={null}>
-                            <em>None</em>
-                        </MenuItem>
-                        {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div>
-                    <button type='submit' onClick={this.modify}>Modifier une population</button>
+                    <button type='submit' onClick={this.modify}>Modify population</button>
                 </div>
             </div>
         )
