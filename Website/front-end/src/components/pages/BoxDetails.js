@@ -26,7 +26,7 @@ class BoxDetails extends React.Component {
       newloaner: null,
       modifycollectionstate: '',
       modifyloanerstate: '',
-      imageUrl: null
+      imageURL: null
     }
   }
 
@@ -35,6 +35,10 @@ class BoxDetails extends React.Component {
     this.getCollections()
     this.getLoaners()
     this.getPicture()
+  }
+
+  refreshPage() {
+    window.location.reload(false)
   }
 
   getStateVar = () => {
@@ -192,7 +196,7 @@ class BoxDetails extends React.Component {
                                                             loaner= {data.loaner}></BoxAttributes>)}
             </div>
             {this.props.isAuthenticated() ?
-                <BoxDetailsAddPop/>
+                <BoxDetailsAddPop refresh={this.refreshPage} id={this.props.searchParams.get("id")}/>
               :
                 <></>
             }

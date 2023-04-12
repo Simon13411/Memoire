@@ -1635,6 +1635,149 @@ function modifypopu(type, id, order, suborder, family, subfamily, tribu, genus, 
     })
 }
 
+function addpopubox(id, order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies) {
+    if (order === null) {
+        order = 'NULL'
+    }
+    if (suborder === null) {
+        suborder = 'NULL'
+    }
+    if (family === null) {
+        family = 'NULL'
+    }
+    if (subfamily === null) {
+        subfamily = 'NULL'
+    }
+    if (tribu === null) {
+        tribu = 'NULL'
+    }
+    if (genus === null) {
+        genus = 'NULL'
+    }
+    if (subgenus === null) {
+        subgenus = 'NULL'
+    }
+    if (species === null) {
+        species = 'NULL'
+    }
+    if (subspecies === null) {
+        subspecies = 'NULL'
+    }
+
+    return new Promise(function (resolve, reject) {
+        var getidpopu = `SELECT "id_population"
+                            FROM "Population" P
+                            WHERE (P."order_id"=(SELECT "id_order" FROM "Order" WHERE "name"=$1) AND
+                                    (CASE WHEN $2 = 'NULL' THEN
+                                        P."suborder_id" is NULL
+                                    ELSE
+                                        P."suborder_id" = (SELECT "id_suborder" FROM "subOrder" WHERE "name"=$2)
+                                    END)
+                                AND
+                                    (CASE WHEN $3 = 'NULL' THEN
+                                        P."family_id" is NULL
+                                    ELSE
+                                        P."family_id" = (SELECT "id_family" FROM "Family" WHERE "name"=$3)
+                                END) AND
+                                (CASE WHEN $4 = 'NULL' THEN
+                                        P."subFamily_id" is NULL
+                                    ELSE
+                                        P."subFamily_id" = (SELECT "id_subfamily" FROM "subFamily" WHERE "name"=$4)
+                                END) AND
+                                (CASE WHEN $5 = 'NULL' THEN
+                                        P."tribu_id" is NULL
+                                    ELSE
+                                        P."tribu_id" = (SELECT "id_tribu" FROM "Tribu" WHERE "name"=$5)
+                                END) AND
+                                (CASE WHEN $6 = 'NULL' THEN
+                                        P."genus_id" is NULL
+                                    ELSE
+                                        P."genus_id" = (SELECT "id_genus" FROM "Genus" WHERE "name"=$6)
+                                END) AND
+                                (CASE WHEN $7 = 'NULL' THEN
+                                        P."subGenus_id" is NULL
+                                    ELSE
+                                        P."subGenus_id" = (SELECT "id_subgenus" FROM "subGenus" WHERE "name"=$7)
+                                END) AND
+                                (CASE WHEN $8 = 'NULL' THEN
+                                        P."species_id" is NULL
+                                    ELSE
+                                        P."species_id" = (SELECT "id_species" FROM "Species" WHERE "name"=$8)
+                                END) AND
+                                (CASE WHEN $9 = 'NULL' THEN
+                                        P."subSpecies_id" is NULL
+                                    ELSE
+                                        P."subSpecies_id" = (SELECT "id_subspecies" FROM "subSpecies" WHERE "name"=$9)
+                                END));`
+
+        var idpopu = 0
+
+        new Promise(function (resolve2, reject2) {client.query(getidpopu, [order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies], (err, res) => {
+                if (err) {
+                    reject2(new Error("Erreur DB"))
+                }
+                else {
+                    if (res.rowCount === 0) {
+                        var insertnewpopu = `INSERT INTO "Population" ("id_population","order_id", "suborder_id", "family_id", "subFamily_id", "tribu_id", "genus_id", "subGenus_id", "species_id", "subSpecies_id")
+                                        VALUES
+                                        ((SELECT MAX("id_population")+1 FROM "Population"),
+                                        (SELECT "id_order" FROM "Order" WHERE "name"=$1),
+                                        (SELECT "id_suborder" FROM "subOrder" WHERE "name"=$2) ,
+                                        (SELECT "id_family" FROM "Family" WHERE "name"=$3 ),
+                                        (SELECT "id_subfamily" FROM "subFamily" WHERE "name"=$4 ),
+                                        (SELECT "id_tribu" FROM "Tribu" WHERE "name"=$5 ),
+                                        (SELECT "id_genus" FROM "Genus" WHERE "name"=$6 ),
+                                        (SELECT "id_subgenus" FROM "subGenus" WHERE "name"=$7 ),
+                                        (SELECT "id_species" FROM "Species" WHERE "name"=$8 ),
+                                        (SELECT "id_subspecies" FROM "subSpecies" WHERE "name"=$9 ));`
+                        
+                        client.query(insertnewpopu, [order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies], (err2, res2) => {
+                            if (err2) {
+                                reject2(new Error("Erreur DB"))
+                            }
+                            else {
+                                client.query(getidpopu, [order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies], (err3, res3) => {
+                                    if (err3) {
+                                        reject2(new Error("Erreur DB"))
+                                    }
+                                    else {
+                                        if (res3.rowCount > 0) {
+                                            idpopu = res3.rows[0].id_population
+                                            resolve2()
+                                        }
+                                        else {
+                                            reject2(new Error("Insertion failed"))
+                                        }
+                                    }
+                                })
+                            }
+                        })
+                    }
+                    else {
+                        idpopu = res.rows[0].id_population
+                        resolve2()
+                    }
+                }
+            })
+        })
+        .then(() => {
+            var insertpopubox = `INSERT INTO "PopuBox" ("population_id", "box_id") VALUES ($1, $2)`
+            client.query(insertpopubox, [idpopu, id], (err, res) => {
+                if (err) {
+                    return reject(new Error("Erreur DB"))
+                }
+                else {
+                    return resolve()
+                }
+            })
+        })
+        .catch((err) =>{
+            return reject(err)
+        })
+    })
+}
+
+
 module.exports = {
     get_boxdetails,
     get_boxresult,
@@ -1666,5 +1809,6 @@ module.exports = {
     csvtosqladmin,
     boxSqlToCsv,
     indivSqlToCsv,
-    modifypopu
+    modifypopu,
+    addpopubox
 }

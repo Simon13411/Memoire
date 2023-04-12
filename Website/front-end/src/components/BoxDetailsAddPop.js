@@ -30,6 +30,7 @@ class BoxDetailsAddPop extends React.Component {
             specieslist: [],
             subspecieslist: [],
             tribulist: [],
+            addstate: ''
         }
     }
 
@@ -112,8 +113,23 @@ class BoxDetailsAddPop extends React.Component {
         })
     }
 
-    modify = () => {
-        
+    addpopu = () => {
+        this.setState({addstate: 'Add in progress...'})
+        axios.post(`${url}/addpopubox`, {id: this.props.id, order: this.state.order, suborder: this.state.suborder, 
+                                        family: this.state.family, subfamily: this.state.subfamily, tribu: this.state.tribu, 
+                                        genus: this.state.genus, subgenus: this.state.subgenus, species: this.state.species, 
+                                        subspecies: this.state.subspecies})
+            .then((res) => {
+                this.setState({changestate: 'Population has been added'}, this.props.refresh)
+            })
+            .catch((err) => {
+                if (!err.response) {
+                  this.setState({changestate: 'Erreur Serveur - Gateway'})
+                }
+                else {
+                  this.setState({changestate: err.response.data.error})
+                }
+            })
     }
 
     render() {
@@ -121,6 +137,7 @@ class BoxDetailsAddPop extends React.Component {
             <div className="column">
                 <div>
                 <h2 className="title">Add Population</h2>
+                {this.state.addstate}
                 <h4 className="title">Order</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select
@@ -265,7 +282,7 @@ class BoxDetailsAddPop extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                    <button type='submit' onClick={this.modify}>Ajouter une population</button>
+                    <button type='submit' onClick={this.addpopu}>Ajouter une population</button>
                 </div>
             </div>
         )

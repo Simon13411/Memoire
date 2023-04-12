@@ -522,6 +522,17 @@ app.post('/modifypopu', (req, res) => {
     })
 })
 
+app.post('/addpopubox', (req, res) => {
+    const { id, order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies} = req.body
+    return db.addpopubox(id, order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies)
+    .then((results) => {
+        res.status(200).json({success: "ok"})
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
+
 function errorhandler(err, res) {
     console.log(err)
     if (err.message) {

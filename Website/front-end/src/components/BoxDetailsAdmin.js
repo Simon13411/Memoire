@@ -114,6 +114,7 @@ class BoxDetailsAdmin extends React.Component {
     }
 
     modify = () => {
+        this.setState({changestate: 'Change in progress...'})
         axios.post(`${url}/modifypopu`, {type: "Box", id: this.props.id, order: this.props.order, suborder: this.props.suborder, 
                                         family: this.props.family, subfamily: this.props.subfamily, tribu: this.props.tribu, 
                                         genus: this.props.genus, subgenus: this.props.subgenus, species: this.props.species, 
