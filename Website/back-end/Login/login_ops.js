@@ -6,7 +6,7 @@ const { Client } = require('pg');
 const { resolve } = require('path');
 const client = new Client({
     user: 'postgres',
-    host: 'db-loginc',
+    host: 'db-login',
     database: 'login',
     password: 'password',
     port: 5432,
@@ -133,15 +133,25 @@ function verifytoken(token) {
           if (error) {
               return reject(new Error("Erreur DB"));
           } else {
+              const DeleteQuery = `DELETE FROM "Tokens" WHERE "expirationTime" < NOW()`;
               if (results.rows.length === 1) {
-                  resolve(results.rows[0].username);
+                client.query(DeleteQuery, (error2, results2) => {
+                  if (error2) {
+                      return reject(new Error("Erreur DB"));
+                  } else {
+                      if (results2.rows.length > 0) {
+                          return reject(new Error('Invalid token not in DB + expired tokens deleted'));
+                      } else {
+                          return resolve(results.rows[0].username);
+                      }
+                  }
+                })
               } else {
-                  const DeleteQuery = `DELETE FROM "Tokens" WHERE "expirationTime" < NOW()`;
-                  client.query(DeleteQuery, (error, results) => {
-                      if (error) {
+                  client.query(DeleteQuery, (error2, results2) => {
+                      if (error2) {
                           return reject(new Error("Erreur DB"));
                       } else {
-                          if (results.rows.length > 0) {
+                          if (results2.rows.length > 0) {
                               return reject(new Error('Invalid token not in DB + expired tokens deleted'));
                           } else {
                               return reject(new Error('Invalid token not in DB'));
