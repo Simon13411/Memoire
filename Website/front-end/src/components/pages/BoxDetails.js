@@ -71,8 +71,9 @@ class BoxDetails extends React.Component {
     const id = this.props.searchParams.get("id")
     axios.get(`${url}/getpicture`, {params : {type: type, id: id}}, { responseType: 'blob' })
     .then(response => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        this.setState({imageURL: url})
+        const imageurl = window.URL.createObjectURL(new Blob([response.data]));
+        console.log(imageurl)
+	this.setState({imageURL: `${url}/getpicture?type=Boxes&id=${id}`})
       })
   }
 
@@ -206,7 +207,9 @@ class BoxDetails extends React.Component {
                 <h2>Pictures</h2>
                 {this.state.imageURL ?
                   (
-                    <img src={this.state.imageURL} alt="Picture" />
+		    <a href={this.state.imageURL}>
+                    <img src={this.state.imageURL} width={250} height={250}/>
+	            </a>
                   ):(
                     <></>
                   )
