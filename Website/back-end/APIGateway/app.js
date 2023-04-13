@@ -538,11 +538,16 @@ app.post(`/modifyright`, (req, res) => {
 
 //Pictures (Port 4004)
 app.get(`/getpicture`, (req, res) => {
+    console.log(IP_PICTU)
+    console.log(req.query.type)
+    console.log(req.query.id)
     axios.get(`http://${IP_PICTU}/getpicture?type=${req.query.type}&id=${req.query.id}`, { responseType: 'stream' })
     .then((response) => {
+        console.log("ok")
         response.data.pipe(res)
     })
     .catch((err) => {
+        console.log(err)
         errorhandler(err, res)
     });
 })
