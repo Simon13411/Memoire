@@ -28,6 +28,8 @@ class FileUploaderAdmin extends Component {
     const formData = new FormData();
     formData.append('file', this.state.selectedFile);
 
+    const token = this.props.getToken()
+
     if (this.props.type === 'Box'){
       this.props.Changeboxuploadstate('Veuillez Patienter...')
     }
@@ -35,7 +37,7 @@ class FileUploaderAdmin extends Component {
       this.props.Changeindivuploadstate('Veuillez Patienter...')
     }
 
-    axios.put(`${url}/csvtosqladmin/${this.props.type}`, formData, {
+    axios.put(`${url}/csvtosqladmin/${this.props.type}`, {token: token}, formData, {
       headers: {
         'Content-Type': 'multipart/form-data' //Contient des données binaires
       }

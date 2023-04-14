@@ -365,29 +365,38 @@ app.put('/csvtosqladmin/:type', upload.single('file'), (req, res) => {
     const formData = new FormData();
     formData.append('file', fs.createReadStream(req.file.path));
 
-    axios.put(`http://${IP_DBOPS}/csvtosqladmin/${req.params.type}`, formData, {
-            headers: {
-            'Content-Type': 'multipart/form-data' //Contient des données binaires
-            }
-        })
-        .then((resu) => {
-            res.status(200).json(resu.data);
-            fs.unlink(req.file.path, (err) => {
-                if (err) {
-                    console.error(err);
-                }
-                    console.log('File removed');
+    const { token } = req.body
+
+    axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
+        .then(() => {
+            axios.put(`http://${IP_DBOPS}/csvtosqladmin/${req.params.type}`, formData, {
+                    headers: {
+                    'Content-Type': 'multipart/form-data' //Contient des données binaires
+                    }
+                })
+                .then((resu) => {
+                    res.status(200).json(resu.data);
+                    fs.unlink(req.file.path, (err) => {
+                        if (err) {
+                            console.error(err);
+                        }
+                            console.log('File removed');
+                        });
+                })
+                .catch((err) => {
+                    errorhandler(err, res)
+                    fs.unlink(req.file.path, (err) => {
+                        if (err) {
+                            console.error(err);
+                        }
+                            console.log('File removed');
+                        });
                 });
-        })
+            })
         .catch((err) => {
             errorhandler(err, res)
-            fs.unlink(req.file.path, (err) => {
-                if (err) {
-                    console.error(err);
-                }
-                    console.log('File removed');
-                });
-        });
+        })
+    
 })
 
 app.get(`/boxessqltocsv`, (req, res) => {

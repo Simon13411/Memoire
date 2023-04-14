@@ -102,7 +102,11 @@ class AdminPannel extends React.Component {
     }
     
     Changeindivuploadstate = (message) => {
-    this.setState({indivuploadstate: message})
+        this.setState({indivuploadstate: message})
+    }
+
+    getToken = () => {
+        return this.state.authToken
     }
 
     get_selection() {
@@ -699,11 +703,11 @@ class AdminPannel extends React.Component {
         
                 <div className="column">
                     <h3>Modify Boxes data - Overwrite mode</h3>
-                    <div><FileUploaderAdmin type='Box' Changeboxuploadstate={this.Changeboxuploadstate}></FileUploaderAdmin></div>
+                    <div><FileUploaderAdmin type='Box' Changeboxuploadstate={this.Changeboxuploadstate} getToken={this.getToken}></FileUploaderAdmin></div>
                     <div>{this.state.boxuploadstate}</div>
                     <br />
                     <h3>Modify Individuals data - Overwrite mode</h3>
-                    <div><FileUploaderAdmin type='Individual' Changeindivuploadstate={this.Changeindivuploadstate}></FileUploaderAdmin></div>
+                    <div><FileUploaderAdmin type='Individual' Changeindivuploadstate={this.Changeindivuploadstate} getToken={this.getToken}></FileUploaderAdmin></div>
                     <div>{this.state.indivuploadstate}</div>
                 </div>
         
