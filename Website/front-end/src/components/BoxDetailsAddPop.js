@@ -114,22 +114,29 @@ class BoxDetailsAddPop extends React.Component {
     }
 
     addpopu = () => {
-        this.setState({addstate: 'Add in progress...'})
-        axios.post(`${url}/addpopubox`, {id: this.props.id, order: this.state.order, suborder: this.state.suborder, 
-                                        family: this.state.family, subfamily: this.state.subfamily, tribu: this.state.tribu, 
-                                        genus: this.state.genus, subgenus: this.state.subgenus, species: this.state.species, 
-                                        subspecies: this.state.subspecies})
-            .then((res) => {
-                this.setState({changestate: 'Population has been added'}, this.props.refresh)
-            })
-            .catch((err) => {
-                if (!err.response) {
-                  this.setState({changestate: 'Erreur Serveur - Gateway'})
-                }
-                else {
-                  this.setState({changestate: err.response.data.error})
-                }
-            })
+        const verif = this.props.maxPopDegree([this.state.order, this.state.suborder, this.state.family, this.state.subfamily, 
+            this.state.tribu, this.state.genus, this.state.subgenus,this.state.species, this.state.subspecies])
+        if (verif !== "ok") {
+            this.setState({addstate: verif})
+        }
+        else {
+            this.setState({addstate: 'Add in progress...'})
+            axios.post(`${url}/addpopubox`, {id: this.props.id, order: this.state.order, suborder: this.state.suborder, 
+                                            family: this.state.family, subfamily: this.state.subfamily, tribu: this.state.tribu, 
+                                            genus: this.state.genus, subgenus: this.state.subgenus, species: this.state.species, 
+                                            subspecies: this.state.subspecies})
+                .then((res) => {
+                    this.setState({addstate: 'Population has been added'}, this.props.refresh)
+                })
+                .catch((err) => {
+                    if (!err.response) {
+                    this.setState({addstate: 'Erreur Serveur - Gateway'})
+                    }
+                    else {
+                    this.setState({addstate: err.response.data.error})
+                    }
+                })
+        }
     }
 
     render() {
@@ -170,38 +177,6 @@ class BoxDetailsAddPop extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                <h4 className="title">Genus</h4>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                        <Select
-                        id="genus-select"
-                        value={this.state.genus}
-                        onChange={this.handleInputChange}
-                        name="genus"
-                        >
-                        <MenuItem value={null}>
-                            <em>None</em>
-                        </MenuItem>
-                        {this.state.genuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div>
-                <h4  className="title">Subgenus</h4>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                        <Select
-                        id="subgenus-select"
-                        value={this.state.subgenus}
-                        onChange={this.handleInputChange}
-                        name="subgenus"
-                        >
-                        <MenuItem value={null}>
-                            <em>None</em>
-                        </MenuItem>
-                        {this.state.subgenuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div>
                 <h4 className="title">Family</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select
@@ -234,6 +209,54 @@ class BoxDetailsAddPop extends React.Component {
                     </FormControl>
                 </div>
                 <div>
+                <h4 className="title">Tribu</h4>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                        <Select
+                        id="tribu-select"
+                        value={this.state.tribu}
+                        onChange={this.handleInputChange}
+                        name="tribu"
+                        >
+                        <MenuItem value={null}>
+                            <em>None</em>
+                        </MenuItem>
+                        {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                </div>
+                <div>
+                <h4 className="title">Genus</h4>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                        <Select
+                        id="genus-select"
+                        value={this.state.genus}
+                        onChange={this.handleInputChange}
+                        name="genus"
+                        >
+                        <MenuItem value={null}>
+                            <em>None</em>
+                        </MenuItem>
+                        {this.state.genuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                </div>
+                <div>
+                <h4  className="title">Subgenus</h4>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                        <Select
+                        id="subgenus-select"
+                        value={this.state.subgenus}
+                        onChange={this.handleInputChange}
+                        name="subgenus"
+                        >
+                        <MenuItem value={null}>
+                            <em>None</em>
+                        </MenuItem>
+                        {this.state.subgenuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                </div>
+                <div>
                 <h4 className="title">Species</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select
@@ -262,22 +285,6 @@ class BoxDetailsAddPop extends React.Component {
                             <em>None</em>
                         </MenuItem>
                         {this.state.subspecieslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div>
-                <h4 className="title">Tribu</h4>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                        <Select
-                        id="tribu-select"
-                        value={this.state.tribu}
-                        onChange={this.handleInputChange}
-                        name="tribu"
-                        >
-                        <MenuItem value={null}>
-                            <em>None</em>
-                        </MenuItem>
-                        {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                         </Select>
                     </FormControl>
                 </div>

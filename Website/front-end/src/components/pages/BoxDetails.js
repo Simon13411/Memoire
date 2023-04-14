@@ -37,6 +37,29 @@ class BoxDetails extends React.Component {
     this.getPicture()
   }
 
+  maxPopDegree = (newattributelist) => {
+    const attributes = ['order','suborder','family','subfamily','tribu','genus','subgenus','species','subspecies']
+    var maxdegree = null
+    for (let i=0; i< attributes.length; i++) {
+      for (let j=0; j<this.state.attr.length; j++){
+        console.log(this.state.attr[j][attributes[i]])
+        console.log(newattributelist[i])
+        if (this.state.attr[j][attributes[i]] !== newattributelist[i]) {
+          if (maxdegree === null) {
+            maxdegree = attributes[i]
+            break;
+          }
+          else {
+            console.log("ici2")
+            return "You can't have such a population in this box (Degree of precision)"
+          }
+        }
+      }
+    }
+    console.log("ici")
+    return "ok"
+  }
+
   refreshPage() {
     window.location.reload(false)
   }
@@ -194,10 +217,10 @@ class BoxDetails extends React.Component {
                                                             species= {data.species}
                                                             subspecies= {data.subspecies}
                                                             tribu= {data.tribu}
-                                                            loaner= {data.loaner}></BoxAttributes>)}
+                                                            loaner= {data.loaner} maxPopDegree={this.maxPopDegree}></BoxAttributes>)}
             </div>
             {this.props.isAuthenticated() ?
-                <BoxDetailsAddPop refresh={this.refreshPage} id={this.props.searchParams.get("id")}/>
+                <BoxDetailsAddPop refresh={this.refreshPage} id={this.props.searchParams.get("id")} maxPopDegree={this.maxPopDegree}/>
               :
                 <></>
             }
@@ -207,9 +230,9 @@ class BoxDetails extends React.Component {
                 <h2>Pictures</h2>
                 {this.state.imageURL ?
                   (
-		    <a href={this.state.imageURL}>
+		              <a href={this.state.imageURL}>
                     <img src={this.state.imageURL} width={250} height={250}/>
-	            </a>
+	                </a>
                   ):(
                     <></>
                   )

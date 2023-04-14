@@ -114,26 +114,33 @@ class BoxDetailsAdmin extends React.Component {
     }
 
     modify = () => {
-        this.setState({changestate: 'Change in progress...'})
-        axios.post(`${url}/modifypopu`, {type: "Box", id: this.props.id, order: this.props.order, suborder: this.props.suborder, 
-                                        family: this.props.family, subfamily: this.props.subfamily, tribu: this.props.tribu, 
-                                        genus: this.props.genus, subgenus: this.props.subgenus, species: this.props.species, 
-                                        subspecies: this.props.subspecies, neworder: this.state.order, newsuborder: this.state.suborder, 
-                                        newfamily: this.state.family, newsubfamily: this.state.subfamily, newtribu: this.state.tribu, 
-                                        newgenus: this.state.genus, newsubgenus: this.state.subgenus, 
-                                        newspecies: this.state.species, newsubspecies: this.state.subspecies}, 
-                                        this.props.changefetchedpop(this.state))
-            .then((res) => {
-                this.setState({changestate: 'Population has been changed with success'})
-            })
-            .catch((err) => {
-                if (!err.response) {
-                  this.setState({changestate: 'Erreur Serveur - Gateway'})
-                }
-                else {
-                  this.setState({changestate: err.response.data.error})
-                }
-            })
+        const verif = this.props.maxPopDegree([this.state.order, this.state.suborder, this.state.family, this.state.subfamily, 
+            this.state.tribu, this.state.genus, this.state.subgenus,this.state.species, this.state.subspecies])
+        if (verif !== "ok") {
+            this.setState({changestate: verif})
+        }
+        else {
+            this.setState({changestate: 'Change in progress...'})
+            axios.post(`${url}/modifypopu`, {type: "Box", id: this.props.id, order: this.props.order, suborder: this.props.suborder, 
+                                            family: this.props.family, subfamily: this.props.subfamily, tribu: this.props.tribu, 
+                                            genus: this.props.genus, subgenus: this.props.subgenus, species: this.props.species, 
+                                            subspecies: this.props.subspecies, neworder: this.state.order, newsuborder: this.state.suborder, 
+                                            newfamily: this.state.family, newsubfamily: this.state.subfamily, newtribu: this.state.tribu, 
+                                            newgenus: this.state.genus, newsubgenus: this.state.subgenus, 
+                                            newspecies: this.state.species, newsubspecies: this.state.subspecies}, 
+                                            this.props.changefetchedpop(this.state))
+                .then((res) => {
+                    this.setState({changestate: 'Population has been changed with success'})
+                })
+                .catch((err) => {
+                    if (!err.response) {
+                    this.setState({changestate: 'Erreur Serveur - Gateway'})
+                    }
+                    else {
+                    this.setState({changestate: err.response.data.error})
+                    }
+                })
+        }
     }
 
     render() {
