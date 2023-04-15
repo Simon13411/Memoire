@@ -289,8 +289,7 @@ app.post('/modifyloaner', (req, res) => {
 })
 
 app.post('/changeindivboxid', (req, res) => {
-    const { individ, newboxid } = req.body
-    axios.post(`http://${IP_DBOPS}/changeindivboxid`, { individ: individ, newboxid: newboxid })
+    axios.post(`http://${IP_DBOPS}/changeindivboxid`, req.body)
         .then((resu) => {
             res.status(200).json(resu.data);
         })
@@ -300,8 +299,7 @@ app.post('/changeindivboxid', (req, res) => {
 })
 
 app.post('/changeindivloaner', (req, res) => {
-    const { individ, newloaner } = req.body
-    axios.post(`http://${IP_DBOPS}/changeindivloaner`, { individ: individ, newloaner: newloaner })
+    axios.post(`http://${IP_DBOPS}/changeindivloaner`, req.body)
         .then((resu) => {
             res.status(200).json(resu.data);
         })
@@ -311,8 +309,7 @@ app.post('/changeindivloaner', (req, res) => {
 })
 
 app.post('/changeboxcollection', (req, res) => {
-    const { boxid, collection } = req.body
-    axios.post(`http://${IP_DBOPS}/changeboxcollection`, { boxid: boxid, collection: collection })
+    axios.post(`http://${IP_DBOPS}/changeboxcollection`, req.body)
         .then((resu) => {
             res.status(200).json(resu.data);
         })
@@ -439,6 +436,16 @@ app.post('/addpopubox', (req, res) => {
     })
 })
 
+app.post(`/deletepopubox`, (req, res) => {
+    axios.post(`http://${IP_DBOPS}/deletepopubox`, req.body)
+    .then((results) => {
+        res.status(200).json({success: "ok"})
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
+
 
 
 //FileDownloader (port 4002)
@@ -464,8 +471,7 @@ app.get('/individualstemplate', (req, res) => {
 
 //LogIn and SignIn (port 4003)
 app.post('/login', (req, res) => {
-    const { username, password } = req.body
-    axios.post(`http://${IP_LOGIN}/login`, { username: username, password: password })
+    axios.post(`http://${IP_LOGIN}/login`, req.body)
         .then((resu) => {
             res.status(200).json({ success: resu.data.success, token: resu.data.token, admin: resu.data.role});
         })
@@ -475,8 +481,7 @@ app.post('/login', (req, res) => {
 })
 
 app.post('/signup', (req, res) => {
-    const { username, password, role, token } = req.body;
-    axios.post(`http://${IP_LOGIN}/signup`, { username: username, password: password, role: role, token: token })
+    axios.post(`http://${IP_LOGIN}/signup`, req.body)
         .then((resu) => {
             res.status(200).json({ success: true });
         })
@@ -491,8 +496,7 @@ app.post('/signup', (req, res) => {
 })
 
 app.post('/adminright', (req, res) => {
-    const { username } = req.body;
-    axios.post(`http://${IP_LOGIN}/adminright`, { username: username})
+    axios.post(`http://${IP_LOGIN}/adminright`, req.body)
         .then((resu) => {
             res.status(200).json({ success: true });
         })

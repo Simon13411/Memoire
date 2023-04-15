@@ -217,7 +217,7 @@ class BoxDetails extends React.Component {
                                                             species= {data.species}
                                                             subspecies= {data.subspecies}
                                                             tribu= {data.tribu}
-                                                            loaner= {data.loaner} maxPopDegree={this.maxPopDegree}></BoxAttributes>)}
+                                                            loaner= {data.loaner} maxPopDegree={this.maxPopDegree} refresh={this.refreshPage}></BoxAttributes>)}
             </div>
             {this.props.isAuthenticated() ?
                 <BoxDetailsAddPop refresh={this.refreshPage} id={this.props.searchParams.get("id")} maxPopDegree={this.maxPopDegree}/>

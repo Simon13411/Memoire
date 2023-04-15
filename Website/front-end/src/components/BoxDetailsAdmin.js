@@ -30,7 +30,8 @@ class BoxDetailsAdmin extends React.Component {
             specieslist: [],
             subspecieslist: [],
             tribulist: [],
-            changestate: ''
+            changestate: '',
+            deletestate: ''
         }
     }
 
@@ -143,10 +144,34 @@ class BoxDetailsAdmin extends React.Component {
         }
     }
 
+    delete = () => {
+        this.setState({deletestate: 'Delete in progress...'})
+        axios.post(`${url}/deletepopubox`, {id: this.props.id, order: this.props.order, suborder: this.props.suborder, 
+                                        family: this.props.family, subfamily: this.props.subfamily, tribu: this.props.tribu, 
+                                        genus: this.props.genus, subgenus: this.props.subgenus, species: this.props.species, 
+                                        subspecies: this.props.subspecies})
+            .then((res) => {
+                this.setState({deletestate: 'Population has been deleted with success'}, this.props.refresh)
+            })
+            .catch((err) => {
+                if (!err.response) {
+                this.setState({deletestate: 'Erreur Serveur - Gateway'})
+                }
+                else {
+                this.setState({deletestate: err.response.data.error})
+                }
+            })
+    }
+
     render() {
         return (
             <div className="column">
                 <div>
+                <h2 className="title">Delete Popu n°{this.props.index+1}</h2>
+                {this.state.deletestate}
+                <div>
+                    <button type='submit' onClick={this.delete}>Delete population</button>
+                </div>
                 <h2 className="title">Modify Popu n°{this.props.index+1}</h2>
                 {this.state.changestate}
                 <h4 className="title">Order</h4>
