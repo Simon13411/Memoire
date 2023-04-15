@@ -300,24 +300,9 @@ def insertBox(data, cursor, conn, admin) :
                                                 #qu'on a 
                                                 populationList.append(population(orderValue,  subOrderValue, familyValue, subFamilyValue, tribuValue, genusValue,subGenusValue,speciesValue,subSpeciesValue,cursor))
              
-            for pop in populationList:
-                #print(pop)
-                duplicate = """SELECT *
-                             FROM "PopuBox"
-                             WHERE "box_id" = {} and "population_id" = {} """.format(toinsertID[i], pop)
-                cursor.execute(duplicate)
-                if(cursor.fetchall()==[]):
-                    insertPopuBox = """INSERT INTO "PopuBox"
-                                     ("population_id", "box_id")
-                                     VALUES
-                                     ({},{}) """.format(pop, toinsertID[i])
-                    cursor.execute(insertPopuBox)
-                    
-            
-            
             collection = """ SELECT "id_collection" 
-                            FROM "Collection"
-                            WHERE "name" = '{}' """.format(toinsertCollection[i])
+                FROM "Collection"
+                WHERE "name" = '{}' """.format(toinsertCollection[i])
             cursor.execute(collection)
             collectionList = cursor.fetchall()
             #print("colection", collectionList[0][0])
@@ -337,6 +322,20 @@ def insertBox(data, cursor, conn, admin) :
                                 ({}, {},'{}','{}',{},{})""".format(toinsertID[i], collectionList[0][0], location, museum, toinsertParaType[i], toinsertType[i])
             #print(insertquery)
             cursor.execute(insertquery)
+
+            for pop in populationList:
+                #print(pop)
+                duplicate = """SELECT *
+                             FROM "PopuBox"
+                             WHERE "box_id" = {} and "population_id" = {} """.format(toinsertID[i], pop)
+                cursor.execute(duplicate)
+                if(cursor.fetchall()==[]):
+                    insertPopuBox = """INSERT INTO "PopuBox"
+                                     ("population_id", "box_id")
+                                     VALUES
+                                     ({},{}) """.format(pop, toinsertID[i])
+                    cursor.execute(insertPopuBox)
+                    
             Count+=1
         elif(admin):
             

@@ -6,7 +6,7 @@ UNIQUE ("id_order"),
 UNIQUE ("name")
 );
 
-﻿CREATE TABLE "subOrder" (
+CREATE TABLE "subOrder" (
 "id_suborder" INT NOT NULL,
 "name" VARCHAR(500) NOT NULL,
 PRIMARY KEY ("id_suborder"),
@@ -184,23 +184,19 @@ PRIMARY KEY ("id_loaner")
 CREATE TABLE "loanBox" (
 "loaner_id" INT NOT NULL,
 "box_id" INT NOT NULL,
-"begin_date" DATE NOT NULL,
-"end_date" DATE NOT NULL,
 UNIQUE("loaner_id"),
-PRIMARY KEY("loaner_id","box_id", "begin_date", "end_date"),
+PRIMARY KEY("loaner_id","box_id"),
 FOREIGN KEY ("loaner_id") REFERENCES "Loaner"("id_loaner"),
 FOREIGN KEY ("box_id") REFERENCES "Box"("id_box") ON DELETE CASCADE,
-CONSTRAINT "UC_loanBox" UNIQUE ("loaner_id","box_id", "begin_date", "end_date")
+CONSTRAINT "UC_loanBox" UNIQUE ("loaner_id","box_id")
 );
 
 CREATE TABLE "loanIndividu" (
 "loaner_id" INT NOT NULL,
 "individu_id" INT NOT NULL,
-"begin_date" DATE NOT NULL,
-"end_date" DATE NOT NULL,
 UNIQUE("loaner_id"),
-PRIMARY KEY("loaner_id","individu_id", "begin_date", "end_date"),
+PRIMARY KEY("loaner_id","individu_id"),
 FOREIGN KEY ("loaner_id") REFERENCES "Loaner"("id_loaner"),
 FOREIGN KEY ("individu_id") REFERENCES "Individu"("id_individu") ON DELETE CASCADE,
-CONSTRAINT "UC_loanIndividu" UNIQUE ("loaner_id","individu_id", "begin_date", "end_date")
+CONSTRAINT "UC_loanIndividu" UNIQUE ("loaner_id","individu_id")
 );
