@@ -545,6 +545,28 @@ app.post(`/deletepopubox`, (req, res) => {
     })
 })
 
+app.post(`/deletebox`, (req, res) => {
+    const { id } = req.body
+    return db.deletebox(id)
+    .then((results) => {
+        res.status(200).json({success: "ok"})
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
+
+app.post(`/deleteindiv`, (req, res) => {
+    const { id } = req.body
+    return db.deleteindiv(id)
+    .then((results) => {
+        res.status(200).json({success: "ok"})
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
+
 
 //Helper for errors
 function errorhandler(err, res) {

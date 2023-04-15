@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Navigate, useSearchParams } from "react-router-dom"
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom"
 import Navbar from '../Navbar';
 
 import MenuItem from '@mui/material/MenuItem';
@@ -26,7 +26,8 @@ class BoxDetails extends React.Component {
       newloaner: null,
       modifycollectionstate: '',
       modifyloanerstate: '',
-      imageURL: null
+      imageURL: null,
+      deletestate: ''
     }
   }
 
@@ -114,11 +115,11 @@ class BoxDetails extends React.Component {
   }
 
   modifycollection = () => {
-    this.setState({modifycollectionstate: 'Changement en cours...'})
+    this.setState({modifycollectionstate: 'Wait...'})
     const newcollection = this.state.newcollection
     axios.post(`${url}/changeboxcollection`, {boxid: this.props.searchParams.get("id"), collection: newcollection})
     .then((res) => {
-      this.setState({collection: newcollection, modifycollectionstate: `La boite appartient maintenant à la collection ${newcollection}`})
+      this.setState({collection: newcollection, modifycollectionstate: `Box is now from collection ${newcollection}`})
     })
     .catch((err) => {
       if (!err.response) {
@@ -147,6 +148,21 @@ class BoxDetails extends React.Component {
     })
   }
 
+  deletebox = () => {
+    axios.post(`${url}/deletebox`, {id: this.props.searchParams.get("id")})
+    .then((res) => {
+      this.props.navigate('/')
+    })
+    .catch((err) => {
+      if (!err.response) {
+        this.setState({deletestate: 'Erreur Serveur - Gateway'})
+      }
+      else {
+        this.setState({deletestate: err.response.data.error})
+      }
+    })
+  }
+
   render() {
     return (
       <>
@@ -157,6 +173,17 @@ class BoxDetails extends React.Component {
           <>
             <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
             <p>Boite n° {this.props.searchParams.get("id")}  Collection: {this.state.collection}  {this.state.loaner ? (<>Loaner: {this.state.loaner}</>):(<></>)}</p>
+            <>
+            {this.props.isAdmin() ? 
+            (
+              <div>
+                <button type='submit' onClick={this.deletebox}>Delete Box</button>
+                {this.state.deletestate}
+              </div>
+            ):(
+              <></>
+            )}
+            </>
             <div className="container">
     
               {this.props.isAuthenticated() ?
@@ -247,5 +274,6 @@ class BoxDetails extends React.Component {
 
 export function BoxDetailsWSP(props) {
   const [searchParams] = useSearchParams();
-  return <BoxDetails searchParams={searchParams} {...props}></BoxDetails>
+  const navigate = useNavigate()
+  return <BoxDetails navigate={navigate} searchParams={searchParams} {...props}></BoxDetails>
 }

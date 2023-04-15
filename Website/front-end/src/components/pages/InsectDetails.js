@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Navigate, useSearchParams } from "react-router-dom"
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom"
 import Navbar from '../Navbar';
 
 import InsectDetailsAdmin from '../InsectDetailsAdmin';
@@ -42,7 +42,8 @@ class InsectDetails extends React.Component {
         newidbox: 0,
         newloaner: null,
         modifyboxstate: '',
-        modifyloanerstate: ''
+        modifyloanerstate: '',
+        deletestate: ''
       }
     }
 
@@ -129,6 +130,21 @@ class InsectDetails extends React.Component {
       })
     }
 
+    deleteindiv = () => {
+      axios.post(`${url}/deleteindiv`, {id: this.state.individ})
+      .then((res) => {
+        this.props.navigate('/individual-search')
+      })
+      .catch((err) => {
+        if (!err.response) {
+          this.setState({deletestate: 'Erreur Serveur - Gateway'})
+        }
+        else {
+          this.setState({deletestate: err.response.data.error})
+        }
+      })
+    }
+
     render() {
       return (
         <>
@@ -139,6 +155,15 @@ class InsectDetails extends React.Component {
             <>
               <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
               <p>Individual n° {this.props.searchParams.get("id")} {this.state.name ? (<>Name: {this.state.name}</>):(<></>)} {this.state.idbox !== 0 ? (<>From Box n° {this.state.idbox}</>):(<></>)} {this.state.loaner ? (<>Loaner: {this.state.loaner}</>):(<></>)}</p>
+              {this.props.isAdmin() ? 
+              (
+                <div>
+                  <button type='submit' onClick={this.deleteindiv}>Delete Individual</button>
+                  {this.state.deletestate}
+                </div>
+              ):(
+                <></>
+              )}
               <div className="container">
                 {/*Info part*/}
                 {this.props.isAuthenticated() ?
@@ -315,5 +340,6 @@ class InsectDetails extends React.Component {
 
 export function InsectDetailsWSP(props) {
   const [searchParams] = useSearchParams();
-  return <InsectDetails searchParams={searchParams} {...props}></InsectDetails>
+  const navigate = useNavigate()
+  return <InsectDetails navigate={navigate} searchParams={searchParams} {...props}></InsectDetails>
 }

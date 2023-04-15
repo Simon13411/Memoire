@@ -3,6 +3,7 @@ const path = require('path');
 
 const { Client } = require('pg');
 const { spawn } = require('child_process');
+const { errorMonitor } = require('events');
 const client = new Client({
     user: 'postgres',
     host: 'db-entomo',
@@ -1765,66 +1766,79 @@ function deletepopubox(id, order, suborder, family, subfamily, tribu, genus, sub
 
     return new Promise(function (resolve, reject) {
         var idpopu = 0
-
-        client.query(getidpopu, [order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies], (err, res) => {
+        
+        var getNumberOfPopBox = `SELECT * FROM "PopuBox" WHERE "box_id"=$1`
+        client.query(getNumberOfPopBox, [id], (err, res) => {
             if (err) {
                 return reject(new Error("Erreur DB"))
             }
             else {
-                idpopu = res.rows[0].id_population
-                var deletepopubox = `DELETE FROM "PopuBox" WHERE "box_id"=$1 AND "population_id"=$2`
-                client.query(deletepopubox, [id, idpopu], (err, res) => {
-                    if (err) {
-                        return reject(new Error("Erreur DB"))
-                    }
-                    else {
-                        var count = 0
-                        new Promise(function (resolve3, reject3) {
-                            client.query(countpopuindiv, [idpopu], (err3, res3) => {
-                                if (err3) {
-                                    reject3(new Error("Erreur DB"))
+                if (res.rowCount > 1) {
+                    client.query(getidpopu, [order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies], (err, res) => {
+                        if (err) {
+                            return reject(new Error("Erreur DB"))
+                        }
+                        else {
+                            idpopu = res.rows[0].id_population
+                            var deletepopubox = `DELETE FROM "PopuBox" WHERE "box_id"=$1 AND "population_id"=$2`
+                            client.query(deletepopubox, [id, idpopu], (err, res) => {
+                                if (err) {
+                                    return reject(new Error("Erreur DB"))
                                 }
                                 else {
-                                    count += res3.rowCount
-                                    resolve3()
-                                }
-                            })
-                        })
-                        .then(() => {
-                            new Promise(function (resolve3, reject3) {
-                                client.query(countpopubox, [idpopu], (err3, res3) => {
-                                    if (err3) {
-                                        reject3(new Error("Erreur DB"))
-                                    }
-                                    else {
-                                        count += res3.rowCount
-                                        resolve3()
-                                    }
-                                })
-                            })
-                            .then(() => {
-                                if (count === 0) {
-                                    var deleteunusedpop = `DELETE 
-                                                        FROM "Population"
-                                                        WHERE "id_population"=$1`
-                                    client.query(deleteunusedpop, [idpopu], (err3, res3) => {
-                                        if (err3) {
-                                            return reject(new Error(`Error during delete of unused deleted pop`))
-                                        }
-                                        console.log(`Population ${idpopu} deleted`)
-                                        return resolve()
+                                    var count = 0
+                                    new Promise(function (resolve3, reject3) {
+                                        client.query(countpopuindiv, [idpopu], (err3, res3) => {
+                                            if (err3) {
+                                                reject3(new Error("Erreur DB"))
+                                            }
+                                            else {
+                                                count += res3.rowCount
+                                                resolve3()
+                                            }
+                                        })
+                                    })
+                                    .then(() => {
+                                        new Promise(function (resolve3, reject3) {
+                                            client.query(countpopubox, [idpopu], (err3, res3) => {
+                                                if (err3) {
+                                                    reject3(new Error("Erreur DB"))
+                                                }
+                                                else {
+                                                    count += res3.rowCount
+                                                    resolve3()
+                                                }
+                                            })
+                                        })
+                                        .then(() => {
+                                            if (count === 0) {
+                                                var deleteunusedpop = `DELETE 
+                                                                    FROM "Population"
+                                                                    WHERE "id_population"=$1`
+                                                client.query(deleteunusedpop, [idpopu], (err3, res3) => {
+                                                    if (err3) {
+                                                        return reject(new Error(`Error during delete of unused deleted pop`))
+                                                    }
+                                                    console.log(`Population ${idpopu} deleted`)
+                                                    return resolve()
+                                                })
+                                            }
+                                            else {
+                                                return resolve()
+                                            }
+                                        })
+                                    })
+                                    .catch((err) => {
+                                        return reject(err)
                                     })
                                 }
-                                else {
-                                    return resolve()
-                                }
                             })
-                        })
-                        .catch((err) => {
-                            return reject(err)
-                        })
-                    }
-                })
+                        }
+                    })
+                }
+                else {
+                    return reject(new Error("You can't delete the last population of a box"))
+                }
             }
         })
     })
@@ -1833,12 +1847,10 @@ function deletepopubox(id, order, suborder, family, subfamily, tribu, genus, sub
 function deletebox(id) {
     //Pas complet
     return new Promise(function (resolve, reject) {
-        var verifnoindiv = `SELECT Count *
+        var verifnoindiv = `SELECT *
                             FROM "Individu"
                             WHERE "box_id"=$1`
-        var deletepopubox = `DELETE 
-                            FROM "PopuBox"
-                            WHERE "id_box"=$1`
+
         var deletebox = `DELETE 
                         FROM "Box"
                         WHERE "id_box"=$1`
@@ -1849,12 +1861,22 @@ function deletebox(id) {
             }
             else {
                 if (res.rowCount === 0) {
-                    client.query(deletepopubox, [id], (err, res) => {
+                    client.query(deletebox, [id], (err, res) => {
                         if (err) {
                             reject(new Error(`Error during search of indiv in box ${id}`))
                         }
                         else {
-                            //Delete unused popu
+                            var deleteunusedpop = `DELETE
+                                                FROM "Population"
+                                                WHERE "id_population" NOT IN (SELECT "population_id" FROM "Individu") AND "id_population" NOT IN (SELECT "population_id" FROM "PopuBox")`
+                            client.query(deleteunusedpop, (err, res) => {
+                                if (err) {
+                                    reject(new Error(`Individual deleted BUT error during delete of unused pop`))
+                                }
+                                else {
+                                    return resolve()       
+                                }
+                            })
                         }
                     })
                 }
@@ -1869,31 +1891,26 @@ function deletebox(id) {
 function deleteindiv(id) {
     //Pas complet
     return new Promise(function (resolve, reject) {
-        var deletepopubox = `DELETE 
-                            FROM "Individuals"
-                            WHERE "id_box"=$1`
-        var deletebox = `DELETE 
-                        FROM "Box"
-                        WHERE "id_box"=$1`
+        var deleteindiv = `DELETE 
+                        FROM "Individu"
+                        WHERE "id_individu"=$1`
 
-        client.query(verifnoindiv, [id], (err, res) => {
+        client.query(deleteindiv, [id], (err, res) => {
             if (err) {
                 reject(new Error(`Error during search of indiv in box ${id}`))
             }
             else {
-                if (res.rowCount === 0) {
-                    client.query(deletepopubox, [id], (err, res) => {
-                        if (err) {
-                            reject(new Error(`Error during search of indiv in box ${id}`))
-                        }
-                        else {
-                            //Delete unused popu
-                        }
-                    })
-                }
-                else {
-                    reject(new Error(`You can't delete a box with individuals in it`))
-                }
+                var deleteunusedpop = `DELETE
+                                    FROM "Population"
+                                    WHERE "id_population" NOT IN (SELECT "population_id" FROM "Individu") AND "id_population" NOT IN (SELECT "population_id" FROM "PopuBox")`
+                client.query(deleteunusedpop, (err, res) => {
+                    if (err) {
+                        reject(new Error(`Individual deleted BUT error during delete of unused pop`))
+                    }
+                    else {
+                        return resolve()       
+                    }
+                })
             }
         })
     })

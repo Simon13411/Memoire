@@ -446,6 +446,26 @@ app.post(`/deletepopubox`, (req, res) => {
     })
 })
 
+app.post(`/deletebox`, (req, res) => {
+    axios.post(`http://${IP_DBOPS}/deletebox`, req.body)
+    .then((results) => {
+        res.status(200).json({success: "ok"})
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
+
+app.post(`/deleteindiv`, (req, res) => {
+    axios.post(`http://${IP_DBOPS}/deleteindiv`, req.body)
+    .then((results) => {
+        res.status(200).json({success: "ok"})
+    })
+    .catch((err) => {
+        errorhandler(err, res)
+    })
+})
+
 
 
 //FileDownloader (port 4002)
