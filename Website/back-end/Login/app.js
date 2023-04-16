@@ -91,11 +91,22 @@ app.post('/modifyright', (req, res) => {
   });
 });
 
+
+app.post('/verifyuserright', (req, res) => {
+  const { token } = req.body
+  return loginops.verifyuserrightrequest(token)
+  .then((results) => {
+    res.status(200).json({success: true});
+  })
+  .catch((err) => {
+    errorhandler(err, res)
+  });
+})
+
 app.post('/verifyadminright', (req, res) => {
   const { token } = req.body
   return loginops.verifyadminrightrequest(token)
   .then((results) => {
-    console.log(results)
     res.status(200).json({success: true});
   })
   .catch((err) => {

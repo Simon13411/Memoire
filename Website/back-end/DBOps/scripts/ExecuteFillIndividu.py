@@ -39,11 +39,11 @@ box, colOk = boxexist.boxExist(extracteddata, "entomologie")
 print("[MY_APP_LOG] End boxes verification")
 if(len(box)>0):
     #il y a des boites qui n'existe pas encore
-    print(f"{box}, {colOk}")
+    print(f"Aux lignes {box} : {colOk}")
 
 else:
     conn = psycopg2.connect(
-        host="db-entomo",
+        host="db-entomoc",
         database="entomologie",
         user="postgres",
         password="password"

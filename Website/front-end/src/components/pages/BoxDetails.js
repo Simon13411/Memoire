@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom"
 import Navbar from '../Navbar';
 
+import Cookies from 'js-cookie';
+
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -115,9 +117,11 @@ class BoxDetails extends React.Component {
   }
 
   modifycollection = () => {
+    const authToken = Cookies.get('auth_token');
+
     this.setState({modifycollectionstate: 'Wait...'})
     const newcollection = this.state.newcollection
-    axios.post(`${url}/changeboxcollection`, {boxid: this.props.searchParams.get("id"), collection: newcollection})
+    axios.post(`${url}/changeboxcollection`, {boxid: this.props.searchParams.get("id"), collection: newcollection, token: authToken})
     .then((res) => {
       this.setState({collection: newcollection, modifycollectionstate: `Box is now from collection ${newcollection}`})
     })
@@ -132,9 +136,11 @@ class BoxDetails extends React.Component {
   }
 
   modifyloaner = () => {
+    const authToken = Cookies.get('auth_token');
+
     this.setState({modifyloanerstate: 'Changement en cours...'})
     const newloaner = this.state.newloaner
-    axios.post(`${url}/changeboxloaner`, {boxid: this.props.searchParams.get("id"), newloaner: newloaner})
+    axios.post(`${url}/changeboxloaner`, {boxid: this.props.searchParams.get("id"), newloaner: newloaner, token: authToken})
     .then((res) => {
       this.setState({loaner: newloaner, modifyloanerstate: `Loaner est maintenant ${newloaner}`})
     })
@@ -149,7 +155,9 @@ class BoxDetails extends React.Component {
   }
 
   deletebox = () => {
-    axios.post(`${url}/deletebox`, {id: this.props.searchParams.get("id")})
+    const authToken = Cookies.get('auth_token');
+
+    axios.post(`${url}/deletebox`, {id: this.props.searchParams.get("id"), token: authToken})
     .then((res) => {
       this.props.navigate('/')
     })

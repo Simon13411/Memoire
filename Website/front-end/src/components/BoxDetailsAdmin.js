@@ -4,6 +4,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+import Cookies from 'js-cookie';
+
 import axios from 'axios'
 const url = process.env.REACT_APP_IP
 
@@ -128,10 +130,9 @@ class BoxDetailsAdmin extends React.Component {
                                             subspecies: this.props.subspecies, neworder: this.state.order, newsuborder: this.state.suborder, 
                                             newfamily: this.state.family, newsubfamily: this.state.subfamily, newtribu: this.state.tribu, 
                                             newgenus: this.state.genus, newsubgenus: this.state.subgenus, 
-                                            newspecies: this.state.species, newsubspecies: this.state.subspecies}, 
-                                            this.props.changefetchedpop(this.state))
+                                            newspecies: this.state.species, newsubspecies: this.state.subspecies})
                 .then((res) => {
-                    this.setState({changestate: 'Population has been changed with success'})
+                    this.setState({changestate: 'Population has been changed with success'}, this.props.changefetchedpop(this.state))
                 })
                 .catch((err) => {
                     if (!err.response) {

@@ -6,7 +6,7 @@ const { Client } = require('pg');
 const { resolve } = require('path');
 const client = new Client({
     user: 'postgres',
-    host: 'db-login',
+    host: 'db-loginc',
     database: 'login',
     password: 'password',
     port: 5432,
@@ -230,7 +230,7 @@ function modifyright(username, role, token) {
                         SET "role" = $1  
                         WHERE "username"=$2`
 
-    client.query(Updatequery, [username, role], (err, res) => {
+    client.query(Updatequery, [role, username], (err, res) => {
           if (err) {
             console.error(err)
             return reject(new Error("Erreur DB"))
@@ -239,6 +239,27 @@ function modifyright(username, role, token) {
             return resolve(res)
           }
         })
+  })
+}
+
+function verifyuserrightrequest(token) {
+  return new Promise (function (resolve, reject) {
+    if (typeof token !== 'string' || token.trim().length === 0) {
+      return reject(new Error("Wrong admin token"));
+    }
+    const Tokenquery = `SELECT * FROM "Tokens" WHERE "token"=$1 AND "expirationTime" > NOW()`;
+    client.query(Tokenquery, [token], (error, results) => {
+      if (error) {
+        return reject(new Error("Error DB"));
+      } else {
+        if (results.rows.length === 1) {
+          return resolve(results)
+        }
+        else {
+          return reject(new Error("Token not in DB"))
+        }
+      }
+    })
   })
 }
 
@@ -264,7 +285,10 @@ function verifyadminrightrequest(token) {
             } else {
               return reject(new Error("Wrong admin token"));
             }
-        })
+          })
+        }
+        else {
+          return reject(new Error("Token not in DB"))
         }
       }
     })
@@ -304,6 +328,7 @@ module.exports = {
     adminright,
     verifytoken,
     verifyadminrightrequest,
+    verifyuserrightrequest,
     getusers,
     modifypw,
     modifyright

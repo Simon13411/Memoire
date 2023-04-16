@@ -3,6 +3,7 @@ import { Navigate, useNavigate, useSearchParams } from "react-router-dom"
 import Navbar from '../Navbar';
 
 import InsectDetailsAdmin from '../InsectDetailsAdmin';
+import Cookies from 'js-cookie';
 
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -72,7 +73,8 @@ class InsectDetails extends React.Component {
                         species: res.data.rows[0].species,
                         subspecies: res.data.rows[0].subspecies,
                         tribu: res.data.rows[0].tribu,
-                        loaner: res.data.rows[0].loaner}, this.Loaded)
+                        loaner: res.data.rows[0].loaner,
+                        newloaner: res.data.rows[0].loaner}, this.Loaded)
       })
     }
 
@@ -97,9 +99,11 @@ class InsectDetails extends React.Component {
     }
 
     modifybox = () => {
+      const authToken = Cookies.get('auth_token');
+
       this.setState({modifyboxstate: 'Changement en cours...'})
       const newboxid = parseInt(this.state.newidbox)
-      axios.post(`${url}/changeindivboxid`, {individ: this.state.individ, newboxid: newboxid})
+      axios.post(`${url}/changeindivboxid`, {individ: this.state.individ, newboxid: newboxid, token: authToken})
       .then((res) => {
         this.setState({idbox: newboxid, modifyboxstate: `Assigné à la box n° ${newboxid}`})
       })
@@ -114,9 +118,11 @@ class InsectDetails extends React.Component {
     }
 
     modifyloaner = () => {
+      const authToken = Cookies.get('auth_token');
+
       this.setState({modifyloanerstate: 'Changement en cours...'})
       const newloaner = this.state.newloaner
-      axios.post(`${url}/changeindivloaner`, {individ: this.state.individ, newloaner: newloaner})
+      axios.post(`${url}/changeindivloaner`, {individ: this.state.individ, newloaner: newloaner, token: authToken})
       .then((res) => {
         this.setState({loaner: newloaner, modifyloanerstate: `Borrower est maintenant ${newloaner}`})
       })
@@ -131,7 +137,9 @@ class InsectDetails extends React.Component {
     }
 
     deleteindiv = () => {
-      axios.post(`${url}/deleteindiv`, {id: this.state.individ})
+      const authToken = Cookies.get('auth_token');
+
+      axios.post(`${url}/deleteindiv`, {id: this.state.individ, token: authToken})
       .then((res) => {
         this.props.navigate('/individual-search')
       })
@@ -154,7 +162,7 @@ class InsectDetails extends React.Component {
           ):(
             <>
               <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
-              <p>Individual n° {this.props.searchParams.get("id")} {this.state.name ? (<>Name: {this.state.name}</>):(<></>)} {this.state.idbox !== 0 ? (<>From Box n° {this.state.idbox}</>):(<></>)} {this.state.loaner ? (<>Loaner: {this.state.loaner}</>):(<></>)}</p>
+              <p>Individual n° {this.props.searchParams.get("id")} {this.state.name ? (<>Name: {this.state.name}</>):(<></>)} {this.state.idbox !== 0 ? (<>From Box n° {this.state.idbox}</>):(<></>)} {this.state.loaner ? (<>Borrower: {this.state.loaner}</>):(<></>)}</p>
               {this.props.isAdmin() ? 
               (
                 <div>
@@ -179,7 +187,7 @@ class InsectDetails extends React.Component {
                     {this.state.modifyboxstate}
                     <div>
                       <div>
-                        <h4 className="title">Loaner</h4>
+                        <h4 className="title">Borrower</h4>
                             <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                                 <Select
                                 id="loaner-select"
@@ -315,10 +323,6 @@ class InsectDetails extends React.Component {
                         </>
                       }
                     </div>
-                </div>
-                <div className="column">
-                  {/*Photo part*/}
-                  <h2>Pictures</h2>
                 </div>
                 {this.props.isAuthenticated() && this.state.isLoaded ? 
                   (

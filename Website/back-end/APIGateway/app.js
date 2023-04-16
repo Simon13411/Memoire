@@ -28,7 +28,7 @@ const IP_DLDER = process.env.IPDLDER
 const IP_LOGIN = process.env.IPLOGIN
 const IP_PICTU = process.env.IPPICTURES  
 
-//DBOps (port 4001)
+//DBOps
 app.get('/get_boxdetails', (req, res) => {
     axios.get(`http://${IP_DBOPS}/get_boxdetails?id=${req.query.id}`)
         .then((resu) => {
@@ -190,7 +190,10 @@ app.post('/add-attribute/:name', (req, res) => {
                 .catch((err) => {
                     errorhandler(err, res)
                 });
-            })
+        })
+        .catch((err1) => {
+            errorhandler(err1, res)
+        });
 })
 
 app.post('/delete-attribute/:name', (req, res) => {
@@ -289,44 +292,71 @@ app.post('/modifyloaner', (req, res) => {
 })
 
 app.post('/changeindivboxid', (req, res) => {
-    axios.post(`http://${IP_DBOPS}/changeindivboxid`, req.body)
-        .then((resu) => {
-            res.status(200).json(resu.data);
-        })
-        .catch((err) => {
-            errorhandler(err, res)
-        })
+    const { individ, newboxid, token } = req.body
+    axios.post(`http://${IP_LOGIN}/verifyuserright`, {token: token})
+        .then(() => {
+            axios.post(`http://${IP_DBOPS}/changeindivboxid`, {individ: individ, newboxid: newboxid})
+                .then((resu) => {
+                    res.status(200).json(resu.data);
+                })
+                .catch((err) => {
+                    errorhandler(err, res)
+                })
+            })
+        .catch((err1) => {
+            errorhandler(err1, res)
+        });
 })
 
 app.post('/changeindivloaner', (req, res) => {
-    axios.post(`http://${IP_DBOPS}/changeindivloaner`, req.body)
-        .then((resu) => {
-            res.status(200).json(resu.data);
-        })
-        .catch((err) => {
-            errorhandler(err, res)
-        })
+    const { individ, newloaner, token } = req.body
+    axios.post(`http://${IP_LOGIN}/verifyuserright`, {token: token})
+        .then(() => {
+            axios.post(`http://${IP_DBOPS}/changeindivloaner`, {individ: individ, newloaner: newloaner})
+                .then((resu) => {
+                    res.status(200).json(resu.data);
+                })
+                .catch((err) => {
+                    errorhandler(err, res)
+                })
+            })
+        .catch((err1) => {
+            errorhandler(err1, res)
+        });
 })
 
 app.post('/changeboxcollection', (req, res) => {
-    axios.post(`http://${IP_DBOPS}/changeboxcollection`, req.body)
-        .then((resu) => {
-            res.status(200).json(resu.data);
-        })
-        .catch((err) => {
-            errorhandler(err, res)
-        })
+    const { boxid, collection, token } = req.body
+    axios.post(`http://${IP_LOGIN}/verifyuserright`, {token: token})
+        .then(() => {
+            axios.post(`http://${IP_DBOPS}/changeboxcollection`, {boxid: boxid, collection: collection})
+                .then((resu) => {
+                    res.status(200).json(resu.data);
+                })
+                .catch((err) => {
+                    errorhandler(err, res)
+                })
+            })
+        .catch((err1) => {
+            errorhandler(err1, res)
+        });
 })
 
 app.post('/changeboxloaner', (req, res) => {
-    const { boxid, newloaner } = req.body
-    axios.post(`http://${IP_DBOPS}/changeboxloaner`, { boxid: boxid, newloaner: newloaner })
-        .then((resu) => {
-            res.status(200).json(resu.data);
-        })
-        .catch((err) => {
-            errorhandler(err, res)
-        })
+    const { boxid, newloaner, token } = req.body
+    axios.post(`http://${IP_LOGIN}/verifyuserright`, {token: token})
+        .then(() => {
+            axios.post(`http://${IP_DBOPS}/changeboxloaner`, { boxid: boxid, newloaner: newloaner })
+                .then((resu) => {
+                    res.status(200).json(resu.data);
+                })
+                .catch((err) => {
+                    errorhandler(err, res)
+                })
+            })
+        .catch((err1) => {
+            errorhandler(err1, res)
+        });
 })
 
 app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
@@ -358,17 +388,17 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
         });
 })
 
-app.put('/csvtosqladmin/:type', upload.single('file'), (req, res) => {
+app.put('/csvtosqladmin/:type/:token', upload.single('file'), (req, res) => {
     const formData = new FormData();
     formData.append('file', fs.createReadStream(req.file.path));
 
-    const { token } = req.body
+    const token = req.params.token
 
     axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
         .then(() => {
             axios.put(`http://${IP_DBOPS}/csvtosqladmin/${req.params.type}`, formData, {
                     headers: {
-                    'Content-Type': 'multipart/form-data' //Contient des données binaires
+                        'Content-Type': 'multipart/form-data' //Contient des données binaires
                     }
                 })
                 .then((resu) => {
@@ -418,12 +448,12 @@ app.get(`/individualssqltocsv`, (req, res) => {
 
 app.post('/modifypopu', (req, res) => {
     axios.post(`http://${IP_DBOPS}/modifypopu`, req.body)
-    .then((results) => {
-        res.status(200).json({success: "ok"})
-    })
-    .catch((err) => {
-        errorhandler(err, res)
-    })
+        .then((results) => {
+            res.status(200).json({success: "ok"})
+        })
+        .catch((err) => {
+            errorhandler(err, res)
+        })
 })
 
 app.post('/addpopubox', (req, res) => {
@@ -447,28 +477,42 @@ app.post(`/deletepopubox`, (req, res) => {
 })
 
 app.post(`/deletebox`, (req, res) => {
-    axios.post(`http://${IP_DBOPS}/deletebox`, req.body)
-    .then((results) => {
-        res.status(200).json({success: "ok"})
-    })
-    .catch((err) => {
-        errorhandler(err, res)
-    })
+    const { id, token } = req.body
+    axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
+        .then(() => {
+            axios.post(`http://${IP_DBOPS}/deletebox`, {id: id})
+            .then((results) => {
+                res.status(200).json({success: "ok"})
+            })
+            .catch((err) => {
+                errorhandler(err, res)
+            })
+        })
+        .catch((err1) => {
+            errorhandler(err1, res)
+        });
 })
 
 app.post(`/deleteindiv`, (req, res) => {
-    axios.post(`http://${IP_DBOPS}/deleteindiv`, req.body)
-    .then((results) => {
-        res.status(200).json({success: "ok"})
-    })
-    .catch((err) => {
-        errorhandler(err, res)
-    })
+    const { id, token } = req.body
+    axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
+        .then(() => {
+            axios.post(`http://${IP_DBOPS}/deleteindiv`, {id: id})
+            .then((results) => {
+                res.status(200).json({success: "ok"})
+            })
+            .catch((err) => {
+                errorhandler(err, res)
+            })
+        })
+        .catch((err1) => {
+            errorhandler(err1, res)
+        });
 })
 
 
 
-//FileDownloader (port 4002)
+//FileDownloader
 app.get('/boxestemplate', (req, res) => {
     axios.get(`http://${IP_DLDER}/boxestemplate`, { responseType: 'stream' })
     .then((response) => {
@@ -489,7 +533,7 @@ app.get('/individualstemplate', (req, res) => {
     });
 })
 
-//LogIn and SignIn (port 4003)
+//LogIn and SignIn
 app.post('/login', (req, res) => {
     axios.post(`http://${IP_LOGIN}/login`, req.body)
         .then((resu) => {
@@ -569,7 +613,7 @@ app.post(`/modifyright`, (req, res) => {
 })
 
 
-//Pictures (Port 4004)
+//Pictures
 app.get(`/getpicture`, (req, res) => {
     console.log(IP_PICTU)
     console.log(req.query.type)
@@ -584,6 +628,7 @@ app.get(`/getpicture`, (req, res) => {
         errorhandler(err, res)
     });
 })
+
 
 //helper
 function errorhandler(err, res) {

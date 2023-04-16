@@ -6,7 +6,7 @@ const { spawn } = require('child_process');
 const { errorMonitor } = require('events');
 const client = new Client({
     user: 'postgres',
-    host: 'db-entomo',
+    host: 'db-entomoc',
     database: 'entomologie',
     password: 'password',
     port: 5432,
@@ -727,7 +727,7 @@ function addattribute(table, attribute) {
             console.error("Invalid table")
             return reject(new Error("Invalid table"))
         }
-        console.log("Here4")
+
         client.query(query, [attribute], (err, res) => {
             if (err) {
                 console.error(err)

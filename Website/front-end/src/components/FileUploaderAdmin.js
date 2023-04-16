@@ -37,7 +37,7 @@ class FileUploaderAdmin extends Component {
       this.props.Changeindivuploadstate('Veuillez Patienter...')
     }
 
-    axios.put(`${url}/csvtosqladmin/${this.props.type}`, {token: token}, formData, {
+    axios.put(`${url}/csvtosqladmin/${this.props.type}/${token}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data' //Contient des données binaires
       }
