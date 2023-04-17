@@ -158,7 +158,7 @@ class Selection extends React.Component {
   }
 
   tribuChange = (event) => {
-    this.setState({subspecies: event.target.value}, this.get_selection)
+    this.setState({tribu: event.target.value}, this.get_selection)
   }
 
   wantedPageChange = (event) => {
