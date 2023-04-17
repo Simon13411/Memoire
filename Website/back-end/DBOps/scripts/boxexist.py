@@ -23,7 +23,7 @@ def boxExist(olddf, dbName):
     df = olddf[checkCol].copy()
     noBox = []
 
-    zeroExist = """SELECT "id_box" FROM "Box" """
+    zeroExist = """SELECT "id_box" FROM "Box" WHERE "id_box"=0 """
     cursor.execute(zeroExist)
 
     if cursor.fetchall()==[]:
@@ -37,10 +37,12 @@ def boxExist(olddf, dbName):
     cursor.execute(SelectAllBoxID)
     AllBoxIDInter = cursor.fetchall()
     AllBoxID = [item[0] for item in AllBoxIDInter]
-    
+
     for i, row in df.iterrows():
         if row.Num_ID not in AllBoxID:
             noBox.append(i+2)
+
+    conn.commit()
 
     cursor.close()
     return noBox, "Certaines boites ne sont pas encore crée"
