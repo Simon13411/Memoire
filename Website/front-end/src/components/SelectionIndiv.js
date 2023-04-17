@@ -157,6 +157,9 @@ class Selection extends React.Component {
   subSpeciesChange = (event) => {
     this.setState({subspecies: event.target.value}, this.get_selection)
   }
+  TribuChange = (event) => {
+    this.setState({tribu: event.target.value}, this.get_selection)
+  }
 
   wantedPageChange = (event) => {
     this.setState({wantedpage: event.target.value})
@@ -271,11 +274,11 @@ class Selection extends React.Component {
           <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
             <InputLabel id="demo-simple-select-label">Tribu</InputLabel>
             <Select
-              labelId="subspecies-label"
-              id="subspecies-select"
-              value={this.state.subspecies}
-              label="Species"
-              onChange={this.subSpeciesChange}
+              labelId="tribu-label"
+              id="tribu-select"
+              value={this.state.tribu}
+              label="Tribu"
+              onChange={this.TribuChange}
             >
               <MenuItem value='NULL'>
                 <em>None</em>
