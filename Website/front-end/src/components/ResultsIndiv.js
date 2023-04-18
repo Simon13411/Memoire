@@ -14,11 +14,6 @@ class ResultsIndiv extends React.Component {
     render() {
         return(
             <Box sx={{m:1, border: 1, borderColor: 'green'}}>
-                {(this.props.id) ?
-                    (<div>Invididual n°: {this.props.id}</div>)
-                    :
-                    (<></>)
-                }
                 {(this.props.name) ?
                     (<div>Name: {this.props.name}</div>)
                     :

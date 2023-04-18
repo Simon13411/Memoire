@@ -162,7 +162,7 @@ class InsectDetails extends React.Component {
           ):(
             <>
               <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
-              <p>Individual n° {this.props.searchParams.get("id")} {this.state.name ? (<>Name: {this.state.name}</>):(<></>)} {this.state.idbox !== 0 ? (<>From Box n° {this.state.idbox}</>):(<></>)} {this.state.loaner ? (<>Borrower: {this.state.loaner}</>):(<></>)}</p>
+              <p>{this.state.name ? (<>Name: {this.state.name}</>):(<></>)} {this.state.idbox !== 0 ? (<>From Box n° {this.state.idbox}</>):(<></>)} {this.state.loaner ? (<>Borrower: {this.state.loaner}</>):(<></>)}</p>
               {this.props.isAdmin() ? 
               (
                 <div>
