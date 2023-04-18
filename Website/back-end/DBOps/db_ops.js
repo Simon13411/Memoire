@@ -1217,6 +1217,7 @@ function csvtosql(filename, type) {
 
             // Chercher le premier message qui ne commence pas par le préfixe spécifique
             const lines = output.split('\n');
+console.log(lines)
             lines.pop()
             const result = lines.findIndex(line => !line.startsWith('[MY_APP_LOG]'));
 
@@ -1268,6 +1269,7 @@ function csvtosql(filename, type) {
 
             // Chercher le premier message qui ne commence pas par le préfixe spécifique
             const lines = output.split('\n');
+console.log(lines)
             lines.pop()
             const result = lines.findIndex(line => !line.startsWith('[MY_APP_LOG]'));
 
