@@ -182,7 +182,7 @@ class InsectDetails extends React.Component {
                         <h4 className="title">Box n°</h4>
                           <input type="number" value={this.state.newidbox} width="40" onChange={this.handleInputChange} name="newidbox" />
                       </div>
-                      <button type="submit" name="newidbox" onClick={this.modifybox}>Modifier</button>
+                      <button type="submit" name="newidbox" onClick={this.modifybox}>Modify</button>
                     </div>
                     {this.state.modifyboxstate}
                     <div>
@@ -202,7 +202,7 @@ class InsectDetails extends React.Component {
                                 </Select>
                             </FormControl>
                       </div>
-                      <button type='submit' onClick={this.modifyloaner}>Modifier</button>
+                      <button type='submit' onClick={this.modifyloaner}>Modify</button>
                     </div>
                     {this.state.modifyloanerstate}
                   </div>
@@ -212,7 +212,7 @@ class InsectDetails extends React.Component {
               }
               
                 <div className="column">
-                  <h2 className="title">Modify Population</h2>
+                  <h2 className="title">Population</h2>
                     <div>
                       {(this.state.idbox) === 0 ?
                         (<></>)

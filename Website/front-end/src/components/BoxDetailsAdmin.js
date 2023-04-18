@@ -173,6 +173,7 @@ class BoxDetailsAdmin extends React.Component {
                 <div>
                     <button type='submit' onClick={this.delete}>Delete population</button>
                 </div>
+                <br />
                 <h2 className="title">Modify Popu n°{this.props.index+1}</h2>
                 {this.state.changestate}
                 <h4 className="title">Order</h4>

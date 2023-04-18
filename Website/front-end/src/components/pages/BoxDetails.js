@@ -213,10 +213,10 @@ class BoxDetails extends React.Component {
                               </Select>
                           </FormControl>
                     </div>
-                    <button type='submit' onClick={this.modifycollection}>Modifier</button>
+                    <button type='submit' onClick={this.modifycollection}>Modify</button>
                     <div>{this.state.modifycollectionstate}</div>
                     <div>
-                      <h4 className="title">Loaner</h4>
+                      <h4 className="title">Borrower</h4>
                         <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                             <Select
                             id="loaner-select"
@@ -231,7 +231,7 @@ class BoxDetails extends React.Component {
                             </Select>
                         </FormControl>
                     </div>
-                    <button type='submit' onClick={this.modifyloaner}>Modifier</button>
+                    <button type='submit' onClick={this.modifyloaner}>Modify</button>
                     <div>{this.state.modifyloanerstate}</div>
                   </div>
                 ):(
