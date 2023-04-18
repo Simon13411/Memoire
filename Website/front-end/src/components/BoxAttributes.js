@@ -84,7 +84,7 @@ class BoxAttributes extends React.Component {
                     (<></>)
                     :
                     <>
-                    <h4 className="title">Tribu</h4>
+                    <h4 className="title">Tribe</h4>
                     <p>{this.state.tribu}</p>
                     </>
                 }
@@ -114,7 +114,7 @@ class BoxAttributes extends React.Component {
                     (<></>)
                     :
                     <>
-                    <h4 className="title">Species</h4>
+                    <h4 className="title">Specie</h4>
                     <p>{this.state.species}</p>
                     </>
                 }
@@ -124,7 +124,7 @@ class BoxAttributes extends React.Component {
                     (<></>)
                     :
                     <>
-                    <h4 className="title">Subspecies</h4>
+                    <h4 className="title">Subspecie</h4>
                     <p>{this.state.subspecies}</p>
                     </>
                 }

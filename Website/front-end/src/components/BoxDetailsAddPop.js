@@ -209,7 +209,7 @@ class BoxDetailsAddPop extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                <h4 className="title">Tribu</h4>
+                <h4 className="title">Tribe</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select
                         id="tribu-select"
@@ -257,7 +257,7 @@ class BoxDetailsAddPop extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                <h4 className="title">Species</h4>
+                <h4 className="title">Specie</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select
                         id="species-select"
@@ -273,7 +273,7 @@ class BoxDetailsAddPop extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                <h4 className="title">Subspecies</h4>
+                <h4 className="title">Subspecie</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select
                         id="subspecies-select"

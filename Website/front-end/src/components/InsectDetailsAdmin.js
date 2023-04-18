@@ -170,38 +170,6 @@ class BoxDetailsAdmin extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                <h4 className="title">Genus</h4>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                        <Select
-                        id="genus-select"
-                        value={this.state.genus}
-                        onChange={this.handleInputChange}
-                        name="genus"
-                        >
-                        <MenuItem value={null}>
-                            <em>None</em>
-                        </MenuItem>
-                        {this.state.genuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div>
-                <h4  className="title">Subgenus</h4>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                        <Select
-                        id="subgenus-select"
-                        value={this.state.subgenus}
-                        onChange={this.handleInputChange}
-                        name="subgenus"
-                        >
-                        <MenuItem value={null}>
-                            <em>None</em>
-                        </MenuItem>
-                        {this.state.subgenuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div>
                 <h4 className="title">Family</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select
@@ -234,7 +202,55 @@ class BoxDetailsAdmin extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                <h4 className="title">Species</h4>
+                <h4 className="title">Tribe</h4>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                        <Select
+                        id="tribu-select"
+                        value={this.state.tribu}
+                        onChange={this.handleInputChange}
+                        name="tribu"
+                        >
+                        <MenuItem value={null}>
+                            <em>None</em>
+                        </MenuItem>
+                        {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                </div>
+                <div>
+                <h4 className="title">Genus</h4>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                        <Select
+                        id="genus-select"
+                        value={this.state.genus}
+                        onChange={this.handleInputChange}
+                        name="genus"
+                        >
+                        <MenuItem value={null}>
+                            <em>None</em>
+                        </MenuItem>
+                        {this.state.genuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                </div>
+                <div>
+                <h4  className="title">Subgenus</h4>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                        <Select
+                        id="subgenus-select"
+                        value={this.state.subgenus}
+                        onChange={this.handleInputChange}
+                        name="subgenus"
+                        >
+                        <MenuItem value={null}>
+                            <em>None</em>
+                        </MenuItem>
+                        {this.state.subgenuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                </div>
+                <div>
+                <h4 className="title">Specie</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select
                         id="species-select"
@@ -250,7 +266,7 @@ class BoxDetailsAdmin extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                <h4 className="title">Subspecies</h4>
+                <h4 className="title">Subspecie</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select
                         id="subspecies-select"
@@ -265,23 +281,7 @@ class BoxDetailsAdmin extends React.Component {
                         </Select>
                     </FormControl>
                 </div>
-                <div>
-                <h4 className="title">Tribu</h4>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                        <Select
-                        id="tribu-select"
-                        value={this.state.tribu}
-                        onChange={this.handleInputChange}
-                        name="tribu"
-                        >
-                        <MenuItem value={null}>
-                            <em>None</em>
-                        </MenuItem>
-                        {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                </div>
-                <button type='submit' onClick={this.modify}>Modifier</button>
+                <button type='submit' onClick={this.modify}>Modify</button>
             </div>
         )
     }

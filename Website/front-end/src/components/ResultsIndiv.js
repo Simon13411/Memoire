@@ -40,7 +40,7 @@ class ResultsIndiv extends React.Component {
                     (<></>)
                 }
                 {(this.props.tribu) ?
-                    (<div>Tribu: {this.props.tribu}</div>)
+                    (<div>Tribe: {this.props.tribu}</div>)
                     :
                     (<></>)
                 }
@@ -55,12 +55,12 @@ class ResultsIndiv extends React.Component {
                     (<></>)
                 }
                 {(this.props.species) ?
-                    (<div>Species: {this.props.species}</div>)
+                    (<div>Specie: {this.props.species}</div>)
                     :
                     (<></>)
                 }
                 {(this.props.subspecies) ?
-                    (<div>Subspecies: {this.props.subspecies}</div>)
+                    (<div>Subspecie: {this.props.subspecies}</div>)
                     :
                     (<></>)
                 }

@@ -272,7 +272,7 @@ class Selection extends React.Component {
             </Select>
           </FormControl>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-            <InputLabel id="demo-simple-select-label">Tribu</InputLabel>
+            <InputLabel id="demo-simple-select-label">Tribe</InputLabel>
             <Select
               labelId="tribu-label"
               id="tribu-select"
@@ -317,7 +317,7 @@ class Selection extends React.Component {
             </Select>
           </FormControl>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-            <InputLabel id="demo-simple-select-label">Species</InputLabel>
+            <InputLabel id="demo-simple-select-label">Specie</InputLabel>
             <Select
               labelId="species-label"
               id="species-select"
@@ -332,7 +332,7 @@ class Selection extends React.Component {
             </Select>
           </FormControl>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-            <InputLabel id="demo-simple-select-label">SubSpecies</InputLabel>
+            <InputLabel id="demo-simple-select-label">SubSpecie</InputLabel>
             <Select
               labelId="subspecies-label"
               id="subspecies-select"
