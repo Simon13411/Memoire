@@ -9,17 +9,17 @@ const url = process.env.REACT_APP_IP
 
 class AdminPannel extends React.Component {
     constructor (props) {
-      super(props)
-      this.state = {
-        authToken: '',
-        newPassword: '', newPassword2: '',
-        newpasswordstate: ''
-      };
+        super(props)
+        this.state = {
+            authToken: '',
+            newPassword: '', newPassword2: '',
+            newpasswordstate: ''
+        };
     }
 
     componentDidMount() {
         this.setState({authToken: Cookies.get('auth_token')})
-      }
+    }
 
 
     onSubmit (event) {

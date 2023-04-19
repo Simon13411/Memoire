@@ -6,9 +6,8 @@ import Selection from '../SelectionIndiv';
 function InsectHome(props) {
     return (
         <>
-        <Navbar isAuthenticated={props.isAuthenticated} isAdmin={props.isAdmin} Logout={props.Logout}/>
-        
-        <Selection> </Selection>
+            <Navbar isAuthenticated={props.isAuthenticated} isAdmin={props.isAdmin} Logout={props.Logout}/>
+            <Selection> </Selection>
         </>
     )
 }

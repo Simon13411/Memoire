@@ -1,16 +1,16 @@
 const axios = require('axios')
 
 const express = require('express')
-
 const app = express.Router()
-const bodyParser = require('body-parser');
 
+//For reading body in requests
+const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//For getting files in requests
 const multer = require('multer')
 const fs = require('fs')
-//Multer options
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/')
@@ -20,13 +20,14 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
-
 const FormData = require('form-data');
 
+//IP of different microservices
 const IP_DBOPS = process.env.IPDBOPS
 const IP_DLDER = process.env.IPDLDER
 const IP_LOGIN = process.env.IPLOGIN
 const IP_PICTU = process.env.IPPICTURES  
+
 
 //DBOps
 app.get('/get_boxdetails', (req, res) => {

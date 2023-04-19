@@ -1,11 +1,11 @@
-const express = require('express')
-
-const app = express.Router()
 const db = require('./db_ops')
 
+const express = require('express')
+const app = express.Router()
+
+//For getting files in requests
 const multer = require('multer')
 const fs = require('fs')
-//Multer options
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/')
@@ -401,7 +401,7 @@ app.put('/csvtosql/:type', upload.single('file'), (req, res) => {
     const type = req.params.type
     console.log(req.file)
 
-    return db.csvtosql(req.file.path, type)
+    return db.csvtosql(req.file.path, type, "false")
     .then((result) => {
         res.status(200).json(result)
         fs.unlink(req.file.path, (err) => {
@@ -427,7 +427,7 @@ app.put('/csvtosqladmin/:type', upload.single('file'), (req, res) => {
     const type = req.params.type
     console.log(req.file)
 
-    return db.csvtosqladmin(req.file.path, type)
+    return db.csvtosql(req.file.path, type, "true")
     .then((result) => {
         res.status(200).json(result)
         fs.unlink(req.file.path, (err) => {
@@ -450,7 +450,7 @@ app.put('/csvtosqladmin/:type', upload.single('file'), (req, res) => {
 
 //SQL to Csv (Boxes)
 app.get('/boxessqltocsv', (req, res) => {
-    return db.boxSqlToCsv()
+    return db.SqlToCsv("Box")
     .then((result) => {
         const filePath = 'FilesToReturn/BoxesData.xlsx'; // chemin absolu du fichier
         const fileName = 'BoxesData.xlsx'; // nom du fichier à télécharger
@@ -481,7 +481,7 @@ app.get('/boxessqltocsv', (req, res) => {
 
 //SQL to Csv (Individuals)
 app.get('/individualssqltocsv', (req, res) => {
-    return db.indivSqlToCsv()
+    return db.SqlToCsv("Individual")
     .then((result) => {
         const filePath = 'FilesToReturn/IndividualsData.xlsx'; // chemin absolu du fichier
         const fileName = 'IndividualsData.xlsx'; // nom du fichier à télécharger

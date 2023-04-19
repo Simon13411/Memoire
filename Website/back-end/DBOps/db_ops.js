@@ -1,9 +1,10 @@
 const fs = require('fs')
 const path = require('path');
 
-const { Client } = require('pg');
 const { spawn } = require('child_process');
-const { errorMonitor } = require('events');
+
+//Postgres client
+const { Client } = require('pg');
 const client = new Client({
     user: 'postgres',
     host: 'db-entomoc',
@@ -76,6 +77,13 @@ var countpopubox = `SELECT *
                     WHERE I."population_id"=$1`
 
 
+/*
+Get Box information
+INPUT: 
+    - id: id of the box
+OUTPUT:
+    - Box informations
+*/ 
 function get_boxdetails(id) {
     var searchquery = `SELECT B."id_box", B."location", B."museum", B."paratypes", B."types", O."name" as "order",
                         So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", Col."name" as "collection", loan."prenom" as "loaner"
@@ -110,6 +118,13 @@ function get_boxdetails(id) {
     })
 }
 
+/*
+Get Box corresponding to given attributes (10 first boxes after the Offs'th box)
+INPUT: 
+    - Offs: offset, O: Order, So: Suborder, F: Family, Sf: Subfamily, T: Tribu, G: Genus, Sg: Subgenus, S: Species, Ss: Subspecies
+OUTPUT:
+    - Number of total row (used for pagination) + 10 Box id and their information
+*/ 
 function get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
     var searchquery = `SELECT DISTINCT COUNT(*) OVER() AS total_rows, B."id_box", B."location", B."museum", B."paratypes", B."types", R."Order",
                         R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", Col."name" as "Col"
@@ -154,6 +169,13 @@ function get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
     })
 }
 
+/*
+Get Individual information
+INPUT: 
+    - id: id of the individual
+OUTPUT:
+    - Individual informations
+*/ 
 function get_indivdetails(id) {
     var searchquery = `SELECT I."id_individu", I."box_id", I."name", I."continent", I."country", I."ecozone", O."name" as "order",
     So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", loan."prenom" as "loaner"
@@ -188,6 +210,13 @@ function get_indivdetails(id) {
     })
 }
 
+/*
+Get Individuals corresponding to given attributes (10 first individuals after the Offs'th individual)
+INPUT: 
+    - Offs: offset, O: Order, So: Suborder, F: Family, Sf: Subfamily, T: Tribu, G: Genus, Sg: Subgenus, S: Specie, Ss: Subspecie
+OUTPUT:
+    - Number of total row (used for pagination) + 10 individuals id and their information
+*/ 
 function get_indivresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
     var searchquery = `SELECT DISTINCT COUNT(*) OVER() AS total_rows, I."id_individu", I."name", I."box_id", I."continent", I."country", I."ecozone", O."name" as "Order",
     So."name" as "subOrder", F."name" as "Family", Sf."name" as "subFamily", T."name" as "Tribu", G."name" as "Genus", Sg."name" as "subGenus" , S."name" as "Species", Ss."name" as "subSpecies"
@@ -229,6 +258,13 @@ function get_indivresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
     })
 }
 
+/*
+Get orders that can give an existing population in function of other attributes
+INPUT: 
+    - So: Suborder, F: Family, Sf: Subfamily, T: Tribu, G: Genus, Sg: Subgenus, S: Specie, Ss: Subspecie
+OUTPUT:
+    - Orders
+*/ 
 function get_selectiono(So, F, Sf, T, G, Sg, S, Ss) {
     var searchquery = "";
 
@@ -272,6 +308,13 @@ function get_selectiono(So, F, Sf, T, G, Sg, S, Ss) {
     })
 }
 
+/*
+Get suborders that can give an existing population in function of other attributes
+INPUT: 
+    - O: Order, F: Family, Sf: Subfamily, T: Tribu, G: Genus, Sg: Subgenus, S: Specie, Ss: Subspecie
+OUTPUT:
+    - Suborders
+*/ 
 function get_selectionso(O, F, Sf, T, G, Sg, S, Ss) {
     var searchquery = "";
 
@@ -315,6 +358,163 @@ function get_selectionso(O, F, Sf, T, G, Sg, S, Ss) {
     })
 }
 
+/*
+Get families that can give an existing population in function of other attributes
+INPUT: 
+    - O: Order, So: Suborder, Sf: Subfamily, T: Tribu, G: Genus, Sg: Subgenus, S: Specie, Ss: Subspecie
+OUTPUT:
+    - Families
+*/ 
+function get_selectionf(O, So, Sf, T, G, Sg, S, Ss) {
+    var searchquery = "";
+
+    if (O === "NULL" && So === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
+        searchquery = `SELECT "name" FROM "Family" ORDER BY "name" ASC`
+    }
+    else {
+        searchquery = `SELECT DISTINCT F."name" as "name"
+                        FROM "Population" P
+                        LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
+                        LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
+                        LEFT OUTER JOIN "Family" f ON P."family_id"=F."id_family"
+                        LEFT OUTER JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
+                        LEFT OUTER JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
+                        LEFT OUTER JOIN "Genus" G ON P."genus_id"=G."id_genus"
+                        LEFT OUTER JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
+                        LEFT OUTER JOIN "Species" S ON P."species_id"=S."id_species"
+                        LEFT OUTER JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
+                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
+                        AND (So."name" = '${So}' OR '${So}'='NULL')
+                        AND (Sf."name" = '${Sf}' OR '${Sf}'='NULL')
+                        AND (T."name" = '${T}' OR '${T}'='NULL')
+                        AND (G."name" = '${G}' OR '${G}'='NULL')
+                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
+                        AND (S."name" = '${S}' OR '${S}'='NULL')
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
+                        AND F."name" IS NOT NULL
+                        ORDER BY "name" ASC`
+    }
+    
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+/*
+Get subfamilies that can give an existing population in function of other attributes
+INPUT: 
+    - O: Order, So: Suborder, F: Family, T: Tribu, G: Genus, Sg: Subgenus, S: Specie, Ss: Subspecie
+OUTPUT:
+    - subfamilies
+*/ 
+function get_selectionsf(O, So, F, T, G, Sg, S, Ss) {
+    var searchquery = "";
+
+    if (O === "NULL" && So === "NULL" && F === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
+        searchquery = `SELECT "name" FROM "subFamily" ORDER BY "name" ASC`
+    }
+    else {
+        searchquery = `SELECT DISTINCT Sf."name" as "name"
+                        FROM "Population" P
+                        LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
+                        LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
+                        LEFT OUTER JOIN "Family" f ON P."family_id"=F."id_family"
+                        LEFT OUTER JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
+                        LEFT OUTER JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
+                        LEFT OUTER JOIN "Genus" G ON P."genus_id"=G."id_genus"
+                        LEFT OUTER JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
+                        LEFT OUTER JOIN "Species" S ON P."species_id"=S."id_species"
+                        LEFT OUTER JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
+                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
+                        AND (So."name" = '${So}' OR '${So}'='NULL')
+                        AND (F."name" = '${F}' OR '${F}'='NULL')
+                        AND (T."name" = '${T}' OR '${T}'='NULL')
+                        AND (G."name" = '${G}' OR '${G}'='NULL')
+                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
+                        AND (S."name" = '${S}' OR '${S}'='NULL')
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
+                        AND Sf."name" IS NOT NULL
+                        ORDER BY "name" ASC`
+    }
+    
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+/*
+Get tribes that can give an existing population in function of other attributes
+INPUT: 
+    - O: Order, So: Suborder, F: Family, Sf: Subfamily, G: Genus, Sg: Subgenus, S: Specie, Ss: Subspecie
+OUTPUT:
+    - tribes
+*/ 
+function get_selectiont(O, So, F, Sf, G, Sg, S, Ss) {
+    var searchquery = "";
+
+    if (O === "NULL" && So === "NULL" && F === "NULL" && Sf === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
+        searchquery = `SELECT "name" FROM "Tribu" ORDER BY "name" ASC`
+    }
+    else {
+        searchquery = `SELECT DISTINCT T."name" as "name"
+                        FROM "Population" P
+                        LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
+                        LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
+                        LEFT OUTER JOIN "Family" f ON P."family_id"=F."id_family"
+                        LEFT OUTER JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
+                        LEFT OUTER JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
+                        LEFT OUTER JOIN "Genus" G ON P."genus_id"=G."id_genus"
+                        LEFT OUTER JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
+                        LEFT OUTER JOIN "Species" S ON P."species_id"=S."id_species"
+                        LEFT OUTER JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
+                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
+                        AND (So."name" = '${So}' OR '${So}'='NULL')
+                        AND (F."name" = '${F}' OR '${F}'='NULL')
+                        AND (Sf."name" = '${Sf}' OR '${Sf}'='NULL')
+                        AND (G."name" = '${G}' OR '${G}'='NULL')
+                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
+                        AND (S."name" = '${S}' OR '${S}'='NULL')
+                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
+                        AND T."name" IS NOT NULL
+                        ORDER BY "name" ASC`
+    }
+    
+    return new Promise(function (resolve, reject) {
+        client.query(searchquery, (err, res) => {
+            if (err) {
+                console.error(err)
+                return reject(new Error("Erreur DB"))
+            }
+            else {
+                return resolve(res)
+            }
+        })
+    })
+}
+
+/*
+Get genuses that can give an existing population in function of other attributes
+INPUT: 
+    - O: Order, So: Suborder, F: Family, Sf: Subfamily, T: Tribu, Sg: Subgenus, S: Specie, Ss: Subspecie
+OUTPUT:
+    - Genuses
+*/ 
 function get_selectiong(O, So, F, Sf, T, Sg, S, Ss) {
     var searchquery = "";
 
@@ -359,6 +559,13 @@ function get_selectiong(O, So, F, Sf, T, Sg, S, Ss) {
     })
 }
 
+/*
+Get subgenuses that can  give an existing population in function of other attributes
+INPUT: 
+    - O: Order, So: Suborder, F: Family, Sf: Subfamily, T: Tribu, Sg: Subgenus, S: Specie, Ss: Subspecie
+OUTPUT:
+    - subgenuses
+*/ 
 function get_selectionsg(O, So, F, Sf, T, G, S, Ss) {
     var searchquery = "";
 
@@ -402,92 +609,13 @@ function get_selectionsg(O, So, F, Sf, T, G, S, Ss) {
     })
 }
 
-function get_selectionf(O, So, Sf, T, G, Sg, S, Ss) {
-    var searchquery = "";
-
-    if (O === "NULL" && So === "NULL" && Sf === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
-        searchquery = `SELECT "name" FROM "Family" ORDER BY "name" ASC`
-    }
-    else {
-        searchquery = `SELECT DISTINCT F."name" as "name"
-                        FROM "Population" P
-                        LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
-                        LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
-                        LEFT OUTER JOIN "Family" f ON P."family_id"=F."id_family"
-                        LEFT OUTER JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
-                        LEFT OUTER JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
-                        LEFT OUTER JOIN "Genus" G ON P."genus_id"=G."id_genus"
-                        LEFT OUTER JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
-                        LEFT OUTER JOIN "Species" S ON P."species_id"=S."id_species"
-                        LEFT OUTER JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
-                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
-                        AND (So."name" = '${So}' OR '${So}'='NULL')
-                        AND (Sf."name" = '${Sf}' OR '${Sf}'='NULL')
-                        AND (T."name" = '${T}' OR '${T}'='NULL')
-                        AND (G."name" = '${G}' OR '${G}'='NULL')
-                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
-                        AND (S."name" = '${S}' OR '${S}'='NULL')
-                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
-                        AND F."name" IS NOT NULL
-                        ORDER BY "name" ASC`
-    }
-    
-    return new Promise(function (resolve, reject) {
-        client.query(searchquery, (err, res) => {
-            if (err) {
-                console.error(err)
-                return reject(new Error("Erreur DB"))
-            }
-            else {
-                return resolve(res)
-            }
-        })
-    })
-}
-
-function get_selectionsf(O, So, F, T, G, Sg, S, Ss) {
-    var searchquery = "";
-
-    if (O === "NULL" && So === "NULL" && F === "NULL" && T === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
-        searchquery = `SELECT "name" FROM "subFamily" ORDER BY "name" ASC`
-    }
-    else {
-        searchquery = `SELECT DISTINCT Sf."name" as "name"
-                        FROM "Population" P
-                        LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
-                        LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
-                        LEFT OUTER JOIN "Family" f ON P."family_id"=F."id_family"
-                        LEFT OUTER JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
-                        LEFT OUTER JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
-                        LEFT OUTER JOIN "Genus" G ON P."genus_id"=G."id_genus"
-                        LEFT OUTER JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
-                        LEFT OUTER JOIN "Species" S ON P."species_id"=S."id_species"
-                        LEFT OUTER JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
-                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
-                        AND (So."name" = '${So}' OR '${So}'='NULL')
-                        AND (F."name" = '${F}' OR '${F}'='NULL')
-                        AND (T."name" = '${T}' OR '${T}'='NULL')
-                        AND (G."name" = '${G}' OR '${G}'='NULL')
-                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
-                        AND (S."name" = '${S}' OR '${S}'='NULL')
-                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
-                        AND Sf."name" IS NOT NULL
-                        ORDER BY "name" ASC`
-    }
-    
-    return new Promise(function (resolve, reject) {
-        client.query(searchquery, (err, res) => {
-            if (err) {
-                console.error(err)
-                return reject(new Error("Erreur DB"))
-            }
-            else {
-                return resolve(res)
-            }
-        })
-    })
-}
-
+/*
+Get species that can give an existing population in function of other attributes
+INPUT: 
+    - O: Order, So: Suborder, F: Family, Sf: Subfamily, T: Tribe, G: Genus, Sg: Subgenus, Ss: Subspecie
+OUTPUT:
+    - Species
+*/ 
 function get_selections(O, So, F, Sf, T, G, Sg, Ss) {
     var searchquery = "";
 
@@ -531,6 +659,13 @@ function get_selections(O, So, F, Sf, T, G, Sg, Ss) {
     })
 }
 
+/*
+Get subspecies that can give an existing population in function of other attributes
+INPUT: 
+    - O: Order, So: Suborder, F: Family, Sf: Subfamily, T: Tribe, G: Genus, Sg: Subgenus, S: Specie
+OUTPUT:
+    - Subspecies
+*/ 
 function get_selectionss(O, So, F, Sf, T, G, Sg, S) {
     var searchquery = "";
 
@@ -574,49 +709,9 @@ function get_selectionss(O, So, F, Sf, T, G, Sg, S) {
     })
 }
 
-function get_selectiont(O, So, F, Sf, G, Sg, S, Ss) {
-    var searchquery = "";
-
-    if (O === "NULL" && So === "NULL" && F === "NULL" && Sf === "NULL" && G === "NULL" && Sg === "NULL" && S === "NULL" && Ss === "NULL") {
-        searchquery = `SELECT "name" FROM "Tribu" ORDER BY "name" ASC`
-    }
-    else {
-        searchquery = `SELECT DISTINCT T."name" as "name"
-                        FROM "Population" P
-                        LEFT OUTER JOIN "Order" O On P."order_id"=O."id_order"
-                        LEFT OUTER JOIN "subOrder" So ON P."suborder_id"=So."id_suborder"
-                        LEFT OUTER JOIN "Family" f ON P."family_id"=F."id_family"
-                        LEFT OUTER JOIN "subFamily" Sf ON P."subFamily_id"=Sf."id_subfamily"
-                        LEFT OUTER JOIN "Tribu" T ON P."tribu_id"=T."id_tribu"
-                        LEFT OUTER JOIN "Genus" G ON P."genus_id"=G."id_genus"
-                        LEFT OUTER JOIN "subGenus" Sg ON P."subGenus_id"=Sg."id_subgenus"
-                        LEFT OUTER JOIN "Species" S ON P."species_id"=S."id_species"
-                        LEFT OUTER JOIN "subSpecies" Ss ON P."subSpecies_id"=Ss."id_subspecies"
-                        WHERE (O."name" = '${O}' OR '${O}'='NULL')
-                        AND (So."name" = '${So}' OR '${So}'='NULL')
-                        AND (F."name" = '${F}' OR '${F}'='NULL')
-                        AND (Sf."name" = '${Sf}' OR '${Sf}'='NULL')
-                        AND (G."name" = '${G}' OR '${G}'='NULL')
-                        AND (Sg."name" = '${Sg}' OR '${Sg}'='NULL')
-                        AND (S."name" = '${S}' OR '${S}'='NULL')
-                        AND (Ss."name" = '${Ss}' OR '${Ss}'='NULL')
-                        AND T."name" IS NOT NULL
-                        ORDER BY "name" ASC`
-    }
-    
-    return new Promise(function (resolve, reject) {
-        client.query(searchquery, (err, res) => {
-            if (err) {
-                console.error(err)
-                return reject(new Error("Erreur DB"))
-            }
-            else {
-                return resolve(res)
-            }
-        })
-    })
-}
-
+/*
+Get all borrowers name
+*/ 
 function get_loaners(){
     var searchquery = `SELECT "name" FROM "Loaner" ORDER BY "name" ASC`
                             
@@ -633,6 +728,10 @@ function get_loaners(){
     })
 }
 
+/*
+Get all borrower's information
+input : - name: borrower's name
+*/ 
 function getloanerinfo(name){
     var searchquery = `SELECT "name", "phone", "mail" FROM "Loaner" WHERE "name"=$1`
                             
@@ -649,6 +748,9 @@ function getloanerinfo(name){
     })
 }
 
+/*
+Get all collections name
+*/ 
 function get_collections() {
     var searchquery = `SELECT "name" FROM "Collection" ORDER BY "name" ASC`
                             
@@ -665,6 +767,11 @@ function get_collections() {
     })
 }
 
+/*
+Add an attribute
+input:  -table: order/suborder/family/...
+        -attribute: attribute's name
+*/ 
 function addattribute(table, attribute) {
     var query = '';
     console.log("Here3")
@@ -740,8 +847,12 @@ function addattribute(table, attribute) {
     })
 }
 
+/*
+Delete an attribute
+input:  -table: order/suborder/family/...
+        -attribute: attribute's name
+*/ 
 function deleteattribute(table, attribute) {
-
     var verifquery = "";
     var deletequery= "";
     var tablename = "";
@@ -866,6 +977,10 @@ function deleteattribute(table, attribute) {
     })
 }
 
+/*
+Add a collection
+input:  -collection: collection's name
+*/ 
 function addcollection(collection) {
     query = `INSERT INTO "Collection"
             ("id_collection", "name")
@@ -884,6 +999,11 @@ function addcollection(collection) {
     })
 }
 
+/*
+Modify a collection
+input:  -collection: collection's name
+        -newname: collection's new name
+*/ 
 function modifycollection(collection, newname) {
     verifquery = `SELECT *
                 FROM "Collection"
@@ -918,6 +1038,11 @@ function modifycollection(collection, newname) {
     })
 }
 
+/*
+Add a borrower
+input:  -name: borrower's name
+        -mail,phone: information of borrower
+*/ 
 function addloaner(name, mail, phone) {
     query = `INSERT INTO "Loaner"
     ("id_loaner", "name", "mail","phone")
@@ -936,6 +1061,11 @@ function addloaner(name, mail, phone) {
     })
 }
 
+/*
+Modify a borrower
+input:  -borrower: borrower's name
+        -name,mail,phone: new information for this borrower
+*/ 
 function modifyloaner(loaner, name, mail, phone) {
     verifquery = `SELECT *
                 FROM "Loaner"
@@ -970,6 +1100,11 @@ function modifyloaner(loaner, name, mail, phone) {
     })
 }
 
+/*
+Change boxid of an individual
+input:  -individ: individual id
+        -newboxid: box that will be assigned to this individual
+*/ 
 function changeindivboxid(individ, newboxid) {
     var Queryverifnewboxid = `SELECT *
                             FROM "Box"
@@ -1003,6 +1138,11 @@ function changeindivboxid(individ, newboxid) {
     })
 }
 
+/*
+Change borrower of an individual
+input:  -individ: individual id
+        -newborrower: borrower that will be assigned to this individual
+*/ 
 function changeindivloaner(individ, newloaner) {
     verifquery = `SELECT *
                     FROM "Loaner"
@@ -1060,6 +1200,11 @@ function changeindivloaner(individ, newloaner) {
     })
 }
 
+/*
+Change collection of a box
+input:  -boxid: box id
+        -collection: new collection of this box
+*/ 
 function changeboxcollection(boxid, collection) {
     verifquery = `SELECT *
                     FROM "Collection"
@@ -1094,6 +1239,11 @@ function changeboxcollection(boxid, collection) {
     })
 }
 
+/*
+Change borrower of a box
+input:  -boxid: box id
+        -newborrower: borrower that will be assigned to this box
+*/ 
 function changeboxloaner(boxid, newloaner) {
     verifquery = `SELECT *
                     FROM "Loaner"
@@ -1151,11 +1301,24 @@ function changeboxloaner(boxid, newloaner) {
     })
 }
 
-function csvtosql(filename, type) {
+/*
+Launch script csv->sql (scripts/ExecuteFillDb.py or scripts/ExecuteFillIndividu.py)
+input: -filename: csv; type: Box/Individual; admin:"true"/"false"
+*/ 
+function csvtosql(filename, type, admin) {
     return new Promise(function(resolve, reject) {
-      if (type === 'Box') {
-        console.log("Subprocess spawning")
-        const script = spawn('python3', ['ExecuteFillDb.py', filename, "false"]);
+        var scriptfilename = ''
+        if (type === 'Box') {
+            scriptfilename = 'ExecuteFillDb.py'
+        }
+        else if (type === 'Individual') {
+            scriptfilename = 'ExecuteFillIndividu.py'
+        }
+        else {
+            return reject("Wrong script's type")
+        }
+        console.log(`Subprocess ${scriptfilename} mode ${admin} spawning`)
+        const script = spawn('python3', [scriptfilename, filename, admin]);
         console.log("Subprocess spawned")
         console.log(filename)
 
@@ -1182,217 +1345,45 @@ function csvtosql(filename, type) {
                 const firstNonAppLogLine = lines[result];
                 return reject(new Error(firstNonAppLogLine));
             }
-          });
-  
+            else {
+                console.log(lines)
+            }
+        });
+
         script.stderr.on('data', (data) => {
-          console.error(`stderr: ${data}`);
-          return reject(new Error("Error during script run"));
-        });
-  
-        script.on('close', (code) => {
-          console.log(`child process exited with code ${code}`);
-          if (code === 1 || code === '1') {
+            console.error(`stderr: ${data}`);
             return reject(new Error("Error during script run"));
-          }
-          return resolve("Success");
         });
-      } else if (type === 'Individual') {
-        console.log("Subprocess spawning")
-        const script = spawn('python3', ['ExecuteFillIndividu.py', filename, "false"]);
-        console.log("Subprocess spawned")
-        console.log(filename)
 
-        script.stdout.on('data', (data) => {
-            const output = data.toString();
-            /** 
-             * UNCOMMENT THESE LINES IF YOU WANT TO SEE CHILD PROCESS LOGS
-            // Convertir la sortie du processus Python en chaîne de caractères
-
-            // Filtrer les messages de log qui commencent par le préfixe spécifique
-            const filteredOutput = output.split('\n').filter(line => line.startsWith('[MY_APP_LOG]')).join('\n');
-
-            // Afficher les messages de log filtrés avec console.log()
-            console.log(filteredOutput);
-            **/
-
-            // Chercher le premier message qui ne commence pas par le préfixe spécifique
-            const lines = output.split('\n');
-console.log(lines)
-            lines.pop()
-            const result = lines.findIndex(line => !line.startsWith('[MY_APP_LOG]'));
-
-            if (result !== -1) {
-                // Renvoyer le premier message qui ne commence pas par le préfixe spécifique avec une promesse
-                const firstNonAppLogLine = lines[result];
-                return reject(new Error(firstNonAppLogLine));
-            }
-          });
-  
-        script.stderr.on('data', (data) => {
-          console.error(`stderr: ${data}`);
-          return reject(new Error("Error during script run"));
-        });
-  
         script.on('close', (code) => {
-          console.log(`child process exited with code ${code}`);
-          if (code === 1 || code === '1'){
-            return reject(new Error("Error during script run"));
-          }
-          else {
-            return resolve("Success");
-            }
-        });
-      }
-    });
-  }
-
-  function csvtosqladmin(filename, type) {
-    return new Promise(function(resolve, reject) {
-      if (type === 'Box') {
-        console.log("Subprocess spawning")
-        const script = spawn('python3', ['ExecuteFillDb.py', filename, "true"]);
-        console.log("Subprocess spawned")
-        console.log(filename)
-
-        script.stdout.on('data', (data) => {
-            const output = data.toString();
-            /** 
-             * UNCOMMENT THESE LINES IF YOU WANT TO SEE CHILD PROCESS LOGS
-            // Convertir la sortie du processus Python en chaîne de caractères
-
-            // Filtrer les messages de log qui commencent par le préfixe spécifique
-            const filteredOutput = output.split('\n').filter(line => line.startsWith('[MY_APP_LOG]')).join('\n');
-
-            // Afficher les messages de log filtrés avec console.log()
-            console.log(filteredOutput);
-            **/
-
-            // Chercher le premier message qui ne commence pas par le préfixe spécifique
-            const lines = output.split('\n');
-console.log(lines)
-            lines.pop()
-            const result = lines.findIndex(line => !line.startsWith('[MY_APP_LOG]'));
-
-            if (result !== -1) {
-                // Renvoyer le premier message qui ne commence pas par le préfixe spécifique avec une promesse
-                const firstNonAppLogLine = lines[result];
-                return reject(new Error(firstNonAppLogLine));
-            }
-          });
-  
-        script.stderr.on('data', (data) => {
-          console.error(`stderr: ${data}`);
-          return reject(new Error("Error during script run"));
-        });
-  
-        script.on('close', (code) => {
-          console.log(`child process exited with code ${code}`);
-          if (code === 1 || code === '1') {
-            return reject(new Error("Error during script run"));
-          }
-          return resolve("Success");
-        });
-      } else if (type === 'Individual') {
-        console.log("Subprocess spawning")
-        const script = spawn('python3', ['ExecuteFillIndividu.py', filename, "true"]);
-        console.log("Subprocess spawned")
-        console.log(filename)
-
-        script.stdout.on('data', (data) => {
-            const output = data.toString();
-            /** 
-             * UNCOMMENT THESE LINES IF YOU WANT TO SEE CHILD PROCESS LOGS
-            // Convertir la sortie du processus Python en chaîne de caractères
-
-            // Filtrer les messages de log qui commencent par le préfixe spécifique
-            const filteredOutput = output.split('\n').filter(line => line.startsWith('[MY_APP_LOG]')).join('\n');
-
-            // Afficher les messages de log filtrés avec console.log()
-            console.log(filteredOutput);
-            **/
-
-            // Chercher le premier message qui ne commence pas par le préfixe spécifique
-            const lines = output.split('\n');
-            lines.pop()
-            const result = lines.findIndex(line => !line.startsWith('[MY_APP_LOG]'));
-
-            if (result !== -1) {
-                // Renvoyer le premier message qui ne commence pas par le préfixe spécifique avec une promesse
-                const firstNonAppLogLine = lines[result];
-                return reject(new Error(firstNonAppLogLine));
-            }
-          });
-  
-        script.stderr.on('data', (data) => {
-          console.error(`stderr: ${data}`);
-          return reject(new Error("Error during script run"));
-        });
-  
-        script.on('close', (code) => {
-          console.log(`child process exited with code ${code}`);
-          if (code === 1 || code === '1'){
-            return reject(new Error("Error during script run"));
-          }
-          else {
-            return resolve("Success");
-            }
-        });
-      }
-    });
-  }
-
-function boxSqlToCsv(){
-    return new Promise(function(resolve, reject) {
-        console.log("Subprocess spawning")
-        const script = spawn('python3', ['SQLToCsvBox.py']);
-        console.log("Subprocess spawned")
-
-        fileDataString = '';
-
-        script.stdout.on('data', (data) => {
-            try {
-                fileDataString += data.toString();
-            }
-            catch (err) {
-                console.log(err)
+            console.log(`child process exited with code ${code}`);
+            if (code === 1 || code === '1') {
                 return reject(new Error("Error during script run"));
             }
-        });
-
-
-        script.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-        return reject(new Error("Error during script run"));
-        });
-
-        script.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-        if (code === 1 || code === '1') {
-            return reject(new Error("Error during script run"));
-        }
-        const fileData = JSON.parse(fileDataString.toString());
-        const filename = fileData.filename;
-        const contentBase64 = fileData.content;
-        const content = Buffer.from(contentBase64, 'base64');
-
-        const filePath = path.join(__dirname, 'FilesToReturn', filename);
-
-        fs.writeFile(filePath, content, (err) => {
-            if (err){
-                console.log(err)
-                return reject(new Error("Erreur lors de l'écriture du fichier"));
-            }
-            console.log(`${filename} has been saved.`);
             return resolve("Success");
-        });
         });
     });
 }
 
-function indivSqlToCsv() {
+/*
+Launch script sql->csv (scripts/SQLToCsvBox.py or scripts/SQLToCsvIndividu.py)
+input: -type: Box/Individual
+output: csv file corresponding to sql database
+*/ 
+function SqlToCsv(type){
     return new Promise(function(resolve, reject) {
-        console.log("Subprocess spawning")
-        const script = spawn('python3', ['SQLToCsvIndividu.py']);
+        var scriptfilename = ''
+        if (type === 'Box') {
+            scriptfilename = 'SQLToCsvBox.py'
+        }
+        else if (type === 'Individual') {
+            scriptfilename = 'SQLToCsvIndividu.py'
+        }
+        else {
+            return reject("Wrong script's type")
+        }
+        console.log(`Subprocess ${scriptfilename} spawning`)
+        const script = spawn('python3', ['SQLToCsvBox.py']);
         console.log("Subprocess spawned")
 
         fileDataString = '';
@@ -1437,66 +1428,35 @@ function indivSqlToCsv() {
     });
 }
 
+/*
+Modify a population of a box
+input: -type: Box/Individual, id:box/indiv id, etc...
+*/ 
 function modifypopu(type, id, order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies, neworder, newsuborder, newfamily, newsubfamily, newtribu, newgenus, newsubgenus, newspecies, newsubspecies) {
-    if (neworder === null) {
-        neworder = 'NULL'
-    }
-    if (newsuborder === null) {
-        newsuborder = 'NULL'
-    }
-    if (newfamily === null) {
-        newfamily = 'NULL'
-    }
-    if (newsubfamily === null) {
-        newsubfamily = 'NULL'
-    }
-    if (newtribu === null) {
-        newtribu = 'NULL'
-    }
-    if (newgenus === null) {
-        newgenus = 'NULL'
-    }
-    if (newsubgenus === null) {
-        newsubgenus = 'NULL'
-    }
-    if (newspecies === null) {
-        newspecies = 'NULL'
-    }
-    if (newsubspecies === null) {
-        newsubspecies = 'NULL'
-    }
-    if (order === null) {
-        order = 'NULL'
-    }
-    if (suborder === null) {
-        suborder = 'NULL'
-    }
-    if (family === null) {
-        family = 'NULL'
-    }
-    if (subfamily === null) {
-        subfamily = 'NULL'
-    }
-    if (tribu === null) {
-        tribu = 'NULL'
-    }
-    if (genus === null) {
-        genus = 'NULL'
-    }
-    if (subgenus === null) {
-        subgenus = 'NULL'
-    }
-    if (species === null) {
-        species = 'NULL'
-    }
-    if (subspecies === null) {
-        subspecies = 'NULL'
-    }
+    if (neworder === null) { neworder = 'NULL' }
+    if (newsuborder === null) { newsuborder = 'NULL' }
+    if (newfamily === null) { newfamily = 'NULL' }
+    if (newsubfamily === null) { newsubfamily = 'NULL' }
+    if (newtribu === null) { newtribu = 'NULL' }
+    if (newgenus === null) { newgenus = 'NULL' }
+    if (newsubgenus === null) { newsubgenus = 'NULL' }
+    if (newspecies === null) { newspecies = 'NULL' }
+    if (newsubspecies === null) { newsubspecies = 'NULL' }
+    if (order === null) { order = 'NULL' }
+    if (suborder === null) { suborder = 'NULL' }
+    if (family === null) { family = 'NULL' }
+    if (subfamily === null) { subfamily = 'NULL' }
+    if (tribu === null) { tribu = 'NULL' }
+    if (genus === null) { genus = 'NULL' }
+    if (subgenus === null) { subgenus = 'NULL' }
+    if (species === null) { species = 'NULL' }
+    if (subspecies === null) { subspecies = 'NULL' }
 
     return new Promise(function (resolve, reject) {
         var idpopu = 0
 
-        new Promise(function (resolve2, reject2) {client.query(getidpopu, [neworder, newsuborder, newfamily, newsubfamily, newtribu, newgenus, newsubgenus, newspecies, newsubspecies], (err, res) => {
+        new Promise(function (resolve2, reject2) {
+            client.query(getidpopu, [neworder, newsuborder, newfamily, newsubfamily, newtribu, newgenus, newsubgenus, newspecies, newsubspecies], (err, res) => {
                 if (err) {
                     reject2(new Error("Erreur DB"))
                 }
@@ -1514,7 +1474,7 @@ function modifypopu(type, id, order, suborder, family, subfamily, tribu, genus, 
                                         (SELECT "id_subgenus" FROM "subGenus" WHERE "name"=$7 ),
                                         (SELECT "id_species" FROM "Species" WHERE "name"=$8 ),
                                         (SELECT "id_subspecies" FROM "subSpecies" WHERE "name"=$9 ));`
-                        
+                            
                         client.query(insertnewpopu, [neworder, newsuborder, newfamily, newsubfamily, newtribu, newgenus, newsubgenus, newspecies, newsubspecies], (err2, res2) => {
                             if (err2) {
                                 reject2(new Error("Erreur DB"))
@@ -1626,7 +1586,7 @@ function modifypopu(type, id, order, suborder, family, subfamily, tribu, genus, 
                     })
                 })
                 .then(() => {
-                    console.log("Population of ${type} changed")
+                    console.log(`Population of ${type} ${id} changed`)
                     return resolve("Success")
                 })
                 .catch((err) => {
@@ -1640,34 +1600,20 @@ function modifypopu(type, id, order, suborder, family, subfamily, tribu, genus, 
     })
 }
 
+/*
+Add a population to a box
+input: -id:boxid, etc...
+*/ 
 function addpopubox(id, order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies) {
-    if (order === null) {
-        order = 'NULL'
-    }
-    if (suborder === null) {
-        suborder = 'NULL'
-    }
-    if (family === null) {
-        family = 'NULL'
-    }
-    if (subfamily === null) {
-        subfamily = 'NULL'
-    }
-    if (tribu === null) {
-        tribu = 'NULL'
-    }
-    if (genus === null) {
-        genus = 'NULL'
-    }
-    if (subgenus === null) {
-        subgenus = 'NULL'
-    }
-    if (species === null) {
-        species = 'NULL'
-    }
-    if (subspecies === null) {
-        subspecies = 'NULL'
-    }
+    if (order === null) { order = 'NULL' }
+    if (suborder === null) { suborder = 'NULL' }
+    if (family === null) { family = 'NULL' }
+    if (subfamily === null) { subfamily = 'NULL' }
+    if (tribu === null) { tribu = 'NULL' }
+    if (genus === null) { genus = 'NULL' }
+    if (subgenus === null) { subgenus = 'NULL' }
+    if (species === null) { species = 'NULL' }
+    if (subspecies === null) { subspecies = 'NULL' }
 
     return new Promise(function (resolve, reject) {
         var idpopu = 0
@@ -1737,34 +1683,20 @@ function addpopubox(id, order, suborder, family, subfamily, tribu, genus, subgen
     })
 }
 
+/*
+Delete a population of a box
+input: -id:boxid, order/suborder/...: attributes of population to delete from the box
+*/ 
 function deletepopubox(id, order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies) {
-    if (order === null) {
-        order = 'NULL'
-    }
-    if (suborder === null) {
-        suborder = 'NULL'
-    }
-    if (family === null) {
-        family = 'NULL'
-    }
-    if (subfamily === null) {
-        subfamily = 'NULL'
-    }
-    if (tribu === null) {
-        tribu = 'NULL'
-    }
-    if (genus === null) {
-        genus = 'NULL'
-    }
-    if (subgenus === null) {
-        subgenus = 'NULL'
-    }
-    if (species === null) {
-        species = 'NULL'
-    }
-    if (subspecies === null) {
-        subspecies = 'NULL'
-    }
+    if (order === null) { order = 'NULL' }
+    if (suborder === null) { suborder = 'NULL' }
+    if (family === null) { family = 'NULL' }
+    if (subfamily === null) { subfamily = 'NULL' }
+    if (tribu === null) { tribu = 'NULL' }
+    if (genus === null) { genus = 'NULL' }
+    if (subgenus === null) { subgenus = 'NULL' }
+    if (species === null) { species = 'NULL' }
+    if (subspecies === null) { subspecies = 'NULL' }
 
     return new Promise(function (resolve, reject) {
         var idpopu = 0
@@ -1846,6 +1778,10 @@ function deletepopubox(id, order, suborder, family, subfamily, tribu, genus, sub
     })
 }
 
+/*
+Delete a box
+input: -id:boxid
+*/ 
 function deletebox(id) {
     //Pas complet
     return new Promise(function (resolve, reject) {
@@ -1890,6 +1826,10 @@ function deletebox(id) {
     })
 }
 
+/*
+Delete an individual
+input: -id:individual id
+*/ 
 function deleteindiv(id) {
     //Pas complet
     return new Promise(function (resolve, reject) {
@@ -1947,9 +1887,7 @@ module.exports = {
     changeboxloaner,
     changeboxcollection,
     csvtosql,
-    csvtosqladmin,
-    boxSqlToCsv,
-    indivSqlToCsv,
+    SqlToCsv,
     modifypopu,
     addpopubox,
     deletepopubox,

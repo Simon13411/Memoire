@@ -5,12 +5,12 @@ const url = process.env.REACT_APP_IP
 
 function FileDownloader({file, type}) {
 
-  const [downloadstate, setDownloadstate] = useState('');
+    const [downloadstate, setDownloadstate] = useState('');
 
-  const handleDownload = () => {
-    setDownloadstate('Veuillez patienter...')
-    if (file === 'Box') {
-        axios.get(`${url}/boxestemplate`, { responseType: 'blob' })
+    const handleDownload = () => {
+        setDownloadstate('Veuillez patienter...')
+        if (file === 'Box') {
+            axios.get(`${url}/boxestemplate`, { responseType: 'blob' })
             .then(response => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
@@ -25,9 +25,9 @@ function FileDownloader({file, type}) {
                 console.error('Error fetching file', error);
                 setDownloadstate('Erreur lors de la génération du fichier')
             });
-    }
-    else if (file === 'Individual') {
-        axios.get(`${url}/individualstemplate`, { responseType: 'blob' })
+        }
+        else if (file === 'Individual') {
+            axios.get(`${url}/individualstemplate`, { responseType: 'blob' })
             .then(response => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
@@ -42,27 +42,27 @@ function FileDownloader({file, type}) {
                 console.error('Error fetching file', error);
                 setDownloadstate('Erreur lors de la génération du fichier')
             });
-    }
-    else if (file === 'BoxSQL') {
-      axios.get(`${url}/boxessqltocsv`, { responseType: 'blob' })
-          .then(response => {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'BoxesData.xlsx';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                setDownloadstate('')
-            })
+        }
+        else if (file === 'BoxSQL') {
+            axios.get(`${url}/boxessqltocsv`, { responseType: 'blob' })
+            .then(response => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'BoxesData.xlsx';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    setDownloadstate('')
+                })
             .catch(error => {
                 console.error('Error fetching file', error);
                 setDownloadstate('Erreur lors de la génération du fichier')
             });
-    }
-    else if (file === 'IndividualSQL') {
-      axios.get(`${url}/individualssqltocsv`, { responseType: 'blob' })
-          .then(response => {
+        }
+        else if (file === 'IndividualSQL') {
+            axios.get(`${url}/individualssqltocsv`, { responseType: 'blob' })
+            .then(response => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 link.href = url;
@@ -76,34 +76,34 @@ function FileDownloader({file, type}) {
                 console.error('Error fetching file', error);
                 setDownloadstate('Erreur lors de la génération du fichier')
             });
-    }
-  };
+        }
+    };
 
-  return (
-    <>
-    {type === 'template' ?
-      ( 
+    return (
         <>
-        <div>
-          <button onClick={handleDownload}>
-            Download the template (.xslx file)
-          </button>
-        </div>
-        <div>{downloadstate}</div>
+        {type === 'template' ?
+            ( 
+                <>
+                <div>
+                    <button onClick={handleDownload}>
+                        Download the template (.xslx file)
+                    </button>
+                </div>
+                <div>{downloadstate}</div>
+                </>
+            ) : (
+                <>
+                <div>
+                    <button onClick={handleDownload}>
+                    Download data (.xlsx File)
+                    </button>
+                </div>
+                <div>{downloadstate}</div>
+                </>
+            )
+        }
         </>
-      ) : (
-        <>
-        <div>
-        <button onClick={handleDownload}>
-          Download data (.xlsx File)
-        </button>
-        </div>
-        <div>{downloadstate}</div>
-        </>
-      )
-    }
-    </>
-  );
+    );
 }
 
 export default FileDownloader;
