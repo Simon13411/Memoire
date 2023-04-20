@@ -251,9 +251,9 @@ app.get('/get_selectiont', (req, res) => {
     })
 })
 
-//Get all Loaners
-app.get('/get_loaners', (req, res) => {
-    return db.get_loaners()
+//Get all borrowers
+app.get('/get_borrowers', (req, res) => {
+    return db.get_borrowers()
     .then((results) => {
         res.status(200).json(results)
     })
@@ -319,9 +319,9 @@ app.post('/modifycollection', (req, res) => {
     })
 })
 
-app.post('/addloaner', (req, res) => {
+app.post('/addborrower', (req, res) => {
     const { name, mail, phone } = req.body
-    return db.addloaner(name, mail, phone)
+    return db.addborrower(name, mail, phone)
     .then((results) => {
         res.status(200).json(results)
     })
@@ -330,8 +330,8 @@ app.post('/addloaner', (req, res) => {
     })
 })
 
-app.get('/get_loanerinfo/:name', (req, res) => {
-    return db.getloanerinfo(req.params.name)
+app.get('/get_borrowerinfo/:name', (req, res) => {
+    return db.getborrowerinfo(req.params.name)
         .then((resu) => {
             res.status(200).json(resu);
         })
@@ -340,9 +340,9 @@ app.get('/get_loanerinfo/:name', (req, res) => {
         });
 })
 
-app.post('/modifyloaner', (req, res) => {
-    const { loaner, name, mail, phone } = req.body
-    return db.modifyloaner(loaner, name, mail, phone)
+app.post('/modifyborrower', (req, res) => {
+    const { borrower, name, mail, phone } = req.body
+    return db.modifyborrower(borrower, name, mail, phone)
     .then((results) => {
         res.status(200).json(results)
     })
@@ -363,9 +363,9 @@ app.post('/changeindivboxid', (req, res) => {
     })
 })
 
-app.post('/changeindivloaner', (req, res) => {
-    const { individ, newloaner } = req.body
-    return db.changeindivloaner(individ, newloaner)
+app.post('/changeindivborrower', (req, res) => {
+    const { individ, newborrower } = req.body
+    return db.changeindivborrower(individ, newborrower)
     .then((results) => {
         res.status(200).json(results)
     })
@@ -385,9 +385,9 @@ app.post('/changeboxcollection', (req, res) => {
     })
 })
 
-app.post('/changeboxloaner', (req, res) => {
-    const { boxid, newloaner } = req.body
-    return db.changeboxloaner(boxid, newloaner)
+app.post('/changeboxborrower', (req, res) => {
+    const { boxid, newborrower } = req.body
+    return db.changeboxborrower(boxid, newborrower)
     .then((results) => {
         res.status(200).json(results)
     })

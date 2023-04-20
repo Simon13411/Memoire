@@ -21,13 +21,13 @@ class BoxDetails extends React.Component {
             attr: [],
             isLoaded: false,
             collection: null,
-            loaner: null,
+            borrower: null,
             collectionlist: [],
-            loanerslist: [],
+            borrowerslist: [],
             newcollection: null,
-            newloaner: null,
+            newborrower: null,
             modifycollectionstate: '',
-            modifyloanerstate: '',
+            modifyborrowerstate: '',
             imageURL: null,
             deletestate: ''
         }
@@ -36,7 +36,7 @@ class BoxDetails extends React.Component {
     componentDidMount() {
         this.GetBox()
         this.getCollections()
-        this.getLoaners()
+        this.getBorrowers()
         this.getPicture()
     }
 
@@ -66,7 +66,7 @@ class BoxDetails extends React.Component {
 
     /* ------------------- Page stuff ---------------------*/
     Loaded = () => {
-        this.setState({isLoaded: true, collection: this.state.attr[0].collection, loaner: this.state.attr[0].loaner})
+        this.setState({isLoaded: true, collection: this.state.attr[0].collection, borrower: this.state.attr[0].borrower})
     }
 
     handleInputChange = (event) => {
@@ -86,7 +86,7 @@ class BoxDetails extends React.Component {
     GetBox = (event) => {
         axios.get(`${url}/get_boxdetails`, {params: {id: this.props.searchParams.get("id")}})
         .then((res) => {
-            this.setState({attr: res.data.rows, collection: res.data.rows[0].collection, newcollection: res.data.rows[0].collection, loaner: res.data.rows[0].loaner, newloaner: res.data.rows[0].loaner}, this.Loaded)
+            this.setState({attr: res.data.rows, collection: res.data.rows[0].collection, newcollection: res.data.rows[0].collection, borrower: res.data.rows[0].borrower, newborrower: res.data.rows[0].borrower}, this.Loaded)
         })
     }
 
@@ -97,10 +97,10 @@ class BoxDetails extends React.Component {
         })
     }
 
-    getLoaners = () => {
-        axios.get(`${url}/get_loaners`)
+    getBorrowers = () => {
+        axios.get(`${url}/get_borrowers`)
         .then((res) => {
-            this.setState({loanerslist: res.data.rows})
+            this.setState({borrowerslist: res.data.rows})
         })
     }
 
@@ -134,21 +134,21 @@ class BoxDetails extends React.Component {
         })
     }
 
-    modifyloaner = () => {
+    modifyborrower = () => {
         const authToken = Cookies.get('auth_token');
 
-        this.setState({modifyloanerstate: 'Changement en cours...'})
-        const newloaner = this.state.newloaner
-        axios.post(`${url}/changeboxloaner`, {boxid: this.props.searchParams.get("id"), newloaner: newloaner, token: authToken})
+        this.setState({modifyborrowerstate: 'Changement en cours...'})
+        const newborrower = this.state.newborrower
+        axios.post(`${url}/changeboxborrower`, {boxid: this.props.searchParams.get("id"), newborrower: newborrower, token: authToken})
         .then((res) => {
-            this.setState({loaner: newloaner, modifyloanerstate: `Loaner est maintenant ${newloaner}`})
+            this.setState({borrower: newborrower, modifyborrowerstate: `borrower est maintenant ${newborrower}`})
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({modifyloanerstate: 'Erreur Serveur - Gateway'})
+                this.setState({modifyborrowerstate: 'Erreur Serveur - Gateway'})
             }
             else {
-                this.setState({modifyloanerstate: err.response.data.error})
+                this.setState({modifyborrowerstate: err.response.data.error})
             }
         })
     }
@@ -181,7 +181,7 @@ class BoxDetails extends React.Component {
                 ):(
                 <>
                     <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
-                    <p>Boite n° {this.props.searchParams.get("id")}  Collection: {this.state.collection}  {this.state.loaner ? (<>Loaner: {this.state.loaner}</>):(<></>)}</p>
+                    <p>Boite n° {this.props.searchParams.get("id")}  Collection: {this.state.collection}  {this.state.borrower ? (<>Borrower: {this.state.borrower}</>):(<></>)}</p>
                     <>
                     {this.props.isAdmin() ? 
                         (
@@ -214,16 +214,16 @@ class BoxDetails extends React.Component {
                                     <div>
                                         <h4 className="title">Borrower</h4>
                                         <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                                            <Select id="loaner-select" value={this.state.newloaner} onChange={this.handleInputChange} name="newloaner">
+                                            <Select id="borrower-select" value={this.state.newborrower} onChange={this.handleInputChange} name="newborrower">
                                                 <MenuItem value={null}>
                                                     <em>None</em>
                                                 </MenuItem>
-                                                {this.state.loanerslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                                                {this.state.borrowerslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                                             </Select>
                                         </FormControl>
                                     </div>
-                                    <button type='submit' onClick={this.modifyloaner}>Modify</button>
-                                    <div>{this.state.modifyloanerstate}</div>
+                                    <button type='submit' onClick={this.modifyborrower}>Modify</button>
+                                    <div>{this.state.modifyborrowerstate}</div>
                                 </div>
                             ):(
                                 <></>
@@ -241,7 +241,7 @@ class BoxDetails extends React.Component {
                                                                         species= {data.species}
                                                                         subspecies= {data.subspecies}
                                                                         tribu= {data.tribu}
-                                                                        loaner= {data.loaner} maxPopDegree={this.maxPopDegree} refresh={this.refreshPage}></BoxAttributes>)}
+                                                                        maxPopDegree={this.maxPopDegree} refresh={this.refreshPage}></BoxAttributes>)}
                     </div>
                     {this.props.isAuthenticated() ?
                         <BoxDetailsAddPop refresh={this.refreshPage} id={this.props.searchParams.get("id")} maxPopDegree={this.maxPopDegree}/>

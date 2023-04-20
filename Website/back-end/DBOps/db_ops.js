@@ -86,7 +86,7 @@ OUTPUT:
 */ 
 function get_boxdetails(id) {
     var searchquery = `SELECT B."id_box", B."location", B."museum", B."paratypes", B."types", O."name" as "order",
-                        So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", Col."name" as "collection", loan."prenom" as "loaner"
+                        So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", Col."name" as "collection", loan."prenom" as "borrower"
                             FROM "Box" B
                             LEFT OUTER JOIN "Collection" Col ON B."collection_id"=Col."id_collection"
                             LEFT OUTER JOIN "PopuBox" P ON B."id_box"=P."box_id"
@@ -178,7 +178,7 @@ OUTPUT:
 */ 
 function get_indivdetails(id) {
     var searchquery = `SELECT I."id_individu", I."box_id", I."name", I."continent", I."country", I."ecozone", O."name" as "order",
-    So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", loan."prenom" as "loaner"
+    So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", loan."prenom" as "borrower"
                         FROM "Individu" I
                             LEFT OUTER JOIN "Population" P2 ON I."population_id"=P2."id_population"
                             LEFT OUTER JOIN "PopuBox" P ON P."population_id"=P2."id_population"
@@ -712,7 +712,7 @@ function get_selectionss(O, So, F, Sf, T, G, Sg, S) {
 /*
 Get all borrowers name
 */ 
-function get_loaners(){
+function get_borrowers(){
     var searchquery = `SELECT "name" FROM "Loaner" ORDER BY "name" ASC`
                             
     return new Promise(function (resolve, reject) {
@@ -732,7 +732,7 @@ function get_loaners(){
 Get all borrower's information
 input : - name: borrower's name
 */ 
-function getloanerinfo(name){
+function getborrowerinfo(name){
     var searchquery = `SELECT "name", "phone", "mail" FROM "Loaner" WHERE "name"=$1`
                             
     return new Promise(function (resolve, reject) {
@@ -1043,7 +1043,7 @@ Add a borrower
 input:  -name: borrower's name
         -mail,phone: information of borrower
 */ 
-function addloaner(name, mail, phone) {
+function addborrower(name, mail, phone) {
     query = `INSERT INTO "Loaner"
     ("id_loaner", "name", "mail","phone")
     VALUES
@@ -1066,7 +1066,7 @@ Modify a borrower
 input:  -borrower: borrower's name
         -name,mail,phone: new information for this borrower
 */ 
-function modifyloaner(loaner, name, mail, phone) {
+function modifyborrower(borrower, name, mail, phone) {
     verifquery = `SELECT *
                 FROM "Loaner"
                 WHERE "name"=$1;`
@@ -1076,13 +1076,13 @@ function modifyloaner(loaner, name, mail, phone) {
                     WHERE "name"=$4;`
 
     return new Promise(function (resolve, reject) {
-        client.query(verifquery, [loaner], (err, res) => {
+        client.query(verifquery, [borrower], (err, res) => {
             if (err) {
                 return reject(new Error("Erreur DB"))
             }
             else {
                 if (res.rowCount !== 0) {
-                    client.query(updatequery, [name, mail, phone, loaner], (err2, res2) => {
+                    client.query(updatequery, [name, mail, phone, borrower], (err2, res2) => {
                         if (err) {
                             console.error(err2)
                             return reject(new Error("Erreur DB"))
@@ -1093,7 +1093,7 @@ function modifyloaner(loaner, name, mail, phone) {
                     })
                 }
                 else {
-                    return reject(new Error(`${loaner} is not in use`))
+                    return reject(new Error(`${borrower} is not in use`))
                 }
             }
         })
@@ -1143,7 +1143,7 @@ Change borrower of an individual
 input:  -individ: individual id
         -newborrower: borrower that will be assigned to this individual
 */ 
-function changeindivloaner(individ, newloaner) {
+function changeindivborrower(individ, newborrower) {
     verifquery = `SELECT *
                     FROM "Loaner"
                     Where "name"=$1;`
@@ -1157,7 +1157,7 @@ function changeindivloaner(individ, newloaner) {
                     WHERE "name"=$1), $2);`
 
     return new Promise(function (resolve, reject) {
-        if (newloaner === null) {
+        if (newborrower === null) {
             client.query(deletequery, [individ], (err, res) => {
                 if (err) {
                     console.error(err)
@@ -1168,7 +1168,7 @@ function changeindivloaner(individ, newloaner) {
                 }
             })
         }
-        client.query(verifquery, [newloaner], (err, res) => {
+        client.query(verifquery, [newborrower], (err, res) => {
             if (err) {
                 return reject(new Error("Erreur DB"))
             }
@@ -1180,7 +1180,7 @@ function changeindivloaner(individ, newloaner) {
                             return reject(new Error("Erreur DB"))
                         }
                         else {
-                            client.query(insertquery, [newloaner, individ], (err3, res3) => {
+                            client.query(insertquery, [newborrower, individ], (err3, res3) => {
                                 if (err3) {
                                     console.error(err3)
                                     return reject(new Error("Erreur DB"))
@@ -1193,7 +1193,7 @@ function changeindivloaner(individ, newloaner) {
                     })
                 }
                 else {
-                    return reject(new Error(`${newloaner} is not in use`))
+                    return reject(new Error(`${newborrower} is not in use`))
                 }
             }
         })
@@ -1232,7 +1232,7 @@ function changeboxcollection(boxid, collection) {
                     })
                 }
                 else {
-                    return reject(new Error(`${loaner} is not in use`))
+                    return reject(new Error(`${borrower} is not in use`))
                 }
             }
         })
@@ -1244,7 +1244,7 @@ Change borrower of a box
 input:  -boxid: box id
         -newborrower: borrower that will be assigned to this box
 */ 
-function changeboxloaner(boxid, newloaner) {
+function changeboxborrower(boxid, newborrower) {
     verifquery = `SELECT *
                     FROM "Loaner"
                     Where "name"=$1;`
@@ -1258,7 +1258,7 @@ function changeboxloaner(boxid, newloaner) {
                     WHERE "name"=$1),$2);`
 
     return new Promise(function (resolve, reject) {
-        if (newloaner === null) {
+        if (newborrower === null) {
             client.query(deletequery, [boxid], (err, res) => {
                 if (err) {
                     console.error(err)
@@ -1269,7 +1269,7 @@ function changeboxloaner(boxid, newloaner) {
                 }
             })
         }
-        client.query(verifquery, [newloaner], (err, res) => {
+        client.query(verifquery, [newborrower], (err, res) => {
             if (err) {
                 return reject(new Error("Erreur DB"))
             }
@@ -1281,7 +1281,7 @@ function changeboxloaner(boxid, newloaner) {
                             return reject(new Error("Erreur DB"))
                         }
                         else {
-                            client.query(insertquery, [newloaner, parseInt(boxid)], (err3, res3) => {
+                            client.query(insertquery, [newborrower, parseInt(boxid)], (err3, res3) => {
                                 if (err3) {
                                     console.error(err3)
                                     return reject(new Error("Erreur DB"))
@@ -1294,7 +1294,7 @@ function changeboxloaner(boxid, newloaner) {
                     })
                 }
                 else {
-                    return reject(new Error(`${newloaner} is not in use`))
+                    return reject(new Error(`${newborrower} is not in use`))
                 }
             }
         })
@@ -1873,18 +1873,18 @@ module.exports = {
     get_selections,
     get_selectionss,
     get_selectiont,
-    get_loaners,
-    getloanerinfo,
+    get_borrowers,
+    getborrowerinfo,
     get_collections,
     addattribute,
     deleteattribute,
     addcollection,
     modifycollection,
-    addloaner,
-    modifyloaner,
+    addborrower,
+    modifyborrower,
     changeindivboxid,
-    changeindivloaner,
-    changeboxloaner,
+    changeindivborrower,
+    changeboxborrower,
     changeboxcollection,
     csvtosql,
     SqlToCsv,

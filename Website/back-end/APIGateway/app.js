@@ -160,8 +160,8 @@ app.get('/get_selectiont', (req, res) => {
         });
 })
 
-app.get('/get_loaners', (req, res) => {
-    axios.get(`http://${IP_DBOPS}/get_loaners`)
+app.get('/get_borrowers', (req, res) => {
+    axios.get(`http://${IP_DBOPS}/get_borrowers`)
         .then((resu) => {
             res.status(200).json(resu.data);
         })
@@ -248,11 +248,11 @@ app.post('/modifycollection', (req, res) => {
         });
 })
 
-app.post('/addloaner', (req, res) => {
+app.post('/addborrower', (req, res) => {
     const { name, mail, phone, token } = req.body
     axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
         .then(() => {
-            axios.post(`http://${IP_DBOPS}/addloaner`, { name: name, mail: mail, phone: phone })
+            axios.post(`http://${IP_DBOPS}/addborrower`, { name: name, mail: mail, phone: phone })
                 .then((resu) => {
                     res.status(200).json(resu.data);
                 })
@@ -265,8 +265,8 @@ app.post('/addloaner', (req, res) => {
         });
 })
 
-app.get('/get_loanerinfo/:name', (req, res) => {
-    axios.get(`http://${IP_DBOPS}/get_loanerinfo/${req.params.name}`)
+app.get('/get_borrowerinfo/:name', (req, res) => {
+    axios.get(`http://${IP_DBOPS}/get_borrowerinfo/${req.params.name}`)
         .then((resu) => {
             res.status(200).json(resu.data);
         })
@@ -275,11 +275,11 @@ app.get('/get_loanerinfo/:name', (req, res) => {
         });
 })
 
-app.post('/modifyloaner', (req, res) => {
-    const { loaner, name, mail, phone, token } = req.body
+app.post('/modifyborrower', (req, res) => {
+    const { borrower, name, mail, phone, token } = req.body
     axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
         .then(() => {
-            axios.post(`http://${IP_DBOPS}/modifyloaner`, { loaner: loaner, name: name, mail: mail, phone: phone })
+            axios.post(`http://${IP_DBOPS}/modifyborrower`, { borrower: borrower, name: name, mail: mail, phone: phone })
                 .then((resu) => {
                     res.status(200).json(resu.data);
                 })
@@ -309,11 +309,11 @@ app.post('/changeindivboxid', (req, res) => {
         });
 })
 
-app.post('/changeindivloaner', (req, res) => {
-    const { individ, newloaner, token } = req.body
+app.post('/changeindivborrower', (req, res) => {
+    const { individ, newborrower, token } = req.body
     axios.post(`http://${IP_LOGIN}/verifyuserright`, {token: token})
         .then(() => {
-            axios.post(`http://${IP_DBOPS}/changeindivloaner`, {individ: individ, newloaner: newloaner})
+            axios.post(`http://${IP_DBOPS}/changeindivborrower`, {individ: individ, newborrower: newborrower})
                 .then((resu) => {
                     res.status(200).json(resu.data);
                 })
@@ -343,11 +343,11 @@ app.post('/changeboxcollection', (req, res) => {
         });
 })
 
-app.post('/changeboxloaner', (req, res) => {
-    const { boxid, newloaner, token } = req.body
+app.post('/changeboxborrower', (req, res) => {
+    const { boxid, newborrower, token } = req.body
     axios.post(`http://${IP_LOGIN}/verifyuserright`, {token: token})
         .then(() => {
-            axios.post(`http://${IP_DBOPS}/changeboxloaner`, { boxid: boxid, newloaner: newloaner })
+            axios.post(`http://${IP_DBOPS}/changeboxborrower`, { boxid: boxid, newborrower: newborrower })
                 .then((resu) => {
                     res.status(200).json(resu.data);
                 })

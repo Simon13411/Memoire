@@ -22,7 +22,6 @@ class BoxDetailsAdmin extends React.Component {
             species: null,
             subspecies: null,
             tribu: null,
-            loaner: null,
             orderlist: [],
             suborderlist: [],
             genuslist: [],

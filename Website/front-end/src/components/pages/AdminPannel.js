@@ -65,18 +65,18 @@ class AdminPannel extends React.Component {
             modifiedcollection: 'NULL',
             modifiedcollection2: '',
             modifycollectionstate: '',
-            //AddLoaner
-            newloanername: '',
-            newloanerphone: '',
-            newloanermail: '',
-            newloanerstate: '',
-            //Modifyloaner
-            loanerlist: [],
-            modifiedloanername: '',
-            modifiedloanername2: '',
-            modifiedloanermail: '',
-            modifiedloanerphone: '',
-            modifiedloanerstate: '',
+            //AddBorrower
+            newborrowername: '',
+            newborrowerphone: '',
+            newborrowermail: '',
+            newborrowerstate: '',
+            //Modifyborrower
+            borrowerlist: [],
+            modifiedborrowername: '',
+            modifiedborrowername2: '',
+            modifiedborrowermail: '',
+            modifiedborrowerphone: '',
+            modifiedborrowerstate: '',
             //Token
             authToken: '',
             //Upload
@@ -90,7 +90,7 @@ class AdminPannel extends React.Component {
         this.getUsers()
         this.get_selection()
         this.getCollections()
-        this.getLoaners()
+        this.getBorrowers()
     }
 
     onSubmit (event) {
@@ -387,81 +387,81 @@ class AdminPannel extends React.Component {
     }
 
     /* --------------------------  Borrower REQUEST ---------------------------- */
-    getLoaners = () => {
-        axios.get(`${url}/get_loaners`)
+    getBorrowers = () => {
+        axios.get(`${url}/get_borrowers`)
         .then((res) => {
-            this.setState({loanerlist: res.data.rows})
+            this.setState({borrowerlist: res.data.rows})
         })
     }
 
-    Addloaner = () => {
-        if (this.state.newloanername === '') {
-            this.setState({newloanerstate: `Loaner's name can't be empty`})
+    addBorrower = () => {
+        if (this.state.newborrowername === '') {
+            this.setState({newborrowerstate: `Borrower's name can't be empty`})
         }
-        axios.post(`${url}/addloaner`, {
-            name: this.state.newloanername,
-            mail: this.state.newloanermail, 
-            phone: this.state.newloanerphone,
+        axios.post(`${url}/addborrower`, {
+            name: this.state.newborrowername,
+            mail: this.state.newborrowermail, 
+            phone: this.state.newborrowerphone,
             token: this.state.authToken
         })
         .then((res) => {
-            this.setState({newloanerstate: `Loaner ${this.state.newloanername} added to db`}, this.getLoaners);
+            this.setState({newborrowerstate: `Borrower ${this.state.newborrowername} added to db`}, this.getBorrowers);
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({newloanerstate: "Erreur Serveur - Gateway"});
+                this.setState({newborrowerstate: "Erreur Serveur - Gateway"});
             }
             else {
-                this.setState({newloanerstate: err.response.data.error});
+                this.setState({newborrowerstate: err.response.data.error});
             }
         });
     }
 
-    ModifyLoaner = () => {
-        if (this.state.modifiedloanername === '') {
-            this.setState({modifiedloanerstate: `Loaner's name can't be empty`})
+    modifyBorrower = () => {
+        if (this.state.modifiedborrowername === '') {
+            this.setState({modifiedborrowerstate: `Borrower's name can't be empty`})
         }
-        axios.post(`${url}/modifyloaner`, {
-            loaner: this.state.modifiedloanername,
-            name: this.state.modifiedloanername2,
-            mail: this.state.modifiedloanermail,
-            phone: this.state.modifiedloanerphone,
+        axios.post(`${url}/modifyborrower`, {
+            borrower: this.state.modifiedborrowername,
+            name: this.state.modifiedborrowername2,
+            mail: this.state.modifiedborrowermail,
+            phone: this.state.modifiedborrowerphone,
             token: this.state.authToken
         })
         .then((res) => {
-            this.setState({modifiedloanerstate: `${this.state.modifiedloanername}'s information changed`}, this.getLoaners);
+            this.setState({modifiedborrowerstate: `${this.state.modifiedborrowername}'s information changed`}, this.getBorrowers);
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({modifiedloanerstate: "Erreur Serveur - Gateway"});
+                this.setState({modifiedborrowerstate: "Erreur Serveur - Gateway"});
             }
             else {
-                this.setState({modifiedloanerstate: err.response.data.error});
+                this.setState({modifiedborrowerstate: err.response.data.error});
             }
         });
     }
 
-    getLoanerInfo = (event) => {
+    getBorrowerInfo = (event) => {
         const target = event.target
         const value = target.value
         const name = target.name
         if (value !== '') {
             this.setState({
                 [name]: value
-            }, this.getLoanerInfoHelper)
+            }, this.getBorrowerInfoHelper)
         }
         else {
             this.setState({[name]: ''})
         }
     }
 
-    getLoanerInfoHelper = () => {
-        axios.get(`${url}/get_loanerinfo/${this.state.modifiedloanername}`)
+    getBorrowerInfoHelper = () => {
+        axios.get(`${url}/get_borrowerinfo/${this.state.modifiedborrowername}`)
         .then((res) => {
             this.setState({
-                modifiedloanername2: res.data.rows[0].name,
-                modifiedloanerphone: res.data.rows[0].phone,
-                modifiedloanermail: res.data.rows[0].mail})
+                modifiedborrowername2: res.data.rows[0].name,
+                modifiedborrowerphone: res.data.rows[0].phone,
+                modifiedborrowermail: res.data.rows[0].mail})
         })
         .catch((err) => {
             //Nothing
@@ -761,29 +761,29 @@ class AdminPannel extends React.Component {
                 <div className='column'>
                     <h3>Add borrower</h3>
                     <form onSubmit={(event) => { this.onSubmit(event) }}>
-                        <label htmlFor="newloaner">New borrower's name:</label>
-                        <input type="text" value={this.state.newloanername} onChange={this.handleInputChange} name="newloanername" />
+                        <label htmlFor="newborrower">New borrower's name:</label>
+                        <input type="text" value={this.state.newborrowername} onChange={this.handleInputChange} name="newborrowername" />
                         <br />
-                        <label htmlFor="newloaner">New borrower's mail:</label>
-                        <input type="text" value={this.state.newloanermail} onChange={this.handleInputChange} name="newloanermail" />
+                        <label htmlFor="newborrower">New borrower's mail:</label>
+                        <input type="text" value={this.state.newborrowermail} onChange={this.handleInputChange} name="newborrowermail" />
                         <br />
-                        <label htmlFor="newloaner">New borrower's phone:</label>
-                        <input type="text" value={this.state.newloanerphone} onChange={this.handleInputChange} name="newloanerphone" />
+                        <label htmlFor="newborrower">New borrower's phone:</label>
+                        <input type="text" value={this.state.newborrowerphone} onChange={this.handleInputChange} name="newborrowerphone" />
                         <br />
-                        <button type="submit" onClick={this.Addloaner}>Add</button>
-                        {this.state.newloanerstate}
+                        <button type="submit" onClick={this.addBorrower}>Add</button>
+                        {this.state.newborrowerstate}
                     </form>
                     <br />
                     <h3>Modify borrower</h3>
                     <form onSubmit={(event) => { this.onSubmit(event) }}>
-                        <label htmlFor="modifiedloaner">Borrower to modify:</label>
+                        <label htmlFor="modifiedborrower">Borrower to modify:</label>
                         <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
                             <InputLabel id="demo-simple-select-label"></InputLabel>
-                            <Select value={this.state.modifiedloanername} label="modifiedloanername" onChange={this.getLoanerInfo} name='modifiedloanername'>
+                            <Select value={this.state.modifiedborrowername} label="modifiedborrowername" onChange={this.getBorrowerInfo} name='modifiedborrowername'>
                                 <MenuItem value='NULL'>
                                     <em>None</em>
                                 </MenuItem>
-                                {this.state.loanerlist.map((l) => (
+                                {this.state.borrowerlist.map((l) => (
                                     <MenuItem key={l.name} value={l.name}>
                                         {l.name}
                                     </MenuItem>
@@ -791,16 +791,16 @@ class AdminPannel extends React.Component {
                             </Select>
                         </FormControl>
                         <label htmlFor="modifiedcollection">Borrower's name:</label>
-                        <input type="text" value={this.state.modifiedloanername2} onChange={this.handleInputChange} name="modifiedloanername2" />
+                        <input type="text" value={this.state.modifiedborrowername2} onChange={this.handleInputChange} name="modifiedborrowername2" />
                         <br />
-                        <label htmlFor="newloaner">Borrower's mail:</label>
-                        <input type="text" value={this.state.modifiedloanermail} onChange={this.handleInputChange} name="modifiedloanermail" />
+                        <label htmlFor="newborrower">Borrower's mail:</label>
+                        <input type="text" value={this.state.modifiedborrowermail} onChange={this.handleInputChange} name="modifiedborrowermail" />
                         <br />
-                        <label htmlFor="newloaner">Borrower's phone:</label>
-                        <input type="text" value={this.state.modifiedloanerphone} onChange={this.handleInputChange} name="modifiedloanerphone" />
+                        <label htmlFor="newborrower">Borrower's phone:</label>
+                        <input type="text" value={this.state.modifiedborrowerphone} onChange={this.handleInputChange} name="modifiedborrowerphone" />
                         <br />
-                        <button type="submit" onClick={this.ModifyLoaner}>Modify</button>
-                        {this.state.modifiedloanerstate}
+                        <button type="submit" onClick={this.modifyBorrower}>Modify</button>
+                        {this.state.modifiedborrowerstate}
                     </form>
                 </div>
             </div>

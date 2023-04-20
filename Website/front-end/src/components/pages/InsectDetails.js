@@ -28,7 +28,7 @@ class InsectDetails extends React.Component {
             species: null,
             subspecies: null,
             tribu: null,
-            loaner: null,
+            borrower: null,
             orderlist: [],
             suborderlist: [],
             genuslist: [],
@@ -38,19 +38,19 @@ class InsectDetails extends React.Component {
             specieslist: [],
             subspecieslist: [],
             tribuslist: [],
-            loanerslist: [],
+            borrowerslist: [],
             isLoaded: false,
             newidbox: 0,
-            newloaner: null,
+            newborrower: null,
             modifyboxstate: '',
-            modifyloanerstate: '',
+            modifyborrowerstate: '',
             deletestate: ''
         }
     }
 
     componentDidMount() {
         this.getIndiv()
-        this.getLoaners()
+        this.getBorrowers()
     }
 
     /*  ------------------- Page stuff ---------------------*/
@@ -84,15 +84,15 @@ class InsectDetails extends React.Component {
                             species: res.data.rows[0].species,
                             subspecies: res.data.rows[0].subspecies,
                             tribu: res.data.rows[0].tribu,
-                            loaner: res.data.rows[0].loaner,
-                            newloaner: res.data.rows[0].loaner}, this.Loaded)
+                            borrower: res.data.rows[0].borrower,
+                            newborrower: res.data.rows[0].borrower}, this.Loaded)
         })
     }
 
-    getLoaners = () => {
-        axios.get(`${url}/get_loaners`)
+    getBorrowers = () => {
+        axios.get(`${url}/get_borrowers`)
         .then((res) => {
-            this.setState({loanerslist: res.data.rows})
+            this.setState({borrowerslist: res.data.rows})
         })
     }
 
@@ -115,21 +115,21 @@ class InsectDetails extends React.Component {
         })
     }
 
-    modifyloaner = () => {
+    modifyborrower = () => {
         const authToken = Cookies.get('auth_token');
 
-        this.setState({modifyloanerstate: 'Changement en cours...'})
-        const newloaner = this.state.newloaner
-        axios.post(`${url}/changeindivloaner`, {individ: this.state.individ, newloaner: newloaner, token: authToken})
+        this.setState({modifyborrowerstate: 'Changement en cours...'})
+        const newborrower = this.state.newborrower
+        axios.post(`${url}/changeindivborrower`, {individ: this.state.individ, newborrower: newborrower, token: authToken})
         .then((res) => {
-            this.setState({loaner: newloaner, modifyloanerstate: `Borrower est maintenant ${newloaner}`})
+            this.setState({borrower: newborrower, modifyborrowerstate: `Borrower est maintenant ${newborrower}`})
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({modifyloanerstate: 'Erreur Serveur - Gateway'})
+                this.setState({modifyborrowerstate: 'Erreur Serveur - Gateway'})
             }
             else {
-                this.setState({modifyloanerstate: err.response.data.error})
+                this.setState({modifyborrowerstate: err.response.data.error})
             }
         })
     }
@@ -161,7 +161,7 @@ class InsectDetails extends React.Component {
                 ):(
                     <>
                     <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
-                    <p>{this.state.name ? (<>Name: {this.state.name}</>):(<></>)} {this.state.idbox !== 0 ? (<>From Box n° {this.state.idbox}</>):(<></>)} {this.state.loaner ? (<>Borrower: {this.state.loaner}</>):(<></>)}</p>
+                    <p>{this.state.name ? (<>Name: {this.state.name}</>):(<></>)} {this.state.idbox !== 0 ? (<>From Box n° {this.state.idbox}</>):(<></>)} {this.state.borrower ? (<>Borrower: {this.state.borrower}</>):(<></>)}</p>
                     {this.props.isAdmin() ? 
                         (
                             <div>
@@ -188,17 +188,17 @@ class InsectDetails extends React.Component {
                                     <div>
                                         <h4 className="title">Borrower</h4>
                                             <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                                            <Select id="loaner-select" value={this.state.newloaner} onChange={this.handleInputChange} name="newloaner">
+                                            <Select id="borrower-select" value={this.state.newborrower} onChange={this.handleInputChange} name="newborrower">
                                                 <MenuItem value={null}>
                                                     <em>None</em>
                                                 </MenuItem>
-                                                {this.state.loanerslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                                                {this.state.borrowerslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                                             </Select>
                                             </FormControl>
                                     </div>
-                                    <button type='submit' onClick={this.modifyloaner}>Modify</button>
+                                    <button type='submit' onClick={this.modifyborrower}>Modify</button>
                                 </div>
-                                {this.state.modifyloanerstate}
+                                {this.state.modifyborrowerstate}
                             </div>
                             ):(
                                 <></>
@@ -303,16 +303,6 @@ class InsectDetails extends React.Component {
                                     <>
                                         <h4 className="title">Tribe</h4>
                                         <p>{this.state.tribu}</p>
-                                    </>
-                                }
-                            </div>
-                            <div>
-                                {(!this.state.loaner) ?
-                                    (<></>)
-                                    :
-                                    <>
-                                        <h4 className="title">Loaner</h4>
-                                        <p>{this.state.loaner}</p>
                                     </>
                                 }
                             </div>
