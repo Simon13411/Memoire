@@ -116,6 +116,8 @@ class BoxDetailsAdmin extends React.Component {
       }
 
     modify = () => {
+        const authToken = Cookies.get('auth_token');
+
         const verif = this.props.maxPopDegree([this.state.order, this.state.suborder, this.state.family, this.state.subfamily, 
             this.state.tribu, this.state.genus, this.state.subgenus,this.state.species, this.state.subspecies])
         if (verif !== "ok") {
@@ -129,7 +131,7 @@ class BoxDetailsAdmin extends React.Component {
                                             subspecies: this.props.subspecies, neworder: this.state.order, newsuborder: this.state.suborder, 
                                             newfamily: this.state.family, newsubfamily: this.state.subfamily, newtribu: this.state.tribu, 
                                             newgenus: this.state.genus, newsubgenus: this.state.subgenus, 
-                                            newspecies: this.state.species, newsubspecies: this.state.subspecies})
+                                            newspecies: this.state.species, newsubspecies: this.state.subspecies, token: authToken})
                 .then((res) => {
                     this.setState({changestate: 'Population has been changed with success'}, this.props.changefetchedpop(this.state))
                 })
@@ -145,11 +147,12 @@ class BoxDetailsAdmin extends React.Component {
     }
 
     delete = () => {
+        const authToken = Cookies.get('auth_token');
         this.setState({deletestate: 'Delete in progress...'})
         axios.post(`${url}/deletepopubox`, {id: this.props.id, order: this.props.order, suborder: this.props.suborder, 
                                         family: this.props.family, subfamily: this.props.subfamily, tribu: this.props.tribu, 
                                         genus: this.props.genus, subgenus: this.props.subgenus, species: this.props.species, 
-                                        subspecies: this.props.subspecies})
+                                        subspecies: this.props.subspecies, token: authToken})
             .then((res) => {
                 this.setState({deletestate: 'Population has been deleted with success'}, this.props.refresh)
             })

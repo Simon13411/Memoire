@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import Cookies from 'js-cookie';
+
 import axios from 'axios'
 const url = process.env.REACT_APP_IP
 
@@ -25,6 +27,8 @@ class FileUploader extends Component {
     };
 
     CsvToSQL = (event) => {
+        const authToken = Cookies.get('auth_token');
+
         const formData = new FormData();
         formData.append('file', this.state.selectedFile);
 
@@ -35,7 +39,7 @@ class FileUploader extends Component {
             this.props.Changeindivuploadstate('Veuillez Patienter...')
         }
 
-        axios.put(`${url}/csvtosql/${this.props.type}`, formData, {
+        axios.put(`${url}/csvtosql?type=${this.props.type}&token=${authToken}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data' //Contient des données binaires
             }

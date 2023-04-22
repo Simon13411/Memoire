@@ -70,7 +70,7 @@ function Navbar(props) {
                     (
                         <>
                         <li>
-                            <Link to='/usersettings' className='nav-links-mobile' onClick={Logout}>
+                            <Link to='/usersettings' className='nav-links-mobile' onClick={closeMobileMenu}>
                                 Settings
                             </Link>
                         </li>

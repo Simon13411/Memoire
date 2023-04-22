@@ -38,7 +38,7 @@ class Authentication extends React.Component {
                 Cookies.set('auth_token', res.data.token);
                 this.props.Authenticate()
 
-                if (res.data.admin === 1) {
+                if (res.data.role === 1) {
                     this.props.BeAdmin()
                 }
                 this.props.navigate('/');

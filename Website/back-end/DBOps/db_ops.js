@@ -782,11 +782,11 @@ function addattribute(table, attribute) {
                     VALUES
                     ((SELECT COALESCE(MAX("id_order"),0)+1 FROM "Order"), $1);`
         }
-        else if (table === "subOrder") {
+        else if (table === "suborder") {
             query = `INSERT INTO "subOrder"
                     ("id_suborder", "name")
                     VALUES
-                    ((SELECT COALESCE(MAX("id_order"),0)+1 FROM "subOrder"), $1);`
+                    ((SELECT COALESCE(MAX("id_suborder"),0)+1 FROM "subOrder"), $1);`
         }
         else if (table === "family") {
             query = `INSERT INTO "Family"
@@ -794,7 +794,7 @@ function addattribute(table, attribute) {
                     VALUES
                     ((SELECT COALESCE(MAX("id_family"),0)+1 FROM "Family"), $1);`
         }
-        else if (table === "subFamily") {
+        else if (table === "subfamily") {
             query = `INSERT INTO "subFamily"
                     ("id_subfamily", "name")
                     VALUES
@@ -812,7 +812,7 @@ function addattribute(table, attribute) {
                     VALUES
                     ((SELECT COALESCE(MAX("id_genus"),0)+1 FROM "Genus"), $1, (SELECT "id_sc"FROM "Scientific" WHERE "name"='Unknown'), NULL)`
         }
-        else if (table === "subGenus") {
+        else if (table === "subgenus") {
             query = `INSERT INTO "subGenus"
                     ("id_subgenus", "name", id_sc,date )
                     VALUES
@@ -824,7 +824,7 @@ function addattribute(table, attribute) {
                     VALUES
                     ((SELECT COALESCE(MAX("id_species"),0)+1 FROM "Species"), $1, (SELECT "id_sc"FROM "Scientific" WHERE "name"='Unknown'), NULL)`
         }
-        else if (table === "subSpecies") {
+        else if (table === "subspecies") {
             query = `INSERT INTO "subSpecies"
                     ("id_subspecies", "name", id_sc,date )
                     VALUES
@@ -890,7 +890,7 @@ function deleteattribute(table, attribute) {
         }
         else if (table === "subfamily2") {
             verifquery = `SELECT * FROM "Population"
-                            WHERE "subfamily_id"=(SELECT "id_subfamily" FROM "subFamily" WHERE "name"=$1);`
+                            WHERE "subFamily_id"=(SELECT "id_subfamily" FROM "subFamily" WHERE "name"=$1);`
 
             deletequery = `DELETE 
                             FROM "subFamily" 
@@ -920,7 +920,7 @@ function deleteattribute(table, attribute) {
         }
         else if (table === "subgenus2") {
             verifquery = `SELECT * FROM "Population"
-                            WHERE "subgenus_id"=(SELECT "id_subgenus" FROM "subGenus" WHERE "name"=$1);`
+                            WHERE "subGenus_id"=(SELECT "id_subgenus" FROM "subGenus" WHERE "name"=$1);`
 
             deletequery = `DELETE 
                             FROM "subGenus" 
@@ -940,7 +940,7 @@ function deleteattribute(table, attribute) {
         }
         else if (table === "subspecies2") {
             verifquery = `SELECT * FROM "Population"
-                            WHERE "species_id"=(SELECT "id_species" FROM "Species" WHERE "name"=$1);`
+                            WHERE "subSpecies_id"=(SELECT "id_subspecies" FROM "subSpecies" WHERE "name"=$1);`
 
             deletequery = `DELETE 
                             FROM "subSpecies" 

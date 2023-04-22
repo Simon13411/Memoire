@@ -11,18 +11,18 @@ COPY public public
 COPY src src
 COPY nginx.conf .
 
-#ENV REACT_APP_IP http://localhost:4000
-ENV REACT_APP_IP http://gx-cloud45.segi.ulg.ac.be:4000
+ENV REACT_APP_IP http://localhost:4000
+#ENV REACT_APP_IP http://gx-cloud45.segi.ulg.ac.be:4000
 
 #dev env
-#CMD npm start
+CMD npm start
 
 #production
-RUN npm run build
+#RUN npm run build
 
 # production env
-FROM nginx:stable-alpine
-COPY --from=build /src/front-end/build /usr/share/nginx/html
-COPY --from=build /src/front-end/nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+#FROM nginx:stable-alpine
+#COPY --from=build /src/front-end/build /usr/share/nginx/html
+#COPY --from=build /src/front-end/nginx.conf /etc/nginx/conf.d/default.conf
+#EXPOSE 80
+#CMD ["nginx", "-g", "daemon off;"]

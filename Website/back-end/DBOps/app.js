@@ -575,7 +575,7 @@ function errorhandler(err, res) {
         res.status(404).json({ error: err.message });
     }
     else {
-        res.status(404).json( {error : "Erreur Back-end DBOps" } );
+        res.status(500).json( {error : "Erreur Back-end DBOps" } );
     }
   }
 

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import Cookies from 'js-cookie';
+
 import axios from 'axios'
 const url = process.env.REACT_APP_IP
 
@@ -37,7 +39,7 @@ class FileUploaderAdmin extends Component {
             this.props.Changeindivuploadstate('Veuillez Patienter...')
         }
 
-        axios.put(`${url}/csvtosqladmin/${this.props.type}/${token}`, formData, {
+        axios.put(`${url}/csvtosqladmin?type=${this.props.type}&token=${token}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data' //Contient des données binaires
             }

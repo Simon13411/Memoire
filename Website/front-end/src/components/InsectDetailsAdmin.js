@@ -114,13 +114,15 @@ class BoxDetailsAdmin extends React.Component {
       }
 
     modify = () => {
+        const authToken = Cookies.get('auth_token');
+        
         axios.post(`${url}/modifypopu`, {type: "Individual", id: this.props.id, order: this.props.order, suborder: this.props.suborder, 
                                         family: this.props.family, subfamily: this.props.subfamily, tribu: this.props.tribu, 
                                         genus: this.props.genus, subgenus: this.props.subgenus, species: this.props.species, 
                                         subspecies: this.props.subspecies, neworder: this.state.order, newsuborder: this.state.suborder, 
                                         newfamily: this.state.family, newsubfamily: this.state.subfamily, newtribu: this.state.tribu, 
                                         newgenus: this.state.genus, newsubgenus: this.state.subgenus, 
-                                        newspecies: this.state.species, newsubspecies: this.state.subspecies})
+                                        newspecies: this.state.species, newsubspecies: this.state.subspecies, token: authToken})
         .then((res) => {
             this.setState({changestate: 'Population has been changed with success'}, this.props.getIndiv)
         })

@@ -256,7 +256,7 @@ function verifytoken(token) {
 function verifyuserrightrequest(token) {
     return new Promise (function (resolve, reject) {
         if (typeof token !== 'string' || token.trim().length === 0) {
-            return reject(new Error("Wrong admin token"));
+            return reject(new Error("Wrong token format"));
         }
         const Tokenquery = `SELECT * FROM "Tokens" WHERE "token"=$1 AND "expirationTime" > NOW()`;
         client.query(Tokenquery, [token], (error, results) => {
@@ -278,7 +278,7 @@ function verifyuserrightrequest(token) {
 function verifyadminrightrequest(token) {
     return new Promise (function (resolve, reject) {
         if (typeof token !== 'string' || token.trim().length === 0) {
-            return reject(new Error("Wrong admin token"));
+            return reject(new Error("Wrong token format"));
         }
         const Tokenquery = `SELECT username FROM "Tokens" WHERE "token"=$1 AND "expirationTime" > NOW()`;
         client.query(Tokenquery, [token], (error, results) => {

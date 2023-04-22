@@ -114,6 +114,8 @@ class BoxDetailsAddPop extends React.Component {
     }
 
     addpopu = () => {
+        const authToken = Cookies.get('auth_token');
+
         const verif = this.props.maxPopDegree([this.state.order, this.state.suborder, this.state.family, this.state.subfamily, 
                                             this.state.tribu, this.state.genus, this.state.subgenus,this.state.species, this.state.subspecies])
         if (verif !== "ok") {
@@ -124,7 +126,7 @@ class BoxDetailsAddPop extends React.Component {
             axios.post(`${url}/addpopubox`, {id: this.props.id, order: this.state.order, suborder: this.state.suborder, 
                                             family: this.state.family, subfamily: this.state.subfamily, tribu: this.state.tribu, 
                                             genus: this.state.genus, subgenus: this.state.subgenus, species: this.state.species, 
-                                            subspecies: this.state.subspecies})
+                                            subspecies: this.state.subspecies, token: authToken})
                 .then((res) => {
                     this.setState({addstate: 'Population has been added'}, this.props.refresh)
                 })
