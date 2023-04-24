@@ -272,7 +272,7 @@ class Selection extends React.Component {
                     </TableHead>
                     <TableBody>
                         {this.state.results.map((row) => (
-                        <ResultsWNav id_box={row.box_id} id={row.id_individu} Order={row.Order} subOrder={row.subOrder} Family={row.Family} subFamily={row.subFamily} Genus={row.Genus}
+                        <ResultsWNav id_box={row.box_id} id={row.id_individu} name={row.name} Order={row.Order} subOrder={row.subOrder} Family={row.Family} subFamily={row.subFamily} Genus={row.Genus}
                                     subGenus={row.subGenus} Species={row.Species} subSpecies={row.subSpecies} Tribu={row.Tribu}/>
                         ))}
                     </TableBody>
