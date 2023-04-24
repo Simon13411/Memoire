@@ -212,7 +212,7 @@ const csvtosqladmin = (req, res) => {
 
     const token = req.query.token
 
-    axios.post(`http://${IP_LOGIN}/verifyadminight`, {token: token})
+    axios.post(`http://${IP_LOGIN}/verifyadminright`, {token: token})
     .then(() => {
         axios.put(`http://${IP_DBOPS}/csvtosql/${req.query.type}`, formData, 
             {
