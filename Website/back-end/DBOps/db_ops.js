@@ -1383,7 +1383,7 @@ function SqlToCsv(type){
             return reject("Wrong script's type")
         }
         console.log(`Subprocess ${scriptfilename} spawning`)
-        const script = spawn('python3', ['SQLToCsvBox.py']);
+        const script = spawn('python3', [scriptfilename]);
         console.log("Subprocess spawned")
 
         fileDataString = '';
