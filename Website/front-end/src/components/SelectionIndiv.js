@@ -257,16 +257,17 @@ class Selection extends React.Component {
                     <Table>
                     <TableHead>
                         <TableRow>
-                        <TableCell>ID</TableCell>
-                        <TableCell>Order</TableCell>
-                        <TableCell>Suborder</TableCell>
-                        <TableCell>Family</TableCell>
-                        <TableCell>Subfamily</TableCell>
-                        <TableCell>Genus</TableCell>
-                        <TableCell>Subgenus</TableCell>
-                        <TableCell>Species</TableCell>
-                        <TableCell>Subspecies</TableCell>
-                        <TableCell>Tribu</TableCell>
+                            <TableCell>Box</TableCell>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Order</TableCell>
+                            <TableCell>Suborder</TableCell>
+                            <TableCell>Family</TableCell>
+                            <TableCell>Subfamily</TableCell>
+                            <TableCell>Genus</TableCell>
+                            <TableCell>Subgenus</TableCell>
+                            <TableCell>Species</TableCell>
+                            <TableCell>Subspecies</TableCell>
+                            <TableCell>Tribu</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
