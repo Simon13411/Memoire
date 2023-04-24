@@ -18,6 +18,10 @@
   max-width: 1500px;
 }
 
+img {
+  max-height: 80px;
+}
+
 .navbar-logo {
   color: #fff;
   justify-self: start;

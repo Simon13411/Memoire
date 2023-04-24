@@ -83,11 +83,11 @@ class FileUploader extends Component {
             <div>
                 <label>
                     {this.state.fileName}
-                    <input type="file" onChange={this.handleFileChange} accept=".xlsx" />
+                    <input type="file" onChange={this.handleFileChange} accept=".xlsx"/>
                 </label>
                 {this.state.fileError && <p style={{ color: 'red' }}>{this.state.fileError}</p>}
                 {this.showbutton() ? (
-                    <button buttonStyle='btn--outline' onClick={this.CsvToSQL}>Add Data</button>
+                    <button onClick={this.CsvToSQL}>Add Data</button>
                     ) : (
                     <></>
                     )

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useNavigate} from 'react-router-dom';
-import Box from '@mui/material/Box';
+import { TableCell, TableRow } from '@mui/material';
 
 class ResultsBox extends React.Component {
     constructor(props) {
@@ -8,64 +8,24 @@ class ResultsBox extends React.Component {
     }
 
     handleClick = () => {
-        this.props.navigate(`/box?id=${this.props.id}`)
+        this.props.navigate(`/box?id=${this.props.id_box}`)
     }
 
     render() {
         return(
-            <Box sx={{m:1, border: 1, borderColor: 'green'}}>
-                {(this.props.id) ?
-                    (<div>Box n°: {this.props.id}</div>)
-                    :
-                    (<></>)
-                }
-                {(this.props.order) ?
-                    (<div>Order: {this.props.order}</div>)
-                    :
-                    (<></>)
-                }
-                {(this.props.suborder) ?
-                    (<div>Suborder: {this.props.suborder}</div>)
-                    :
-                    (<></>)
-                }
-                {(this.props.family) ?
-                    (<div>Family: {this.props.family}</div>)
-                    :
-                    (<></>)
-                }
-                {(this.props.subfamily) ?
-                    (<div>Subfamily: {this.props.subfamily}</div>)
-                    :
-                    (<></>)
-                }
-                {(this.props.tribu) ?
-                    (<div>Tribe: {this.props.tribu}</div>)
-                    :
-                    (<></>)
-                }
-                {(this.props.genus) ?
-                    (<div>Genus: {this.props.genus}</div>)
-                    :
-                    (<></>)
-                }
-                {(this.props.subgenus) ?
-                    (<div>Subgenus: {this.props.subgenus}</div>)
-                    :
-                    (<></>)
-                }
-                {(this.props.species) ?
-                    (<div>Specie: {this.props.species}</div>)
-                    :
-                    (<></>)
-                }
-                {(this.props.subspecies) ?
-                    (<div>Subspecie: {this.props.subspecies}</div>)
-                    :
-                    (<></>)
-                }
-                <button buttonStyle='btn--outline' onClick={this.handleClick}>Details</button>
-            </Box>
+            <TableRow key={this.props.id_box}>
+                <TableCell>{this.props.id_box}</TableCell>
+                <TableCell>{this.props.Order}</TableCell>
+                <TableCell>{this.props.subOrder}</TableCell>
+                <TableCell>{this.props.Family}</TableCell>
+                <TableCell>{this.props.subFamily}</TableCell>
+                <TableCell>{this.props.Genus}</TableCell>
+                <TableCell>{this.props.subGenus}</TableCell>
+                <TableCell>{this.props.Species}</TableCell>
+                <TableCell>{this.props.subSpecies}</TableCell>
+                <TableCell>{this.props.Tribu}</TableCell>
+                <TableCell><button buttonStyle='btn--outline' onClick={this.handleClick}>Details</button></TableCell>
+            </TableRow>
         )
     }
 

@@ -125,7 +125,7 @@ INPUT:
 OUTPUT:
     - Number of total row (used for pagination) + 10 Box id and their information
 */ 
-function get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
+function get_boxresult(Offs, Limit, O, So, F, Sf, T, G, Sg, S, Ss) {
     var searchquery = `SELECT DISTINCT COUNT(*) OVER() AS total_rows, B."id_box", B."location", B."museum", B."paratypes", B."types", R."Order",
                         R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", Col."name" as "Col"
                         FROM "Box" B, "Collection" Col,
@@ -154,10 +154,10 @@ function get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
                         WHERE B."id_box" = R."bid" 
                             AND B."collection_id"=Col."id_collection" 
                         ORDER BY B."id_box" ASC
-                        LIMIT 10 OFFSET $10`
+                        LIMIT $11 OFFSET $10`
                         
     return new Promise(function (resolve, reject) {
-        client.query(searchquery, [O, So, F, Sf, T, G, Sg, S, Ss, Offs], (err, res) => {
+        client.query(searchquery, [O, So, F, Sf, T, G, Sg, S, Ss, Offs, Limit], (err, res) => {
             if (err) {
                 console.error(err)
                 return reject(new Error("Erreur DB"))
@@ -217,7 +217,7 @@ INPUT:
 OUTPUT:
     - Number of total row (used for pagination) + 10 individuals id and their information
 */ 
-function get_indivresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
+function get_indivresult(Offs, Limit, O, So, F, Sf, T, G, Sg, S, Ss) {
     var searchquery = `SELECT DISTINCT COUNT(*) OVER() AS total_rows, I."id_individu", I."name", I."box_id", I."continent", I."country", I."ecozone", O."name" as "Order",
     So."name" as "subOrder", F."name" as "Family", Sf."name" as "subFamily", T."name" as "Tribu", G."name" as "Genus", Sg."name" as "subGenus" , S."name" as "Species", Ss."name" as "subSpecies"
                         FROM "Individu" I
@@ -242,11 +242,11 @@ function get_indivresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss) {
                                 AND (S."name"=$8 OR $8='NULL')
                                 AND (Ss."name"=$9 OR $9='NULL') 
                                 ORDER BY I."id_individu" ASC
-                                    LIMIT 10 OFFSET $10`
+                                    LIMIT $11 OFFSET $10`
 
 
     return new Promise(function (resolve, reject) {
-        client.query(searchquery, [O, So, F, Sf, T, G, Sg, S, Ss, Offs], (err, res) => {
+        client.query(searchquery, [O, So, F, Sf, T, G, Sg, S, Ss, Offs, Limit], (err, res) => {
             if (err) {
                 console.error(err)
                 return reject(new Error("Erreur DB"))

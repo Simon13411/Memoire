@@ -4,6 +4,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination } from '@mui/material';
+
 import  {ResultsWNav} from './ResultsBox'
 
 import axios from 'axios'
@@ -34,10 +36,10 @@ class Selection extends React.Component {
             subspecieslist: [],
             tribulist: [],
             //pagination
-            actualpage: 0,
-            wantedpage: 0,
             maxpage: 0,
-            wantedpagestate: ''
+            page: 0,
+            rowsPerPage: 10,
+            nresults: 0
         }
     }
 
@@ -49,85 +51,85 @@ class Selection extends React.Component {
     fetchResults = () => {
         axios.get(`${url}/get_boxresult`, {
             params:
-            {offs: (this.state.actualpage*10).toString(), o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+            {offs: (this.state.page*this.state.rowsPerPage).toString(), limit:this.state.rowsPerPage, o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
         .then((res) => {
             this.setState({results: res.data.rows})
             if (res.data.rows.length > 0) {
-                this.setState({maxpage: Math.floor(parseInt(res.data.rows[0].total_rows)/10)})
+                this.setState({maxpage: Math.floor(parseInt(res.data.rows[0].total_rows)/10), nresults: res.data.rows[0].total_rows})
             }
             else {
-                this.setState({maxpage: 0})
+                this.setState({maxpage: 0, nresults: 0})
             }
         })
     }
 
     fetchResultsOnClick = () => {
-        this.setState({actualpage: 0, wantedpage: 0}, this.fetchResults)
+        this.setState({page: 0}, this.fetchResults)
     }
 
     get_selection() {
-    axios.get(`${url}/get_selectiono`, {
-        params:
-        {so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
-    .then((res) => {
-        this.setState({orderlist: res.data.rows})
-    })
+        axios.get(`${url}/get_selectiono`, {
+            params:
+            {so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+        .then((res) => {
+            this.setState({orderlist: res.data.rows})
+        })
 
-    axios.get(`${url}/get_selectionso`, {
-        params:
-        {o: this.state.order, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
-    .then((res) => {
-        this.setState({suborderlist: res.data.rows})
-    })
+        axios.get(`${url}/get_selectionso`, {
+            params:
+            {o: this.state.order, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+        .then((res) => {
+            this.setState({suborderlist: res.data.rows})
+        })
 
-    axios.get(`${url}/get_selectiong`, {
-        params:
-        {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
-    .then((res) => {
-        this.setState({genuslist: res.data.rows})
-    })
+        axios.get(`${url}/get_selectiong`, {
+            params:
+            {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+        .then((res) => {
+            this.setState({genuslist: res.data.rows})
+        })
 
-    axios.get(`${url}/get_selectionsg`, {
-        params:
-        {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, s: this.state.species, ss: this.state.subspecies}})
-    .then((res) => {
-        this.setState({subgenuslist: res.data.rows})
-    })
+        axios.get(`${url}/get_selectionsg`, {
+            params:
+            {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, s: this.state.species, ss: this.state.subspecies}})
+        .then((res) => {
+            this.setState({subgenuslist: res.data.rows})
+        })
 
-    axios.get(`${url}/get_selectionf`, {
-        params:
-        {o: this.state.order, so: this.state.suborder, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
-    .then((res) => {
-        this.setState({familylist: res.data.rows})
-    })
+        axios.get(`${url}/get_selectionf`, {
+            params:
+            {o: this.state.order, so: this.state.suborder, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+        .then((res) => {
+            this.setState({familylist: res.data.rows})
+        })
 
-    axios.get(`${url}/get_selectionsf`, {
-        params:
-        {o: this.state.order, so: this.state.suborder, f: this.state.family, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
-    .then((res) => {
-        this.setState({subfamilylist: res.data.rows})
-    })
+        axios.get(`${url}/get_selectionsf`, {
+            params:
+            {o: this.state.order, so: this.state.suborder, f: this.state.family, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+        .then((res) => {
+            this.setState({subfamilylist: res.data.rows})
+        })
 
-    axios.get(`${url}/get_selections`, {
-        params:
-        {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, ss: this.state.subspecies}})
-    .then((res) => {
-        this.setState({specieslist: res.data.rows})
-    })
+        axios.get(`${url}/get_selections`, {
+            params:
+            {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, ss: this.state.subspecies}})
+        .then((res) => {
+            this.setState({specieslist: res.data.rows})
+        })
 
-    axios.get(`${url}/get_selectionss`, {
-        params:
-        {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species}})
-    .then((res) => {
-        this.setState({subspecieslist: res.data.rows})
-    })
+        axios.get(`${url}/get_selectionss`, {
+            params:
+            {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species}})
+        .then((res) => {
+            this.setState({subspecieslist: res.data.rows})
+        })
 
-    axios.get(`${url}/get_selectiont`, {
-        params:
-        {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
-    .then((res) => {
-        this.setState({tribulist: res.data.rows})
-    })
+        axios.get(`${url}/get_selectiont`, {
+            params:
+            {o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+        .then((res) => {
+            this.setState({tribulist: res.data.rows})
+        })
     }
 
     handleAttributeChange = (event) => {
@@ -138,43 +140,15 @@ class Selection extends React.Component {
             [name]: value
         }, this.get_selection)
     }
-
-    wantedPageChange = (event) => {
-        this.setState({wantedpage: event.target.value})
-    }
-
-    nextPage = () => {
-        const wantedpage = this.state.actualpage+1
-        this.setState({actualpage: wantedpage, wantedpage: wantedpage, wantedpagestate:''}, this.fetchResults)
-    }
-
-    previousPage = () => {
-        const wantedpage = this.state.actualpage-1
-        this.setState({actualpage: wantedpage, wantedpage: wantedpage, wantedpagestate:''}, this.fetchResults)
-    }
-
-    goToPage = () => {
-        const wantedpage = parseInt(this.state.wantedpage)
-        if (wantedpage > this.state.maxpage || wantedpage < 0) {
-            this.wrongPage()
-        }
-        else {
-            this.setState({actualpage: wantedpage, wantedpagestate: ''}, this.fetchResults)
-        }
-    }
-
-    wrongPage = () => {
-        this.setState({wantedpagestate: 'Invalid page number'})
-    }
   
     componentDidMount() {
         axios.get(`${url}/get_boxresult`, {
             params:
-            {offs: (this.state.actualpage*10).toString(), o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+            {offs: (this.state.page*10).toString(), limit:this.state.rowsPerPage, o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
         .then((res) => {
             this.setState({results: res.data.rows})
             if (res.data.rows[0].total_rows) {
-                this.setState({maxpage: Math.floor(parseInt(res.data.rows[0].total_rows)/10)})
+                this.setState({maxpage: Math.floor(parseInt(res.data.rows[0].total_rows)/10), nresults: res.data.rows[0].total_rows})
             }
             else {
                 this.setState({maxpage: 0})
@@ -183,9 +157,18 @@ class Selection extends React.Component {
         this.get_selection()
     }
 
+    handleChangePage = (event, newPage) => {
+        this.setState({page: newPage}, this.fetchResults);
+    };
+    
+    handleChangeRowsPerPage = (event) => {
+        this.setState({rowsPerPage: event.target.value}, this.fetchResultsOnClick)
+    };
+    
+
     render() {
         return(
-            <>
+            <div cassname="containerhome">
             <div className='selectdiv'>
                 <button buttonStyle='btn--outline' onClick={this.fetchResultsOnClick}>SEARCH BOXES</button>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
@@ -269,19 +252,43 @@ class Selection extends React.Component {
                         {this.state.subspecieslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                     </Select>
             </FormControl>
-            {this.state.actualpage !== 0 ?
-                (<button buttonStyle='btn--outline' onClick={this.previousPage}>Previous page</button>) : (<></>)
-            }
-            {this.state.actualpage < this.state.maxpage ?
-                (<button buttonStyle='btn--outline' onClick={this.nextPage}>Next page</button>) : (<></>)
-            }
-            <button buttonStyle='btn--outline' onClick={this.goToPage}>Go to page n°</button><input type="number" value={this.state.wantedpage} onChange={this.wantedPageChange} size="5" />
-            {this.state.wantedpagestate}
             </div>
-            <ul class="datalist">
-                {this.state.results.map((data) => <li><ResultsWNav id={data.id_box} order={data.Order} suborder={data.subOrder} family={data.Family} subfamily={data.subFamily} genus={data.Genus} subgenus={data.subGenus} species={data.Species} subspecies={data.subSpecies} tribu={data.Tribu}></ResultsWNav></li>)}
-            </ul>
-            </>
+            <div classname="datalist">
+                <TableContainer sx={{width:'auto', flex:1}}>
+                    <Table>
+                    <TableHead>
+                        <TableRow>
+                        <TableCell>Boite</TableCell>
+                        <TableCell>Order</TableCell>
+                        <TableCell>Suborder</TableCell>
+                        <TableCell>Family</TableCell>
+                        <TableCell>Subfamily</TableCell>
+                        <TableCell>Genus</TableCell>
+                        <TableCell>Subgenus</TableCell>
+                        <TableCell>Species</TableCell>
+                        <TableCell>Subspecies</TableCell>
+                        <TableCell>Tribu</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {this.state.results.map((row) => (
+                        <ResultsWNav id_box={row.id_box} Order={row.Order} subOrder={row.subOrder} Family={row.Family} subFamily={row.subFamily} Genus={row.Genus}
+                                    subGenus={row.subGenus} Species={row.Species} subSpecies={row.subSpecies} Tribu={row.Tribu}/>
+                        ))}
+                    </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                    component="div"
+                    count={this.state.nresults}
+                    rowsPerPage={this.state.rowsPerPage}
+                    page={this.state.page}
+                    onPageChange={this.handleChangePage}
+                    onRowsPerPageChange={this.handleChangeRowsPerPage}
+                />
+            </div>
+            </div>
         );
     }
 }

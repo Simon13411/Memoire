@@ -30,6 +30,7 @@ app.get('/get_boxdetails', (req, res) => {
 
 app.get('/get_boxresult', (req, res) => {
     const Offs = req.query.offs
+    const Limit = req.query.limit
     const O = req.query.o
     const So = req.query.so
     const F = req.query.f
@@ -39,7 +40,7 @@ app.get('/get_boxresult', (req, res) => {
     const Sg = req.query.sg
     const S = req.query.s
     const Ss = req.query.ss
-    return db.get_boxresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss)
+    return db.get_boxresult(Offs, Limit, O, So, F, Sf, T, G, Sg, S, Ss)
     .then((result) => {
         res.status(200).json(result)
     })
@@ -62,6 +63,7 @@ app.get('/get_indivdetails', (req, res) => {
 
 app.get('/get_indivresult', (req, res) => {
     const Offs = req.query.offs
+    const Limit = req.query.limit
     const O = req.query.o
     const So = req.query.so
     const F = req.query.f
@@ -71,7 +73,7 @@ app.get('/get_indivresult', (req, res) => {
     const Sg = req.query.sg
     const S = req.query.s
     const Ss = req.query.ss
-    return db.get_indivresult(Offs, O, So, F, Sf, T, G, Sg, S, Ss)
+    return db.get_indivresult(Offs, Limit, O, So, F, Sf, T, G, Sg, S, Ss)
     .then((result) => {
         res.status(200).json(result)
     })

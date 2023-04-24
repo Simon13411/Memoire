@@ -516,12 +516,12 @@ class AdminPannel extends React.Component {
                         <button type="submit" name="subgenus" onClick={this.AddAttribute}>Add</button>
                         <br />
             
-                        <label htmlFor="species">Species:</label>
+                        <label htmlFor="species">Specie:</label>
                         <input type="text" value={this.state.species} onChange={this.handleInputChange} name="species" />
                         <button type="submit" name="species" onClick={this.AddAttribute}>Add</button>
                         <br />
             
-                        <label htmlFor="subspecies">SubSpecies:</label>
+                        <label htmlFor="subspecies">SubSpecie:</label>
                         <input type="text" value={this.state.subspecies} onChange={this.handleInputChange} name="subspecies" />
                         <button type="submit" name="subspecies" onClick={this.AddAttribute}>Add</button>
                     </form>
