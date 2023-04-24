@@ -144,7 +144,7 @@ class Selection extends React.Component {
     componentDidMount() {
         axios.get(`${url}/get_boxresult`, {
             params:
-            {offs: (this.state.page*10).toString(), limit:this.state.rowsPerPage, o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+            {offs: (this.state.page*this.state.rowsPerPage).toString(), limit:this.state.rowsPerPage, o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
         .then((res) => {
             this.setState({results: res.data.rows})
             if (res.data.rows[0].total_rows) {
