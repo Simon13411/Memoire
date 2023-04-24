@@ -156,7 +156,7 @@ class Selection extends React.Component {
         .then((res) => {
             this.setState({results: res.data.rows})
             if (res.data.rows[0].total_rows) {
-                this.setState({maxpage: Math.floor(parseInt(res.data.rows[0].total_rows)/10)})
+                this.setState({maxpage: Math.floor(parseInt(res.data.rows[0].total_rows)/10),  nresults: res.data.rows[0].total_rows})
             }
             else {
                 this.setState({maxpage: 0})
@@ -272,7 +272,7 @@ class Selection extends React.Component {
                     </TableHead>
                     <TableBody>
                         {this.state.results.map((row) => (
-                        <ResultsWNav id_box={row.box_id} Order={row.Order} subOrder={row.subOrder} Family={row.Family} subFamily={row.subFamily} Genus={row.Genus}
+                        <ResultsWNav id_box={row.box_id} id={row.id_individu} Order={row.Order} subOrder={row.subOrder} Family={row.Family} subFamily={row.subFamily} Genus={row.Genus}
                                     subGenus={row.subGenus} Species={row.Species} subSpecies={row.subSpecies} Tribu={row.Tribu}/>
                         ))}
                     </TableBody>
