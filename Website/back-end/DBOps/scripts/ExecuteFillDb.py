@@ -1,14 +1,7 @@
-import ordre
-import family
-import subfamily
+import name
+import namescientist
 import scientific
-import Genus
-import subgenus
-import species
 import Collection
-import tribu
-import suborder
-import subspecies
 import population
 import box
 
@@ -17,15 +10,20 @@ import BoxFilter as filtre
 import pandas as pd
 import psycopg2
 import sys
+import sqlite3
 
 filename = sys.argv[1]
+#filename = "GoodFormat.xlsx"
 extracteddata = pd.read_excel(filename, engine="openpyxl")
 
 a,b,data,d = filtre.filterExcel(extracteddata)
 
+
+
 #On va regarder pour l'admin si les boites existent deja, si oui on les supprimes et elle seront remise après
 #Verifier si boite existe sinon oups probleme
 admin = False
+
 if (sys.argv[2] == "true") :
     admin = True
 elif (sys.argv[2] == "false") :
@@ -35,28 +33,36 @@ if (b>0):
     print(f"{b} lignes problématiques: {a} -> {d}")
 
 else:
+    data = data.where(data.notnull(), None)
     conn = psycopg2.connect(
         host="db-entomoc",
         database="entomologie",
         user="postgres",
         password="password"
     )
+    
+    #database = "Gembloux5_4.db"
+
+
+    cursor = conn.cursor()
     cursor = conn.cursor()
     print("[MY_APP_LOG] Successfully connected to DB")
 
 
-    tribu.insertTribu(data, cursor, conn)
-    ordre.insertOrder(data, cursor, conn)
-    suborder.insertSubOrder(data, cursor, conn)
-    family.insertFamily(data, cursor, conn)
-    subfamily.insertSubFamily(data, cursor, conn) 
+    #tribu.insertTribu(data, cursor, conn)
+    name.insertName(data, cursor, conn,"Order",  "Order", "id_order")
+    name.insertName(data, cursor, conn,"Suborder",  "subOrder", "id_suborder")
+    name.insertName(data, cursor, conn,"Family",  "Family", "id_family")
+    name.insertName(data, cursor, conn,"Subfamily",  "subFamily", "id_subfamily")
+    name.insertName(data, cursor, conn,"Tribu",  "Tribu", "id_tribu")
     scientific.insertScientific(data, cursor, conn)
-    Genus.insertGenus(data, cursor, conn)
-    subgenus.insertSubGenus(data, cursor, conn)
-    species.insertSpecies(data, cursor, conn)
-    subspecies.insertSubSpecies(data, cursor, conn)
+    namescientist.insertNameScientist(data, cursor, conn,"Genus", "Genus_Descriptor", "Genus_Date", "Genus", "id_genus")
+    namescientist.insertNameScientist(data, cursor, conn,"Subgenus", "Subgenus_Descriptor", "Subgenus_Date", "subGenus", "id_subgenus")
+    namescientist.insertNameScientist(data, cursor, conn,"species", "Species_Descriptor", "Species_Date", "Species", "id_species")
+    namescientist.insertNameScientist(data, cursor, conn,"Subspecies", "Subspecies_descriptor", "Subspecies_Date", "subSpecies", "id_subspecies")
     Collection.insertCollection(data, cursor, conn)
     population.insertPopulation(data, cursor, conn)
+    
     box.insertBox(data, cursor, conn, admin)
 
 

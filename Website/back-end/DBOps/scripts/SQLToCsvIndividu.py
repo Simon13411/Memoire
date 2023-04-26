@@ -10,17 +10,18 @@ import warnings
 warnings.filterwarnings('ignore')
 
 conn = psycopg2.connect(
-    host="db-entomoc",
-    database="entomologie",
-    user="postgres",
-    password="password"
-)
+        host="db-entomoc",
+        database="entomologie",
+        user="postgres",
+        password="password"
+    )
 cursor = conn.cursor()
 
-selectBox = """SELECT I."box_id", I."name" as "SpeciCode", I."continent", I."country", I."ecozone", I."latitude", I."longitude" ,O."name" as ordre,
+selectBox = """SELECT I."box_id", I."id_individu" as "SpeciCode", I."continent", I."country", I."ecozone", I."latitude", I."longitude" ,O."name" as ordre,
     So."name" as suborder, F."name" as family, Sf."name" as subfamily, T."name" as tribu, G."name" as genus, Sg."name" as subgenus, S."name" as species, Ss."name" as subspecies, 
     G."date" as gendate, Sg."date" as subgendate, S."date" spedate, Ss."date" as subspedate,
-    Sgen."name" as scgen, Ssubgen."name" as subgen, Sspe."name" as spe, Ssubspe."name" as subspe
+    Sgen."name" as scgen, Ssubgen."name" as subgen, Sspe."name" as spe, Ssubspe."name" as subspe,
+    I."locality", I."number", I."collection_date", I."sexe"
 
 FROM "Individu" I
 LEFT OUTER JOIN "Population" P2 ON I."population_id"=P2."id_population"
@@ -75,7 +76,11 @@ for i, row in df.iterrows():
               'Country':row.country,
               'ecozone': row.ecozone,
               'Latitude':row.latitude,
-              'Longitude': row.longitude}
+              'Longitude': row.longitude,
+              'Locality': row.locality,
+              'Number': row.number,
+              'Collection_Date': row.collection_date,
+              'Sexe':row.sexe}
     newDf.loc[len(newDf)] = new_row
 
 output = io.BytesIO()

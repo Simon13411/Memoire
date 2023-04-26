@@ -1,225 +1,16 @@
 import sqlite3
 import pandas as pd
 import numpy as np
+import getPopulation
 
+"""
+insertIndividu is a function that will insert in a database a specific individu
 
-def order(insert, cursor):
-    #On recupere la liste d'id de l'ordre
-    if isinstance(insert, str) : ordernameList  = insert.split("_")
-    else : ordernameList = ["NULL"]
-    
-    returnOrder = []
-    for index in ordernameList:
-        if index=="NULL": 
-            returnOrder.append("NULL")
-            continue
-        order = """SELECT "id_order"
-                        FROM "Order"
-                        WHERE "name"='{}' """.format(index)
-        cursor.execute(order)
-        orderList = cursor.fetchall()
-        returnOrder.append(orderList[0][0])
-    return returnOrder
-                
-    
-def suborder(insert, cursor):
-    #On recupere la liste d'id du suborder
-    if isinstance(insert, str) : subordernameList  = insert.split("_")
-    else : subordernameList = ["NULL"]
-    
-    returnSubOrder = []
-    for index in subordernameList:
-        if index=="NULL": 
-            returnSubOrder.append("NULL")
-            continue
-        
-        suborder = """SELECT "id_suborder"
-                        FROM "subOrder"
-                        WHERE "name"='{}' """.format(index)
-        cursor.execute(suborder)
-        suborderList = cursor.fetchall()
-        #print("suborderList:" , returnSubOrder)
-        returnSubOrder.append(suborderList[0][0])
-    return returnSubOrder
-    
-    
-def tribu(insert, cursor):
-    #On recupere la liste d'id de la tribu
-    if isinstance(insert, str) : tribunameList  = insert.split("_")
-    else : tribunameList = ["NULL"]
-    
-    returnTribu = []
-    for index in tribunameList:
-        if index=="NULL": 
-            returnTribu.append("NULL")
-            continue
-        
-        tribu = """SELECT "id_tribu"
-                        FROM "Tribu"
-                        WHERE "name"='{}' """.format(index)
-        cursor.execute(tribu)
-        tribuList = cursor.fetchall()
-        returnTribu.append(tribuList[0][0])
-    return returnTribu
-    
-    
-def family(insert, cursor):
-    #On recupere la liste d'id de la tribu
-    if isinstance(insert, str) : familynameList  = insert.split("_")
-    else : familynameList = ["NULL"]
-    returnFamily = []
-    for index in familynameList:
-        if index=="NULL": 
-            returnFamily.append("NULL")
-            continue
-        
-        family = """SELECT "id_family"
-                        FROM "Family"
-                        WHERE "name"='{}' """.format(index)
-        cursor.execute(family)
-        familyList = cursor.fetchall()
-        returnFamily.append(familyList[0][0])
-    return returnFamily
-    
-    
-def subfamily(insert, cursor):
-    #On recupere la liste d'id de la tribu
-    if isinstance(insert, str) : subfamilynameList  = insert.split("_")
-    else : subfamilynameList = ["NULL"]
-    returnSubFamily = []
-    for index in subfamilynameList:
-        if index=="NULL": 
-            returnSubFamily.append("NULL")
-            continue
-        
-        subFamily = """SELECT "id_subfamily"
-                        FROM "subFamily"
-                        WHERE "name"='{}' """.format(index)
-        cursor.execute(subFamily)
-        subFamilyList = cursor.fetchall()
-        returnSubFamily.append(subFamilyList[0][0])
-    return returnSubFamily
-    
-    
-def genus(insert, cursor):
-    #On recupere la liste d'id de la tribu
-    if isinstance(insert, str) : genusnameList  = insert.split("_")
-    else :genusnameList = ["NULL"]
-    returnGenus = []
-    for index in genusnameList:
-        if index=="NULL": 
-            returnGenus.append("NULL")
-            continue
-        
-        genus = """SELECT "id_genus"
-                        FROM "Genus"
-                        WHERE "name"='{}' """.format(index)
-        cursor.execute(genus)
-        genusList = cursor.fetchall()
-        returnGenus.append(genusList[0][0])
-    return returnGenus
-    
-    
-def subgenus(insert, cursor):
-    #On recupere la liste d'id de la tribu
-    if isinstance(insert, str) : subgenusnameList  = insert.split("_")
-    else : subgenusnameList = ["NULL"]
-    returnSubGenus = []
-    for index in subgenusnameList:
-        if index=="NULL": 
-            returnSubGenus.append("NULL")
-            continue
-        
-        subGenus = """SELECT "id_subgenus"
-                        FROM "subGenus"
-                        WHERE "name"='{}' """.format(index)
-        cursor.execute(subGenus)
-        subGenusList = cursor.fetchall()
-        returnSubGenus.append(subGenusList[0][0])
-    return returnSubGenus
-    
-    
-def species(insert, cursor):
-    #On recupere la liste d'id de la tribu
-    if isinstance(insert, str) : speciesnameList  = insert.split("_")
-    else : speciesnameList = ["NULL"]
-    returnSpecies = []
-    for index in speciesnameList:
-        if index=="NULL": 
-            returnSpecies.append("NULL")
-            continue
-        
-        species = """SELECT "id_species"
-                        FROM "Species"
-                        WHERE "name"='{}' """.format(index)
-        cursor.execute(species)
-        speciesList = cursor.fetchall()
-        returnSpecies.append(speciesList[0][0])
-    return returnSpecies
-    
-    
-def subspecies(insert, cursor):
-    #On recupere la liste d'id de la tribu
-    if isinstance(insert, str) : subspeciesnameList  = insert.split("_")
-    else : subspeciesnameList = ["NULL"]
-    returnSubSpecies = []
-    for index in subspeciesnameList:
-        if index=="NULL": 
-            returnSubSpecies.append("NULL") 
-            continue
-        
-        subSpecies = """SELECT "id_subspecies"
-                        FROM "subSpecies"
-                        WHERE "name"='{}' """.format(index)
-        cursor.execute(subSpecies)
-        subSpeciesList = cursor.fetchall()
-        returnSubSpecies.append(subSpeciesList[0][0])
-    return returnSubSpecies
-    
-    
-def population(order, suborder, family, subfamily, tribu, genus, subgenus, species, subspecies, cursor):
-    #On recupere l'id de la population de la boite
-    query = """
-    SELECT * FROM "Population"
-    WHERE "order_id" = {}
-    """.format(order)
-
-    if suborder != "NULL":
-        query += """ AND "suborder_id" = {}""".format(suborder)
-    else:
-        query+= """ AND "suborder_id" IS NULL"""
-    if tribu != "NULL":
-        query += """ AND "tribu_id" = {}""".format(tribu)
-    else:
-        query+= """ AND "tribu_id" IS NULL"""
-    if family != "NULL":
-        query += """ AND "family_id" = {}""".format(family)
-    else:
-        query+= """ AND "family_id" IS NULL"""
-    if subfamily != "NULL":
-        query += """ AND "subFamily_id" = {}""".format(subfamily)
-    else:
-        query+= """ AND "subFamily_id" IS NULL"""
-    if genus != "NULL":
-        query += """ AND "genus_id" = {}""".format(genus)
-    else:
-        query+= """ AND "genus_id" IS NULL"""
-    if subgenus != "NULL":
-        query += """ AND "subGenus_id" = {}""".format(subgenus)
-    else:
-        query+= """ AND "subGenus_id" IS NULL"""
-    if species != "NULL":
-        query += """ AND "species_id" = {}""".format(species)
-    else:
-        query+= """ AND "species_id" IS NULL"""
-    if subspecies != "NULL":
-        query += """ AND "subSpecies_id" = {}""".format(subspecies)
-    else:
-        query+= """ AND "subSpecies_id" IS NULL"""   
-    cursor.execute(query)
-    id_populationList = cursor.fetchall()
-    return id_populationList[0][0]
-
+:param data: a pandas dataframe
+:param cursor: cursor to traverse the result of SQL query
+:param conn: represent the connection to the database
+:param admin: boolean value to authorize or not the overwrite
+"""
 def insertIndividu(data, cursor, conn, admin) :
     toinsert = data["SpecimenCode"].values.tolist()
     toinsertCountry = data["Country"].values.tolist()
@@ -228,6 +19,10 @@ def insertIndividu(data, cursor, conn, admin) :
     toinsertID = data["Num_ID"].values.tolist()
     toinsertLatitude = data["Latitude"].tolist()
     toinsertLongitude = data["Longitude"].tolist()
+    toinsertLocality = data["Locality"].values.tolist()
+    toinsertNumber = data["Number"].values.tolist()
+    toinsertCollection = data["Collection_Date"].tolist()
+    toinsertSexe = data["Sexe"].tolist()
     
     toinsertOrder = data["Order"].values.tolist()
     toinsertSubOrder = data["Suborder"].values.tolist()
@@ -239,117 +34,60 @@ def insertIndividu(data, cursor, conn, admin) :
     toinsertSpecies = data["species"].values.tolist()
     toinsertSubSpecies = data["Subspecies"].values.tolist()
     
-    duplicationquery =  """SELECT MAX("id_individu")
-                            FROM "Individu" """
-    cursor.execute(duplicationquery)
-    result = cursor.fetchall()
-    Count = 1
-    #print(result)
-    if result != [(None,)] :
-        Count = result[0][0]+1
-
     for i in range(0, len(toinsert)):
 
+        #On recupere l'ordre
+        orderList = getPopulation.order(toinsertOrder[i], cursor, "id_order", "Order")
+        
+        #On recupere le sous ordre
+        suborderList = getPopulation.order(toinsertSubOrder[i], cursor, "id_suborder", "subOrder")
+        
+        #On recupere la tribu
+        tribuList = getPopulation.order(toinsertTribu[i], cursor, "id_tribu", "Tribu")
+        
+        #On recupere la famille
+        familyList = getPopulation.order(toinsertFamily[i], cursor, "id_family", "Family")
+        
+        #On recupere la sous famille
+        subFamilyList = getPopulation.order(toinsertSubFamily[i], cursor, "id_subfamily", "subFamily")
+        
+        #On recupere le genus
+        genusList = getPopulation.order(toinsertGenus[i], cursor, "id_genus", "Genus")
+        
+        #On recupere le sous genus
+        subGenusList = getPopulation.order(toinsertSubGenus[i], cursor, "id_subgenus", "subGenus")
+        
+        #On recupere la species
+        speciesList  = getPopulation.order(toinsertSpecies[i], cursor, "id_species", "Species")
+        
+        #On recupere la sous species
+        subSpeciesList  =getPopulation.order(toinsertSubSpecies[i], cursor, "id_subspecies", "subSpecies")
             
-        duplicationquery =  """SELECT "id_individu"
+        popu = getPopulation.population(orderList[0],  suborderList[0], familyList[0], subFamilyList[0], tribuList[0], genusList[0],subGenusList[0],speciesList[0],subSpeciesList[0],cursor)
+        duplicationquery =  """SELECT *
                                 FROM "Individu" 
-                                WHERE "name" = '{}' """.format(toinsert[i])
-        cursor.execute(duplicationquery)
+                                WHERE "id_individu" = (%s) """
+        dataduplicationquery = (toinsert[i],)
+        cursor.execute(duplicationquery, dataduplicationquery)
         id_indivList = cursor.fetchall()
         if id_indivList == [] :
             
-            
-            #On recupere l'ordre
-            orderList = order(toinsertOrder[i], cursor)
-                
-            #On recupere le sous ordre
-            suborderList = suborder(toinsertSubOrder[i], cursor)
-                
-            #On recupere la tribu
-            tribuList = tribu(toinsertTribu[i], cursor)
-                 
-            #On recupere la famille
-            familyList = family(toinsertFamily[i], cursor)
-                
-            #On recupere la sous famille
-            subFamilyList = subfamily(toinsertSubFamily[i], cursor)
-                
-            #On recupere le genus
-            genusList = genus(toinsertGenus[i], cursor)
-                
-            #On recupere le sous genus
-            subGenusList = subgenus(toinsertSubGenus[i], cursor)
-                
-            #On recupere la species
-            speciesList  = species(toinsertSpecies[i], cursor)
-                
-            #On recupere la sous species
-            subSpeciesList  =subspecies(toinsertSubSpecies[i], cursor)
 
-            popu = population(orderList[0],  suborderList[0], familyList[0], subFamilyList[0], tribuList[0], genusList[0],subGenusList[0],speciesList[0],subSpeciesList[0],cursor)
-
-            
-            if isinstance(toinsertContinent[i], float): toinsertContinent[i]=""
-            
-            if isinstance(toinsertCountry[i], float): toinsertCountry[i]=""
-            
-            if isinstance(toinsertEcozone[i], float): toinsertEcozone[i]=""
-            
-            if isinstance(toinsertLatitude[i], float): toinsertLatitude[i]=""
-            
-            if isinstance(toinsertLongitude[i], float): toinsertLongitude[i]=""
-            
             insertquery = """INSERT INTO "Individu"
-                            ("id_individu", "box_id", "population_id", "continent", "country", "ecozone", "name", "latitude", "longitude") 
+                            ("id_individu", "box_id", "population_id", "continent", "country", "ecozone", "latitude", "longitude", "locality", "number", "collection_date", "sexe") 
                             VALUES 
-                            ({},{}, {}, '{}', '{}', '{}','{}', '{}','{}')""".format(Count, toinsertID[i], popu, toinsertContinent[i], toinsertCountry[i], toinsertEcozone[i], toinsert[i], toinsertLatitude[i], toinsertLongitude[i])
+                            ((%s),(%s),(%s),(%s),(%s),(%s),(%s),(%s),(%s),(%s),(%s),(%s))"""
+            datainsertquery = (toinsert[i], toinsertID[i], popu, toinsertContinent[i], toinsertCountry[i], toinsertEcozone[i], toinsertLatitude[i], toinsertLongitude[i],toinsertLocality[i], toinsertNumber[i], toinsertCollection[i], toinsertSexe[i])
             #print(insertquery)
-            cursor.execute(insertquery)
-            Count+=1
+            cursor.execute(insertquery, datainsertquery)
+
         elif(admin):
-            #On recupere l'ordre
-            orderList = order(toinsertOrder[i], cursor)
-                
-            #On recupere le sous ordre
-            suborderList = suborder(toinsertSubOrder[i], cursor)
-                
-            #On recupere la tribu
-            tribuList = tribu(toinsertTribu[i], cursor)
-                 
-            #On recupere la famille
-            familyList = family(toinsertFamily[i], cursor)
-                
-            #On recupere la sous famille
-            subFamilyList = subfamily(toinsertSubFamily[i], cursor)
-                
-            #On recupere le genus
-            genusList = genus(toinsertGenus[i], cursor)
-                
-            #On recupere le sous genus
-            subGenusList = subgenus(toinsertSubGenus[i], cursor)
-                
-            #On recupere la species
-            speciesList  = species(toinsertSpecies[i], cursor)
-                
-            #On recupere la sous species
-            subSpeciesList  =subspecies(toinsertSubSpecies[i], cursor)
-
-            popu = population(orderList[0],  suborderList[0], familyList[0], subFamilyList[0], tribuList[0], genusList[0],subGenusList[0],speciesList[0],subSpeciesList[0],cursor)
-
             
-            if isinstance(toinsertContinent[i], float): toinsertContinent[i]=""
-            
-            if isinstance(toinsertCountry[i], float): toinsertCountry[i]=""
-            
-            if isinstance(toinsertEcozone[i], float): toinsertEcozone[i]=""
-            
-            if isinstance(toinsertLatitude[i], float): toinsertLatitude[i]=""
-            
-            if isinstance(toinsertLongitude[i], float): toinsertLongitude[i]=""
             
             insertquery = """UPDATE "Individu"
-                             SET "box_id" = {}, "population_id" ={}, "continent"='{}', "country"='{}', "ecozone"='{}', "name"='{}', "latitude"='{}', "longitude"='{}' 
-                            WHERE "id_individu" = {} """.format(toinsertID[i], popu, toinsertContinent[i], toinsertCountry[i], toinsertEcozone[i], toinsert[i], toinsertLatitude[i], toinsertLongitude[i], id_indivList[0][0])
+                             SET "box_id" = (%s), "population_id" =(%s), "continent"=(%s), "country"=(%s), "ecozone"=(%s), "latitude"=(%s), "longitude"=(%s), "locality"=(%s), "number"=(%s), "collection_date"=(%s), "sexe"=(%s) 
+                            WHERE "id_individu" = (%s) """
+            datainsertquery = (toinsertID[i], popu, toinsertContinent[i], toinsertCountry[i], toinsertEcozone[i], toinsertLatitude[i], toinsertLongitude[i],toinsertLocality[i], toinsertNumber[i], toinsertCollection[i], toinsertSexe[i], toinsert[i])
             #print(insertquery)
-            cursor.execute(insertquery)
+            cursor.execute(insertquery, datainsertquery)
     conn.commit()

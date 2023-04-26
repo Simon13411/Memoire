@@ -4,12 +4,23 @@ import math
 import psycopg2
 
 
+"""
+boxexit is a function that will look if a box already exist in a database
+it will add the box 0 if it not exist yet
+
+:param data: a pandas dataframe
+:param cursor: cursor to traverse the result of SQL query
+:param conn: represent the connection to the database
+:param admin: boolean value to authorize or not the overwrite
+
+return noBox that not exist in the databse and a string of explanation
+"""
 def boxExist(olddf, dbName):
     
     
     conn = psycopg2.connect(
         host="db-entomoc",
-        database=dbName,
+        database="entomologie",
         user="postgres",
         password="password"
     )
@@ -30,8 +41,9 @@ def boxExist(olddf, dbName):
         insertquery = """INSERT INTO "Box"
                             ("id_box", "location", "museum", "paratypes", "types") 
                             VALUES 
-                            ({},'{}','{}',{},{})""".format(0,"", "", "NULL", "NULL")
-        cursor.execute(insertquery)
+                            ((%s),(%s),(%s),(%s),(%s))"""
+        datainsertquery = (0,None, None, None, None)
+        cursor.execute(insertquery, datainsertquery)
 
     SelectAllBoxID = """SELECT "id_box" FROM "Box" """
     cursor.execute(SelectAllBoxID)
@@ -45,4 +57,4 @@ def boxExist(olddf, dbName):
     conn.commit()
 
     cursor.close()
-    return noBox, "Certaines boites ne sont pas encore crée"
+    return noBox, "Some boxes has not been created yet"
