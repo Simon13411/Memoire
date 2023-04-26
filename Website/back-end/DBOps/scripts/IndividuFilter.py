@@ -51,9 +51,13 @@ def filterIndividu(olddf):
             count += 1
             reasons.append("There is no specimen code mentioned")
             continue
-        if (isinstance(row.Family, str)):
+        if (isinstance(row.Order, str)):
             order = row.Order.split("_")
-        else: order=[""]
+        else:
+            bad.append(i+2)
+            count+=1
+            reasons.append("There is no order")
+            continue
         if (isinstance(row.Suborder, str)): suborder = row.Suborder.split("_")
         else: suborder=[""]
         if (isinstance(row.Family, str)): family = row.Family.split("_")
@@ -111,11 +115,6 @@ def filterIndividu(olddf):
             reasons.append("several species and several sub classification")
             continue
         
-        if not isinstance(row.Order, str)  or math.isnan(row.Num_ID):
-            bad.append(i+2)
-            count += 1
-            reasons.append("There is no order")
-            continue
         if not isinstance(row.Suborder, str) and not (row.Suborder != row.Suborder) :
             bad.append(i+2)
             count += 1
