@@ -8,7 +8,7 @@ UNIQUE ("name")
 
 CREATE TABLE "subOrder" (
 "id_suborder" INT NOT NULL,
-"name" VARCHAR(500) NOT NULL,
+"name" VARCHAR(100) NOT NULL,
 PRIMARY KEY ("id_suborder"),
 UNIQUE ("id_suborder"),
 UNIQUE ("name")
@@ -16,7 +16,7 @@ UNIQUE ("name")
 
 CREATE TABLE "Tribu" (
 "id_tribu" INT NOT NULL,
-"name" VARCHAR(50) NOT NULL,
+"name" VARCHAR(100) NOT NULL,
 PRIMARY KEY ("id_tribu"),
 UNIQUE ("id_tribu"),
 UNIQUE ("name")
@@ -25,7 +25,7 @@ UNIQUE ("name")
 
 CREATE TABLE "Family" (
 "id_family" INT NOT NULL,
-"name" VARCHAR(500) NOT NULL,
+"name" VARCHAR(100) NOT NULL,
 PRIMARY KEY ("id_family"),
 UNIQUE ("id_family"),
 UNIQUE ("name")
@@ -33,7 +33,7 @@ UNIQUE ("name")
 
 CREATE TABLE "subFamily" (
 "id_subfamily" INT NOT NULL,
-"name" VARCHAR(500) NOT NULL,
+"name" VARCHAR(100) NOT NULL,
 PRIMARY KEY ("id_subfamily"),
 UNIQUE ("id_subfamily"),
 UNIQUE ("name")
@@ -41,7 +41,7 @@ UNIQUE ("name")
 
 CREATE TABLE "Scientific" (
 "id_sc" INT NOT NULL,
-"name" VARCHAR(500) NOT NULL,
+"name" VARCHAR(100) NOT NULL,
 PRIMARY KEY ("id_sc"),
 UNIQUE ("id_sc"),
 UNIQUE("name")
@@ -49,7 +49,7 @@ UNIQUE("name")
 
 CREATE TABLE "Genus" (
 "id_genus" INT NOT NULL,
-"name" VARCHAR(500) NOT NULL,
+"name" VARCHAR(100) NOT NULL,
 "id_sc" INT,
 "date" VARCHAR(15), 
 PRIMARY KEY ("id_genus"),
@@ -61,7 +61,7 @@ FOREIGN KEY("id_sc") REFERENCES "Scientific"("id_sc")
 
 CREATE TABLE "subGenus" (
 "id_subgenus" INT NOT NULL,
-"name" VARCHAR(500) NOT NULL,
+"name" VARCHAR(100) NOT NULL,
 "id_sc" INT,
 "date" VARCHAR(15), 
 PRIMARY KEY ("id_subgenus"),
@@ -74,7 +74,7 @@ FOREIGN KEY("id_sc") REFERENCES "Scientific"("id_sc")
 
 CREATE TABLE "Species" (
 "id_species" INT NOT NULL,
-"name" VARCHAR(500) NOT NULL,
+"name" VARCHAR(100) NOT NULL,
 "id_sc" INT,
 "date" VARCHAR(15), 
 PRIMARY KEY ("id_species"),
@@ -86,7 +86,7 @@ FOREIGN KEY("id_sc") REFERENCES "Scientific"("id_sc")
 
 CREATE TABLE "subSpecies" (
 "id_subspecies" INT NOT NULL,
-"name" VARCHAR(500) NOT NULL,
+"name" VARCHAR(100) NOT NULL,
 "id_sc" INT,
 "date" VARCHAR(15), 
 PRIMARY KEY ("id_subspecies"),
@@ -152,8 +152,7 @@ CONSTRAINT "UC_PopuBox" UNIQUE ("population_id", "box_id")
 );
 
 CREATE TABLE "Individu" (
-"id_individu" INT NOT NULL,
-"name" VARCHAR(500) NOT NULL,
+"id_individu" VARCHAR(500) NOT NULL,
 "box_id" INT NOT NULL,
 "population_id" INT NOT NULL,
 "continent" VARCHAR(50),
@@ -161,8 +160,11 @@ CREATE TABLE "Individu" (
 "ecozone" VARCHAR(50),
 "latitude" VARCHAR(50),
 "longitude" VARCHAR(50),
+"locality" VARCHAR(50),
+"number" INT,
+"collection_date" VARCHAR(50),
+"sexe" VARCHAR(50),
 UNIQUE ("id_individu"),
-UNIQUE("name"),
 PRIMARY KEY ("id_individu"),
 FOREIGN KEY ("box_id") REFERENCES "Box"("id_box"),
 FOREIGN KEY ("population_id") REFERENCES "Population"("id_population")
@@ -193,7 +195,7 @@ CONSTRAINT "UC_loanBox" UNIQUE ("loaner_id","box_id")
 
 CREATE TABLE "loanIndividu" (
 "loaner_id" INT NOT NULL,
-"individu_id" INT NOT NULL,
+"individu_id" VARCHAR(500) NOT NULL,
 UNIQUE("loaner_id"),
 PRIMARY KEY("loaner_id","individu_id"),
 FOREIGN KEY ("loaner_id") REFERENCES "Loaner"("id_loaner"),

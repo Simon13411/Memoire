@@ -51,7 +51,7 @@ class Selection extends React.Component {
     fetchResults = () => {
         axios.get(`${url}/get_indivresult`, {
             params:
-            {offs: (this.state.page*10).toString(), limit:this.state.rowsPerPage, o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+            {offs: (this.state.page*this.state.rowsPerPage).toString(), limit:this.state.rowsPerPage, o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
         .then((res) => {
             this.setState({results: res.data.rows})
             if (res.data.rows.length > 0) {
@@ -152,11 +152,11 @@ class Selection extends React.Component {
     componentDidMount() {
         axios.get(`${url}/get_indivresult`, {
             params:
-            {offs: (this.state.actualpage*this.state.rowsPerPage).toString(), limit:this.state.rowsPerPage, o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+            {offs: (this.state.page*this.state.rowsPerPage).toString(), limit:this.state.rowsPerPage, o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
         .then((res) => {
             this.setState({results: res.data.rows})
             if (res.data.rows[0].total_rows) {
-                this.setState({maxpage: Math.floor(parseInt(res.data.rows[0].total_rows)/10)})
+                this.setState({maxpage: Math.floor(parseInt(res.data.rows[0].total_rows)/10),  nresults: res.data.rows[0].total_rows})
             }
             else {
                 this.setState({maxpage: 0})
@@ -271,7 +271,7 @@ class Selection extends React.Component {
                     </TableHead>
                     <TableBody>
                         {this.state.results.map((row) => (
-                        <ResultsWNav id_box={row.id_box} Order={row.Order} subOrder={row.subOrder} Family={row.Family} subFamily={row.subFamily} Genus={row.Genus}
+                        <ResultsWNav id_box={row.box_id} id={row.id_individu} name={row.name} Order={row.Order} subOrder={row.subOrder} Family={row.Family} subFamily={row.subFamily} Genus={row.Genus}
                                     subGenus={row.subGenus} Species={row.Species} subSpecies={row.subSpecies} Tribu={row.Tribu}/>
                         ))}
                     </TableBody>

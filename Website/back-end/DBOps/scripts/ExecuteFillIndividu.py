@@ -1,13 +1,6 @@
-import ordre
-import family
-import subfamily
+import name
+import namescientist
 import scientific
-import Genus
-import subgenus
-import species
-import tribu
-import suborder
-import subspecies
 import population
 import boxexist
 import individu
@@ -19,13 +12,16 @@ import psycopg2
 import sys
 
 filename = sys.argv[1]
+#filename = "templateIndividuBis.xlsx"
 extracteddata = pd.read_excel(filename, engine="openpyxl")
 
 admin = False
+
 if (sys.argv[2] == "true") :
     admin = True
 elif (sys.argv[2] == "false") :
     admin= False
+
 print("[MY_APP_LOG] Begin Filtering")
 a,b,data,d = filtre.filterIndividu(extracteddata)
 print("[MY_APP_LOG] End Filtering")
@@ -46,6 +42,7 @@ if(len(box)>0):
     print(f'{{"type": "These lines have a wrong box", "lines":{box}}}')
 
 else:
+    data = data.where(data.notnull(), None)
     conn = psycopg2.connect(
         host="db-entomoc",
         database="entomologie",
@@ -60,16 +57,17 @@ else:
     ### On peut également mettre certain insert en commentaires pour ajouter que ceux désirés ###
 
 
-    tribu.insertTribu(data, cursor, conn)
-    ordre.insertOrder(data, cursor, conn)
-    suborder.insertSubOrder(data, cursor, conn)
-    family.insertFamily(data, cursor, conn)
-    subfamily.insertSubFamily(data, cursor, conn) 
+    name.insertName(data, cursor, conn,"Order",  "Order", "id_order")
+    name.insertName(data, cursor, conn,"Suborder",  "subOrder", "id_suborder")
+    name.insertName(data, cursor, conn,"Family",  "Family", "id_family")
+    name.insertName(data, cursor, conn,"Subfamily",  "subFamily", "id_subfamily")
+    name.insertName(data, cursor, conn,"Tribu",  "Tribu", "id_tribu")
     scientific.insertScientific(data, cursor, conn)
-    Genus.insertGenus(data, cursor, conn)
-    subgenus.insertSubGenus(data, cursor, conn)
-    species.insertSpecies(data, cursor, conn)
-    subspecies.insertSubSpecies(data, cursor, conn)
+    namescientist.insertNameScientist(data, cursor, conn,"Genus", "Genus_Descriptor", "Genus_Date", "Genus", "id_genus")
+    namescientist.insertNameScientist(data, cursor, conn,"Subgenus", "Subgenus_Descriptor", "Subgenus_Date", "subGenus", "id_subgenus")
+    namescientist.insertNameScientist(data, cursor, conn,"species", "Species_Descriptor", "Species_Date", "Species", "id_species")
+    namescientist.insertNameScientist(data, cursor, conn,"Subspecies", "Subspecies_descriptor", "Subspecies_Date", "subSpecies", "id_subspecies")
+
     population.insertPopulation(data, cursor, conn)
 
     individu.insertIndividu(data, cursor, conn, admin)

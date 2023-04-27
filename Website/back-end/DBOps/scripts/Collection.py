@@ -16,14 +16,16 @@ def insertCollection(data, cursor, conn) :
     for i in range(0, len(toinsert)):
         duplicationquery =  """SELECT *
                                 FROM "Collection" 
-                                WHERE "name" = '{}' """.format(toinsert[i]) 
-        cursor.execute(duplicationquery)
+                                WHERE "name" = (%s)"""
+        dataduplicationquery = (toinsert[i],) 
+        cursor.execute(duplicationquery, dataduplicationquery)
         if cursor.fetchall() == [] :
             insertquery = """INSERT INTO "Collection"
                             ("id_collection", "name") 
                             VALUES 
-                            ({},'{}') """.format(Count, toinsert[i])
+                            ((%s), (%s)) """
+            datainsertquery = (Count, toinsert[i],)
             ##print(insertquery)
-            cursor.execute(insertquery)
+            cursor.execute(insertquery, datainsertquery)
             Count+=1
     conn.commit()
