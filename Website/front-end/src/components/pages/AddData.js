@@ -11,7 +11,7 @@ class AddData extends React.Component {
         super(props)
         this.state = {
             boxuploadstate: '',
-            indivuploadstate: ''
+            uploadstate: ''
         }
     }
 
@@ -34,7 +34,7 @@ class AddData extends React.Component {
                     <div className="column">
                         <h1>Upload Boxes</h1>
                         <div>
-                            <FileUploader type='Box' Changeboxuploadstate={this.Changeboxuploadstate}/>
+                            <FileUploader type='Box' path='/csvtosql'/>
                         </div>
                         <div>
                             <FileDownloader file='Box' type='template'/>
@@ -46,7 +46,7 @@ class AddData extends React.Component {
                     <div className="column">
                         <h1>Upload Individuals</h1>
                         <div>
-                            <FileUploader type='Individual' Changeindivuploadstate={this.Changeindivuploadstate}/>
+                            <FileUploader type='Individual' path='/csvtosql'/>
                         </div>
                         <div>
                             <FileDownloader file='Individual' type='template'/>

@@ -15,6 +15,7 @@ class ResultsBox extends React.Component {
         return(
             <TableRow key={this.props.id_box}>
                 <TableCell>{this.props.id_box}</TableCell>
+                <TableCell>{this.props.Collection}</TableCell>
                 <TableCell>{this.props.Order}</TableCell>
                 <TableCell>{this.props.subOrder}</TableCell>
                 <TableCell>{this.props.Family}</TableCell>

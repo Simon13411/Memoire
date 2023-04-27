@@ -138,7 +138,7 @@ class Selection extends React.Component {
         const name = target.name
         this.setState({
             [name]: value
-        })
+        }, this.get_selection)
     }    
     
     handleChangePage = (event, newPage) => {
@@ -257,17 +257,16 @@ class Selection extends React.Component {
                     <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Box</TableCell>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Order</TableCell>
-                            <TableCell>Suborder</TableCell>
-                            <TableCell>Family</TableCell>
-                            <TableCell>Subfamily</TableCell>
-                            <TableCell>Genus</TableCell>
-                            <TableCell>Subgenus</TableCell>
-                            <TableCell>Species</TableCell>
-                            <TableCell>Subspecies</TableCell>
-                            <TableCell>Tribu</TableCell>
+                        <TableCell>ID</TableCell>
+                        <TableCell>Order</TableCell>
+                        <TableCell>Suborder</TableCell>
+                        <TableCell>Family</TableCell>
+                        <TableCell>Subfamily</TableCell>
+                        <TableCell>Tribe</TableCell>
+                        <TableCell>Genus</TableCell>
+                        <TableCell>Subgenus</TableCell>
+                        <TableCell>species</TableCell>
+                        <TableCell>subspecies</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

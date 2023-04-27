@@ -226,7 +226,7 @@ class Selection extends React.Component {
                     </Select>
                 </FormControl>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                    <InputLabel id="demo-simple-select-label">SubGenus</InputLabel>
+                    <InputLabel id="demo-simple-select-label">Subgenus</InputLabel>
                     <Select value={this.state.subgenus} name="subgenus" label="subGenus" onChange={this.handleAttributeChange}>
                         <MenuItem value='NULL'>
                             <em>None</em>
@@ -235,7 +235,7 @@ class Selection extends React.Component {
                     </Select>
                 </FormControl>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                    <InputLabel id="demo-simple-select-label">Specie</InputLabel>
+                    <InputLabel id="demo-simple-select-label">species</InputLabel>
                     <Select value={this.state.species} name="species" label="Species" onChange={this.handleAttributeChange}>
                         <MenuItem value='NULL'>
                             <em>None</em>
@@ -244,7 +244,7 @@ class Selection extends React.Component {
                     </Select>
                 </FormControl>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                    <InputLabel id="demo-simple-select-label">SubSpecie</InputLabel>
+                    <InputLabel id="demo-simple-select-label">subspecies</InputLabel>
                     <Select value={this.state.subspecies} name="subspecies" label="Species" onChange={this.handleAttributeChange} >
                         <MenuItem value='NULL'>
                             <em>None</em>
@@ -259,20 +259,21 @@ class Selection extends React.Component {
                     <TableHead>
                         <TableRow>
                         <TableCell>Boite</TableCell>
+                        <TableCell>Collection</TableCell>
                         <TableCell>Order</TableCell>
                         <TableCell>Suborder</TableCell>
                         <TableCell>Family</TableCell>
                         <TableCell>Subfamily</TableCell>
+                        <TableCell>Tribe</TableCell>
                         <TableCell>Genus</TableCell>
                         <TableCell>Subgenus</TableCell>
-                        <TableCell>Species</TableCell>
-                        <TableCell>Subspecies</TableCell>
-                        <TableCell>Tribu</TableCell>
+                        <TableCell>species</TableCell>
+                        <TableCell>subspecies</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {this.state.results.map((row) => (
-                        <ResultsWNav id_box={row.id_box} Order={row.Order} subOrder={row.subOrder} Family={row.Family} subFamily={row.subFamily} Genus={row.Genus}
+                        <ResultsWNav id_box={row.id_box} Collection={row.collection} Order={row.Order} subOrder={row.subOrder} Family={row.Family} subFamily={row.subFamily} Genus={row.Genus}
                                     subGenus={row.subGenus} Species={row.Species} subSpecies={row.subSpecies} Tribu={row.Tribu}/>
                         ))}
                     </TableBody>

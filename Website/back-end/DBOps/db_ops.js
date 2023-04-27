@@ -86,7 +86,7 @@ OUTPUT:
 */ 
 function get_boxdetails(id) {
     var searchquery = `SELECT B."id_box", B."location", B."museum", B."paratypes", B."types", O."name" as "order",
-                        So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", Col."name" as "collection", loan."prenom" as "borrower"
+                        So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", Col."name" as "collection", borrow."prenom" as "borrower"
                             FROM "Box" B
                             LEFT OUTER JOIN "Collection" Col ON B."collection_id"=Col."id_collection"
                             LEFT OUTER JOIN "PopuBox" P ON B."id_box"=P."box_id"
@@ -101,8 +101,8 @@ function get_boxdetails(id) {
                             LEFT OUTER JOIN "Species" S ON P2."species_id"=S."id_species"
                             LEFT OUTER JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
                             LEFT OUTER JOIN (SELECT L.name as "prenom", LB.box_id
-                                            FROM "loanBox" LB, "Loaner" L
-                                            WHERE LB.loaner_id=L.id_loaner) as loan ON B."id_box"=loan.box_id
+                                            FROM "borrowerBox" LB, "Borrower" L
+                                            WHERE LB.borrower_id=L.id_borrower) as borrow ON B."id_box"=borrow.box_id
                             WHERE (B."id_box"=$1)`
                             
     return new Promise(function (resolve, reject) {
@@ -178,7 +178,7 @@ OUTPUT:
 */ 
 function get_indivdetails(id) {
     var searchquery = `SELECT I."id_individu", I."box_id", I."name", I."continent", I."country", I."ecozone", O."name" as "order",
-    So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", loan."prenom" as "borrower"
+    So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", borrow."prenom" as "borrower"
                         FROM "Individu" I
                             LEFT OUTER JOIN "Population" P2 ON I."population_id"=P2."id_population"
                             LEFT OUTER JOIN "PopuBox" P ON P."population_id"=P2."id_population"
@@ -192,8 +192,8 @@ function get_indivdetails(id) {
                             LEFT OUTER JOIN "Species" S ON P2."species_id"=S."id_species"
                             LEFT OUTER JOIN "subSpecies" Ss ON P2."subSpecies_id"=Ss."id_subspecies"
                             LEFT OUTER JOIN (SELECT L."name" as "prenom", LI."individu_id"
-                            FROM "loanIndividu" LI, "Loaner" L
-                            WHERE LI."loaner_id"=L."id_loaner") as loan on I."id_individu"=loan."individu_id"
+                            FROM "borrowerIndividu" LI, "Borrower" L
+                            WHERE LI."borrower_id"=L."id_borrower") as borrow on I."id_individu"=borrow."individu_id"
                         
                         WHERE I."id_individu"=$1`
                             
@@ -713,7 +713,7 @@ function get_selectionss(O, So, F, Sf, T, G, Sg, S) {
 Get all borrowers name
 */ 
 function get_borrowers(){
-    var searchquery = `SELECT "name" FROM "Loaner" ORDER BY "name" ASC`
+    var searchquery = `SELECT "name" FROM "Borrower" ORDER BY "name" ASC`
                             
     return new Promise(function (resolve, reject) {
         client.query(searchquery, (err, res) => {
@@ -733,7 +733,7 @@ Get all borrower's information
 input : - name: borrower's name
 */ 
 function getborrowerinfo(name){
-    var searchquery = `SELECT "name", "phone", "mail" FROM "Loaner" WHERE "name"=$1`
+    var searchquery = `SELECT "name", "phone", "mail" FROM "Borrower" WHERE "name"=$1`
                             
     return new Promise(function (resolve, reject) {
         client.query(searchquery, [name], (err, res) => {
@@ -1044,10 +1044,10 @@ input:  -name: borrower's name
         -mail,phone: information of borrower
 */ 
 function addborrower(name, mail, phone) {
-    query = `INSERT INTO "Loaner"
-    ("id_loaner", "name", "mail","phone")
+    query = `INSERT INTO "Borrower"
+    ("id_borrower", "name", "mail","phone")
     VALUES
-    ((SELECT COALESCE(MAX("id_loaner"),0)+1 FROM "Loaner"), $1, $2, $3)`
+    ((SELECT COALESCE(MAX("id_borrower"),0)+1 FROM "Borrower"), $1, $2, $3)`
 
     return new Promise(function (resolve, reject) {
         client.query(query, [name, mail, phone], (err, res) => {
@@ -1068,10 +1068,10 @@ input:  -borrower: borrower's name
 */ 
 function modifyborrower(borrower, name, mail, phone) {
     verifquery = `SELECT *
-                FROM "Loaner"
+                FROM "Borrower"
                 WHERE "name"=$1;`
 
-    updatequery = `UPDATE "Loaner"
+    updatequery = `UPDATE "Borrower"
                     Set "name" = $1,"mail"=$2, "phone"=$3
                     WHERE "name"=$4;`
 
@@ -1145,15 +1145,15 @@ input:  -individ: individual id
 */ 
 function changeindivborrower(individ, newborrower) {
     verifquery = `SELECT *
-                    FROM "Loaner"
+                    FROM "Borrower"
                     Where "name"=$1;`
 
-    deletequery = `DELETE FROM "loanIndividu" WHERE "individu_id"=$1;`
-    insertquery = `INSERT INTO "loanIndividu"
-                    ("loaner_id", "individu_id")
+    deletequery = `DELETE FROM "borrowerIndividu" WHERE "individu_id"=$1;`
+    insertquery = `INSERT INTO "borrowerIndividu"
+                    ("borrower_id", "individu_id")
                     VALUES
-                    ((SELECT "id_loaner"
-                    FROM "Loaner"
+                    ((SELECT "id_borrower"
+                    FROM "Borrower"
                     WHERE "name"=$1), $2);`
 
     return new Promise(function (resolve, reject) {
@@ -1246,15 +1246,15 @@ input:  -boxid: box id
 */ 
 function changeboxborrower(boxid, newborrower) {
     verifquery = `SELECT *
-                    FROM "Loaner"
+                    FROM "Borrower"
                     Where "name"=$1;`
 
-    deletequery = `DELETE FROM "loanBox" WHERE "box_id"=$1;`
-    insertquery = `INSERT INTO "loanBox"
-                    ("loaner_id", "box_id")
+    deletequery = `DELETE FROM "borrowerBox" WHERE "box_id"=$1;`
+    insertquery = `INSERT INTO "borrowerBox"
+                    ("borrower_id", "box_id")
                     VALUES
-                    ((SELECT "id_loaner"
-                    FROM "Loaner"
+                    ((SELECT "id_borrower"
+                    FROM "Borrower"
                     WHERE "name"=$1),$2);`
 
     return new Promise(function (resolve, reject) {

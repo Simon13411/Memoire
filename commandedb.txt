@@ -170,35 +170,35 @@ FOREIGN KEY ("box_id") REFERENCES "Box"("id_box"),
 FOREIGN KEY ("population_id") REFERENCES "Population"("id_population")
 );
 
-CREATE TABLE "Loaner" (
-"id_loaner" INT NOT NULL,
+CREATE TABLE "Borrower" (
+"id_borrower" INT NOT NULL,
 "name" VARCHAR(50) NOT NULL,
 "mail" VARCHAR(100),
 "phone" VARCHAR(25),
-UNIQUE ("id_loaner"),
+UNIQUE ("id_borrower"),
 UNIQUE("name"),
 UNIQUE ("mail"),
 UNIQUE ("phone"),
-PRIMARY KEY ("id_loaner")
+PRIMARY KEY ("id_borrower")
 );
 
 
-CREATE TABLE "loanBox" (
-"loaner_id" INT NOT NULL,
+CREATE TABLE "borrowerBox" (
+"borrower_id" INT NOT NULL,
 "box_id" INT NOT NULL,
-UNIQUE("loaner_id"),
-PRIMARY KEY("loaner_id","box_id"),
-FOREIGN KEY ("loaner_id") REFERENCES "Loaner"("id_loaner"),
+UNIQUE("borrower_id"),
+PRIMARY KEY("borrower_id","box_id"),
+FOREIGN KEY ("borrower_id") REFERENCES "Borrower"("id_borrower"),
 FOREIGN KEY ("box_id") REFERENCES "Box"("id_box") ON DELETE CASCADE,
-CONSTRAINT "UC_loanBox" UNIQUE ("loaner_id","box_id")
+CONSTRAINT "UC_borrowerBox" UNIQUE ("borrower_id","box_id")
 );
 
-CREATE TABLE "loanIndividu" (
-"loaner_id" INT NOT NULL,
+CREATE TABLE "borrowerIndividu" (
+"borrower_id" INT NOT NULL,
 "individu_id" VARCHAR(500) NOT NULL,
-UNIQUE("loaner_id"),
-PRIMARY KEY("loaner_id","individu_id"),
-FOREIGN KEY ("loaner_id") REFERENCES "Loaner"("id_loaner"),
+UNIQUE("borrower_id"),
+PRIMARY KEY("borrower_id","individu_id"),
+FOREIGN KEY ("borrower_id") REFERENCES "Borrower"("id_borrower"),
 FOREIGN KEY ("individu_id") REFERENCES "Individu"("id_individu") ON DELETE CASCADE,
-CONSTRAINT "UC_loanIndividu" UNIQUE ("loaner_id","individu_id")
+CONSTRAINT "UC_borrowerIndividu" UNIQUE ("borrower_id","individu_id")
 );

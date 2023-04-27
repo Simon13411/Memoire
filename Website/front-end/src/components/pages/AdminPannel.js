@@ -12,7 +12,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import FileUploaderAdmin from '../FileUploaderAdmin';
+import FileUploader from '../FileUploader';
 
 import axios from 'axios'
 const url = process.env.REACT_APP_IP
@@ -95,18 +95,6 @@ class AdminPannel extends React.Component {
 
     onSubmit (event) {
         event.preventDefault()
-    }
-
-    Changeboxuploadstate = (message) => {
-        this.setState({boxuploadstate: message})
-    }
-    
-    Changeindivuploadstate = (message) => {
-        this.setState({indivuploadstate: message})
-    }
-
-    getToken = () => {
-        return this.state.authToken
     }
 
     //Fields Change Handlers
@@ -642,11 +630,11 @@ class AdminPannel extends React.Component {
         
                 <div className="column">
                     <h3>Modify Boxes data - Overwrite mode</h3>
-                    <div><FileUploaderAdmin type='Box' Changeboxuploadstate={this.Changeboxuploadstate} getToken={this.getToken}></FileUploaderAdmin></div>
+                    <div><FileUploader type='Box' path='/csvtosqladmin'></FileUploader></div>
                     <div>{this.state.boxuploadstate}</div>
                     <br />
                     <h3>Modify Individuals data - Overwrite mode</h3>
-                    <div><FileUploaderAdmin type='Individual' Changeindivuploadstate={this.Changeindivuploadstate} getToken={this.getToken}></FileUploaderAdmin></div>
+                    <div><FileUploader type='Individual' path='/csvtosqladmin'></FileUploader></div>
                     <div>{this.state.indivuploadstate}</div>
                 </div>
         

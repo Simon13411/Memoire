@@ -26,16 +26,20 @@ print("[MY_APP_LOG] Begin Filtering")
 a,b,data,d = filtre.filterIndividu(extracteddata)
 print("[MY_APP_LOG] End Filtering")
 
+if b==1:
+    if a == []:
+        print("Wrong column's name")
+    print(f'{{"type": "{b} line have wrong format", "lines":{a}, "errors": {d}}}')
 if b>0:
     #il y a des lignes qui ont des problemes
-    print(f"{b} lignes problématiques: {a} -> {d}")
+    print(f'{{"type": "{b} lines have wrong format", "lines":{a}, "errors": {d}}}')
 
 print("[MY_APP_LOG] Begin boxes verification")
 box, colOk = boxexist.boxExist(extracteddata, "entomologie")
 print("[MY_APP_LOG] End boxes verification")
 if(len(box)>0):
     #il y a des boites qui n'existe pas encore
-    print(f"Aux lignes {box} : {colOk}")
+    print(f'{{"type": "These lines have a wrong box", "lines":{box}}}')
 
 else:
     data = data.where(data.notnull(), None)
