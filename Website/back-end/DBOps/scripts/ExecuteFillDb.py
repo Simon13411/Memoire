@@ -32,7 +32,7 @@ elif (sys.argv[2] == "false") :
     admin= False
 
 if (b>0):
-    print(f"{b} lignes problématiques: {a} -> {d}")
+    print(f'{{"type": "{b} lines have wrong format", "lines":{a}, "errors": {d}}}')
 
 else:
     conn = psycopg2.connect(

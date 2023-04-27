@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 
-import logo from './Hexapoda.png'
+import logo from './GemblouxLogo.png'
 
 function Navbar(props) {
     const [click, setClick] = useState(false);

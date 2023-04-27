@@ -39,9 +39,8 @@ def filterIndividu(olddf):
             count += 1
             reasons.append("il n'y a pas de Specimen code mentionne")
             continue
-        if (isinstance(row.Family, str)):
+        if (isinstance(row.Order, str)):
             order = row.Order.split("_")
-        else: order=[""]
         if (isinstance(row.Suborder, str)): suborder = row.Suborder.split("_")
         else: suborder=[""]
         if (isinstance(row.Family, str)): family = row.Family.split("_")
