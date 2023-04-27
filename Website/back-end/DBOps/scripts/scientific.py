@@ -12,10 +12,10 @@ insertScientific is a function that will insert in a database all the known scie
 :param conn: represent the connection to the database
 """
 def insertScientific(data, cursor, conn) :
-    toinsert = data["Genus_Descriptor"].values.tolist()
-    toinsert += data["Subgenus_Descriptor"].values.tolist()
-    toinsert += data["Species_Descriptor"].values.tolist()
-    toinsert += data["Species_Descriptor"].values.tolist()
+    toinsert = data["Genus_Descriptor"].fillna(np.nan).replace([np.nan], [None]).values.tolist()
+    toinsert += data["Subgenus_Descriptor"].fillna(np.nan).replace([np.nan], [None]).values.tolist()
+    toinsert += data["Species_Descriptor"].fillna(np.nan).replace([np.nan], [None]).values.tolist()
+    toinsert += data["subSpecies_Descriptor"].fillna(np.nan).replace([np.nan], [None]).values.tolist()
     duplicationquery =  """SELECT MAX("id_sc")
                             FROM "Scientific" """
     cursor.execute(duplicationquery)
