@@ -218,7 +218,7 @@ OUTPUT:
     - Number of total row (used for pagination) + 10 individuals id and their information
 */ 
 function get_indivresult(Offs, Limit, O, So, F, Sf, T, G, Sg, S, Ss) {
-    var searchquery = `SELECT DISTINCT COUNT(*) OVER() AS total_rows, I."id_individu", I."name", I."box_id", I."continent", I."country", I."ecozone", O."name" as "Order",
+    var searchquery = `SELECT DISTINCT COUNT(*) OVER() AS total_rows, I."id_individu", I."box_id", I."continent", I."country", I."ecozone", O."name" as "Order",
     So."name" as "subOrder", F."name" as "Family", Sf."name" as "subFamily", T."name" as "Tribu", G."name" as "Genus", Sg."name" as "subGenus" , S."name" as "Species", Ss."name" as "subSpecies"
                         FROM "Individu" I
                             LEFT OUTER JOIN "Population" P2 ON I."population_id"=P2."id_population"

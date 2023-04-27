@@ -10,7 +10,6 @@ import BoxFilter as filtre
 import pandas as pd
 import psycopg2
 import sys
-import sqlite3
 
 filename = sys.argv[1]
 #filename = "GoodFormat.xlsx"
@@ -30,6 +29,8 @@ elif (sys.argv[2] == "false") :
     admin= False
 
 if (b>0):
+    if a == []:
+        print("Wrong column's name")
     print(f'{{"type": "{b} lines have wrong format", "lines":{a}, "errors": {d}}}')
 
 else:

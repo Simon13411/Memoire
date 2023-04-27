@@ -15,8 +15,8 @@ class ResultsIndiv extends React.Component {
     render() {
         return(
             <TableRow key={this.props.id}>
+                <TableCell>{this.props.id}</TableCell>
                 <TableCell>{this.props.id_box}</TableCell>
-                <TableCell>{this.props.name}</TableCell>
                 <TableCell>{this.props.Order}</TableCell>
                 <TableCell>{this.props.subOrder}</TableCell>
                 <TableCell>{this.props.Family}</TableCell>

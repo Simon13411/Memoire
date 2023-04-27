@@ -14,10 +14,10 @@ insertBox is a function that will insert in a database a specific box
 """
 def insertBox(data, cursor, conn, admin) :
     toinsertID = data["Num_ID"].values.tolist()
-    toinsertLocation = data["Box_Localization"].values.tolist()
-    toinsertMuseum = data["Museum"].values.tolist()
-    toinsertParaType = data["Paratypes"].values.tolist()
-    toinsertType = data["Types"].values.tolist()
+    toinsertLocation = data["Box_Localization"].fillna(np.nan).replace([np.nan], [None]).values.tolist()
+    toinsertMuseum = data["Museum"].fillna(np.nan).replace([np.nan], [None]).values.tolist()
+    toinsertParaType = data["Paratypes"].fillna(np.nan).replace([np.nan], [None]).values.tolist()
+    toinsertType = data["Types"].fillna(np.nan).replace([np.nan], [None]).values.tolist()
     toinsertCollection = data["Collection_Name"].tolist()
     
     toinsertOrder = data["Order"].values.tolist()

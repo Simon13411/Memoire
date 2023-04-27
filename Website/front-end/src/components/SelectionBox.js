@@ -258,7 +258,7 @@ class Selection extends React.Component {
                     <Table>
                     <TableHead>
                         <TableRow>
-                        <TableCell>Boite</TableCell>
+                        <TableCell>Box</TableCell>
                         <TableCell>Collection</TableCell>
                         <TableCell>Order</TableCell>
                         <TableCell>Suborder</TableCell>
