@@ -10,6 +10,7 @@ import IndividuFilter as filtre
 import pandas as pd
 import psycopg2
 import sys
+import json
 
 filename = sys.argv[1]
 #filename = "templateIndividuBis.xlsx"
@@ -29,10 +30,10 @@ print("[MY_APP_LOG] End Filtering")
 if b==1:
     if a == []:
         print("Wrong column's name")
-    print(f'{{"type": "{b} line have wrong format", "lines":{a}, "errors": {d}}}')
+    print(f'{{"type": "{b} line have wrong format", "lines":{a}, "errors": {json.dumps(d)}}}')
 if b>0:
     #il y a des lignes qui ont des problemes
-    print(f'{{"type": "{b} lines have wrong format", "lines":{a}, "errors": {d}}}')
+    print(f'{{"type": "{b} lines have wrong format", "lines":{a}, "errors": {json.dumps(d)}}}')
 
 print("[MY_APP_LOG] Begin boxes verification")
 box, colOk = boxexist.boxExist(extracteddata, "entomologie")

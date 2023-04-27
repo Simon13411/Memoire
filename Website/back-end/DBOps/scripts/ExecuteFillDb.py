@@ -10,6 +10,7 @@ import BoxFilter as filtre
 import pandas as pd
 import psycopg2
 import sys
+import json
 
 filename = sys.argv[1]
 #filename = "GoodFormat.xlsx"
@@ -31,7 +32,7 @@ elif (sys.argv[2] == "false") :
 if (b>0):
     if a == []:
         print("Wrong column's name")
-    print(f'{{"type": "{b} lines have wrong format", "lines":{a}, "errors": {d}}}')
+    print(f'{{"type": "{b} lines have wrong format", "lines":{a}, "errors": {json.dumps(d)}}}')
 
 else:
     data = data.where(data.notnull(), None)

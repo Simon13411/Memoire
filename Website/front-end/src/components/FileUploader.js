@@ -61,7 +61,6 @@ class FileUploader extends Component {
                     this.Changeuploadstate(jsonData)
                 }
                 catch (e) {
-                    console.log(e)
                     this.Changeuploadstate(err.response.data.error)
                 }
             }
