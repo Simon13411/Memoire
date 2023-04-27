@@ -25,6 +25,7 @@ class Selection extends React.Component {
             species: 'NULL',
             subspecies: 'NULL',
             tribu: 'NULL',
+            collection: 'NULL',
             results: [],
             orderlist: [],
             suborderlist: [],
@@ -35,6 +36,7 @@ class Selection extends React.Component {
             specieslist: [],
             subspecieslist: [],
             tribulist: [],
+            collectionslist: [],
             //pagination
             maxpage: 0,
             page: 0,
@@ -51,7 +53,7 @@ class Selection extends React.Component {
     fetchResults = () => {
         axios.get(`${url}/get_boxresult`, {
             params:
-            {offs: (this.state.page*this.state.rowsPerPage).toString(), limit:this.state.rowsPerPage, o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+            {offs: (this.state.page*this.state.rowsPerPage).toString(), limit:this.state.rowsPerPage, o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies, collection: this.state.collection}})
         .then((res) => {
             this.setState({results: res.data.rows})
             if (res.data.rows.length > 0) {
@@ -132,6 +134,13 @@ class Selection extends React.Component {
         })
     }
 
+    get_collections() {
+        axios.get(`${url}/get_collections`)
+        .then((res) => {
+            this.setState({collectionslist: res.data.rows})
+        })
+    }
+
     handleAttributeChange = (event) => {
         const target = event.target
         const value = target.value
@@ -144,7 +153,7 @@ class Selection extends React.Component {
     componentDidMount() {
         axios.get(`${url}/get_boxresult`, {
             params:
-            {offs: (this.state.page*this.state.rowsPerPage).toString(), limit:this.state.rowsPerPage, o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies}})
+            {offs: (this.state.page*this.state.rowsPerPage).toString(), limit:this.state.rowsPerPage, o: this.state.order, so: this.state.suborder, f: this.state.family, sf: this.state.subfamily, t: this.state.tribu, g: this.state.genus, sg: this.state.subgenus, s: this.state.species, ss: this.state.subspecies, collection: this.state.collection}})
         .then((res) => {
             this.setState({results: res.data.rows})
             if (res.data.rows[0].total_rows) {
@@ -155,6 +164,7 @@ class Selection extends React.Component {
             }
         })
         this.get_selection()
+        this.get_collections()
     }
 
     handleChangePage = (event, newPage) => {
@@ -171,6 +181,15 @@ class Selection extends React.Component {
             <div cassname="containerhome">
             <div className='selectdiv'>
                 <button buttonStyle='btn--outline' onClick={this.fetchResultsOnClick}>SEARCH BOXES</button>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                    <InputLabel id="demo-simple-select-label">Collection</InputLabel>
+                        <Select value={this.state.collection} label="Collection" name="collection" onChange={this.handleAttributeChange} >
+                            <MenuItem value='NULL'>
+                                <em>None</em>
+                            </MenuItem>
+                            {this.state.collectionslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                        </Select>
+                </FormControl>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                     <InputLabel id="demo-simple-select-label">Order</InputLabel>
                         <Select value={this.state.order} label="Order" name="order" onChange={this.handleAttributeChange} >

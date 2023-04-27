@@ -252,7 +252,6 @@ class AdminPannel extends React.Component {
                 token: this.state.authToken
             })
             .then((res) => {
-                console.log(res)
                 this.setState({useraddstate: `User ${this.state.usernameToAdd} added`, usernameToAdd: '', passwordToAdd: '', passwordToAdd2: '', adminToAdd: '0'}, this.getUsers);
             })
             .catch((err) => {

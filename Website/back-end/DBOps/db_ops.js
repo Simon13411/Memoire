@@ -119,15 +119,15 @@ function get_boxdetails(id) {
 }
 
 /*
-Get Box corresponding to given attributes (10 first boxes after the Offs'th box)
+Get Box corresponding to given attributes (Limit first boxes after the Offs'th box)
 INPUT: 
     - Offs: offset, O: Order, So: Suborder, F: Family, Sf: Subfamily, T: Tribu, G: Genus, Sg: Subgenus, S: Species, Ss: Subspecies
 OUTPUT:
     - Number of total row (used for pagination) + 10 Box id and their information
 */ 
-function get_boxresult(Offs, Limit, O, So, F, Sf, T, G, Sg, S, Ss) {
+function get_boxresult(Offs, Limit, O, So, F, Sf, T, G, Sg, S, Ss, Collection) {
     var searchquery = `SELECT DISTINCT COUNT(*) OVER() AS total_rows, B."id_box", B."location", B."museum", B."paratypes", B."types", R."Order",
-                        R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", Col."name" as "Col"
+                        R."subOrder", R."Family", R."subFamily", R."Tribu", R."Genus", R."subGenus", R."Species", R."subSpecies", Col."name" as "collection"
                         FROM "Box" B, "Collection" Col,
                         (SELECT P."box_id" as "bid", O."name" as "Order", So."name" as "subOrder", F."name" as "Family", Sf."name" as "subFamily", T."name" as "Tribu", G."name" as "Genus", Sg."name"as "subGenus", S."name" as "Species", Ss."name" as "subSpecies"
                             FROM "PopuBox" P, "Population" P2
@@ -152,12 +152,12 @@ function get_boxresult(Offs, Limit, O, So, F, Sf, T, G, Sg, S, Ss) {
                                     AND (Ss."name"=$9 OR $9='NULL') 
                                 ) AS R
                         WHERE B."id_box" = R."bid" 
-                            AND B."collection_id"=Col."id_collection" 
+                            AND (B."collection_id"=Col."id_collection" AND  (Col."name"=$12 OR $12='NULL') )
                         ORDER BY B."id_box" ASC
                         LIMIT $11 OFFSET $10`
                         
     return new Promise(function (resolve, reject) {
-        client.query(searchquery, [O, So, F, Sf, T, G, Sg, S, Ss, Offs, Limit], (err, res) => {
+        client.query(searchquery, [O, So, F, Sf, T, G, Sg, S, Ss, Offs, Limit, Collection], (err, res) => {
             if (err) {
                 console.error(err)
                 return reject(new Error("Erreur DB"))
@@ -177,7 +177,7 @@ OUTPUT:
     - Individual informations
 */ 
 function get_indivdetails(id) {
-    var searchquery = `SELECT I."id_individu", I."box_id", I."name", I."continent", I."country", I."ecozone", O."name" as "order",
+    var searchquery = `SELECT I."id_individu", I."box_id", I."continent", I."country", I."ecozone", O."name" as "order",
     So."name" as "suborder", F."name" as "family", Sf."name" as "subfamily", T."name" as "tribu", G."name" as "genus", Sg."name" as "subgenus" , S."name" as "species", Ss."name" as "subspecies", borrow."prenom" as "borrower"
                         FROM "Individu" I
                             LEFT OUTER JOIN "Population" P2 ON I."population_id"=P2."id_population"
@@ -211,7 +211,7 @@ function get_indivdetails(id) {
 }
 
 /*
-Get Individuals corresponding to given attributes (10 first individuals after the Offs'th individual)
+Get Individuals corresponding to given attributes (Limit first individuals after the Offs'th individual)
 INPUT: 
     - Offs: offset, O: Order, So: Suborder, F: Family, Sf: Subfamily, T: Tribu, G: Genus, Sg: Subgenus, S: Specie, Ss: Subspecie
 OUTPUT:

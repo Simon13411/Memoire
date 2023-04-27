@@ -40,7 +40,8 @@ app.get('/get_boxresult', (req, res) => {
     const Sg = req.query.sg
     const S = req.query.s
     const Ss = req.query.ss
-    return db.get_boxresult(Offs, Limit, O, So, F, Sf, T, G, Sg, S, Ss)
+    const Collection = req.query.collection
+    return db.get_boxresult(Offs, Limit, O, So, F, Sf, T, G, Sg, S, Ss, Collection)
     .then((result) => {
         res.status(200).json(result)
     })
