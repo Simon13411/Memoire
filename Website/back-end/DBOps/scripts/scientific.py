@@ -15,7 +15,7 @@ def insertScientific(data, cursor, conn) :
     toinsert = data["Genus_Descriptor"].fillna(np.nan).replace([np.nan], [None]).values.tolist()
     toinsert += data["Subgenus_Descriptor"].fillna(np.nan).replace([np.nan], [None]).values.tolist()
     toinsert += data["Species_Descriptor"].fillna(np.nan).replace([np.nan], [None]).values.tolist()
-    toinsert += data["subSpecies_Descriptor"].fillna(np.nan).replace([np.nan], [None]).values.tolist()
+    toinsert += data["Subspecies_Descriptor"].fillna(np.nan).replace([np.nan], [None]).values.tolist()
     duplicationquery =  """SELECT MAX("id_sc")
                             FROM "Scientific" """
     cursor.execute(duplicationquery)
