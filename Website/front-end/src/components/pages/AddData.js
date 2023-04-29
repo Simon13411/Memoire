@@ -10,7 +10,6 @@ class AddData extends React.Component {
     constructor (props) {
         super(props)
         this.state = {
-            boxuploadstate: '',
             uploadstate: ''
         }
     }
@@ -32,15 +31,20 @@ class AddData extends React.Component {
                 <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
                 <div className="container">
                     <div className="column">
+                        <h1>Instructions</h1>
+                        <div>
+                            <FileDownloader path='/getscriptinstructions' filename='instructions.pdf' type='instructions'/>
+                        </div>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="column">
                         <h1>Upload Boxes</h1>
                         <div>
                             <FileUploader type='Box' path='/csvtosql'/>
                         </div>
                         <div>
-                            <FileDownloader file='Box' type='template'/>
-                        </div>
-                        <div>
-                            {this.state.boxuploadstate}
+                            <FileDownloader path='/boxestemplate' filename='Boxes.xlsx' type='template'/>
                         </div>
                     </div>
                     <div className="column">
@@ -49,21 +53,18 @@ class AddData extends React.Component {
                             <FileUploader type='Individual' path='/csvtosql'/>
                         </div>
                         <div>
-                            <FileDownloader file='Individual' type='template'/>
-                        </div>
-                        <div>
-                            {this.state.indivuploadstate}
+                            <FileDownloader path= '/individualstemplate' filename='Individuals.xlsx' type='template'/>
                         </div>
                     </div>
                 </div>
                 <div className="container">
                     <div className="column">
                         <h1>Download Boxes Data</h1>
-                        <FileDownloader file='BoxSQL' type='data'/>
+                        <FileDownloader path='/boxessqltocsv' file='BoxesData.xlsx' type='data'/>
                     </div>
                     <div className="column">
                         <h1>Download Individuals Data</h1>
-                        <FileDownloader file='IndividualSQL' type='data'/>
+                        <FileDownloader path='/individualssqltocsv' filename='IndividualsData.xlsx' type='data'/>
                     </div>
                 </div>
             </div>

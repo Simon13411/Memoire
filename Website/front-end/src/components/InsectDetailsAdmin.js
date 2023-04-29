@@ -216,7 +216,7 @@ class BoxDetailsAdmin extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                    <h4 className="title">Specie</h4>
+                    <h4 className="title">species</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                     <Select id="species-select" value={this.state.species} onChange={this.handleInputChange} name="species">
                         <MenuItem value={null}>
@@ -227,7 +227,7 @@ class BoxDetailsAdmin extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                    <h4 className="title">Subspecie</h4>
+                    <h4 className="title">subspecies</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                     <Select id="subspecies-select" value={this.state.subspecies} onChange={this.handleInputChange} name="subspecies" >
                         <MenuItem value={null}>

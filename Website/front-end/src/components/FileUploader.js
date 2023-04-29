@@ -28,7 +28,7 @@ class FileUploader extends Component {
             });
         } else {
             this.setState({
-                fileError: 'Le fichier doit être de type .xlsx',
+                fileError: 'File must be a .xlsx file',
             });
         }
     };
@@ -39,7 +39,7 @@ class FileUploader extends Component {
         const formData = new FormData();
         formData.append('file', this.state.selectedFile);
 
-        this.Changeuploadstate('Veuillez Patienter...')
+        this.Changeuploadstate('Please wait...')
 
         axios.put(`${url}${this.props.path}?type=${this.props.type}&token=${authToken}`, formData, {
             headers: {
@@ -47,13 +47,13 @@ class FileUploader extends Component {
             }
         })
         .then(response => {
-            console.log('Fichier envoyé avec succès');
-            this.Changeuploadstate('Fichier envoyé avec succès')
+            console.log('File sent successfully');
+            this.Changeuploadstate('File sent successfully')
         })
         .catch(err => {
-            console.error('Erreur lors de l\'envoi du fichier', err);
+            console.error('Error while sending file', err);
             if (!err.response) {
-                this.Changeuploadstate('Erreur Serveur - Gateway')
+                this.Changeuploadstate('Server Error - Gateway')
             }
             else {
                 try {

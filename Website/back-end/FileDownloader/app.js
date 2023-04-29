@@ -20,7 +20,7 @@ app.get('/individualstemplate', (req, res) => {
 });
 
 app.get('/boxestemplate', (req, res) => {
-    const filePath = '/usr/dlder/Files/Boxes.xlsx'; // chemin absolu du fichier
+    const filePath = 'Files/Boxes.xlsx'; // chemin absolu du fichier
     const fileName = 'Boxes.xlsx'; // nom du fichier à télécharger
     console.log("Recherche du fichier Boxes.xlsx")
     const fileContent = fs.readFileSync(filePath);
@@ -34,6 +34,24 @@ app.get('/boxestemplate', (req, res) => {
 
     res.send(fileContent);
     console.log("Fichier Boxes.xlsx envoyé")
+  });
+
+
+app.get('/getscriptinstructions', (req, res) => {
+    const filePath = 'Files/ScriptsInstructions.pdf'; // chemin absolu du fichier
+    const fileName = 'ScriptsInstructions.pdf'; // nom du fichier à télécharger
+    console.log("Recherche du fichier ScriptsInstructions.pdf")
+    const fileContent = fs.readFileSync(filePath);
+    const stats = fs.statSync(filePath);
+    const fileSize = stats.size;
+    console.log("Fichier ScriptsInstructions.pdf trouvé")
+  
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Length', fileSize);
+
+    res.send(fileContent);
+    console.log("Fichier ScriptsInstructions.pdf envoyé")
   });
 
 module.exports = app

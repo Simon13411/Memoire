@@ -13,8 +13,7 @@ COPY gulpfile.js .
 COPY daemon.js .
 COPY app.js .
 RUN mkdir -p /usr/dlder/Files
-COPY Files/Individuals.xlsx Files/.
-COPY Files/Boxes.xlsx Files/.
+COPY Files/ Files/.
 
 ENV IP localhost
 

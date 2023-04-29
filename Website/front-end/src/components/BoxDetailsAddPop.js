@@ -4,6 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+import Cookies from 'js-cookie';
 import axios from 'axios'
 const url = process.env.REACT_APP_IP
 
@@ -132,7 +133,7 @@ class BoxDetailsAddPop extends React.Component {
                 })
                 .catch((err) => {
                     if (!err.response) {
-                        this.setState({addstate: 'Erreur Serveur - Gateway'})
+                        this.setState({addstate: 'Server Error - Gateway'})
                     }
                     else {
                         this.setState({addstate: err.response.data.error})
@@ -224,7 +225,7 @@ class BoxDetailsAddPop extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                    <h4 className="title">Specie</h4>
+                    <h4 className="title">species</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select id="species-select" value={this.state.species} onChange={this.handleInputChange} name="species">
                         <MenuItem value={null}>
@@ -235,7 +236,7 @@ class BoxDetailsAddPop extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                    <h4 className="title">Subspecie</h4>
+                    <h4 className="title">subspecies</h4>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
                         <Select id="subspecies-select" value={this.state.subspecies} onChange={this.handleInputChange} name="subspecies" >
                         <MenuItem value={null}>
@@ -246,7 +247,7 @@ class BoxDetailsAddPop extends React.Component {
                     </FormControl>
                 </div>
                 <div>
-                    <button type='submit' onClick={this.addpopu}>Ajouter une population</button>
+                    <button type='submit' onClick={this.addpopu}>Add population</button>
                 </div>
             </div>
         )

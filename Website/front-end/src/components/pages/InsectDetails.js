@@ -17,7 +17,6 @@ class InsectDetails extends React.Component {
         super(props)
         this.state = {
             individ: null,
-            name: null,
             idbox: 0,
             order: null,
             suborder: null,
@@ -72,7 +71,6 @@ class InsectDetails extends React.Component {
         axios.get(`${url}/get_indivdetails`, {params: {id: this.props.searchParams.get("id")}})
         .then((res) => {
             this.setState({individ: res.data.rows[0].id_individu,
-                            name: res.data.rows[0].name,
                             idbox: res.data.rows[0].box_id,
                             newidbox: res.data.rows[0].box_id,
                             order: res.data.rows[0].order,
@@ -99,15 +97,15 @@ class InsectDetails extends React.Component {
     modifybox = () => {
         const authToken = Cookies.get('auth_token');
 
-        this.setState({modifyboxstate: 'Changement en cours...'})
+        this.setState({modifyboxstate: 'Change in progress...'})
         const newboxid = parseInt(this.state.newidbox)
         axios.post(`${url}/changeindivboxid`, {individ: this.state.individ, newboxid: newboxid, token: authToken})
         .then((res) => {
-            this.setState({idbox: newboxid, modifyboxstate: `Assigné à la box n° ${newboxid}`})
+            this.setState({idbox: newboxid, modifyboxstate: `Assigned to box n° ${newboxid}`})
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({modifyboxstate: 'Erreur Serveur - Gateway'})
+                this.setState({modifyboxstate: 'Server Error - Gateway'})
             }
             else {
                 this.setState({modifyboxstate: err.response.data.error})
@@ -118,15 +116,15 @@ class InsectDetails extends React.Component {
     modifyborrower = () => {
         const authToken = Cookies.get('auth_token');
 
-        this.setState({modifyborrowerstate: 'Changement en cours...'})
+        this.setState({modifyborrowerstate: 'Change in progress...'})
         const newborrower = this.state.newborrower
         axios.post(`${url}/changeindivborrower`, {individ: this.state.individ, newborrower: newborrower, token: authToken})
         .then((res) => {
-            this.setState({borrower: newborrower, modifyborrowerstate: `Borrower est maintenant ${newborrower}`})
+            this.setState({borrower: newborrower, modifyborrowerstate: `Borrower is now ${newborrower}`})
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({modifyborrowerstate: 'Erreur Serveur - Gateway'})
+                this.setState({modifyborrowerstate: 'Server Error - Gateway'})
             }
             else {
                 this.setState({modifyborrowerstate: err.response.data.error})
@@ -143,7 +141,7 @@ class InsectDetails extends React.Component {
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({deletestate: 'Erreur Serveur - Gateway'})
+                this.setState({deletestate: 'Server Error - Gateway'})
             }
             else {
                 this.setState({deletestate: err.response.data.error})
@@ -161,7 +159,7 @@ class InsectDetails extends React.Component {
                 ):(
                     <>
                     <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
-                    <p>{this.state.name ? (<>Name: {this.state.name}</>):(<></>)} {this.state.idbox !== 0 ? (<>From Box n° {this.state.idbox}</>):(<></>)} {this.state.borrower ? (<>Borrower: {this.state.borrower}</>):(<></>)}</p>
+                    <p>{this.state.individ ? (<>Name: {this.state.individ}</>):(<></>)} {this.state.idbox !== 0 ? (<>From Box n° {this.state.idbox}</>):(<></>)} {this.state.borrower ? (<>Borrower: {this.state.borrower}</>):(<></>)}</p>
                     {this.props.isAdmin() ? 
                         (
                             <div>
@@ -235,26 +233,6 @@ class InsectDetails extends React.Component {
                                         <p>{this.state.suborder}</p>
                                     </>
                                 }
-                                </div>
-                            <div>
-                                {(!this.state.genus) ?
-                                    (<></>)
-                                    :
-                                    <>
-                                        <h4 className="title">Genus</h4>
-                                        <p>{this.state.genus}</p>
-                                    </>
-                                }
-                            </div>
-                            <div>
-                                {(!this.state.subgenus)? 
-                                    (<></>)
-                                    :
-                                    <>
-                                        <h4  className="title">Subgenus</h4>
-                                        <p>{this.state.subgenus}</p>
-                                    </>
-                                }
                             </div>
                             <div>
                                 {(!this.state.family) ?
@@ -277,11 +255,41 @@ class InsectDetails extends React.Component {
                                 }
                             </div>
                             <div>
+                                {(!this.state.tribu) ?
+                                    (<></>)
+                                    :
+                                    <>
+                                        <h4 className="title">Tribe</h4>
+                                        <p>{this.state.tribu}</p>
+                                    </>
+                                }
+                            </div>
+                            <div>
+                                {(!this.state.genus) ?
+                                    (<></>)
+                                    :
+                                    <>
+                                        <h4 className="title">Genus</h4>
+                                        <p>{this.state.genus}</p>
+                                    </>
+                                }
+                            </div>
+                            <div>
+                                {(!this.state.subgenus)? 
+                                    (<></>)
+                                    :
+                                    <>
+                                        <h4  className="title">Subgenus</h4>
+                                        <p>{this.state.subgenus}</p>
+                                    </>
+                                }
+                            </div>
+                            <div>
                                 {(!this.state.species) ?
                                     (<></>)
                                     :
                                     <>
-                                        <h4 className="title">Specie</h4>
+                                        <h4 className="title">species</h4>
                                         <p>{this.state.species}</p>
                                     </>
                                 }
@@ -291,18 +299,8 @@ class InsectDetails extends React.Component {
                                     (<></>)
                                     :
                                     <>
-                                        <h4 className="title">Subspecie</h4>
+                                        <h4 className="title">subspecies</h4>
                                         <p>{this.state.subspecies}</p>
-                                    </>
-                                }
-                            </div>
-                            <div>
-                                {(!this.state.tribu) ?
-                                    (<></>)
-                                    :
-                                    <>
-                                        <h4 className="title">Tribe</h4>
-                                        <p>{this.state.tribu}</p>
                                     </>
                                 }
                             </div>

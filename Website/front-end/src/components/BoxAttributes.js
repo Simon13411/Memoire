@@ -2,9 +2,6 @@ import * as React from 'react';
 
 import BoxDetailsAdmin from './BoxDetailsAdmin';
 
-import axios from 'axios'
-const url = process.env.REACT_APP_IP
-
 class BoxAttributes extends React.Component {
     constructor (props) {
         super(props)
@@ -114,7 +111,7 @@ class BoxAttributes extends React.Component {
                         (<></>)
                         :
                         <>
-                        <h4 className="title">Specie</h4>
+                        <h4 className="title">species</h4>
                         <p>{this.state.species}</p>
                         </>
                     }
@@ -124,7 +121,7 @@ class BoxAttributes extends React.Component {
                         (<></>)
                         :
                         <>
-                        <h4 className="title">Subspecie</h4>
+                        <h4 className="title">subspecies</h4>
                         <p>{this.state.subspecies}</p>
                         </>
                     }

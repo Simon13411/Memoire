@@ -36,7 +36,7 @@ const getDBOPS = ['/get_boxdetails', '/get_indivdetails', '/get_boxresult', '/ge
 
 const getDBOPSwStreamReponse = ['/boxessqltocsv', '/individualssqltocsv']
 
-const getDLDERwStreamResponse = ['/boxestemplate', '/individualstemplate']
+const getDLDERwStreamResponse = ['/boxestemplate', '/individualstemplate', '/getscriptinstructions']
 
 const getPICTUwStreamResponse = ['/getpicture']
 

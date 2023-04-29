@@ -234,7 +234,7 @@ class Selection extends React.Component {
                 </Select>
             </FormControl>
             <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                <InputLabel id="demo-simple-select-label">Specie</InputLabel>
+                <InputLabel id="demo-simple-select-label">species</InputLabel>
                 <Select value={this.state.species} name="species" label="Species" onChange={this.handleAttributeChange}>
                     <MenuItem value='NULL'>
                         <em>None</em>
@@ -243,7 +243,7 @@ class Selection extends React.Component {
                 </Select>
             </FormControl>
             <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                <InputLabel id="demo-simple-select-label">SubSpecie</InputLabel>
+                <InputLabel id="demo-simple-select-label">subspecies</InputLabel>
                 <Select value={this.state.subspecies} name="subspecies" label="Species" onChange={this.handleAttributeChange} >
                     <MenuItem value='NULL'>
                         <em>None</em>
@@ -279,7 +279,7 @@ class Selection extends React.Component {
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[10, 25, 50, 100, 500, 1000]}
                     component="div"
                     count={this.state.nresults}
                     rowsPerPage={this.state.rowsPerPage}

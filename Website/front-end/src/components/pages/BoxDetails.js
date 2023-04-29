@@ -118,7 +118,7 @@ class BoxDetails extends React.Component {
     modifycollection = () => {
         const authToken = Cookies.get('auth_token');
 
-        this.setState({modifycollectionstate: 'Wait...'})
+        this.setState({modifycollectionstate: 'Change in progress...'})
         const newcollection = this.state.newcollection
         axios.post(`${url}/changeboxcollection`, {boxid: this.props.searchParams.get("id"), collection: newcollection, token: authToken})
         .then((res) => {
@@ -126,7 +126,7 @@ class BoxDetails extends React.Component {
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({modifycollectionstate: 'Erreur Serveur - Gateway'})
+                this.setState({modifycollectionstate: 'Server Error - Gateway'})
             }
             else {
                 this.setState({modifycollectionstate: err.response.data.error})
@@ -137,15 +137,15 @@ class BoxDetails extends React.Component {
     modifyborrower = () => {
         const authToken = Cookies.get('auth_token');
 
-        this.setState({modifyborrowerstate: 'Changement en cours...'})
+        this.setState({modifyborrowerstate: 'Change in progress...'})
         const newborrower = this.state.newborrower
         axios.post(`${url}/changeboxborrower`, {boxid: this.props.searchParams.get("id"), newborrower: newborrower, token: authToken})
         .then((res) => {
-            this.setState({borrower: newborrower, modifyborrowerstate: `borrower est maintenant ${newborrower}`})
+            this.setState({borrower: newborrower, modifyborrowerstate: `borrower is now ${newborrower}`})
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({modifyborrowerstate: 'Erreur Serveur - Gateway'})
+                this.setState({modifyborrowerstate: 'Server Error - Gateway'})
             }
             else {
                 this.setState({modifyborrowerstate: err.response.data.error})
@@ -162,7 +162,7 @@ class BoxDetails extends React.Component {
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({deletestate: 'Erreur Serveur - Gateway'})
+                this.setState({deletestate: 'Server Error - Gateway'})
             }
             else {
                 this.setState({deletestate: err.response.data.error})
@@ -242,24 +242,24 @@ class BoxDetails extends React.Component {
                                                                         subspecies= {data.subspecies}
                                                                         tribu= {data.tribu}
                                                                         maxPopDegree={this.maxPopDegree} refresh={this.refreshPage}></BoxAttributes>)}
-                    </div>
-                    {this.props.isAuthenticated() ?
-                        <BoxDetailsAddPop refresh={this.refreshPage} id={this.props.searchParams.get("id")} maxPopDegree={this.maxPopDegree}/>
-                    :
-                        <></>
-                    }
-
-                    <div className="column">
-                        <h2>Pictures</h2>
-                        {this.state.imageURL ?
-                            (
-                                <a href={this.state.imageURL}>
-                                    <img src={this.state.imageURL} width={250} height={250}/>
-                                </a>
-                            ):(
-                                <></>
-                            )
+                        {this.props.isAuthenticated() ?
+                            <BoxDetailsAddPop refresh={this.refreshPage} id={this.props.searchParams.get("id")} maxPopDegree={this.maxPopDegree}/>
+                        :
+                            <></>
                         }
+
+                        <div className="column">
+                            <h2>Pictures</h2>
+                            {this.state.imageURL ?
+                                (
+                                    <a href={this.state.imageURL}>
+                                        <img src={this.state.imageURL} width={250} height={250}/>
+                                    </a>
+                                ):(
+                                    <></>
+                                )
+                            }
+                        </div>
                     </div>
                 </>
                 )

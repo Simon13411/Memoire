@@ -299,7 +299,7 @@ class Selection extends React.Component {
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                    rowsPerPageOptions={[10, 25, 50, 100, 500, 1000]}
                     component="div"
                     count={this.state.nresults}
                     rowsPerPage={this.state.rowsPerPage}

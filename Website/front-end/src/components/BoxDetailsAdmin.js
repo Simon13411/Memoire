@@ -137,7 +137,7 @@ class BoxDetailsAdmin extends React.Component {
                 })
                 .catch((err) => {
                     if (!err.response) {
-                    this.setState({changestate: 'Erreur Serveur - Gateway'})
+                    this.setState({changestate: 'Server Error - Gateway'})
                     }
                     else {
                     this.setState({changestate: err.response.data.error})
@@ -158,7 +158,7 @@ class BoxDetailsAdmin extends React.Component {
             })
             .catch((err) => {
                 if (!err.response) {
-                this.setState({deletestate: 'Erreur Serveur - Gateway'})
+                this.setState({deletestate: 'Server Error - Gateway'})
                 }
                 else {
                 this.setState({deletestate: err.response.data.error})
@@ -170,13 +170,13 @@ class BoxDetailsAdmin extends React.Component {
         return (
             <div className="column">
                 <div>
-                    <h2 className="title">Delete Popu n°{this.props.index+1}</h2>
+                    <h2 className="title">Delete population n°{this.props.index+1}</h2>
                     {this.state.deletestate}
                     <div>
                         <button type='submit' onClick={this.delete}>Delete population</button>
                     </div>
                     <br />
-                    <h2 className="title">Modify Popu n°{this.props.index+1}</h2>
+                    <h2 className="title">Modify population n°{this.props.index+1}</h2>
                     {this.state.changestate}
                     <h4 className="title">Order</h4>
                         <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>

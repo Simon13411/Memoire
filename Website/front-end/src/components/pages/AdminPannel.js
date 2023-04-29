@@ -132,7 +132,7 @@ class AdminPannel extends React.Component {
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({addattrstate: "Erreur Serveur - Gateway"});
+                this.setState({addattrstate: "Server Error - Gateway"});
             }
             else {
                 this.setState({addattrstate: err.response.data.error});
@@ -153,7 +153,7 @@ class AdminPannel extends React.Component {
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({deleteattrstate: "Erreur serveur - Gateway"});
+                this.setState({deleteattrstate: "Server Error - Gateway"});
             }
             else {
                 this.setState({deleteattrstate: err.response.data.error});
@@ -256,7 +256,7 @@ class AdminPannel extends React.Component {
             })
             .catch((err) => {
                 if (!err.response) {
-                    this.setState({useraddstate: "Erreur Serveur - Gateway"});
+                    this.setState({useraddstate: "Server Error - Gateway"});
                 }
                 else {
                     this.setState({useraddstate: err.response.data.error});
@@ -286,7 +286,7 @@ class AdminPannel extends React.Component {
             })
             .catch((err) => {
                 if (!err.response) {
-                    this.setState({usermodifstate: "Erreur Serveur - Gateway"});
+                    this.setState({usermodifstate: "Server Error - Gateway"});
                 }
                 else {
                     this.setState({usermodifstate: err.response.data.error});
@@ -313,7 +313,7 @@ class AdminPannel extends React.Component {
             })
             .catch((err) => {
                 if (!err.response) {
-                    this.setState({userrightstate: "Erreur Serveur - Gateway"});
+                    this.setState({userrightstate: "Server Error - Gateway"});
                 }
                 else {
                     this.setState({userrightstate: err.response.data.error});
@@ -343,7 +343,7 @@ class AdminPannel extends React.Component {
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({addcollectionstate: "Erreur Serveur - Gateway"});
+                this.setState({addcollectionstate: "Server Error - Gateway"});
             }
             else {
                 this.setState({addcollectionstate: err.response.data.error});
@@ -365,7 +365,7 @@ class AdminPannel extends React.Component {
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({modifycollectionstate: "Erreur Serveur - Gateway"});
+                this.setState({modifycollectionstate: "Server Error - Gateway"});
             }
             else {
                 this.setState({modifycollectionstate: err.response.data.error});
@@ -396,7 +396,7 @@ class AdminPannel extends React.Component {
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({newborrowerstate: "Erreur Serveur - Gateway"});
+                this.setState({newborrowerstate: "Server Error - Gateway"});
             }
             else {
                 this.setState({newborrowerstate: err.response.data.error});
@@ -420,7 +420,7 @@ class AdminPannel extends React.Component {
         })
         .catch((err) => {
             if (!err.response) {
-                this.setState({modifiedborrowerstate: "Erreur Serveur - Gateway"});
+                this.setState({modifiedborrowerstate: "Server Error - Gateway"});
             }
             else {
                 this.setState({modifiedborrowerstate: err.response.data.error});
