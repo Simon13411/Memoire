@@ -153,7 +153,6 @@ app.use((req, res) => {
         csvtosqladmin(req, res)
     }
     else if (req.method === 'OPTIONS' && AllRequests.some(route => match(route)(req.path))) {
-        console.log("OPTIONRECU")
         res.set('Access-Control-Allow-Origin', '*');
         res.set('Access-Control-Allow-Methods', 'GET, POST, PUT');
         res.set('Access-Control-Allow-Headers', 'Content-Type');
