@@ -22,14 +22,15 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 const FormData = require('form-data');
-const { exec } = require('child_process');
+app.use(upload.single('file'));
 
 //IP of different microservices
 const IP_DBOPS = process.env.IPDBOPS
 const IP_DLDER = process.env.IPDLDER
 const IP_LOGIN = process.env.IPLOGIN
-const IP_PICTU = process.env.IPPICTURES  
+const IP_PICTU = process.env.IPPICTURES 
 
+//Categories of client requests
 const getDBOPS = ['/get_boxdetails', '/get_indivdetails', '/get_boxresult', '/get_indivresult', '/get_selectiono', '/get_selectionso',
                 '/get_selectionf', '/get_selectionsf', '/get_selectiont', '/get_selectiong', '/get_selectionsg', '/get_selections', '/get_selectionss',
                 '/get_borrowers', '/get_collections', '/get_borrowerinfo/:name'];
@@ -56,8 +57,7 @@ everyrequests = [getDBOPS, getDBOPSwStreamReponse, getDLDERwStreamResponse, getP
 const AllRequests = everyrequests.flat();
 
 
-app.use(upload.single('file'));
-
+//Processes the request according to its category
 app.use((req, res) => {
     if (getDBOPS.some(route => match(route)(req.path)) && req.method === 'GET') {
         axios.get(`http://${IP_DBOPS}${req.url}`)
@@ -161,7 +161,7 @@ app.use((req, res) => {
         res.sendStatus(200);
     }
     else {
-        res.status(500);
+        res.status(404);
     }
 })
 
