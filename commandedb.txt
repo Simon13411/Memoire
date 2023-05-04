@@ -137,7 +137,8 @@ CREATE TABLE "Box" (
 "paratypes" INT, 
 "types" INT, 
 UNIQUE("id_box"),
-PRIMARY KEY ("id_box")
+PRIMARY KEY ("id_box"),
+FROEIGN KEY ("collection_id") REFERENCES "Collection"("id_collection")
 );
 
 
