@@ -1,5 +1,5 @@
 .navbar {
-  background: rgb(185, 205, 118);
+  background: rgb(160, 205, 120);
   height: 80px;
   display: flex;
   justify-content: center;
@@ -18,7 +18,7 @@
   width: 100%;
 }
 
-img {
+.logo-nav {
   max-height: 80px;
 }
 

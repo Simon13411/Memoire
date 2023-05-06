@@ -16,16 +16,16 @@ class ResultsIndiv extends React.Component {
         return(
             <TableRow key={this.props.id}>
                 <TableCell>{this.props.id}</TableCell>
-                <TableCell>{this.props.id_box}</TableCell>
-                <TableCell>{this.props.Order}</TableCell>
-                <TableCell>{this.props.subOrder}</TableCell>
-                <TableCell>{this.props.Family}</TableCell>
-                <TableCell>{this.props.subFamily}</TableCell>
-                <TableCell>{this.props.Tribu}</TableCell>
-                <TableCell>{this.props.Genus}</TableCell>
-                <TableCell>{this.props.subGenus}</TableCell>
-                <TableCell>{this.props.Species}</TableCell>
-                <TableCell>{this.props.subSpecies}</TableCell>
+                {(this.props.toShow[0]===1) && <TableCell>{this.props.id_box}</TableCell>}
+                {(this.props.toShow[1]===1) && <TableCell>{this.props.Order}</TableCell>}
+                {(this.props.toShow[2]===1) && <TableCell>{this.props.subOrder}</TableCell>}
+                {(this.props.toShow[3]===1) && <TableCell>{this.props.Family}</TableCell>}
+                {(this.props.toShow[4]===1) && <TableCell>{this.props.subFamily}</TableCell>}
+                {(this.props.toShow[5]===1) && <TableCell>{this.props.Tribu}</TableCell>}
+                {(this.props.toShow[6]===1) && <TableCell>{this.props.Genus}</TableCell>}
+                {(this.props.toShow[7]===1) && <TableCell>{this.props.subGenus}</TableCell>}
+                {(this.props.toShow[8]===1) && <TableCell>{this.props.Species}</TableCell>}
+                {(this.props.toShow[9]===1) && <TableCell>{this.props.subSpecies}</TableCell>}
                 <TableCell><button buttonStyle='btn--outline' onClick={this.handleClick}>Details</button></TableCell>
             </TableRow>
         )

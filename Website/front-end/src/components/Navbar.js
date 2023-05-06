@@ -42,7 +42,7 @@ function Navbar(props) {
         <nav className='navbar'>
             <div className='navbar-container'>
                 <Link to='/' className='navbar-logo' onClick={ClickHome}>
-                    <img src={logo}/>
+                    <img className='logo-nav' src={logo}/>
                 </Link>
                 <div className='menu-icon' onClick={handleClick}>
                     <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
@@ -68,16 +68,12 @@ function Navbar(props) {
                             About Us
                         </Link>
                     </li>
-                    {props.isAdmin() ?
-                        (
+                    {props.isAdmin() &&
                             <li>
                                 <Link to='/admin-pannel' className='nav-links-mobile' onClick={closeMobileMenu}>
-                                ADMIN
+                                    ADMIN
                                 </Link>
                             </li>
-                        ) : (
-                            <></>
-                        )
                     }
                     {props.isAuthenticated() ?
                         (
@@ -102,48 +98,30 @@ function Navbar(props) {
                         )
                     }
                 </ul>
-                {props.isAdmin() ?
-                    (
-                        <>
-                        {button 
-                        && 
-                        <Link to='/admin-pannel' className='btn-mobile'>
-                        <button
-                            className={`btn btn--outline btn--medium`}
-                            onClick={closeMobileMenu}
-                        >
-                            ADMIN
-                        </button>
+                {props.isAdmin() && button && 
+                        <Link to='/admin-pannel'>
+                            <button className={`btn btn--outline btn--medium btn-nav`} onClick={closeMobileMenu}>
+                                ADMIN
+                            </button>
                         </Link>
-                        }
-                        </>
-                    ) : (
-                        <></>
-                    )
                 }
                 {props.isAuthenticated() ?
                     (
                     <>
                         {button 
                         && 
-                        <Link to='/usersettings' className='btn-mobile'>
-                        <button
-                            className={`btn btn--outline btn--medium`}
-                            onClick={closeMobileMenu}
-                        >
-                            Settings
-                        </button>
+                        <Link to='/usersettings'>
+                            <button className={`btn btn--outline btn--medium btn-nav`} onClick={closeMobileMenu}>
+                                Settings
+                            </button>
                         </Link>
                         }
                         {button 
                         && 
-                        <Link to='/' className='btn-mobile'>
-                        <button
-                            className={`btn btn--outline btn--medium`}
-                            onClick={Logout}
-                        >
-                            SignOut
-                        </button>
+                        <Link to='/'>
+                            <button className={`btn btn--outline btn--medium btn-nav`} onClick={Logout}>
+                                SignOut
+                            </button>
                         </Link>
                         }
                     </>
@@ -151,13 +129,10 @@ function Navbar(props) {
                     <>
                         {button 
                         && 
-                        <Link to='/sign-in' className='btn-mobile'>
-                        <button
-                            className={`btn btn--outline btn--medium`}
-                            onClick={closeMobileMenu}
-                        >
-                            SignIn
-                        </button>
+                        <Link to='/sign-in'>
+                            <button className={`btn btn--outline btn--medium`} onClick={closeMobileMenu}>
+                                SignIn
+                            </button>
                         </Link>
                     }
                     </>

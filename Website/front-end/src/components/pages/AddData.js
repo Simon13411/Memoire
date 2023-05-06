@@ -60,7 +60,7 @@ class AddData extends React.Component {
                 <div className="container">
                     <div className="column">
                         <h1>Download Boxes Data</h1>
-                        <FileDownloader path='/boxessqltocsv' file='BoxesData.xlsx' type='data'/>
+                        <FileDownloader path='/boxessqltocsv' filename='BoxesData.xlsx' type='data'/>
                     </div>
                     <div className="column">
                         <h1>Download Individuals Data</h1>

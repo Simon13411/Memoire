@@ -13,20 +13,28 @@
     font-size: 3rem;
   }
 
+  .attrselect {
+    background-color: rgb(160, 205, 120);
+    display:block;
+    flex-direction: row;
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+
   .selectdiv {
-    border: 2px solid green;
-    float:left;
+    border: 2px solid rgb(160, 205, 120);
+    background-color: rgb(160, 205, 120);
     display:flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-left: 10px;
     margin-top: 10px;
+    float:left;
   }
   
   .datalist {
-    margin-left: 10px;
-    float:left
+    float:left;
   }
 
   .containerhome {
@@ -127,7 +135,6 @@ input[type="password"] {
 }
 
 button {
-  margin-top: 10px;
   padding: 5px 20px;
   border-radius: 3px;
   border: none;

@@ -3,6 +3,8 @@ import * as React from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import Select from '@mui/material/Select';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination } from '@mui/material';
 
@@ -39,7 +41,9 @@ class Selection extends React.Component {
             maxpage: 0,
             page: 0,
             rowsPerPage: 10,
-            nresults: 0
+            nresults: 0,
+            //selection
+            toShow: [0, 1, 1, 1, 1, 1, 0, 0, 0, 0]
         }
     }
 
@@ -130,7 +134,7 @@ class Selection extends React.Component {
         .then((res) => {
             this.setState({tribulist: res.data.rows})
         })
-  }
+    }
 
     handleAttributeChange = (event) => {
         const target = event.target
@@ -139,7 +143,17 @@ class Selection extends React.Component {
         this.setState({
             [name]: value
         }, this.get_selection)
-    }    
+    }
+    
+    handleCheck = (event) => {
+        const target = event.target;
+        const value = target.checked ? 1 : 0; //if crossed 1 if not 0
+        const index = parseInt(target.name);
+    
+        var newToShow = this.state.toShow;
+        newToShow[index] = value;
+        this.setState({toShow: newToShow})
+    }
     
     handleChangePage = (event, newPage) => {
         this.setState({page: newPage}, this.fetchResults);
@@ -170,7 +184,7 @@ class Selection extends React.Component {
         <div cassname="containerhome">
             <div className='selectdiv'>
             <button buttonStyle='btn--outline' onClick={this.fetchResultsOnClick}>SEARCH INDIVIDUALS</button>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 220 }}>
                 <InputLabel id="demo-simple-select-label">Order</InputLabel>
                 <Select value={this.state.order} label="Order" name="order" onChange={this.handleAttributeChange} >
                     <MenuItem value='NULL'>
@@ -179,7 +193,7 @@ class Selection extends React.Component {
                     {this.state.orderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                 </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 220 }}>
                 <InputLabel id="demo-simple-select-label">SubOrder</InputLabel>
                 <Select value={this.state.suborder} name="suborder" label="subOrder" onChange={this.handleAttributeChange} >
                     <MenuItem value='NULL'>
@@ -188,7 +202,7 @@ class Selection extends React.Component {
                     {this.state.suborderlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                 </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 220 }}>
                 <InputLabel id="demo-simple-select-label">Family</InputLabel>
                 <Select value={this.state.family} name="family" label="family" onChange={this.handleAttributeChange} >
                     <MenuItem value='NULL'>
@@ -197,7 +211,7 @@ class Selection extends React.Component {
                     {this.state.familylist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                 </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 220 }}>
                 <InputLabel id="demo-simple-select-label">SubFamily</InputLabel>
                 <Select value={this.state.subfamily} name="subfamily" label="subfamily" onChange={this.handleAttributeChange} >
                     <MenuItem value='NULL'>
@@ -206,7 +220,7 @@ class Selection extends React.Component {
                     {this.state.subfamilylist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                 </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 220 }}>
                 <InputLabel id="demo-simple-select-label">Tribe</InputLabel>
                 <Select value={this.state.tribu} name="tribu" label="Tribu" onChange={this.handleAttributeChange} >
                     <MenuItem value='NULL'>
@@ -215,7 +229,7 @@ class Selection extends React.Component {
                     {this.state.tribulist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                 </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 220 }}>
                 <InputLabel id="demo-simple-select-label">Genus</InputLabel>
                 <Select value={this.state.genus} name="genus" label="Genus" onChange={this.handleAttributeChange} >
                     <MenuItem value='NULL'>
@@ -224,7 +238,7 @@ class Selection extends React.Component {
                     {this.state.genuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                 </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 220 }}>
                 <InputLabel id="demo-simple-select-label">SubGenus</InputLabel>
                 <Select value={this.state.subgenus} name="subgenus" label="subGenus" onChange={this.handleAttributeChange}>
                     <MenuItem value='NULL'>
@@ -233,7 +247,7 @@ class Selection extends React.Component {
                     {this.state.subgenuslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                 </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 220 }}>
                 <InputLabel id="demo-simple-select-label">species</InputLabel>
                 <Select value={this.state.species} name="species" label="Species" onChange={this.handleAttributeChange}>
                     <MenuItem value='NULL'>
@@ -242,7 +256,7 @@ class Selection extends React.Component {
                     {this.state.specieslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
                 </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 220 }}>
                 <InputLabel id="demo-simple-select-label">subspecies</InputLabel>
                 <Select value={this.state.subspecies} name="subspecies" label="Species" onChange={this.handleAttributeChange} >
                     <MenuItem value='NULL'>
@@ -253,26 +267,38 @@ class Selection extends React.Component {
             </FormControl>
             </div>
             <div classname="datalist">
+                <div className='attrselect'>
+                    <FormControlLabel name="0" onChange={this.handleCheck} control={<Checkbox />} label="Box" />
+                    <FormControlLabel name="1" onChange={this.handleCheck} control={<Checkbox defaultChecked />} label="Order" />
+                    <FormControlLabel name="2" onChange={this.handleCheck} control={<Checkbox defaultChecked />} label="Suborder" />
+                    <FormControlLabel name="3" onChange={this.handleCheck} control={<Checkbox defaultChecked />} label="Family" />
+                    <FormControlLabel name="4" onChange={this.handleCheck} control={<Checkbox defaultChecked />} label="Subfamily" />
+                    <FormControlLabel name="5" onChange={this.handleCheck} control={<Checkbox defaultChecked />} label="Tribe" />
+                    <FormControlLabel name="6" onChange={this.handleCheck} control={<Checkbox />} label="Genus" />
+                    <FormControlLabel name="7" onChange={this.handleCheck} control={<Checkbox />} label="Subgenus" />
+                    <FormControlLabel name="8" onChange={this.handleCheck} control={<Checkbox />} label="species" />
+                    <FormControlLabel name="9" onChange={this.handleCheck} control={<Checkbox />} label="subspecies" />
+                </div>
                 <TableContainer sx={{width:'auto', flex:1}}>
                     <Table>
                     <TableHead>
                         <TableRow>
                         <TableCell>SpeciCode</TableCell>
-                        <TableCell>Box</TableCell>
-                        <TableCell>Order</TableCell>
-                        <TableCell>Suborder</TableCell>
-                        <TableCell>Family</TableCell>
-                        <TableCell>Subfamily</TableCell>
-                        <TableCell>Tribe</TableCell>
-                        <TableCell>Genus</TableCell>
-                        <TableCell>Subgenus</TableCell>
-                        <TableCell>species</TableCell>
-                        <TableCell>subspecies</TableCell>
+                        {(this.state.toShow[0]===1) && <TableCell>Box</TableCell>}
+                        {(this.state.toShow[1]===1) && <TableCell>Order</TableCell>}
+                        {(this.state.toShow[2]===1) && <TableCell>Suborder</TableCell>}
+                        {(this.state.toShow[3]===1) && <TableCell>Family</TableCell>}
+                        {(this.state.toShow[4]===1) && <TableCell>Subfamily</TableCell>}
+                        {(this.state.toShow[5]===1) && <TableCell>Tribe</TableCell>}
+                        {(this.state.toShow[6]===1) && <TableCell>Genus</TableCell>}
+                        {(this.state.toShow[7]===1) && <TableCell>Subgenus</TableCell>}
+                        {(this.state.toShow[8]===1) && <TableCell>species</TableCell>}
+                        {(this.state.toShow[9]===1) && <TableCell>subspecies</TableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {this.state.results.map((row) => (
-                        <ResultsWNav id_box={row.box_id} id={row.id_individu} Order={row.Order} subOrder={row.subOrder} Family={row.Family} subFamily={row.subFamily} Genus={row.Genus}
+                        <ResultsWNav toShow={this.state.toShow} id_box={row.box_id} id={row.id_individu} Order={row.Order} subOrder={row.subOrder} Family={row.Family} subFamily={row.subFamily} Genus={row.Genus}
                                     subGenus={row.subGenus} Species={row.Species} subSpecies={row.subSpecies} Tribu={row.Tribu}/>
                         ))}
                     </TableBody>
