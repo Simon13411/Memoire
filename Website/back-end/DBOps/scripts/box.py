@@ -181,7 +181,7 @@ def insertBox(data, cursor, conn, admin) :
                             SET  "collection_id" = (%s) ,"location" = (%s), "museum"= (%s), "paratypes" = (%s), "types"= (%s)
                             WHERE "id_box" = (%s) """
             datainsertquery = ( collectionList[0][0], toinsertLocation[i], toinsertMuseum[i], toinsertParaType[i], toinsertType[i],toinsertID[i])
-            #print(insertquery)
+
             cursor.execute(insertquery, datainsertquery)
                 
     conn.commit()

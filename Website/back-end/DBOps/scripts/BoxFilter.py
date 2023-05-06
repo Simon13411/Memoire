@@ -16,9 +16,9 @@ def filter_values(val):
         if val.is_integer():
             return int(val)
         elif math.isnan(val):
-            return val
-        else:
             return None
+        else:
+            return "BadEncodingDate"
     else:
         return val
 
@@ -260,7 +260,7 @@ def filterExcel(olddf):
         subgenDate = filter_values(row.Subgenus_Date)
         speDate = filter_values(row.Species_Date)
         subspeDate = filter_values(row.Subspecies_Date)
-        if(genDate==None):
+        if(genDate=="BadEncodingDate"):
             bad.append(i+2)
             baddf.loc[len(baddf)] = row
             count += 1
@@ -268,7 +268,7 @@ def filterExcel(olddf):
             continue
         else :
             row.Genus_Date= genDate
-        if(subgenDate==None):
+        if(subgenDate=="BadEncodingDate"):
             bad.append(i+2)
             baddf.loc[len(baddf)] = row
             count += 1
@@ -276,7 +276,7 @@ def filterExcel(olddf):
             continue
         else :
             row.Subgenus_Date= subgenDate
-        if(speDate==None):
+        if(speDate=="BadEncodingDate"):
             bad.append(i+2)
             baddf.loc[len(baddf)] = row
             count += 1
@@ -284,7 +284,7 @@ def filterExcel(olddf):
             continue
         else :
             row.Species_Date= speDate
-        if(subspeDate==None):
+        if(subspeDate=="BadEncodingDate"):
             bad.append(i+2)
             baddf.loc[len(baddf)] = row
             count += 1
@@ -293,6 +293,8 @@ def filterExcel(olddf):
         else :
             row.Subspecies_Date= subspeDate
         
+        
+        #print(row.Genus_Date, row.Subgenus_Date, row.Species_Date, row.Subspecies_Date)
     
     
         gooddf.loc[len(gooddf)] = row

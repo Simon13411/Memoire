@@ -7,9 +7,9 @@ def filter_values(val):
         if val.is_integer():
             return int(val)
         elif math.isnan(val):
-            return val
-        else:
             return None
+        else:
+            return "BadEncodingDate"
     else:
         return val
 
@@ -210,7 +210,7 @@ def filterIndividu(olddf):
             reasons.append("sexe is a number")
             continue
         collDate = filter_values(row.Collection_Date)
-        if(collDate==None):
+        if(collDate=="BadEncodingDate"):
             bad.append(i+2)
             count += 1
             reasons.append("date of the collection Descriptor is not well encoded")
@@ -240,6 +240,38 @@ def filterIndividu(olddf):
             count += 1
             reasons.append("specimecode is a number")
             continue
+        genDate = filter_values(row.Genus_Date)
+        subgenDate = filter_values(row.Subgenus_Date)
+        speDate = filter_values(row.Species_Date)
+        subspeDate = filter_values(row.Subspecies_Date)
+        if(genDate=="BadEncodingDate"):
+            bad.append(i+2)
+            count += 1
+            reasons.append("date of the genus Descriptor is not a integer")
+            continue
+        else :
+            row.Genus_Date= genDate
+        if(subgenDate=="BadEncodingDate"):
+            bad.append(i+2)
+            count += 1
+            reasons.append("date of the subgenus Descriptor is not a integer")
+            continue
+        else :
+            row.Subgenus_Date= subgenDate
+        if(speDate=="BadEncodingDate"):
+            bad.append(i+2)
+            count += 1
+            reasons.append("date of the species Descriptor is not a integer")
+            continue
+        else :
+            row.Species_Date= speDate
+        if(subspeDate=="BadEncodingDate"):
+            bad.append(i+2)
+            count += 1
+            reasons.append("date of the Subspecies Descriptor is not a integer")
+            continue
+        else :
+            row.Subspecies_Date= subspeDate
     
     
         gooddf.loc[len(gooddf)] = row

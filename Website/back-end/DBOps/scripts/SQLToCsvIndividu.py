@@ -82,7 +82,11 @@ for i, row in df.iterrows():
               'Collection_Date': row.collection_date,
               'Sexe':row.sexe}
     newDf.loc[len(newDf)] = new_row
-
+"""
+writer = pd.ExcelWriter('fooIndividu.xlsx')
+newDf.to_excel(writer, sheet_name='bar', index=False)
+writer.save()
+"""
 output = io.BytesIO()
 writer = pd.ExcelWriter(output)
 newDf.to_excel(writer, index=False)

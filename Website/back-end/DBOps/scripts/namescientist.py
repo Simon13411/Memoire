@@ -20,7 +20,7 @@ insertNameScientist is a function that will insert in a database in the correspo
 
 def insertNameScientist(data, cursor, conn, columnName, columnDescriptor, columnDate, tableDB, id_DB) :
     toinsertName = data[columnName].fillna(np.nan).replace([np.nan], [None]).values.tolist()
-    toinsertDate = data[columnDate].fillna(np.nan).replace([np.nan], [None]).values.tolist()
+    toinsertDate = data[columnDate].values.tolist()
     toinsertSc = data[columnDescriptor].fillna(np.nan).replace([np.nan], [None]).values.tolist()
     duplicationquery = sql.SQL("select MAX({field}) from {table}").format(
     field=sql.Identifier(id_DB),
@@ -59,7 +59,6 @@ def insertNameScientist(data, cursor, conn, columnName, columnDescriptor, column
                 dataSC = (toinsertSc[i],)
                 cursor.execute(id_sc_query, dataSC)
                 id_sc_list = cursor.fetchall()
-                
                 if len(id_sc_list)==0:
                     insertquery = sql.SQL("""INSERT INTO {table}
                                 ({field}, "name", "id_sc", "date") 

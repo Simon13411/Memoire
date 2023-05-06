@@ -16,8 +16,8 @@ it will add the box 0 if it not exist yet
 return noBox that not exist in the databse and a string of explanation
 """
 def boxExist(olddf, dbName):
-    
-    
+
+
     conn = psycopg2.connect(
         host="db-entomoc",
         database="entomologie",
@@ -25,12 +25,12 @@ def boxExist(olddf, dbName):
         password="password"
     )
     cursor = conn.cursor()
-    
+
     #check if the column of the template are good or not
-    checkCol = ["SpecimenCode", "Continent", "Country", "Ecozone", "Order", "Suborder", "Tribu", "Family","Subfamily", "Genus", "Subgenus", 
-       "species", "Subspecies", "Num_ID", "Genus_Descriptor", "Species_Descriptor", "Subgenus_Descriptor", 
+    checkCol = ["SpecimenCode", "Continent", "Country", "Ecozone", "Order", "Suborder", "Tribu", "Family","Subfamily", "Genus", "Subgenus",
+       "species", "Subspecies", "Num_ID", "Genus_Descriptor", "Species_Descriptor", "Subgenus_Descriptor",
        "Subspecies_descriptor", "Genus_Date","Subgenus_Date","Species_Date","Subspecies_Date","Latitude", "Longitude"]
-        
+
     df = olddf[checkCol].copy()
     noBox = []
 
@@ -39,8 +39,8 @@ def boxExist(olddf, dbName):
 
     if cursor.fetchall()==[]:
         insertquery = """INSERT INTO "Box"
-                            ("id_box", "location", "museum", "paratypes", "types") 
-                            VALUES 
+                            ("id_box", "location", "museum", "paratypes", "types")
+                            VALUES
                             ((%s),(%s),(%s),(%s),(%s))"""
         datainsertquery = (0,None, None, None, None)
         cursor.execute(insertquery, datainsertquery)

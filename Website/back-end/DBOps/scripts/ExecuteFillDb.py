@@ -20,19 +20,19 @@ a,b,data,d = filtre.filterExcel(extracteddata)
 
 
 
-#On va regarder pour l'admin si les boites existent deja, si oui on les supprimes et elle seront remise après
+#On va regarder pour l admin si les boites existent deja, si oui on les supprimes et elle seront remise apres
 #Verifier si boite existe sinon oups probleme
-admin = False
-
+admin = True
+"""
 if (sys.argv[2] == "true") :
     admin = True
 elif (sys.argv[2] == "false") :
     admin= False
-
+"""
 if (b>0):
     if a == []:
         print("Wrong column's name")
-    print(f'{{"type": "{b} lines have wrong format", "lines":{a}, "errors": {json.dumps(d)}}}')
+    #print(f'{{"type": "{b} lines have wrong format", "lines":{a}, "errors": {json.dumps(d)}}}')
 
 else:
     data = data.where(data.notnull(), None)
@@ -42,14 +42,13 @@ else:
         user="postgres",
         password="password"
     )
-    
+
     #database = "Gembloux5_4.db"
 
 
     cursor = conn.cursor()
     cursor = conn.cursor()
     print("[MY_APP_LOG] Successfully connected to DB")
-
 
     #tribu.insertTribu(data, cursor, conn)
     name.insertName(data, cursor, conn,"Order",  "Order", "id_order")
@@ -64,7 +63,7 @@ else:
     namescientist.insertNameScientist(data, cursor, conn,"Subspecies", "Subspecies_descriptor", "Subspecies_Date", "subSpecies", "id_subspecies")
     Collection.insertCollection(data, cursor, conn)
     population.insertPopulation(data, cursor, conn)
-    
+
     box.insertBox(data, cursor, conn, admin)
 
 

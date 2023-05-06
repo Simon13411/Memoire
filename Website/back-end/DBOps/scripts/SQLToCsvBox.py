@@ -10,10 +10,10 @@ import warnings
 warnings.filterwarnings('ignore')
 
 conn = psycopg2.connect(
-    host="db-entomoc",
-    database="entomologie",
-    user="postgres",
-    password="password"
+     host="db-entomoc",
+     database="entomologie",
+     user="postgres",
+     password="password"
 )
 cursor = conn.cursor()
 
@@ -172,6 +172,11 @@ for i, row in df.iterrows():
             'Collection_Name':row.col}
         newDf.loc[len(newDf)] = new_row
 
+"""
+writer = pd.ExcelWriter('foo.xlsx')
+newDf.to_excel(writer, sheet_name='bar', index=False)
+writer.save()
+"""
 output = io.BytesIO()
 writer = pd.ExcelWriter(output)
 newDf.to_excel(writer, index=False)
