@@ -15,7 +15,7 @@ class AboutUs extends React.Component {
             <div className="about-container">
                 <h1>About Us</h1>
                 <div className="about-content">
-                    <img src={logo} />
+                    <img className='logo-nav' src={logo} />
                     <p>
                         This new platform for the Walloon entomology is the result from the first numeric repertoire of the Gembloux entomological conservatory <sup>[1]</sup>. It includes two levels of numeric datasets: the insect boxes and the insect specimen data.
                     </p>

@@ -35,7 +35,7 @@ class BoxAttributes extends React.Component {
             <>
                 <div className="column">
                     {/*Info part*/}
-                    <h2>Population n°{this.props.index+1}</h2>
+                    <h3>Population n°{this.props.index+1}</h3>
                     <div>
                     {(!this.state.order) ?
                         (<></>)
@@ -127,13 +127,9 @@ class BoxAttributes extends React.Component {
                     }
                     </div>
                 </div>
-                {this.props.isAuthenticated() ? 
-                    (
+                {this.props.isAuthenticated() && this.props.mode===1 &&
                     //Admin Tools
                     <BoxDetailsAdmin changefetchedpop={this.changefetchedpop} {...this.props}/>
-                    ) : (
-                    <></>
-                    )
                 }
             </>
             )

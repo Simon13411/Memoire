@@ -6,6 +6,8 @@ import Cookies from 'js-cookie';
 
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import Select from '@mui/material/Select';
 
 import BoxAttributes from '../BoxAttributes'
@@ -29,7 +31,8 @@ class BoxDetails extends React.Component {
             modifycollectionstate: '',
             modifyborrowerstate: '',
             imageURL: null,
-            deletestate: ''
+            deletestate: '',
+            mode: 0 //modification mode = 1
         }
   }
 
@@ -73,6 +76,16 @@ class BoxDetails extends React.Component {
         const target = event.target
         const value = target.value
         const name = target.name
+        this.setState({
+            [name]: value
+        })
+    }
+
+    handleCheck = (event) => {
+        const target = event.target;
+        const value = target.checked ? 1 : 0; //if crossed 1 if not 0
+        const name = target.name;
+    
         this.setState({
             [name]: value
         })
@@ -181,55 +194,51 @@ class BoxDetails extends React.Component {
                 ):(
                 <>
                     <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
-                    <p>Boite n° {this.props.searchParams.get("id")}  Collection: {this.state.collection}  {this.state.borrower ? (<>Borrower: {this.state.borrower}</>):(<></>)}</p>
-                    <>
-                    {this.props.isAdmin() ? 
-                        (
+                    <p>Box n° {this.props.searchParams.get("id")} from collection {this.state.collection}  {this.state.borrower ? (<>borrowed by {this.state.borrower}</>):(<></>)}</p>
+                    {this.props.isAuthenticated() && 
+                        <div>
+                            <FormControlLabel name="mode" onChange={this.handleCheck} control={<Checkbox />} label="Modification mode" />
+                        </div>
+                    }
+                    {(this.props.isAdmin() && this.state.mode===1) &&
                         <div>
                             <button type='submit' onClick={this.deletebox}>Delete Box</button>
                             {this.state.deletestate}
                         </div>
-                        ):(
-                        <></>
-                        )
                     }
-                    </>
                     <div className="container">
-                        {this.props.isAuthenticated() ?
-                            (
-                                <div className="column">
-                                    <div>
-                                    <h4 className="title">Collection</h4>
-                                        <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                                            <Select id="collection-select" value={this.state.newcollection} onChange={this.handleInputChange} name="newcollection">
-                                                <MenuItem value={null}>
-                                                    <em>None</em>
-                                                </MenuItem>
-                                                {this.state.collectionlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                    <button type='submit' onClick={this.modifycollection}>Modify</button>
-                                    <div>{this.state.modifycollectionstate}</div>
-                                    <div>
-                                        <h4 className="title">Borrower</h4>
-                                        <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
-                                            <Select id="borrower-select" value={this.state.newborrower} onChange={this.handleInputChange} name="newborrower">
-                                                <MenuItem value={null}>
-                                                    <em>None</em>
-                                                </MenuItem>
-                                                {this.state.borrowerslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                    <button type='submit' onClick={this.modifyborrower}>Modify</button>
-                                    <div>{this.state.modifyborrowerstate}</div>
+                        {this.props.isAuthenticated() && this.state.mode===1 &&
+                            <div className="column">
+                                <div>
+                                <h4 className="title">Collection</h4>
+                                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                                        <Select id="collection-select" value={this.state.newcollection} onChange={this.handleInputChange} name="newcollection">
+                                            <MenuItem value={null}>
+                                                <em>None</em>
+                                            </MenuItem>
+                                            {this.state.collectionlist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                                        </Select>
+                                    </FormControl>
                                 </div>
-                            ):(
-                                <></>
-                            )
+                                <button type='submit' onClick={this.modifycollection}>Modify</button>
+                                <div>{this.state.modifycollectionstate}</div>
+                                <div>
+                                    <h4 className="title">Borrower</h4>
+                                    <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>
+                                        <Select id="borrower-select" value={this.state.newborrower} onChange={this.handleInputChange} name="newborrower">
+                                            <MenuItem value={null}>
+                                                <em>None</em>
+                                            </MenuItem>
+                                            {this.state.borrowerslist.map((data) => <MenuItem value={data.name}>{data.name}</MenuItem>)}
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                                <button type='submit' onClick={this.modifyborrower}>Modify</button>
+                                <div>{this.state.modifyborrowerstate}</div>
+                            </div>
                         }
-                        {this.state.attr.map((data, index) => <BoxAttributes isAuthenticated={this.props.isAuthenticated}
+                        {this.state.attr.map((data, index) => <BoxAttributes mode={this.state.mode}
+                                                                        isAuthenticated={this.props.isAuthenticated}
                                                                         id={this.props.searchParams.get("id")}
                                                                         index={index}
                                                                         order={data.order}
@@ -242,22 +251,16 @@ class BoxDetails extends React.Component {
                                                                         subspecies= {data.subspecies}
                                                                         tribu= {data.tribu}
                                                                         maxPopDegree={this.maxPopDegree} refresh={this.refreshPage}></BoxAttributes>)}
-                        {this.props.isAuthenticated() ?
+                        {this.props.isAuthenticated() && this.state.mode===1 &&
                             <BoxDetailsAddPop refresh={this.refreshPage} id={this.props.searchParams.get("id")} maxPopDegree={this.maxPopDegree}/>
-                        :
-                            <></>
                         }
 
                         <div className="column">
-                            <h2>Pictures</h2>
-                            {this.state.imageURL ?
-                                (
-                                    <a href={this.state.imageURL}>
-                                        <img src={this.state.imageURL} width={250} height={250}/>
-                                    </a>
-                                ):(
-                                    <></>
-                                )
+                            <h3>Pictures</h3>
+                            {this.state.imageURL &&
+                                <a href={this.state.imageURL}>
+                                    <img src={this.state.imageURL} width={250} height={250}/>
+                                </a>
                             }
                         </div>
                     </div>

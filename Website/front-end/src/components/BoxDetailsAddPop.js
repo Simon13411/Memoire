@@ -146,7 +146,7 @@ class BoxDetailsAddPop extends React.Component {
         return (
             <div className="column">
                 <div>
-                    <h2 className="title">Add Population</h2>
+                    <h3 className="title">Add Population</h3>
                     {this.state.addstate}
                     <h4 className="title">Order</h4>
                         <FormControl variant="standard" sx={{ m: 1, minWidth: 180 }}>

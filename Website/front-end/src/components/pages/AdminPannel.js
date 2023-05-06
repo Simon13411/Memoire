@@ -641,11 +641,11 @@ class AdminPannel extends React.Component {
                     <h3>Add user</h3>
                     <form onSubmit={(event) => { this.onSubmit(event) }}>
                         <label htmlFor="newusername">Username:</label>
-                        <input type="text" value={this.state.usernameToAdd} onChange={this.handleInputChange} name="usernameToAdd"/>
+                        <input type="text" autoComplete="new-password" value={this.state.usernameToAdd} onChange={this.handleInputChange} name="usernameToAdd"/>
                         <br />
             
                         <label htmlFor="newpassword">Password:</label>
-                        <input type="password" value={this.state.passwordToAdd} onChange={this.handleInputChange} name="passwordToAdd"/>
+                        <input type="password" autoComplete="new-password" value={this.state.passwordToAdd} onChange={this.handleInputChange} name="passwordToAdd"/>
                         <br />
 
                         <label htmlFor="newpassword">Confirm password:</label>
@@ -678,7 +678,7 @@ class AdminPannel extends React.Component {
                         <br />
         
                         <label htmlFor="newpassword">New password:</label>
-                        <input type="password" value={this.state.newPassword} onChange={this.handleInputChange} name="newPassword" />
+                        <input type="password" autoComplete="new-password" value={this.state.newPassword} onChange={this.handleInputChange} name="newPassword" />
                         <br />
                         <label htmlFor="newpassword">Confirm password:</label>
                         <input type="password" value={this.state.newPassword2} onChange={this.handleInputChange} name="newPassword2" />

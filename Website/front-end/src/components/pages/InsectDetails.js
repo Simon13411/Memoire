@@ -7,6 +7,8 @@ import Cookies from 'js-cookie';
 
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import Select from '@mui/material/Select';
 
 import axios from 'axios'
@@ -43,7 +45,8 @@ class InsectDetails extends React.Component {
             newborrower: null,
             modifyboxstate: '',
             modifyborrowerstate: '',
-            deletestate: ''
+            deletestate: '',
+            mode: 0 //modification mode = 1
         }
     }
 
@@ -61,6 +64,16 @@ class InsectDetails extends React.Component {
         const target = event.target
         const value = target.value
         const name = target.name
+        this.setState({
+            [name]: value
+        })
+    }
+
+    handleCheck = (event) => {
+        const target = event.target;
+        const value = target.checked ? 1 : 0; //if crossed 1 if not 0
+        const name = target.name;
+    
         this.setState({
             [name]: value
         })
@@ -159,8 +172,13 @@ class InsectDetails extends React.Component {
                 ):(
                     <>
                     <Navbar isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout}/>
-                    <p>{this.state.individ ? (<>Name: {this.state.individ}</>):(<></>)} {this.state.idbox !== 0 ? (<>From Box n° {this.state.idbox}</>):(<></>)} {this.state.borrower ? (<>Borrower: {this.state.borrower}</>):(<></>)}</p>
-                    {this.props.isAdmin() ? 
+                    <p>{this.state.individ && <>Individual {this.state.individ}</>} {this.state.idbox !== 0 && <>from Box n° {this.state.idbox}</>} {this.state.borrower && <>borrowed by {this.state.borrower}</>}</p>
+                    {this.props.isAuthenticated() &&
+                        <div>
+                            <FormControlLabel name="mode" onChange={this.handleCheck} control={<Checkbox />} label="Modification mode" />
+                        </div>
+                    }
+                    {this.props.isAdmin() && this.state.mode===1  ? 
                         (
                             <div>
                             <button type='submit' onClick={this.deleteindiv}>Delete Individual</button>
@@ -171,8 +189,7 @@ class InsectDetails extends React.Component {
                         )
                     }
                     <div className="container">
-                        {this.props.isAuthenticated() ?
-                            (
+                        {this.props.isAuthenticated() && this.state.mode===1 &&
                             <div className="column">
                                 <div>
                                     <div>
@@ -198,16 +215,11 @@ class InsectDetails extends React.Component {
                                 </div>
                                 {this.state.modifyborrowerstate}
                             </div>
-                            ):(
-                                <></>
-                            )
                         }
                         <div className="column">
-                            <h2 className="title">Population</h2>
+                            <h3 className="title">Population</h3>
                             <div>
-                                {(this.state.idbox) === 0 ?
-                                    (<></>)
-                                    :
+                                {(this.state.idbox) !== 0 &&
                                     <>
                                         <h4 className="title">Box ID</h4>
                                         <p>{this.state.idbox}</p>
@@ -215,9 +227,7 @@ class InsectDetails extends React.Component {
                                 }
                             </div>
                             <div>
-                                {(!this.state.order) ?
-                                    (<></>)
-                                    :
+                                {(this.state.order) &&
                                     <>
                                         <h4 className="title">Order</h4>
                                         <p>{this.state.order}</p>
@@ -225,9 +235,7 @@ class InsectDetails extends React.Component {
                                 }
                             </div>
                             <div>
-                                {(!this.state.suborder) ?
-                                    (<></>)
-                                    :
+                                {(this.state.suborder) &&
                                     <>
                                         <h4 className="title">Suborder</h4>
                                         <p>{this.state.suborder}</p>
@@ -235,9 +243,7 @@ class InsectDetails extends React.Component {
                                 }
                             </div>
                             <div>
-                                {(!this.state.family) ?
-                                    (<></>)
-                                    :
+                                {(this.state.family) &&
                                     <>
                                         <h4 className="title">Family</h4>
                                         <p>{this.state.family}</p>
@@ -245,9 +251,7 @@ class InsectDetails extends React.Component {
                                 }
                             </div>
                             <div>
-                                {(!this.state.subfamily) ?
-                                    (<></>)
-                                    :
+                                {(this.state.subfamily) &&
                                     <>
                                         <h4 className="title">Subfamily</h4>
                                         <p>{this.state.subfamily}</p>
@@ -255,9 +259,7 @@ class InsectDetails extends React.Component {
                                 }
                             </div>
                             <div>
-                                {(!this.state.tribu) ?
-                                    (<></>)
-                                    :
+                                {(this.state.tribu) &&
                                     <>
                                         <h4 className="title">Tribe</h4>
                                         <p>{this.state.tribu}</p>
@@ -265,9 +267,7 @@ class InsectDetails extends React.Component {
                                 }
                             </div>
                             <div>
-                                {(!this.state.genus) ?
-                                    (<></>)
-                                    :
+                                {(this.state.genus) &&
                                     <>
                                         <h4 className="title">Genus</h4>
                                         <p>{this.state.genus}</p>
@@ -275,9 +275,7 @@ class InsectDetails extends React.Component {
                                 }
                             </div>
                             <div>
-                                {(!this.state.subgenus)? 
-                                    (<></>)
-                                    :
+                                {(this.state.subgenus) &&
                                     <>
                                         <h4  className="title">Subgenus</h4>
                                         <p>{this.state.subgenus}</p>
@@ -285,9 +283,7 @@ class InsectDetails extends React.Component {
                                 }
                             </div>
                             <div>
-                                {(!this.state.species) ?
-                                    (<></>)
-                                    :
+                                {(this.state.species) &&
                                     <>
                                         <h4 className="title">species</h4>
                                         <p>{this.state.species}</p>
@@ -295,9 +291,7 @@ class InsectDetails extends React.Component {
                                 }
                             </div>
                             <div>
-                                {(!this.state.subspecies) ?
-                                    (<></>)
-                                    :
+                                {(this.state.subspecies) &&
                                     <>
                                         <h4 className="title">subspecies</h4>
                                         <p>{this.state.subspecies}</p>
@@ -305,15 +299,11 @@ class InsectDetails extends React.Component {
                                 }
                             </div>
                         </div>
-                        {this.props.isAuthenticated() && this.state.isLoaded ? 
-                        (
+                        {this.props.isAuthenticated() && this.state.isLoaded && this.state.mode===1 &&
                             //Admin Tools
                             <InsectDetailsAdmin isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout} getIndiv={this.getIndiv}
                             id={this.state.individ} order={this.state.order} suborder={this.state.suborder} genus={this.state.genus} subgenus={this.state.subgenus}
                             family={this.state.family} subfamily={this.state.subfamily} species={this.state.species} subspecies={this.state.subspecies} tribu={this.state.tribu}/>
-                        ) : (
-                            <></>
-                        )
                         }
                     </div>
                     </>

@@ -75,7 +75,7 @@ class AdminPannel extends React.Component {
                     <h3>Modify password</h3>
                     <form onSubmit={(event) => { this.onSubmit(event) }}>
                         <label htmlFor="newpassword">New password:</label>
-                        <input type="password" value={this.state.newPassword} onChange={this.handleInputChange} name="newPassword" />
+                        <input type="password" autoComplete="new-password" value={this.state.newPassword} onChange={this.handleInputChange} name="newPassword" />
                         <label htmlFor="newpassword2">Confirm password:</label>
                         <input type="password" value={this.state.newPassword2} onChange={this.handleInputChange} name="newPassword2" />
                         <button type="submit" name="newPassword" onClick={this.ModifyPassword}>Modify</button>
