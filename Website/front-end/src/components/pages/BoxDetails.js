@@ -197,7 +197,7 @@ class BoxDetails extends React.Component {
                     <p>Box n° {this.props.searchParams.get("id")} from collection {this.state.collection}  {this.state.borrower ? (<>borrowed by {this.state.borrower}</>):(<></>)}</p>
                     {this.props.isAuthenticated() && 
                         <div>
-                            <FormControlLabel name="mode" onChange={this.handleCheck} control={<Checkbox />} label="Modification mode" />
+                            <FormControlLabel name="mode" onChange={this.handleCheck} control={<Checkbox color="success"/>} label="Modification mode" />
                         </div>
                     }
                     {(this.props.isAdmin() && this.state.mode===1) &&

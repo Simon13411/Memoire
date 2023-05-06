@@ -175,7 +175,7 @@ class InsectDetails extends React.Component {
                     <p>{this.state.individ && <>Individual {this.state.individ}</>} {this.state.idbox !== 0 && <>from Box n° {this.state.idbox}</>} {this.state.borrower && <>borrowed by {this.state.borrower}</>}</p>
                     {this.props.isAuthenticated() &&
                         <div>
-                            <FormControlLabel name="mode" onChange={this.handleCheck} control={<Checkbox />} label="Modification mode" />
+                            <FormControlLabel name="mode" onChange={this.handleCheck} control={<Checkbox color="success"/>} label="Modification mode" />
                         </div>
                     }
                     {this.props.isAdmin() && this.state.mode===1  ? 

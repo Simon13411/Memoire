@@ -653,7 +653,7 @@ class AdminPannel extends React.Component {
                         <br />
 
                         <FormGroup>
-                            <FormControlLabel control={<Checkbox checked={this.state.adminToAdd === '1'} onChange={this.handleCheck} name="adminToAdd"/>} label='adminacces' />
+                            <FormControlLabel control={<Checkbox color="success" checked={this.state.adminToAdd === '1'} onChange={this.handleCheck} name="adminToAdd"/>} label='adminacces' />
                         </FormGroup>
                         <button type="submit" onClick={this.AddUser}>Add</button>
                         <div>{this.state.useraddstate}</div>
@@ -706,7 +706,7 @@ class AdminPannel extends React.Component {
                         <br />
             
                         <FormGroup>
-                            <FormControlLabel control={<Checkbox checked={this.state.adminRight === '1'} onChange={this.handleCheck} name="adminRight"/>} label='adminacces' />
+                            <FormControlLabel control={<Checkbox color="success" checked={this.state.adminRight === '1'} onChange={this.handleCheck} name="adminRight"/>} label='adminacces' />
                         </FormGroup>
                         <button type="submit" onClick={this.Modifyright}>Modify</button>
                         {this.state.userrightstate}
