@@ -1214,7 +1214,14 @@ function changeboxcollection(boxid, collection) {
                     SET  "collection_id" = (SELECT "id_collection" FROM "Collection" WHERE "name"=$1)
                     WHERE "id_box" = $2`
 
+    updatequery2 = `UPDATE "Box"
+                    SET  "collection_id" = NULL
+                    WHERE "id_box" = $2`
+
     return new Promise(function (resolve, reject) {
+        if (collection === null) {
+            return reject(new Error("Collection can't be null"))
+        }
         client.query(verifquery, [collection], (err, res) => {
             if (err) {
                 return reject(new Error("Erreur DB"))
@@ -1232,7 +1239,7 @@ function changeboxcollection(boxid, collection) {
                     })
                 }
                 else {
-                    return reject(new Error(`${borrower} is not in use`))
+                    return reject(new Error(`${collection} is not in use`))
                 }
             }
         })
@@ -1386,7 +1393,7 @@ function SqlToCsv(type){
         const script = spawn('python3', [scriptfilename]);
         console.log("Subprocess spawned")
 
-        fileDataString = '';
+        var fileDataString = '';
 
         script.stdout.on('data', (data) => {
             try {
@@ -1409,11 +1416,11 @@ function SqlToCsv(type){
             if (code === 1 || code === '1') {
                 return reject(new Error("Error during script run"));
             }
+
             const fileData = JSON.parse(fileDataString.toString());
             const filename = fileData.filename;
             const contentBase64 = fileData.content;
             const content = Buffer.from(contentBase64, 'base64');
-
             const filePath = path.join(__dirname, 'FilesToReturn', filename);
 
             fs.writeFile(filePath, content, (err) => {

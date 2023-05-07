@@ -133,7 +133,7 @@ class BoxDetailsAdmin extends React.Component {
                                             newgenus: this.state.genus, newsubgenus: this.state.subgenus, 
                                             newspecies: this.state.species, newsubspecies: this.state.subspecies, token: authToken})
                 .then((res) => {
-                    this.setState({changestate: 'Population has been changed with success'}, this.props.changefetchedpop(this.state))
+                    this.setState({changestate: 'Population has been changed with success'}, this.props.changefetchedpop(this.state, this.props.index))
                 })
                 .catch((err) => {
                     if (!err.response) {

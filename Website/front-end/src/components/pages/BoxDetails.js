@@ -9,11 +9,13 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Select from '@mui/material/Select';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 import BoxAttributes from '../BoxAttributes'
 import BoxDetailsAddPop from '../BoxDetailsAddPop';
 
 import axios from 'axios'
+import BoxDetailsModifPop from '../BoxDetailsModifPop';
 const url = process.env.REACT_APP_IP
 
 class BoxDetails extends React.Component {
@@ -49,21 +51,17 @@ class BoxDetails extends React.Component {
         var maxdegree = null
         for (let i=0; i< attributes.length; i++) {
             for (let j=0; j<this.state.attr.length; j++){
-                console.log(this.state.attr[j][attributes[i]])
-                console.log(newattributelist[i])
                 if (this.state.attr[j][attributes[i]] !== newattributelist[i]) {
                 if (maxdegree === null) {
                     maxdegree = attributes[i]
                     break;
                 }
                 else {
-                    console.log("ici2")
                     return "You can't have such a population in this box (Degree of precision)"
                 }
                 }
             }
         }
-        console.log("ici")
         return "ok"
     }
 
@@ -89,6 +87,20 @@ class BoxDetails extends React.Component {
         this.setState({
             [name]: value
         })
+    }
+
+    changefetchedpop = (childstatevar, index) => {
+        var newAttr = this.state.attr;
+        newAttr[index].order = childstatevar.order
+        newAttr[index].suborder = childstatevar.suborder
+        newAttr[index].family = childstatevar.family
+        newAttr[index].subfamily = childstatevar.subfamily
+        newAttr[index].tribu = childstatevar.tribu
+        newAttr[index].genus = childstatevar.genus
+        newAttr[index].subgenus = childstatevar.subgenus
+        newAttr[index].species = childstatevar.species
+        newAttr[index].subspecies = childstatevar.subspecies
+        this.setState({attr: newAttr})
     }
 
     refreshPage() {
@@ -123,8 +135,7 @@ class BoxDetails extends React.Component {
         axios.get(`${url}/getpicture`, {params : {type: type, id: id}}, { responseType: 'blob' })
         .then(response => {
             const imageurl = window.URL.createObjectURL(new Blob([response.data]));
-            console.log(imageurl)
-            this.setState({imageURL: `${url}/getpicture?type=Boxes&id=${id}`})
+            this.setState({imageURL: `${url}/getpicture?type=${type}&id=${id}`})
         })
     }
 
@@ -206,8 +217,42 @@ class BoxDetails extends React.Component {
                             {this.state.deletestate}
                         </div>
                     }
+                    <div classname="datalist">
+                        <TableContainer sx={{width:'auto', flex:1}}>
+                            <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Pop n°</TableCell>
+                                    <TableCell>Order</TableCell>
+                                    <TableCell>Suborder</TableCell>
+                                    <TableCell>Family</TableCell>
+                                    <TableCell>Subfamily</TableCell>
+                                    <TableCell>Tribe</TableCell>
+                                    <TableCell>Genus</TableCell>
+                                    <TableCell>Subgenus</TableCell>
+                                    <TableCell>species</TableCell>
+                                    <TableCell>subspecies</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                            {this.state.attr.map((data, index) => <BoxAttributes
+                                                                        index={index}
+                                                                        order={data.order}
+                                                                        suborder= {data.suborder}
+                                                                        family= {data.family}
+                                                                        subfamily= {data.subfamily}
+                                                                        genus= {data.genus}
+                                                                        subgenus= {data.subgenus}
+                                                                        species= {data.species}
+                                                                        subspecies= {data.subspecies}
+                                                                        tribu= {data.tribu}></BoxAttributes>)}
+                            </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </div>
                     <div className="container">
                         {this.props.isAuthenticated() && this.state.mode===1 &&
+                        <>
                             <div className="column">
                                 <div>
                                 <h4 className="title">Collection</h4>
@@ -236,25 +281,24 @@ class BoxDetails extends React.Component {
                                 <button type='submit' onClick={this.modifyborrower}>Modify</button>
                                 <div>{this.state.modifyborrowerstate}</div>
                             </div>
-                        }
-                        {this.state.attr.map((data, index) => <BoxAttributes mode={this.state.mode}
-                                                                        isAuthenticated={this.props.isAuthenticated}
-                                                                        id={this.props.searchParams.get("id")}
-                                                                        index={index}
-                                                                        order={data.order}
-                                                                        suborder= {data.suborder}
-                                                                        family= {data.family}
-                                                                        subfamily= {data.subfamily}
-                                                                        genus= {data.genus}
-                                                                        subgenus= {data.subgenus}
-                                                                        species= {data.species}
-                                                                        subspecies= {data.subspecies}
-                                                                        tribu= {data.tribu}
-                                                                        maxPopDegree={this.maxPopDegree} refresh={this.refreshPage}></BoxAttributes>)}
-                        {this.props.isAuthenticated() && this.state.mode===1 &&
+                            {this.state.attr.map((data, index) => <BoxDetailsModifPop
+                                index={index}
+                                id={this.props.searchParams.get("id")}
+                                order={data.order}
+                                suborder= {data.suborder}
+                                family= {data.family}
+                                subfamily= {data.subfamily}
+                                genus= {data.genus}
+                                subgenus= {data.subgenus}
+                                species= {data.species}
+                                subspecies= {data.subspecies}
+                                tribu= {data.tribu}
+                                maxPopDegree={this.maxPopDegree} changefetchedpop={this.changefetchedpop}></BoxDetailsModifPop>)}
                             <BoxDetailsAddPop refresh={this.refreshPage} id={this.props.searchParams.get("id")} maxPopDegree={this.maxPopDegree}/>
+                        </>
                         }
-
+                    </div>
+                    <div className='container'>
                         <div className="column">
                             <h3>Pictures</h3>
                             {this.state.imageURL &&

@@ -39,7 +39,7 @@ class FileUploader extends Component {
         const formData = new FormData();
         formData.append('file', this.state.selectedFile);
 
-        this.Changeuploadstate('Please wait...')
+        this.Changeuploadstate('Please wait... Operation can take minutes to complete')
 
         axios.put(`${url}${this.props.path}?type=${this.props.type}&token=${authToken}`, formData, {
             headers: {

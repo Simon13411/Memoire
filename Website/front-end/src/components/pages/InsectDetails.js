@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom"
 import Navbar from '../Navbar';
 
-import InsectDetailsAdmin from '../InsectDetailsAdmin';
+import InsectDetailsModifPop from '../InsectDetailsModifPop';
 import Cookies from 'js-cookie';
 
 import MenuItem from '@mui/material/MenuItem';
@@ -10,6 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Select from '@mui/material/Select';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 import axios from 'axios'
 const url = process.env.REACT_APP_IP
@@ -46,6 +47,7 @@ class InsectDetails extends React.Component {
             modifyboxstate: '',
             modifyborrowerstate: '',
             deletestate: '',
+            imageURL: null,
             mode: 0 //modification mode = 1
         }
     }
@@ -53,6 +55,7 @@ class InsectDetails extends React.Component {
     componentDidMount() {
         this.getIndiv()
         this.getBorrowers()
+        this.getPicture()
     }
 
     /*  ------------------- Page stuff ---------------------*/
@@ -104,6 +107,16 @@ class InsectDetails extends React.Component {
         axios.get(`${url}/get_borrowers`)
         .then((res) => {
             this.setState({borrowerslist: res.data.rows})
+        })
+    }
+
+    getPicture = () => {
+        const type = "Individuals"
+        const id = this.props.searchParams.get("id")
+        axios.get(`${url}/getpicture`, {params : {type: type, id: id}}, { responseType: 'blob' })
+        .then(response => {
+            const imageurl = window.URL.createObjectURL(new Blob([response.data]));
+            this.setState({imageURL: `${url}/getpicture?type=${type}&id=${id}`})
         })
     }
 
@@ -188,6 +201,36 @@ class InsectDetails extends React.Component {
                             <></>
                         )
                     }
+                    <TableContainer sx={{width:'auto', flex:1}}>
+                        <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Order</TableCell>
+                                <TableCell>Suborder</TableCell>
+                                <TableCell>Family</TableCell>
+                                <TableCell>Subfamily</TableCell>
+                                <TableCell>Tribe</TableCell>
+                                <TableCell>Genus</TableCell>
+                                <TableCell>Subgenus</TableCell>
+                                <TableCell>species</TableCell>
+                                <TableCell>subspecies</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <TableRow key={this.state.individ}>
+                                <TableCell>{this.state.order}</TableCell>
+                                <TableCell>{this.state.suborder}</TableCell>
+                                <TableCell>{this.state.family}</TableCell>
+                                <TableCell>{this.state.subfamily}</TableCell>
+                                <TableCell>{this.state.tribu}</TableCell>
+                                <TableCell>{this.state.genus}</TableCell>
+                                <TableCell>{this.state.subgenus}</TableCell>
+                                <TableCell>{this.state.species}</TableCell>
+                                <TableCell>{this.state.subspecies}</TableCell>
+                            </TableRow>
+                        </TableBody>
+                        </Table>
+                    </TableContainer>
                     <div className="container">
                         {this.props.isAuthenticated() && this.state.mode===1 &&
                             <div className="column">
@@ -216,95 +259,22 @@ class InsectDetails extends React.Component {
                                 {this.state.modifyborrowerstate}
                             </div>
                         }
-                        <div className="column">
-                            <h3 className="title">Population</h3>
-                            <div>
-                                {(this.state.idbox) !== 0 &&
-                                    <>
-                                        <h4 className="title">Box ID</h4>
-                                        <p>{this.state.idbox}</p>
-                                    </>
-                                }
-                            </div>
-                            <div>
-                                {(this.state.order) &&
-                                    <>
-                                        <h4 className="title">Order</h4>
-                                        <p>{this.state.order}</p>
-                                    </>
-                                }
-                            </div>
-                            <div>
-                                {(this.state.suborder) &&
-                                    <>
-                                        <h4 className="title">Suborder</h4>
-                                        <p>{this.state.suborder}</p>
-                                    </>
-                                }
-                            </div>
-                            <div>
-                                {(this.state.family) &&
-                                    <>
-                                        <h4 className="title">Family</h4>
-                                        <p>{this.state.family}</p>
-                                    </>
-                                }
-                            </div>
-                            <div>
-                                {(this.state.subfamily) &&
-                                    <>
-                                        <h4 className="title">Subfamily</h4>
-                                        <p>{this.state.subfamily}</p>
-                                    </>
-                                }
-                            </div>
-                            <div>
-                                {(this.state.tribu) &&
-                                    <>
-                                        <h4 className="title">Tribe</h4>
-                                        <p>{this.state.tribu}</p>
-                                    </>
-                                }
-                            </div>
-                            <div>
-                                {(this.state.genus) &&
-                                    <>
-                                        <h4 className="title">Genus</h4>
-                                        <p>{this.state.genus}</p>
-                                    </>
-                                }
-                            </div>
-                            <div>
-                                {(this.state.subgenus) &&
-                                    <>
-                                        <h4  className="title">Subgenus</h4>
-                                        <p>{this.state.subgenus}</p>
-                                    </>
-                                }
-                            </div>
-                            <div>
-                                {(this.state.species) &&
-                                    <>
-                                        <h4 className="title">species</h4>
-                                        <p>{this.state.species}</p>
-                                    </>
-                                }
-                            </div>
-                            <div>
-                                {(this.state.subspecies) &&
-                                    <>
-                                        <h4 className="title">subspecies</h4>
-                                        <p>{this.state.subspecies}</p>
-                                    </>
-                                }
-                            </div>
-                        </div>
                         {this.props.isAuthenticated() && this.state.isLoaded && this.state.mode===1 &&
                             //Admin Tools
-                            <InsectDetailsAdmin isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout} getIndiv={this.getIndiv}
+                            <InsectDetailsModifPop isAuthenticated={this.props.isAuthenticated} isAdmin={this.props.isAdmin} Logout={this.props.Logout} getIndiv={this.getIndiv}
                             id={this.state.individ} order={this.state.order} suborder={this.state.suborder} genus={this.state.genus} subgenus={this.state.subgenus}
                             family={this.state.family} subfamily={this.state.subfamily} species={this.state.species} subspecies={this.state.subspecies} tribu={this.state.tribu}/>
                         }
+                    </div>
+                    <div className='container'>
+                        <div className="column">
+                            <h3>Pictures</h3>
+                            {this.state.imageURL &&
+                                <a href={this.state.imageURL}>
+                                    <img src={this.state.imageURL} width={250} height={250}/>
+                                </a>
+                            }
+                        </div>
                     </div>
                     </>
                     )

@@ -8,7 +8,7 @@ function FileDownloader({path, filename, type}) {
     const [downloadstate, setDownloadstate] = useState('');
 
     const handleDownload = () => {
-        setDownloadstate('Please wait...')
+        setDownloadstate('Please wait... Operation can take minutes to complete')
         axios.get(`${url}${path}`, { responseType: 'blob' })
         .then(response => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
