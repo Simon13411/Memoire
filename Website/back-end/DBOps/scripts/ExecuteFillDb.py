@@ -22,13 +22,13 @@ a,b,data,d = filtre.filterExcel(extracteddata)
 
 #On va regarder pour l admin si les boites existent deja, si oui on les supprimes et elle seront remise apres
 #Verifier si boite existe sinon oups probleme
-admin = True
-"""
+admin = False
+
 if (sys.argv[2] == "true") :
     admin = True
 elif (sys.argv[2] == "false") :
     admin= False
-"""
+    
 if (b>0):
     if a == []:
         print("Wrong column's name")
@@ -44,7 +44,6 @@ else:
     )
 
     #database = "Gembloux5_4.db"
-
 
     cursor = conn.cursor()
     cursor = conn.cursor()

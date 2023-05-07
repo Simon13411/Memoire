@@ -42,7 +42,7 @@ def filterExcel(olddf):
             colname.append(col)
     for col in checkCol:
         if col not in colname:
-            
+
             return [],1,pd.DataFrame, ["pas les bonnes colonnes"]
 
     df = olddf[colname].copy()
@@ -131,7 +131,7 @@ def filterExcel(olddf):
             count+=1
             reasons.append("several species and several sub classification")
             continue
-        
+
         if not isinstance(row.Order, str)  or math.isnan(row.Num_ID):
             bad.append(i+2)
             baddf.loc[len(baddf)] = row
@@ -186,14 +186,14 @@ def filterExcel(olddf):
             count += 1
             reasons.append("subspecies is a number")
             continue
-        
+
         if not isinstance(row.Genus_Descriptor, str) and not (row.Genus_Descriptor != row.Genus_Descriptor) :
             bad.append(i+2)
             baddf.loc[len(baddf)] = row
             count += 1
             reasons.append("genus descriptor is a number")
             continue
-        
+
         #Subgenus_Descriptor filter
         if not isinstance(row.Subgenus_Descriptor, str) and not (row.Subgenus_Descriptor != row.Subgenus_Descriptor) :
             bad.append(i+2)
@@ -201,7 +201,7 @@ def filterExcel(olddf):
             count += 1
             reasons.append("subgenus descriptor is a number")
             continue
-        
+
         #Species_Descriptor filter
         if not isinstance(row.Species_Descriptor, str) and not (row.Species_Descriptor != row.Species_Descriptor) :
             bad.append(i+2)
@@ -209,7 +209,7 @@ def filterExcel(olddf):
             count += 1
             reasons.append("species descriptor is a number")
             continue
-                
+
         #SubSpecies_Descriptor filter
         if not isinstance(row.Subspecies_descriptor, str) and not (row.Subspecies_descriptor != row.Subspecies_descriptor):
             bad.append(i+2)
@@ -218,28 +218,35 @@ def filterExcel(olddf):
             reasons.append("subspecies descriptor is a number")
             continue
 
-        
-        
+
+
         if not isinstance(row.Museum, str) and not (row.Museum != row.Museum):
             bad.append(i+2)
             baddf.loc[len(baddf)] = row
             count += 1
             reasons.append("museum is a number")
             continue
-        
+
         if not isinstance(row.Box_Localization, str) and not (row.Box_Localization != row.Box_Localization):
             bad.append(i+2)
             baddf.loc[len(baddf)] = row
             count += 1
             reasons.append("box localization is a number")
             continue
-        
+
         if not isinstance(row.Collection_Name, str) and not (row.Collection_Name != row.Collection_Name):
             bad.append(i+2)
             baddf.loc[len(baddf)] = row
             count += 1
             reasons.append("collection is a number")
             continue
+        if not isinstance(row.Collection_Name, str):
+            if math.isnan(row.Collection_Name):
+                bad.append(i+2)
+                baddf.loc[len(baddf)] = row
+                count += 1
+                reasons.append("There is no Collection name")
+                continue
         if isinstance(row.Types, str) and not (row.Types != row.Types):
             if not any(char.isdigit() for char in row.Types):
 
@@ -292,18 +299,12 @@ def filterExcel(olddf):
             continue
         else :
             row.Subspecies_Date= subspeDate
-        
-        
+
+
         #print(row.Genus_Date, row.Subgenus_Date, row.Species_Date, row.Subspecies_Date)
-    
-    
+
+
         gooddf.loc[len(gooddf)] = row
     #baddf.to_excel("WrongFormatData5-4.xlsx", index=False)
     #gooddf.to_excel("GoodFormat.xlsx", index=False)
     return bad, count, gooddf, reasons
-        
-
-            
-
-
-
