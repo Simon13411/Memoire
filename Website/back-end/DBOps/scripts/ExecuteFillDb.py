@@ -18,21 +18,17 @@ extracteddata = pd.read_excel(filename, engine="openpyxl")
 
 a,b,data,d = filtre.filterExcel(extracteddata)
 
-
-
-#On va regarder pour l admin si les boites existent deja, si oui on les supprimes et elle seront remise apres
-#Verifier si boite existe sinon oups probleme
 admin = False
-
 if (sys.argv[2] == "true") :
     admin = True
 elif (sys.argv[2] == "false") :
     admin= False
-    
+  
 if (b>0):
     if a == []:
         print("Wrong column's name")
-    #print(f'{{"type": "{b} lines have wrong format", "lines":{a}, "errors": {json.dumps(d)}}}')
+    else:
+        print(f'{{"type": "{b} lines have wrong format", "lines":{a}, "errors": {json.dumps(d)}}}')
 
 else:
     data = data.where(data.notnull(), None)
@@ -42,14 +38,10 @@ else:
         user="postgres",
         password="password"
     )
-
-    #database = "Gembloux5_4.db"
-
     cursor = conn.cursor()
     cursor = conn.cursor()
     print("[MY_APP_LOG] Successfully connected to DB")
 
-    #tribu.insertTribu(data, cursor, conn)
     name.insertName(data, cursor, conn,"Order",  "Order", "id_order")
     name.insertName(data, cursor, conn,"Suborder",  "subOrder", "id_suborder")
     name.insertName(data, cursor, conn,"Family",  "Family", "id_family")

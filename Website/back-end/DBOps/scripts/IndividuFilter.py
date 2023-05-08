@@ -36,246 +36,179 @@ def filterIndividu(olddf):
 
 
     #How Many lines are not well encoded ?
-    count = 0
-    total = 0
+
     bad = []
     reasons = []
+    """
+    StringValue is a function that will check wether or not the cell of the excel is a string or not
+    
+    :param: name = name of the specific cell (eg: row.Column)
+    :param: error = string error of the column name
+    :return: True if there is an error
+     """
+    def StringValue(name, error):
+        if not isinstance(name, str) and not (name != name) :
+            bad.append(i+2)
+            reasons.append(error +" is a number")
+            return True
+        else:
+            return False
+    """
+    MandatoryValue is a function that will check wether or not the mandatory cell of the excel have certain value
+    
+    :param: name = name of the specific cell (eg: row.Column)
+    :param: error = string error of the column name
+    :return: True if there is an error
+     """ 
+    def MandatoryString(name, error):
+        if not isinstance(name, str):
+            if math.isnan(name):
+                bad.append(i+2)
+                reasons.append("There is no " + error)
+                return True
+            else:
+                return False
+    """
+    IntValue is a function that will check wether or not the cell of the excel is a int or not
+    
+    :param: name = name of the specific cell (eg: row.Column)
+    :param: error = string error of the column name
+    :return: True if there is an error
+     """
+    def IntValue(name, error):
+        if isinstance(name, str) and not (name != name):
+            if not any(char.isdigit() for char in name):
+                bad.append(i+2)
+                reasons.append(error + " is not a number")
+                return True
+            else:
+                return False
+    """
+    SeveralPopu is a function that will check that an individual has no more then one identification
+    
+    :param: name = name of the specific cell (eg: row.Column)
+    :param: error = string error of the column name
+    :return: True if there is an error
+     """
+    def SeveralPopu(name, error):
+        if (isinstance(name, str)): nameList = name.split("_")
+        else: nameList = [""]
+        if(len(nameList)>1):
+            bad.append(i+2)
+            reasons.append("several " + error + " for an individual")
+            return True
+        else: 
+            return False
+
     for i, row in df.iterrows() :
         if math.isnan(row.Num_ID): #obliger d'avoir une box_id = 0 si individu pas dans uen boite
             bad.append(i+2)
-            count += 1
             reasons.append("There is no box mentioned")
             continue
-        if not isinstance(row.SpecimenCode, str): #obliger d'avoir une box_id = 0 si individu pas dans uen boite
-            bad.append(i+2)
-            count += 1
-            reasons.append("There is no specimen code mentioned")
+        if(MandatoryString(row.SpecimenCode, "specimen code")):
             continue
-        if (isinstance(row.Order, str)):
-            order = row.Order.split("_")
-        else:
-            bad.append(i+2)
-            count+=1
-            reasons.append("There is no order")
+     
+        
+        if(MandatoryString(row.Order, "order")):
             continue
-        if (isinstance(row.Suborder, str)): suborder = row.Suborder.split("_")
-        else: suborder=[""]
-        if (isinstance(row.Family, str)): family = row.Family.split("_")
-        else: family=[""]
-        if (isinstance(row.Subfamily, str)): subfamily = row.Subfamily.split("_")
-        else: subfamily=[""]
-        if (isinstance(row.Tribu, str)): tribu = row.Tribu.split("_")
-        else: tribu=[""]
-        if (isinstance(row.Genus, str)): genus = row.Genus.split("_")
-        else: genus=[""]
-        if (isinstance(row.Subgenus, str)): subgenus = row.Subgenus.split("_")
-        else: subgenus=[""]
-        if (isinstance(row.species, str)): species = row.species.split("_")
-        else: species=[""]
-        if (isinstance(row.Subspecies, str)): subspecies = row.Subspecies.split("_")
-        else: subspecies=[""]
-        if(len(order)>1 and (len(suborder)>1 or len(family)>1 or len(subfamily)>1 or len(tribu)>1 or len(genus)>1 or len(subgenus)>1 or len(species)>1 or len(subspecies)>1)):
-            bad.append(i+2)
-            count+=1
-            reasons.append("several order and several sub classification")
+        if(StringValue(row.Suborder, "SubOrder")):
             continue
-        if(len(suborder)>1 and (len(family)>1 or len(subfamily)>1 or len(tribu)>1 or len(genus)>1 or len(subgenus)>1 or len(species)>1 or len(subspecies)>1)):
-            bad.append(i+2)
-            count+=1
-            reasons.append("several suborder and several sub classification")
+        if(StringValue(row.Family, "Family")):
             continue
-        if(len(family)>1 and( len(subfamily)>1 or len(tribu)>1 or len(genus)>1 or len(subgenus)>1 or len(species)>1 or len(subspecies)>1)):
-            bad.append(i+2)
-            count+=1
-            reasons.append("several family and several sub classification")
+        if(StringValue(row.Subfamily, "SubFamily")):
             continue
-        if( len(subfamily)>1 and( len(tribu)>1 or len(genus)>1 or len(subgenus)>1 or len(species)>1 or len(subspecies)>1)):
-            bad.append(i+2)
-            count+=1
-            reasons.append("several subfamily and several sub classification")
+        if(StringValue(row.Tribu, "Tribu")):
             continue
-        if( len(tribu)>1 and( len(genus)>1 or len(subgenus)>1 or len(species)>1 or len(subspecies)>1)):
-            bad.append(i+2)
-            count+=1
-            reasons.append("several tribu and several sub classification")
+        if(StringValue(row.Genus, "Genus")):
             continue
-        if(len(genus)>1 and( len(subgenus)>1 or len(species)>1 or len(subspecies)>1)):
-            bad.append(i+2)
-            count+=1
-            reasons.append("several genus and several sub classification")
+        if(StringValue(row.Subgenus, "SubGenus")):
             continue
-        if(len(subgenus)>1 and( len(species)>1 or len(subspecies)>1)):
-            bad.append(i+2)
-            count+=1
-            reasons.append("several subgenus and several sub classification")
+        if(StringValue(row.species, "species")):
             continue
-        if(len(species)>1 and len(subspecies)>1):
-            bad.append(i+2)
-            count+=1
-            reasons.append("several species and several sub classification")
+        if(StringValue(row.Subspecies, "SubSpecies")):
             continue
         
-        if not isinstance(row.Suborder, str) and not (row.Suborder != row.Suborder) :
-            bad.append(i+2)
-            count += 1
-            reasons.append("suborder is a number")
+        if(SeveralPopu(row.Order, "order")):
             continue
-        if not isinstance(row.Family, str) and not (row.Family != row.Family) :
-            count += 1
-            bad.append(i+2)
-            reasons.append("family is a number")
+        if(SeveralPopu(row.Suborder, "SubOrder")):
             continue
-        if not isinstance(row.Subfamily, str) and not (row.Subfamily != row.Subfamily):
-            bad.append(i+2)
-            count += 1
-            reasons.append("subfamily is a number")
+        if(SeveralPopu(row.Family, "Family")):
             continue
-        if not isinstance(row.Tribu, str) and not (row.Tribu != row.Tribu):
-            bad.append(i+2)
-            count += 1
-            reasons.append("tribu is a number")
+        if(SeveralPopu(row.Subfamily, "SubFamily")):
             continue
-        if not isinstance(row.Genus, str) and not (row.Genus != row.Genus):
-            bad.append(i+2)
-            count += 1
-            reasons.append("genus is a number")
+        if(SeveralPopu(row.Tribu, "Tribu")):
             continue
-        if not isinstance(row.Subgenus, str) and not (row.Subgenus != row.Subgenus) :
-            bad.append(i+2)
-            count += 1
-            reasons.append("subgenus is a number")
+        if(SeveralPopu(row.Genus, "Genus")):
             continue
-        if not isinstance(row.species, str) and not (row.species != row.species) :
-            bad.append(i)
-            count += 1
-            reasons.append("species is a number")
+        if(SeveralPopu(row.Subgenus, "SubGenus")):
             continue
-        if not isinstance(row.Subspecies, str) and not (row.Subspecies != row.Subspecies) :
-            bad.append(i+2)
-            count += 1
-            reasons.append("subspecies is a number")
+        if(SeveralPopu(row.species, "species")):
+            continue
+        if(SeveralPopu(row.Subspecies, "SubSpecies")):
             continue
         
-        if not isinstance(row.Genus_Descriptor, str) and not (row.Genus_Descriptor != row.Genus_Descriptor) :
-            bad.append(i+2)
-            count += 1
-            reasons.append("genus descriptor is a number")
+        if(StringValue(row.Genus_Descriptor, "genus descriptor")):
             continue
-        
-        #Subgenus_Descriptor filter
-        if not isinstance(row.Subgenus_Descriptor, str) and not (row.Subgenus_Descriptor != row.Subgenus_Descriptor) :
-            bad.append(i+2)
-            count += 1
-            reasons.append("subgenus descriptor is a number")
+        if(StringValue(row.Subgenus_Descriptor, "subgenus descriptor")):
             continue
-        
-        #Species_Descriptor filter
-        if not isinstance(row.Species_Descriptor, str) and not (row.Species_Descriptor != row.Species_Descriptor) :
-            bad.append(i+2)
-            count += 1
-            reasons.append("species descriptor is a number")
+        if(StringValue(row.Species_Descriptor, "species descriptor")):
             continue
-                
-        #SubSpecies_Descriptor filter
-        if not isinstance(row.Subspecies_descriptor, str) and not (row.Subspecies_descriptor != row.Subspecies_descriptor):
-            bad.append(i+2)
-            count += 1
-            reasons.append("subspecies descriptor is a number")
+        if(StringValue(row.Subspecies_descriptor, "subspecies descriptor")):
             continue
-
-        if not isinstance(row.Continent, str) and not (row.Continent != row.Continent):
-            bad.append(i+2)
-            count += 1
-            reasons.append("continent is a number")
+        if(StringValue(row.Continent, "continent")):
             continue
-        
-        if not isinstance(row.Country, str) and not (row.Country != row.Country):
-            bad.append(i+2)
-            count += 1
-            reasons.append("country is a number")
+        if(StringValue(row.Country, "country")):
             continue
-        if not isinstance(row.Locality, str) and not (row.Locality != row.Locality):
-            bad.append(i+2)
-            count += 1
-            reasons.append("loality is a number")
+        if(StringValue(row.Locality, "locality")):
+            continue
+        if(StringValue(row.Sexe, "sexe")):
+            continue
+        if(StringValue(row.Ecozone, "ecozone")):
+            continue
+        if(StringValue(row.Latitude, "latitude")):
+            continue
+        if(StringValue(row.Longitude, "longitude")):
+            continue
+        if(StringValue(row.SpecimenCode, "specimen code")):
             continue
         if row.Number<1:
             bad.append(i+2)
-            count += 1
             reasons.append("number is lower then one")
             continue
-        if not isinstance(row.Sexe, str) and not (row.Sexe != row.Sexe):
+        if(filter_values(row.Collection_Date)=="BadEncodingDate"):
             bad.append(i+2)
-            count += 1
-            reasons.append("sexe is a number")
-            continue
-        collDate = filter_values(row.Collection_Date)
-        if(collDate=="BadEncodingDate"):
-            bad.append(i+2)
-            count += 1
             reasons.append("date of the collection Descriptor is not well encoded")
             continue
         else :
-            row.Collection_Date= collDate
-        if not isinstance(row.Ecozone, str) and not (row.Ecozone != row.Ecozone):
+            row.Collection_Date= filter_values(row.Collection_Date)
+        if(filter_values(row.Genus_Date)=="BadEncodingDate"):
             bad.append(i+2)
-            count += 1
-            reasons.append("ecozone is a number")
-            continue
-        
-        if not isinstance(row.Latitude, str) and not (row.Latitude != row.Latitude):
-            bad.append(i+2)
-            count += 1
-            reasons.append("latitude is a number")
-            continue
-        
-        if not isinstance(row.Longitude, str) and not (row.Longitude != row.Longitude):
-            bad.append(i+2)
-            count += 1
-            reasons.append("longitude is a number")
-            continue
-        
-        if not isinstance(row.SpecimenCode, str) and not (row.SpecimenCode != row.SpecimenCode):
-            bad.append(i+2)
-            count += 1
-            reasons.append("specimecode is a number")
-            continue
-        genDate = filter_values(row.Genus_Date)
-        subgenDate = filter_values(row.Subgenus_Date)
-        speDate = filter_values(row.Species_Date)
-        subspeDate = filter_values(row.Subspecies_Date)
-        if(genDate=="BadEncodingDate"):
-            bad.append(i+2)
-            count += 1
             reasons.append("date of the genus Descriptor is not a integer")
             continue
         else :
-            row.Genus_Date= genDate
-        if(subgenDate=="BadEncodingDate"):
+            row.Genus_Date= filter_values(row.Genus_Date)
+        if(filter_values(row.Subgenus_Date)=="BadEncodingDate"):
             bad.append(i+2)
-            count += 1
             reasons.append("date of the subgenus Descriptor is not a integer")
             continue
         else :
-            row.Subgenus_Date= subgenDate
-        if(speDate=="BadEncodingDate"):
+            row.Subgenus_Date= filter_values(row.Subgenus_Date)
+        if(filter_values(row.Species_Date)=="BadEncodingDate"):
             bad.append(i+2)
-            count += 1
             reasons.append("date of the species Descriptor is not a integer")
             continue
         else :
-            row.Species_Date= speDate
-        if(subspeDate=="BadEncodingDate"):
+            row.Species_Date= filter_values(row.Species_Date)
+        if(filter_values(row.Subspecies_Date)=="BadEncodingDate"):
             bad.append(i+2)
-            count += 1
             reasons.append("date of the Subspecies Descriptor is not a integer")
             continue
         else :
-            row.Subspecies_Date= subspeDate
+            row.Subspecies_Date= filter_values(row.Subspecies_Date)
     
     
         gooddf.loc[len(gooddf)] = row
-    return bad, count, gooddf, reasons
+    return bad, len(bad), gooddf, reasons
 
 
 #print(taxonomydf["Specimen code"][0])
