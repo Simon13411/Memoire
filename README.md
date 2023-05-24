@@ -20,7 +20,8 @@ Finally, a user test was set up to ensure that the needs of entomologists were m
 
 ## Where are the different parts of the project located?
 - CreateTables folder: CREATE TABLE SQL commands for the two database
-- Website folder: all the implementation part (scripts, Front-end, Back-end, scripts instructions, etc...)
+- Driagramme folder: .drawio file of the physical diagram of entomological database (editable)
 - PGTap folder: PGTap testing
+- Website folder: all the implementation part (scripts, Front-end, Back-end, scripts instructions, etc...)
 - xlsx folder: .xlsx examples files for current fill-scripts
 - MasterThesis.pdf: Design and Testing part but also every other information mentioned in description
