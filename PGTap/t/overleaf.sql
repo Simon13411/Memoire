@@ -1,0 +1,14 @@
+BEGIN;
+CREATE EXTENSION pgtap;
+SELECT plan(9);
+SELECT columns_are('Order', ARRAY['id_order', 'name']);
+SELECT has_column('Order', 'id_order');
+SELECT col_is_pk('Order', 'id_order');
+SELECT col_not_null('Order', 'id_order');
+SELECT col_type_is('Order', 'id_order', 'integer');
+SELECT has_column('Order', 'name');
+SELECT col_type_is('Order', 'name', 'character varying(100)');
+SELECT col_not_null('Order', 'name');
+SELECT col_is_unique('Order', 'name');
+SELECT * FROM finish();
+ROLLBACK;

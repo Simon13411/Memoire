@@ -157,6 +157,9 @@ def filterExcel(olddf):
 
         if(MandatoryString(row.Order, "order")):
             continue
+        
+        if(StringValue(row.Order, "Order")):
+            continue
         if(StringValue(row.Suborder, "SubOrder")):
             continue
         if(StringValue(row.Family, "Family")):

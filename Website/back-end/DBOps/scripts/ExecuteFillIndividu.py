@@ -73,3 +73,4 @@ elif b==0:
         individu.insertIndividu(data, cursor, conn, admin)
     
         cursor.close()
+        

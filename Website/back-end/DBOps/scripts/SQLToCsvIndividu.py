@@ -45,7 +45,7 @@ fetch = cursor.fetchall()
 
 checkCol = ["SpecimenCode", "Order", "Suborder", "Tribu", "Family","Subfamily", "Genus", "Subgenus", 
        "species", "Subspecies", "Genus_Descriptor", "Species_Descriptor", "Subgenus_Descriptor", 
-       "Subspecies_descriptor", "Genus_Date","Subgenus_Date","Species_Date","Subspecies_Date", "Num_ID","Continent", "Country", "Ecozone","Latitude", "Longitude"]
+       "Subspecies_descriptor", "Genus_Date","Subgenus_Date","Species_Date","Subspecies_Date", "Num_ID","Continent", "Country", "Ecozone","Latitude", "Longitude", "Locality", "Number", "Collection_Date", "Sexe"]
 newDf = pd.DataFrame(columns = checkCol)
 
 df = pd.read_sql_query(selectBox, conn)
