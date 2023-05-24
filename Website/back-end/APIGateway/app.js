@@ -45,7 +45,7 @@ const postLOGIN = ['/login', '/signup', '/adminright', '/validate-token', '/modi
 
 const getLOGIN = ['/get-users']
 
-const postDBOPSwAdminVerif = ['/add-attribute/:name', '/delete-attribute/:name', '/addcollection', '/modifycollection', '/addborrower', '/modifyborrower']
+const postDBOPSwAdminVerif = ['/add-attribute/:name', '/delete-attribute/:name', '/addcollection', '/modifycollection', '/addborrower', '/modifyborrower', '/deleteindiv', '/deletebox']
 
 const postDBOPSwUserVerif = ['/changeindivboxid', '/verifyuserright', '/changeboxcollection', '/changeboxborrower', '/modifypopu', '/addpopubox', '/deletepopubox']
 

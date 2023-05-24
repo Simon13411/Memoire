@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom"
-import Navbar from '../Navbar';
+import Navbar from '../components/Navbar';
 
 import Cookies from 'js-cookie';
 
@@ -11,11 +11,11 @@ import Checkbox from '@mui/material/Checkbox';
 import Select from '@mui/material/Select';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
-import BoxAttributes from '../BoxAttributes'
-import BoxDetailsAddPop from '../BoxDetailsAddPop';
+import BoxAttributes from '../components/BoxAttributes'
+import BoxDetailsAddPop from '../components/BoxDetailsAddPop';
 
 import axios from 'axios'
-import BoxDetailsModifPop from '../BoxDetailsModifPop';
+import BoxDetailsModifPop from '../components/BoxDetailsModifPop';
 const url = process.env.REACT_APP_IP
 
 class BoxDetails extends React.Component {

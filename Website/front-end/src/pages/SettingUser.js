@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Navbar from '../Navbar';
+import Navbar from '../components/Navbar';
 import {Navigate} from 'react-router-dom';
 
 import Cookies from 'js-cookie';

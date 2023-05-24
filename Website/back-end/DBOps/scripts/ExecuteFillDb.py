@@ -13,7 +13,6 @@ import sys
 import json
 
 filename = sys.argv[1]
-#filename = "GoodFormat.xlsx"
 extracteddata = pd.read_excel(filename, engine="openpyxl")
 
 a,b,data,d = filtre.filterExcel(extracteddata)

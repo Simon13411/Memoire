@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Navbar from '../Navbar';
+import Navbar from '../components/Navbar';
 import {Navigate} from 'react-router-dom';
 
 import Cookies from 'js-cookie';
@@ -12,7 +12,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import FileUploader from '../FileUploader';
+import FileUploader from '../components/FileUploader';
 
 import axios from 'axios'
 const url = process.env.REACT_APP_IP

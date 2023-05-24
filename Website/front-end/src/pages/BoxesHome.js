@@ -1,5 +1,5 @@
-import Navbar from '../Navbar';
-import Selection from '../SelectionBox';
+import Navbar from '../components/Navbar';
+import Selection from '../components/SelectionBox';
 
 function BoxesHome(props) {
     return (

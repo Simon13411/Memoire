@@ -5,15 +5,15 @@ import './App.css';
 
 import axios from 'axios'
 
-import {BoxDetailsWSP} from './components/pages/BoxDetails';
-import {InsectDetailsWSP} from './components/pages/InsectDetails';
-import BoxesHome from './components/pages/BoxesHome';
-import InsectHome from './components/pages/InsectHome';
-import AddData from './components/pages/AddData';
-import AboutUs from './components/pages/AboutUs';
-import {AuthWNav} from './components/pages/Authentication';
-import AdminPannel from './components/pages/AdminPannel';
-import SettingUser from './components/pages/SettingUser';
+import {BoxDetailsWSP} from './pages/BoxDetails';
+import {InsectDetailsWSP} from './pages/InsectDetails';
+import BoxesHome from './pages/BoxesHome';
+import InsectHome from './pages/InsectHome';
+import AddData from './pages/AddData';
+import AboutUs from './pages/AboutUs';
+import {AuthWNav} from './pages/Authentication';
+import AdminPannel from './pages/AdminPannel';
+import SettingUser from './pages/SettingUser';
 
 const url = process.env.REACT_APP_IP
 

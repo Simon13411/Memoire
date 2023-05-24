@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom"
-import Navbar from '../Navbar';
+import Navbar from '../components/Navbar';
 
-import InsectDetailsModifPop from '../InsectDetailsModifPop';
+import InsectDetailsModifPop from '../components/InsectDetailsModifPop';
 import Cookies from 'js-cookie';
 
 import MenuItem from '@mui/material/MenuItem';

@@ -9,19 +9,18 @@ import IndividuFilter as filtre
 
 import pandas as pd
 import psycopg2
+import sys
 import json
 
-#filename = sys.argv[1]
-filename = "templateIndividuBis.xlsx"
+filename = sys.argv[1]
 extracteddata = pd.read_excel(filename, engine="openpyxl")
 
 admin = False
-"""
 if (sys.argv[2] == "true") :
     admin = True
 elif (sys.argv[2] == "false") :
     admin= False
-"""
+
 print("[MY_APP_LOG] Begin Filtering")
 a,b,data,d = filtre.filterIndividu(extracteddata)
 print("[MY_APP_LOG] End Filtering")

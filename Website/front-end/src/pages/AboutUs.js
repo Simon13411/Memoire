@@ -1,7 +1,7 @@
 import * as React from 'react';
-import Navbar from '../Navbar';
+import Navbar from '../components/Navbar';
 
-import logo from '../GemblouxLogo.png';
+import logo from '../components/GemblouxLogo.png';
 
 class AboutUs extends React.Component {
     constructor (props) {

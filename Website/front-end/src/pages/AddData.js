@@ -1,7 +1,7 @@
 import React from 'react';
-import Navbar from '../Navbar';
-import FileUploader from '../FileUploader';
-import FileDownloader from '../FileDownloader';
+import Navbar from '../components/Navbar';
+import FileUploader from '../components/FileUploader';
+import FileDownloader from '../components/FileDownloader';
 
 import {Navigate} from 'react-router-dom';
 
