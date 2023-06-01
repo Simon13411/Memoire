@@ -1,8 +1,7 @@
 # Memoire - Entomological museum WebApp
+# By Jean Schot and Simon Grognard
 
 This project is the product of the work of Jean Schot and Simon Grognard. It was realized in the framework of a master thesis at the UCLouvain under the supervision of Axel Legay and the help of our client, Grégoire Noël, entomologist of the Gembloux faculty (ULiège), and his colleagues.
-
-**Any use outside the faculty of Gembloux or UCLouvain requires our prior consultation.**
 
 Several READMEs are available in the different folders so that they speak more specifically about a folder and not about the whole project.
 
